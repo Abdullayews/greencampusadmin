@@ -4,6 +4,7 @@ from functools import wraps
 from config import get_db_connection
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "kampus-secret-key-2026")
@@ -18,8 +19,8 @@ def admin_required(f):
     return decorated
 
 def serve_html(filename, **context):
-    """Read and serve HTML file. If Jinja2 variables exist, render them."""
-    filepath = os.path.join(BASE_DIR, filename)
+    """Read and serve HTML file from templates folder."""
+    filepath = os.path.join(TEMPLATES_DIR, filename)
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -27,7 +28,7 @@ def serve_html(filename, **context):
             return render_template_string(content, **context)
         return content
     except FileNotFoundError:
-        return jsonify({"success": False, "message": f"{filename} tapılmadı"}), 404
+        return jsonify({"success": False, "message": f"{filename} tapılmadı (axtarılan yer: {filepath})"}), 404
 
 # ===== PUBLIC PAGE ROUTES =====
 
