@@ -1,9 +1,11 @@
 import os
-from flask import Flask, request, jsonify, session, send_from_directory, render_template_string
+from flask import Flask, request, jsonify, session, render_template_string
 from functools import wraps
 from config import get_db_connection
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "kampus-secret-key-2026")
 app.config['JSON_AS_ASCII'] = False
 
@@ -15,23 +17,39 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated
 
-# ===== PUBLIC ROUTES =====
+def serve_html(filename, **context):
+    """Read and serve HTML file. If Jinja2 variables exist, render them."""
+    filepath = os.path.join(BASE_DIR, filename)
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        if context:
+            return render_template_string(content, **context)
+        return content
+    except FileNotFoundError:
+        return jsonify({"success": False, "message": f"{filename} tapılmadı"}), 404
+
+# ===== PUBLIC PAGE ROUTES =====
 
 @app.route('/')
 def index():
-    """Root route - serves the student panel (index.html)"""
-    try:
-        return send_from_directory('.', 'index.html')
-    except FileNotFoundError:
-        return jsonify({"success": False, "message": "index.html tapılmadı"}), 404
+    """Student panel"""
+    return serve_html('index.html',
+        user_name="Tələbə",
+        user_ixtisas="",
+        user_kurs="",
+        user_otaq="",
+        is_logged_in=False,
+        name_first="Tələbə",
+        user_initials="T",
+        name_short="Tələbə",
+        current_year=2026
+    )
 
 @app.route('/admin')
 def admin_panel():
-    """Admin panel route - serves the admin HTML panel"""
-    try:
-        return send_from_directory('.', 'admin_panel.html')
-    except FileNotFoundError:
-        return jsonify({"success": False, "message": "admin_panel.html tapılmadı"}), 404
+    """Admin panel"""
+    return serve_html('admin_panel.html')
 
 @app.route('/login', methods=['POST'])
 def login():
