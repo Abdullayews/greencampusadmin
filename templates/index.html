@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yataqxana İdarəetmə Paneli | KUDS</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --ku-green:#44766C; --ku-dark-green:#16423C; --ku-soft-green:#D3E8BF;
+  --ku-light-blue:#CAEAF1; --ku-cream:#F0F3BF; --bg:#F8FAFC; --surface:#FFFFFF;
+  --border:#E2E8F0; --text-primary:#1E293B; --text-secondary:#64748B;
+  --success:#10B981; --warning:#F59E0B; --danger:#EF4444;
+  --shadow-xs:0 1px 2px rgba(0,0,0,.04); --shadow-sm:0 2px 6px rgba(0,0,0,.06);
+  --shadow-md:0 8px 20px rgba(0,0,0,.08); --shadow-lg:0 12px 32px rgba(0,0,0,.10);
+  --radius-btn:8px; --radius-card:12px; --radius-badge:999px;
+  --radius-modal:16px; --radius-avatar:50%;
+  --transition-fast:150ms cubic-bezier(0.4,0,0.2,1);
+  --transition-base:250ms cubic-bezier(0.4,0,0.2,1);
+  --transition-slow:350ms cubic-bezier(0.4,0,0.2,1);
+  --transition-bounce:400ms cubic-bezier(0.34,1.56,0.64,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.5;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.8}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+@keyframes bounceIn{0%{opacity:0;transform:scale(0.3)}50%{transform:scale(1.05)}70%{transform:scale(0.9)}100%{opacity:1;transform:scale(1)}}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+.animate-fade-in-up{animation:fadeInUp 0.5s var(--transition-base) forwards;opacity:0}
+.delay-100{animation-delay:100ms}
+.delay-200{animation-delay:200ms}
+.delay-300{animation-delay:300ms}
+.delay-400{animation-delay:400ms}
+
+.skeleton{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-btn)}
+.skeleton-text{height:16px;margin-bottom:8px}
+
+/* LOGIN */
+.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,var(--ku-dark-green) 0%,#1a5248 50%,var(--ku-green) 100%);background-size:200% 200%;animation:gradientShift 15s ease infinite;z-index:9999;display:none;justify-content:center;align-items:center;padding:24px}
+.login-overlay::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:0.6}
+.login-overlay.active{display:flex}
+.login-card{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius-modal);padding:40px;box-shadow:var(--shadow-lg);position:relative;z-index:2;transform:translateY(0);transition:transform 0.3s ease,box-shadow 0.3s ease}
+.login-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.login-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:32px;animation:fadeInUp 0.6s ease}
+.login-logo-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--ku-soft-green),var(--ku-light-blue));border-radius:var(--radius-avatar);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:var(--shadow-sm);animation:float 3s ease-in-out infinite}
+.login-logo-icon i{width:32px;height:32px;color:var(--ku-dark-green)}
+.login-logo h2{font-size:28px;font-weight:700;color:var(--ku-dark-green);margin-bottom:4px}
+.login-logo p{font-size:14px;color:var(--text-secondary);font-weight:400}
+.input-group{margin-bottom:20px;position:relative}
+.input-group label{display:block;font-size:14px;color:var(--text-secondary);margin-bottom:8px;font-weight:500}
+.input-group input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;outline:none;background:var(--bg);transition:all var(--transition-fast)}
+.input-group input:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
+.login-btn{width:100%;padding:14px 24px;background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(68,118,108,0.3)}
+.login-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,0.2) 100%);opacity:0;transition:opacity 0.3s}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.4)}
+.login-btn:hover::after{opacity:1}
+.login-btn:active{transform:translateY(0)}
+.login-btn i{width:20px;height:20px;transition:transform 0.3s}
+.login-btn:hover i{transform:translateX(4px)}
+.login-error{color:var(--danger);font-size:14px;text-align:center;margin-top:16px;display:none;padding:8px;background:#fef2f2;border-radius:var(--radius-btn);border:1px solid #fee2e2;animation:shake 0.4s ease}
+
+/* SIDEBAR */
+.sidebar{width:280px;background:var(--surface);height:100vh;position:fixed;left:0;top:0;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);overflow:visible;white-space:nowrap;box-shadow:var(--shadow-sm)}
+.sidebar.collapsed{width:80px}
+.sidebar.collapsed .logo span,.sidebar.collapsed .nav-item span,.sidebar.collapsed .nav-section,.sidebar.collapsed .sidebar-footer-links h4,.sidebar.collapsed .sidebar-footer-links li a span{opacity:0;width:0;pointer-events:none}
+.sidebar.collapsed .logo{padding:0;justify-content:center;gap:0}
+.sidebar.collapsed .nav-item{justify-content:center;padding:12px 16px;gap:0}
+.sidebar.collapsed .sidebar-footer-links li a{justify-content:center;padding:8px 16px;gap:0}
+.logo{height:72px;padding:0 24px;font-size:22px;font-weight:700;color:var(--ku-dark-green);display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:all var(--transition-base);position:relative;overflow:hidden}
+.logo::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ku-green);transform:scaleY(0);transition:transform 0.3s ease}
+.logo:hover::before{transform:scaleY(1)}
+.logo:hover{background:var(--bg)}
+.logo i{width:28px;height:28px;color:var(--ku-green);flex-shrink:0;transition:transform 0.3s ease}
+.logo:hover i{transform:rotate(-10deg) scale(1.1)}
+.logo span{transition:opacity 0.2s ease;font-weight:700}
+.nav-menu{flex:1;padding:16px 12px;overflow-y:auto;overflow-x:hidden}
+.nav-section{padding:0 16px;margin:16px 0 8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-secondary);transition:opacity 0.2s}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;color:var(--text-primary);text-decoration:none;border-radius:var(--radius-btn);margin-bottom:6px;font-size:15px;font-weight:500;transition:all var(--transition-fast);cursor:pointer;position:relative;overflow:hidden;border:none;background:none;width:100%;font-family:'Poppins';text-align:left}
+.nav-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:60%;background:var(--ku-green);border-radius:0 4px 4px 0;transition:transform 0.25s ease}
+.nav-item:hover::before{transform:translateY(-50%) scaleY(1)}
+.nav-item i{width:22px;height:22px;color:var(--text-secondary);flex-shrink:0;transition:all 0.25s ease}
+.nav-item span{transition:opacity 0.2s ease}
+.nav-item:hover{background:var(--bg);transform:translateX(4px)}
+.nav-item:hover i{color:var(--ku-green);transform:scale(1.1)}
+.nav-item.active{background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface);box-shadow:0 4px 12px rgba(22,66,60,0.25)}
+.nav-item.active i{color:var(--surface)}
+.nav-item.active::before{display:none}
+.sidebar-footer-links{padding:16px;border-top:1px solid var(--border)}
+.sidebar-footer-links h4{font-size:11px;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;transition:opacity 0.2s;font-weight:600}
+.sidebar-footer-links ul{list-style:none}
+.sidebar-footer-links li{margin-bottom:4px}
+.sidebar-footer-links li a{display:flex;align-items:center;gap:12px;color:var(--text-primary);text-decoration:none;font-size:14px;padding:8px 16px;border-radius:var(--radius-btn);transition:all var(--transition-fast);cursor:pointer;position:relative;overflow:hidden}
+.sidebar-footer-links li a:hover{background:var(--bg);color:var(--ku-green);transform:translateX(4px)}
+.sidebar-footer-links li a i{width:18px;height:18px;color:var(--text-secondary);transition:color 0.2s}
+.sidebar-footer-links li a:hover i{color:var(--ku-green)}
+
+/* MAIN */
+.main-wrapper{margin-left:280px;min-height:100vh;display:flex;flex-direction:column;transition:margin-left 0.35s cubic-bezier(0.4,0,0.2,1);flex:1}
+.main-wrapper.expanded{margin-left:80px}
+.top-bar{height:72px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 32px;position:sticky;top:0;z-index:90;transition:all var(--transition-fast)}
+.top-bar h1{font-size:28px;font-weight:700;color:var(--text-primary);opacity:0;animation:fadeInUp 0.4s ease forwards}
+.top-bar-desc{font-size:14px;color:var(--text-secondary);font-weight:400;margin-top:2px}
+.top-bar-actions{display:flex;align-items:center;gap:16px}
+.icon-btn{width:44px;height:44px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;position:relative;transition:all var(--transition-fast)}
+.icon-btn:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.icon-btn:active{transform:translateY(0)}
+.icon-btn i{width:20px;height:20px;transition:transform 0.2s}
+.icon-btn:hover i{transform:scale(1.1)}
+.content-layout{padding:32px;flex:1}
+.page-content{display:none;width:100%;opacity:0;transform:translateY(16px);transition:opacity 0.3s ease,transform 0.3s ease}
+.page-content.active-page{display:block;opacity:1;transform:translateY(0);animation:fadeInUp 0.4s ease}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:32px}
+.stat-card{background:var(--surface);padding:28px;border-radius:var(--radius-card);border:1px solid var(--border);box-shadow:var(--shadow-xs);transition:all var(--transition-base);position:relative;overflow:hidden;animation:fadeInUp 0.5s ease both}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));transform:scaleX(0);transition:transform 0.3s ease}
+.stat-card:hover::before{transform:scaleX(1)}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--ku-green)}
+.stat-icon{width:52px;height:52px;border-radius:var(--radius-btn);display:flex;align-items:center;justify-content:center;margin-bottom:16px;transition:all 0.3s ease}
+.stat-card:hover .stat-icon{transform:scale(1.1) rotate(-5deg)}
+.stat-icon i{width:24px;height:24px}
+.stat-label{font-size:14px;color:var(--text-secondary);margin-bottom:8px;font-weight:500}
+.stat-value{font-size:32px;font-weight:700;color:var(--text-primary);line-height:1}
+
+/* WIDGET */
+.widget-card{background:var(--surface);border-radius:var(--radius-card);border:1px solid var(--border);padding:28px;box-shadow:var(--shadow-xs);transition:all var(--transition-base);position:relative;overflow:hidden}
+.widget-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-2px)}
+.widget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.widget-header h3{font-size:18px;font-weight:600}
+.section-title{font-size:24px;margin-bottom:24px;color:var(--text-primary);font-weight:700;position:relative;display:inline-block}
+.section-title::after{content:'';position:absolute;bottom:-6px;left:0;width:40px;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));border-radius:2px}
+
+/* BUTTONS */
+.btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(68,118,108,0.25)}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,0.15) 100%);opacity:0;transition:opacity 0.3s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.35)}
+.btn-primary:hover::before{opacity:1}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary i{width:18px;height:18px}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(239,68,68,0.25)}
+.btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35)}
+.btn-danger:active{transform:translateY(0)}
+.btn-secondary{background:var(--bg);color:var(--text-primary);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
+.btn-secondary:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px)}
+.btn-icon{width:36px;height:36px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);display:inline-flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;transition:all var(--transition-fast)}
+.btn-icon:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:scale(1.1)}
+.btn-icon.danger:hover{background:#fee2e2;color:var(--danger);border-color:var(--danger)}
+.btn-icon i{width:18px;height:18px}
+
+/* TABLES */
+.table-wrap{overflow-x:auto}
+.data-table{width:100%;border-collapse:separate;border-spacing:0}
+.data-table thead th{padding:16px;text-align:left;font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;border-bottom:2px solid var(--border);background:var(--bg);white-space:nowrap}
+.data-table tbody tr{transition:all 0.2s ease}
+.data-table tbody tr:hover{background:var(--bg);transform:scale(1.002);box-shadow:var(--shadow-xs)}
+.data-table tbody td{padding:16px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tbody td:last-child{white-space:nowrap}
+
+/* FORMS */
+.form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary);font-weight:400;transition:all var(--transition-fast)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
+.form-textarea{min-height:100px;resize:vertical}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;padding-right:40px}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:14px;font-weight:500;color:var(--text-secondary);margin-bottom:8px}
+.form-row{display:flex;gap:16px}
+.form-row .form-group{flex:1}
+
+/* BADGES */
+.badge{padding:5px 14px;border-radius:var(--radius-badge);font-weight:600;font-size:12px;display:inline-block;transition:transform 0.2s}
+.badge:hover{transform:scale(1.05)}
+.badge-success{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
+.badge-warning{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e}
+.badge-danger{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
+.badge-info{background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e}
+.badge-gray{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);color:var(--text-secondary)}
+
+/* MODAL */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:1000;display:none;justify-content:center;align-items:center;padding:24px;opacity:0;transition:opacity 0.3s ease}
+.modal-overlay.active{display:flex;opacity:1}
+.modal-card{width:100%;max-width:560px;background:var(--surface);border-radius:var(--radius-modal);box-shadow:var(--shadow-lg);overflow:hidden;transform:scale(0.9) translateY(20px);transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);max-height:90vh;display:flex;flex-direction:column}
+.modal-overlay.active .modal-card{transform:scale(1) translateY(0)}
+.modal-header{padding:24px;background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-header h3{font-size:20px;font-weight:600}
+.modal-header .close-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-btn);cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.1)}
+.modal-header .close-btn:hover{background:rgba(255,255,255,0.2);transform:rotate(90deg)}
+.modal-header .close-btn i{width:20px;height:20px}
+.modal-body{padding:28px;overflow-y:auto;flex:1}
+.modal-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px;flex-shrink:0;background:var(--bg)}
+
+/* CANTEEN */
+.canteen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.canteen-location{border:1px solid var(--border);border-radius:var(--radius-card);padding:24px;transition:all var(--transition-base);background:var(--surface)}
+.canteen-location:hover{border-color:var(--ku-green);box-shadow:var(--shadow-sm)}
+.canteen-location h4{font-size:16px;font-weight:600;margin-bottom:16px;color:var(--ku-green);display:flex;align-items:center;gap:8px}
+.meal-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px dashed var(--border);font-size:14px;transition:all 0.2s}
+.meal-row:hover{background:var(--bg);margin:0 -8px;padding:14px 8px;border-radius:6px}
+.meal-row:last-child{border-bottom:none}
+.meal-day{font-weight:600;color:var(--text-secondary);white-space:nowrap;margin-right:12px}
+.meal-input{border:none;border-bottom:2px solid var(--border);background:transparent;font-family:'Poppins';font-size:14px;text-align:right;color:var(--text-primary);font-weight:500;padding:4px 8px;width:100%;max-width:200px;outline:none;transition:border-color 0.2s}
+.meal-input:focus{border-bottom-color:var(--ku-green)}
+
+/* LOADING */
+.loader-wrap{display:flex;justify-content:center;align-items:center;min-height:200px}
+.loader{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--ku-green);border-radius:50%;animation:spin 0.8s linear infinite}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary);animation:fadeIn 0.4s ease}
+.empty-state i{width:64px;height:64px;margin-bottom:16px;opacity:0.4}
+.empty-state p{font-size:16px;font-weight:500}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+
+/* FOCUS */
+*:focus-visible{outline:2px solid var(--ku-green);outline-offset:2px;border-radius:4px}
+button:focus-visible,a:focus-visible{outline-offset:3px}
+
+/* RESPONSIVE */
+@media (max-width:1023px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{flex-direction:column;gap:0}
+}
+@media (max-width:767px){
+  .stats-grid{grid-template-columns:1fr}
+  .top-bar h1{font-size:22px}
+  .sidebar{width:80px}
+  .main-wrapper{margin-left:80px}
+  .sidebar .logo span,.sidebar .nav-item span,.sidebar .nav-section,.sidebar .sidebar-footer-links h4,.sidebar .sidebar-footer-links li a span{opacity:0;width:0;pointer-events:none}
+  .sidebar .logo,.sidebar .nav-item,.sidebar .sidebar-footer-links li a{justify-content:center;padding:12px 16px;gap:0}
+  .content-layout{padding:20px}
+  .modal-card{max-height:95vh}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-overlay active" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon"><i data-lucide="shield-check"></i></div>
+      <h2>Admin Paneli</h2>
+      <p>Yataqxana İdarəetmə Sistemi</p>
+    </div>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="input-group">
+        <label>İstifadəçi adı</label>
+        <input type="text" id="loginEmail" placeholder="İstifadəçi adı (123)" required>
+      </div>
+      <div class="input-group">
+        <label>Şifrə</label>
+        <input type="password" id="loginPassword" placeholder="Şifrə (123)" required>
+      </div>
+      <div class="login-error" id="loginError">Məlumatlar yanlışdır!</div>
+      <button type="submit" class="login-btn" id="loginBtn">
+        <i data-lucide="log-in"></i> Daxil ol
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo" onclick="toggleSidebar()">
+    <i data-lucide="shield-check"></i>
+    <span>Admin Panel</span>
+  </div>
+  <nav class="nav-menu">
+    <div class="nav-section">Ümumi</div>
+    <button class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)">
+      <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+    </button>
+    <div class="nav-section">İdarəetmə</div>
+    <button class="nav-item" data-menu="students" onclick="loadPage('students',this)">
+      <i data-lucide="users"></i><span>Tələbələr</span>
+    </button>
+    <button class="nav-item" data-menu="rooms" onclick="loadPage('rooms',this)">
+      <i data-lucide="door-open"></i><span>Otaqlar və Əşyalar</span>
+    </button>
+    <button class="nav-item" data-menu="applications" onclick="loadPage('applications',this)">
+      <i data-lucide="clipboard-list"></i><span>Müraciətlər</span>
+    </button>
+    <div class="nav-section">Məzmun</div>
+    <button class="nav-item" data-menu="announcements" onclick="loadPage('announcements',this)">
+      <i data-lucide="megaphone"></i><span>Elanlar</span>
+    </button>
+    <button class="nav-item" data-menu="surveys" onclick="loadPage('surveys',this)">
+      <i data-lucide="clipboard-check"></i><span>Anketlər</span>
+    </button>
+    <button class="nav-item" data-menu="canteen" onclick="loadPage('canteen',this)">
+      <i data-lucide="utensils"></i><span>Yeməkxana</span>
+    </button>
+    <button class="nav-item" data-menu="laundry" onclick="loadPage('laundry',this)">
+      <i data-lucide="washing-machine"></i><span>Camaşırxana</span>
+    </button>
+    <div class="nav-section">Maliyyə</div>
+    <button class="nav-item" data-menu="penalties" onclick="loadPage('penalties',this)">
+      <i data-lucide="receipt-text"></i><span>Cərimələr</span>
+    </button>
+  </nav>
+  <div class="sidebar-footer-links">
+    <h4>Hesab</h4>
+    <ul><li><a onclick="logout()"><i data-lucide="log-out"></i><span>Çıxış</span></a></li></ul>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-wrapper" id="mainWrapper">
+  <header class="top-bar">
+    <div>
+      <h1 id="pageTitle">Dashboard</h1>
+      <div class="top-bar-desc" id="pageDesc">Ümumi statistika</div>
+    </div>
+    <div class="top-bar-actions">
+      <button class="icon-btn" onclick="toggleSidebar()" title="Menyu"><i data-lucide="panel-left"></i></button>
+    </div>
+  </header>
+
+  <main class="content-layout">
+    <!-- DASHBOARD -->
+    <section id="page-dashboard" class="page-content active-page">
+      <div class="stats-grid" id="dashboardStats">
+        <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Aktiv Otaqlar</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+      </div>
+    </section>
+
+    <!-- STUDENTS -->
+    <section id="page-students" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Tələbə Siyahısı</h3><button class="btn-primary" onclick="addStudentModal()"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchStudents" onkeyup="filterTable('searchStudents','studentsTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr><th>ID</th><th>Ad Soyad</th><th>Email</th><th>İxtisas</th><th>Kurs</th><th>API Açarı</th><th>Əməliyyat</th></tr></thead><tbody id="studentsTbody"><tr><td colspan="7"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ROOMS -->
+    <section id="page-rooms" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button class="btn-primary" onclick="addRoomModal()"><i data-lucide="plus"></i> Yeni Otaq</button></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchRooms" onkeyup="filterTable('searchRooms','roomsTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr><th>Otaq ID</th><th>Tələbə 1</th><th>Tələbə 2</th><th>Əməliyyat</th></tr></thead><tbody id="roomsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- APPLICATIONS -->
+    <section id="page-applications" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Müraciətlər</h3></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchApps" onkeyup="filterTable('searchApps','appsTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr><th>Tələbə</th><th>Müraciət</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS -->
+    <section id="page-announcements" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Elanlar</h3><button class="btn-primary" onclick="addContentModal('announcement','Elan')"><i data-lucide="plus"></i> Yeni Elan</button></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchAnn" onkeyup="filterTable('searchAnn','annTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr><th>Başlıq</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- SURVEYS -->
+    <section id="page-surveys" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Anketlər</h3><button class="btn-primary" onclick="addContentModal('survey','Anket')"><i data-lucide="plus"></i> Yeni Anket</button></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchSur" onkeyup="filterTable('searchSur','surTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr><th>Başlıq</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- PENALTIES -->
+    <section id="page-penalties" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Cərimələr</h3><button class="btn-danger" onclick="addPenaltyModal()"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchPen" onkeyup="filterTable('searchPen','penTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr><th>Tələbə</th><th>Səbəb</th><th>Məbləğ</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- CANTEEN -->
+    <section id="page-canteen" class="page-content">
+      <h2 class="section-title">Həftəlik Menyu</h2>
+      <div class="canteen-grid" id="canteenGrid"><div class="widget-card" style="display:flex;justify-content:center;align-items:center;min-height:200px"><div class="loader"></div></div></div>
+    </section>
+
+    <!-- LAUNDRY -->
+    <section id="page-laundry" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Camaşırxana</h3><button class="btn-primary" onclick="addLaundryModal()"><i data-lucide="plus"></i> Maşın Statusu Təyin Et</button></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchLaundry" onkeyup="filterTable('searchLaundry','laundryTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr><th>Tələbə</th><th>Maşın 1</th><th>Maşın 2</th><th>Maşın 3</th><th>Əməliyyat</th></tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="universalModal">
+  <div class="modal-card">
+    <div class="modal-header"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter" style="display:none"><button class="btn-secondary" onclick="closeModal()">Ləğv et</button></div>
+  </div>
+</div>
+
+<script>
+lucide.createIcons();
+let currentStudents=[];
+let isLoggedIn=false;
+
+fetch('/api/admin/stats',{method:'GET'})
+.then(r=>{if(r.status===403){showLogin()}else{hideLogin();isLoggedIn=true;loadDashboard()}})
+.catch(()=>showLogin());
+
+function showLogin(){document.getElementById('loginOverlay').classList.add('active')}
+function hideLogin(){document.getElementById('loginOverlay').classList.remove('active')}
+
+function handleLogin(e){
+  e.preventDefault();
+  const btn=document.getElementById('loginBtn');
+  const original=btn.innerHTML;
+  btn.innerHTML='<i data-lucide="loader-2" style="animation:spin 1s linear infinite"></i> Yoxlanılır...';
+  lucide.createIcons();
+  fetch('/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('loginEmail').value,sifre:document.getElementById('loginPassword').value})})
+  .then(r=>r.json()).then(data=>{
+    if(data.success){hideLogin();isLoggedIn=true;loadDashboard()}
+    else{document.getElementById('loginError').style.display='block';btn.innerHTML=original;lucide.createIcons()}
+  }).catch(()=>{document.getElementById('loginError').style.display='block';btn.innerHTML=original;lucide.createIcons()});
+}
+
+function logout(){fetch('/logout').then(()=>{isLoggedIn=false;showLogin()})}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('mainWrapper').classList.toggle('expanded')}
+
+function apiAction(action,method='GET',body=null){
+  return fetch(`/api/admin/${action}`,{method:method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):null})
+  .then(res=>{if(res.status===403){showLogin();throw new Error('Unauthorized')}return res.json()});
+}
+
+function openModal(title,bodyHtml,showFooter=false){
+  document.getElementById('modalTitle').innerText=title;
+  document.getElementById('modalBody').innerHTML=bodyHtml;
+  document.getElementById('modalFooter').style.display=showFooter?'flex':'none';
+  document.getElementById('universalModal').classList.add('active');
+  lucide.createIcons();
+}
+function closeModal(){document.getElementById('universalModal').classList.remove('active')}
+
+function filterTable(inputId,tableId){
+  const input=document.getElementById(inputId).value.toLowerCase();
+  const rows=document.getElementById(tableId).getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+  for(let i=0;i<rows.length;i++){
+    let found=false;const cells=rows[i].getElementsByTagName('td');
+    for(let j=0;j<cells.length;j++){if(cells[j].textContent.toLowerCase().includes(input)){found=true;break}}
+    rows[i].style.display=found?'':'none';
+  }
+}
+
+function loadPage(page,el){
+  document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const titles={
+    dashboard:['Dashboard','Ümumi statistika'],students:['Tələbələr','Tələbə məlumatları'],
+    rooms:['Otaqlar və Əşyalar','İnventar idarəetməsi'],applications:['Müraciətlər','Yataqxana və Təmir sorğuları'],
+    announcements:['Elanlar','Rəsmi elanlar'],surveys:['Anketlər','Sorğular və anketlər'],
+    penalties:['Cərimələr','Cərimə əməliyyatları'],canteen:['Yeməkxana','Həftəlik menyu'],
+    laundry:['Camaşırxana','Maşın idarəetməsi']
+  };
+  document.getElementById('pageTitle').innerText=titles[page][0];
+  document.getElementById('pageDesc').innerText=titles[page][1];
+  document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active-page'));
+  const target=document.getElementById('page-'+page);
+  if(target){target.classList.add('active-page');}
+  if(page==='dashboard')loadDashboard();
+  if(page==='students')loadStudents();
+  if(page==='rooms')loadRooms();
+  if(page==='applications')loadApplications();
+  if(page==='announcements')loadAnnouncements();
+  if(page==='surveys')loadSurveys();
+  if(page==='penalties')loadPenalties();
+  if(page==='canteen')loadCanteen();
+  if(page==='laundry')loadLaundry();
+}
+
+function loadDashboard(){
+  apiAction('stats').then(data=>{
+    const s=data.stats;
+    document.getElementById('dashboardStats').innerHTML=`
+      <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="stat-value">${s.students}</div></div>
+      <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Aktiv Otaqlar</div><div class="stat-value">${s.rooms}</div></div>
+      <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="stat-value">${s.apps}</div></div>
+      <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">${s.penalties}</div></div>`;
+    lucide.createIcons();
+  });
+}
+
+function loadStudents(){
+  apiAction('get_students').then(data=>{
+    currentStudents=data.data;
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="7"><div class="empty-state"><i data-lucide="users"></i><p>Tələbə yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((s,idx)=>{
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4">${s.id}</td><td class="p-4" style="font-weight:600">${s.ad_soyad}</td><td class="p-4">${s.email}</td><td class="p-4">${s.ixtisas}</td><td class="p-4">${s.kurs}</td><td class="p-4"><span class="badge ${s.api_key?'badge-success':'badge-gray'}">${s.api_key?'Var':'Yoxdur'}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editStudentModal(${s.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteStudent(${s.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+      });
+    }
+    document.getElementById('studentsTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function addStudentModal(){
+  openModal('Yeni Tələbə',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" placeholder="Ad Soyad"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" placeholder="Email"></div><div class="form-group"><label>İxtisas</label><input type="text" class="form-input" id="s_ixtisas" placeholder="İxtisas"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" placeholder="Kurs"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function editStudentModal(id){
+  const s=currentStudents.find(x=>x.id==id);
+  openModal('Tələbəni Redaktə Et',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" value="${s.ad_soyad}"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" value="${s.email}"></div><div class="form-group"><label>İxtisas</label><input type="text" class="form-input" id="s_ixtisas" value="${s.ixtisas}"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" value="${s.kurs}"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function saveStudent(id){
+  apiAction('save_student','POST',{id:id,ad_soyad:document.getElementById('s_name').value,email:document.getElementById('s_email').value,ixtisas:document.getElementById('s_ixtisas').value,kurs:document.getElementById('s_kurs').value}).then(data=>{if(data.success){closeModal();loadStudents()}});
+}
+function deleteStudent(id){if(confirm('Silinsin?'))apiAction('delete_student','POST',{id:id}).then(data=>{if(data.success)loadStudents()})}
+
+function loadRooms(){
+  apiAction('get_rooms').then(data=>{
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="4"><div class="empty-state"><i data-lucide="door-open"></i><p>Otaq yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((r,idx)=>{
+        const t1=r.telebe_1_id?`İD:${r.telebe_1_id} (Y:${r.yataq_1_status?r.yataq_1_status[0]:'-'},Ş:${r.skaf_1_status?r.skaf_1_status[0]:'-'},O:${r.oturacaq_1_status?r.oturacaq_1_status[0]:'-'})`:'Boş';
+        const t2=r.telebe_2_id?`İD:${r.telebe_2_id} (Y:${r.yataq_2_status?r.yataq_2_status[0]:'-'},Ş:${r.skaf_2_status?r.skaf_2_status[0]:'-'},O:${r.oturacaq_2_status?r.oturacaq_2_status[0]:'-'})`:'Boş';
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:700">${r.id}</td><td class="p-4">${t1}</td><td class="p-4">${t2}</td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editRoomModal(${r.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteRoom(${r.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+      });
+    }
+    document.getElementById('roomsTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function genStudentOptions(selectedId){
+  return currentStudents.map(s=>`<option value="${s.id}" ${s.id==selectedId?'selected':''}>${s.id} - ${s.ad_soyad}</option>`).join('');
+}
+function genStatusOptions(selectedStatus){
+  const stats=['Yaxşı','Az zədəli','Zədəli'];
+  return stats.map(s=>`<option value="${s}" ${s==selectedStatus?'selected':''}>${s}</option>`).join('');
+}
+function addRoomModal(){
+  if(currentStudents.length===0){alert('Əvvəl Tələbələr bölməsinə daxil olun!');return}
+  openModal('Yeni Otaq',`<div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" placeholder="Məs: 105"></div><h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-secondary)">1-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t1"><option value="">Boş</option>${genStudentOptions()}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y1">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s1">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o1">${genStatusOptions('Yaxşı')}</select></div></div><h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-secondary)">2-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t2"><option value="">Boş</option>${genStudentOptions()}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y2">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s2">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o2">${genStatusOptions('Yaxşı')}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveRoom(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function editRoomModal(id){
+  apiAction('get_rooms').then(data=>{
+    const r=data.data.find(x=>x.id==id);
+    openModal('Otaq Redaktə: '+id,`<h4 style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)">1-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t1"><option value="">Boş</option>${genStudentOptions(r.telebe_1_id)}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y1">${genStatusOptions(r.yataq_1_status)}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s1">${genStatusOptions(r.skaf_1_status)}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o1">${genStatusOptions(r.oturacaq_1_status)}</select></div></div><h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-secondary)">2-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t2"><option value="">Boş</option>${genStudentOptions(r.telebe_2_id)}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y2">${genStatusOptions(r.yataq_2_status)}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s2">${genStatusOptions(r.skaf_2_status)}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o2">${genStatusOptions(r.oturacaq_2_status)}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveRoom(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  });
+}
+function saveRoom(id){
+  const payload={id:id||document.getElementById('r_id').value,t1:document.getElementById('r_t1').value,y1:document.getElementById('r_y1').value,s1:document.getElementById('r_s1').value,o1:document.getElementById('r_o1').value,t2:document.getElementById('r_t2').value,y2:document.getElementById('r_y2').value,s2:document.getElementById('r_s2').value,o2:document.getElementById('r_o2').value};
+  apiAction('save_room','POST',payload).then(data=>{if(data.success){closeModal();loadRooms()}else alert(data.message)});
+}
+function deleteRoom(id){if(confirm('Bu otaq silinsin?'))apiAction('delete_room','POST',{id:id}).then(data=>{if(data.success)loadRooms()})}
+
+function loadApplications(){
+  apiAction('get_applications').then(data=>{
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="4"><div class="empty-state"><i data-lucide="clipboard-list"></i><p>Müraciət yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((a,idx)=>{
+        let statusClass=a.status==='Təsdiqləndi'?'badge-success':(a.status==='Gözləmədə'?'badge-warning':'badge-danger');
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${a.ad_soyad}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td><td class="p-4"><div style="font-weight:600">${a.basliq}</div><div style="font-size:12px;color:var(--text-secondary)">${a.muraciet}</div><span class="badge badge-info" style="margin-top:4px">${a.priority}</span></td><td class="p-4"><span class="badge ${statusClass}">${a.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Təsdiqləndi')" title="Təsdiqlə"><i data-lucide="check"></i></button><button class="btn-icon danger" onclick="updateAppStatus(${a.id},'Rədd edildi')" title="Rədd et"><i data-lucide="x"></i></button></div></td></tr>`;
+      });
+    }
+    document.getElementById('appsTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function updateAppStatus(id,status){apiAction('update_app_status','POST',{id:id,status:status}).then(data=>{if(data.success)loadApplications()})}
+
+function loadAnnouncements(){
+  apiAction('get_announcements').then(data=>{
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="3"><div class="empty-state"><i data-lucide="megaphone"></i><p>Elan yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((c,idx)=>{
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yüksək'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('announcement',${c.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('announcement',${c.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+      });
+    }
+    document.getElementById('annTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function loadSurveys(){
+  apiAction('get_surveys').then(data=>{
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="3"><div class="empty-state"><i data-lucide="clipboard-check"></i><p>Anket yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((c,idx)=>{
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yüksək'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('survey',${c.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('survey',${c.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+      });
+    }
+    document.getElementById('surTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function addContentModal(type,titleStr){
+  openModal('Yeni '+titleStr,`<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="c_title" placeholder="Başlıq"></div><div class="form-group"><label>Təsvir</label><textarea class="form-textarea" id="c_desc" placeholder="Təsvir" rows="4"></textarea></div><div class="form-row"><div class="form-group"><label>Öncəlik</label><select class="form-select" id="c_priority"><option>Normal</option><option>Yüksək</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option>Aktiv</option><option>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function editContentModal(type,id){
+  const action=type==='announcement'?'get_announcements':'get_surveys';
+  apiAction(action).then(data=>{
+    const c=data.data.find(x=>x.id==id);
+    openModal('Redaktə',`<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="c_title" value="${c.title}"></div><div class="form-group"><label>Təsvir</label><textarea class="form-textarea" id="c_desc" rows="4">${c.description}</textarea></div><div class="form-row"><div class="form-group"><label>Öncəlik</label><select class="form-select" id="c_priority"><option ${c.priority=='Normal'?'selected':''}>Normal</option><option ${c.priority=='Yüksək'?'selected':''}>Yüksək</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option ${c.status=='Aktiv'?'selected':''}>Aktiv</option><option ${c.status=='Passiv'?'selected':''}>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  });
+}
+function saveContent(type,id){
+  const action=type==='announcement'?'save_announcement':'save_survey';
+  apiAction(action,'POST',{id:id,title:document.getElementById('c_title').value,description:document.getElementById('c_desc').value,priority:document.getElementById('c_priority').value,status:document.getElementById('c_status').value}).then(data=>{if(data.success){closeModal();type==='announcement'?loadAnnouncements():loadSurveys()}});
+}
+function deleteContent(type,id){
+  if(confirm('Silinsin?')){
+    const action=type==='announcement'?'delete_announcement':'delete_survey';
+    apiAction(action,'POST',{id:id}).then(data=>{if(data.success){type==='announcement'?loadAnnouncements():loadSurveys()}});
+  }
+}
+
+function loadPenalties(){
+  apiAction('get_penalties').then(data=>{
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="5"><div class="empty-state"><i data-lucide="receipt-text"></i><p>Cərimə yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((p,idx)=>{
+        let statusClass=p.status==='Ödənilib'?'badge-success':'badge-danger';
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${p.ad_soyad}</td><td class="p-4">${p.reason}</td><td class="p-4" style="font-weight:700">${p.amount} AZN</td><td class="p-4"><span class="badge ${statusClass}">${p.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editPenaltyModal(${p.id})"><i data-lucide="edit-3"></i></button>${p.status==='Ödənilməmiş'?`<button class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ödə"><i data-lucide="check-circle"></i></button>`:''}</div></td></tr>`;
+      });
+    }
+    document.getElementById('penTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function addPenaltyModal(){
+  if(currentStudents.length===0){alert('Əvvəl Tələbələr bölməsinə daxil olun!');return}
+  const opts=currentStudents.map(s=>`<option value="${s.id}">${s.ad_soyad}</option>`).join('');
+  openModal('Yeni Cərimə',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student">${opts}</select></div><div class="form-group"><label>Məbləğ (AZN)</label><input type="number" class="form-input" id="p_amount" placeholder="Məbləğ"></div><div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" placeholder="Səbəb"></div><button class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function editPenaltyModal(id){
+  apiAction('get_penalties').then(data=>{
+    const p=data.data.find(x=>x.id==id);
+    const opts=currentStudents.map(s=>`<option value="${s.id}" ${s.id==p.student_id?'selected':''}>${s.ad_soyad}</option>`).join('');
+    openModal('Cərimə Redaktə',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student" disabled>${opts}</select></div><div class="form-group"><label>Məbləğ (AZN)</label><input type="number" class="form-input" id="p_amount" value="${p.amount}"></div><div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="${p.reason}"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  });
+}
+function savePenalty(id){
+  apiAction('save_penalty','POST',{id:id,student_id:document.getElementById('p_student').value,amount:document.getElementById('p_amount').value,reason:document.getElementById('p_reason').value}).then(data=>{if(data.success){closeModal();loadPenalties()}});
+}
+function payPenalty(id){apiAction('pay_penalty','POST',{id:id}).then(data=>{if(data.success)loadPenalties()})}
+
+function loadCanteen(){
+  apiAction('get_canteen').then(data=>{
+    let html='';
+    const days=['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə','Bazar'];
+    ['Yataqxana','Universitet'].forEach(loc=>{
+      html+=`<div class="canteen-location"><h4><i data-lucide="${loc==='Yataqxana'?'hotel':'graduation-cap'}"></i> ${loc}</h4>`;
+      for(let i=1;i<=7;i++){
+        let item=data.data.find(x=>x.location===loc&&x.day_of_week==i);
+        if(item){
+          html+=`<div class="meal-row"><span class="meal-day">${days[i]}</span><input type="text" class="meal-input" value="${item.meal_name}" onchange="updateCanteen(${item.id},this.value)" onkeyup="updateCanteenDelayed(${item.id},this.value)"></div>`;
+        }
+      }
+      html+=`</div>`;
+    });
+    document.getElementById('canteenGrid').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function updateCanteen(id,val){apiAction('save_canteen','POST',{id:id,meal_name:val}).then(data=>{if(data.success)console.log('Yemək yeniləndi')})}
+let canteenTimer;
+function updateCanteenDelayed(id,val){clearTimeout(canteenTimer);canteenTimer=setTimeout(()=>updateCanteen(id,val),800)}
+
+function loadLaundry(){
+  apiAction('get_laundry').then(data=>{
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="5"><div class="empty-state"><i data-lucide="washing-machine"></i><p>Məlumat yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((l,idx)=>{
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${l.ad_soyad}</td><td class="p-4"><span class="badge ${l.machine_1_status==='Hazır'?'badge-success':(l.machine_1_status==='Gözlənilir'?'badge-warning':'badge-gray')}">${l.machine_1_status}</span></td><td class="p-4"><span class="badge ${l.machine_2_status==='Hazır'?'badge-success':(l.machine_2_status==='Gözlənilir'?'badge-warning':'badge-gray')}">${l.machine_2_status}</span></td><td class="p-4"><span class="badge ${l.machine_3_status==='Hazır'?'badge-success':(l.machine_3_status==='Gözlənilir'?'badge-warning':'badge-gray')}">${l.machine_3_status}</span></td><td class="p-4"><button class="btn-icon" onclick="editLaundryModal(${l.student_id})"><i data-lucide="edit-3"></i></button></td></tr>`;
+      });
+    }
+    document.getElementById('laundryTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function genLaundryOptions(selected){
+  const stats=['Yoxdur','Gözlənilir','Hazır'];
+  return stats.map(s=>`<option value="${s}" ${s==selected?'selected':''}>${s}</option>`).join('');
+}
+function addLaundryModal(){
+  if(currentStudents.length===0){alert('Əvvəl Tələbələr bölməsinə daxil olun!');return}
+  const opts=currentStudents.map(s=>`<option value="${s.id}">${s.ad_soyad}</option>`).join('');
+  openModal('Yeni Camaşırxana Qeydi',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student">${opts}</select></div><div class="form-row"><div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions('Yoxdur')}</select></div><div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions('Yoxdur')}</select></div><div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions('Yoxdur')}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function editLaundryModal(student_id){
+  apiAction('get_laundry').then(data=>{
+    const l=data.data.find(x=>x.student_id==student_id);
+    const opts=currentStudents.map(s=>`<option value="${s.id}" ${s.id==l.student_id?'selected':''}>${s.ad_soyad}</option>`).join('');
+    openModal('Redaktə',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student" disabled>${opts}</select></div><div class="form-row"><div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions(l.machine_1_status)}</select></div><div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions(l.machine_2_status)}</select></div><div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions(l.machine_3_status)}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  });
+}
+function saveLaundry(student_id){
+  apiAction('save_laundry','POST',{student_id:student_id||document.getElementById('l_student').value,m1:document.getElementById('l_m1').value,m2:document.getElementById('l_m2').value,m3:document.getElementById('l_m3').value}).then(data=>{if(data.success){closeModal();loadLaundry()}});
+}
+</script>
+</body>
+</html>
