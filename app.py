@@ -1,9 +1,9 @@
 import os
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, send_from_directory, render_template_string
 from functools import wraps
 from config import get_db_connection
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 app.secret_key = os.getenv("SECRET_KEY", "kampus-secret-key-2026")
 app.config['JSON_AS_ASCII'] = False
 
@@ -15,12 +15,30 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated
 
+# ===== PUBLIC ROUTES =====
+
+@app.route('/')
+def index():
+    """Root route - serves the student panel (index.html)"""
+    try:
+        return send_from_directory('.', 'index.html')
+    except FileNotFoundError:
+        return jsonify({"success": False, "message": "index.html tapılmadı"}), 404
+
+@app.route('/admin')
+def admin_panel():
+    """Admin panel route - serves the admin HTML panel"""
+    try:
+        return send_from_directory('.', 'admin_panel.html')
+    except FileNotFoundError:
+        return jsonify({"success": False, "message": "admin_panel.html tapılmadı"}), 404
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     email = data.get('email', '')
     sifre = data.get('sifre', '')
-    
+
     if email == '123' and sifre == '123':
         session['admin_logged_in'] = True
         return jsonify({"success": True})
@@ -29,7 +47,9 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return jsonify({"success": True, "redirect": "/"})
+    return jsonify({"success": True, "redirect": "/admin"})
+
+# ===== ADMIN API ROUTES =====
 
 @app.route('/api/admin/<action>', methods=['GET', 'POST'])
 @admin_required
@@ -37,10 +57,10 @@ def admin_api(action):
     conn = get_db_connection()
     if isinstance(conn, tuple):
         return conn[0]
-    
+
     try:
         data = request.get_json() if request.method == 'POST' else {}
-        
+
         if action == 'stats':
             with conn.cursor() as cur:
                 cur.execute("SELECT COUNT(*) as c FROM students")
@@ -52,12 +72,12 @@ def admin_api(action):
                 cur.execute("SELECT COUNT(*) as c FROM rooms")
                 rooms = cur.fetchone()['c']
             return jsonify({"success": True, "stats": {"students": students, "apps": apps, "penalties": penalties, "rooms": rooms}})
-        
+
         elif action == 'get_students':
             with conn.cursor() as cur:
                 cur.execute("SELECT id, ad_soyad, email, ixtisas, kurs, api_key FROM students ORDER BY id ASC")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'save_student':
             with conn.cursor() as cur:
                 if data.get('id'):
@@ -68,18 +88,18 @@ def admin_api(action):
                                [data['ad_soyad'], data['email'], data['ixtisas'], data['kurs']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'delete_student':
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM students WHERE id = %s", [data['id']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'get_rooms':
             with conn.cursor() as cur:
                 cur.execute("SELECT * FROM rooms ORDER BY id ASC")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'save_room':
             with conn.cursor() as cur:
                 if data.get('id'):
@@ -93,13 +113,13 @@ def admin_api(action):
                                [data['id'], data['t1'], data['y1'], data['s1'], data['o1'], data['t2'], data['y2'], data['s2'], data['o2']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'delete_room':
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM rooms WHERE id = %s", [data['id']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'get_applications':
             with conn.cursor() as cur:
                 cur.execute("""SELECT a.id, a.basliq, a.muraciet, a.priority, a.status, 
@@ -107,18 +127,18 @@ def admin_api(action):
                               FROM applications a JOIN students s ON a.student_id = s.id 
                               ORDER BY a.created_at DESC""")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'update_app_status':
             with conn.cursor() as cur:
                 cur.execute("UPDATE applications SET status = %s WHERE id = %s", [data['status'], data['id']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'get_announcements':
             with conn.cursor() as cur:
                 cur.execute("SELECT id, title, description, priority, status FROM contents WHERE type='announcement' ORDER BY created_at DESC")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'save_announcement':
             with conn.cursor() as cur:
                 if data.get('id'):
@@ -129,18 +149,18 @@ def admin_api(action):
                                [data['title'], data['description'], data['priority'], data['status']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'delete_announcement':
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM contents WHERE id = %s", [data['id']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'get_surveys':
             with conn.cursor() as cur:
                 cur.execute("SELECT id, title, description, priority, status FROM contents WHERE type='survey' ORDER BY created_at DESC")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'save_survey':
             with conn.cursor() as cur:
                 if data.get('id'):
@@ -151,19 +171,19 @@ def admin_api(action):
                                [data['title'], data['description'], data['priority'], data['status']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'delete_survey':
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM contents WHERE id = %s", [data['id']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'get_penalties':
             with conn.cursor() as cur:
                 cur.execute("""SELECT p.id, p.amount, p.reason, p.status, DATE_FORMAT(p.created_at, '%%d.%%m.%%Y') as tarix, s.ad_soyad 
                               FROM penalties p JOIN students s ON p.student_id = s.id ORDER BY p.created_at DESC""")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'save_penalty':
             with conn.cursor() as cur:
                 if data.get('id'):
@@ -174,30 +194,30 @@ def admin_api(action):
                                [data['student_id'], data['amount'], data['reason']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'pay_penalty':
             with conn.cursor() as cur:
                 cur.execute("UPDATE penalties SET status = 'Ödənilib' WHERE id = %s", [data['id']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'get_canteen':
             with conn.cursor() as cur:
                 cur.execute("SELECT id, location, day_of_week, meal_name FROM canteen_menu ORDER BY location, day_of_week ASC")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'save_canteen':
             with conn.cursor() as cur:
                 cur.execute("UPDATE canteen_menu SET meal_name = %s WHERE id = %s", [data['meal_name'], data['id']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         elif action == 'get_laundry':
             with conn.cursor() as cur:
                 cur.execute("""SELECT l.student_id, l.machine_1_status, l.machine_2_status, l.machine_3_status, s.ad_soyad 
                               FROM laundry l JOIN students s ON l.student_id = s.id""")
                 return jsonify({"success": True, "data": cur.fetchall()})
-        
+
         elif action == 'save_laundry':
             with conn.cursor() as cur:
                 cur.execute("""INSERT INTO laundry (student_id, machine_1_status, machine_2_status, machine_3_status) 
@@ -207,10 +227,10 @@ def admin_api(action):
                            [data['student_id'], data['m1'], data['m2'], data['m3'], data['m1'], data['m2'], data['m3']])
             conn.commit()
             return jsonify({"success": True})
-        
+
         else:
             return jsonify({"success": False, "message": "Action tapılmadı"})
-            
+
     except Exception as e:
         return jsonify({"success": False, "message": str(e)})
     finally:
