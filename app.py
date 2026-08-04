@@ -79,20 +79,20 @@ def admin_api(action):
 
         elif action == 'get_students':
             with conn.cursor() as cur:
-                cur.execute("SELECT id, ad_soyad, email, ixtisas, kurs, api_key FROM students ORDER BY id ASC")
+                cur.execute("SELECT id, ad_soyad, email, ixtisas, kurs, api_key, universitet, ev_deyisme_isteyi FROM students ORDER BY id ASC")
                 return jsonify({"success": True, "data": cur.fetchall()})
 
         elif action == 'get_student_full':
             with conn.cursor() as cur:
-                cur.execute("SELECT id, ad_soyad, email, sifre, ixtisas, kurs, api_key FROM students WHERE id=%s", [data.get('id')])
+                cur.execute("SELECT id, ad_soyad, email, sifre, ixtisas, kurs, api_key, universitet, ev_deyisme_isteyi FROM students WHERE id=%s", [data.get('id')])
                 student = cur.fetchone()
                 return jsonify({"success": True, "data": student})
 
         elif action == 'save_student':
             with conn.cursor() as cur:
                 if data.get('id'):
-                    fields = ["ad_soyad=%s", "email=%s", "ixtisas=%s", "kurs=%s"]
-                    vals = [data['ad_soyad'], data['email'], data['ixtisas'], data['kurs']]
+                    fields = ["ad_soyad=%s", "email=%s", "ixtisas=%s", "kurs=%s", "universitet=%s", "ev_deyisme_isteyi=%s"]
+                    vals = [data['ad_soyad'], data['email'], data['ixtisas'], data['kurs'], data.get('universitet','Qarabağ Universiteti'), data.get('ev_deyisme_isteyi',0)]
                     if data.get('sifre'):
                         fields.append("sifre=%s")
                         vals.append(data['sifre'])
@@ -102,8 +102,8 @@ def admin_api(action):
                     vals.append(data['id'])
                     cur.execute(f"UPDATE students SET {', '.join(fields)} WHERE id=%s", vals)
                 else:
-                    cur.execute("INSERT INTO students (ad_soyad, email, sifre, ixtisas, kurs, api_key) VALUES (%s, %s, %s, %s, %s, %s)",
-                               [data['ad_soyad'], data['email'], data.get('sifre','12345'), data['ixtisas'], data['kurs'], data.get('api_key')])
+                    cur.execute("INSERT INTO students (ad_soyad, email, sifre, ixtisas, kurs, api_key, universitet, ev_deyisme_isteyi) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                               [data['ad_soyad'], data['email'], data.get('sifre','12345'), data['ixtisas'], data['kurs'], data.get('api_key'), data.get('universitet','Qarabağ Universiteti'), data.get('ev_deyisme_isteyi',0)])
             conn.commit()
             return jsonify({"success": True})
 
