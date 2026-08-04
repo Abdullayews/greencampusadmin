@@ -46,7 +46,7 @@ def login():
     data = request.get_json()
     email = data.get('email', '')
     sifre = data.get('sifre', '')
-    if email == '123' and sifre == '123':
+    if email == 'Admin' and sifre == '123':
         session['admin_logged_in'] = True
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Admin məlumatları yanlışdır!"})
