@@ -249,8 +249,13 @@ def admin_api(action):
         elif action == 'save_penalty':
             with conn.cursor() as cur:
                 if data.get('id'):
-                    cur.execute("UPDATE penalties SET amount=%s, reason=%s WHERE id=%s",
-                               [data['amount'], data['reason'], data['id']])
+                    fields = ["amount=%s", "reason=%s"]
+                    vals = [data['amount'], data['reason']]
+                    if data.get('status'):
+                        fields.append("status=%s")
+                        vals.append(data['status'])
+                    vals.append(data['id'])
+                    cur.execute(f"UPDATE penalties SET {', '.join(fields)} WHERE id=%s", vals)
                 else:
                     cur.execute("INSERT INTO penalties (student_id, amount, reason) VALUES (%s, %s, %s)",
                                [data['student_id'], data['amount'], data['reason']])
