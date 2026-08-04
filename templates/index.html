@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yataqxana İdarəetmə Paneli | KUDS</title>
+<title>Yataqxana Idareetme Paneli | KUDS</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -18,8 +18,6 @@
   --radius-modal:16px; --radius-avatar:50%;
   --transition-fast:150ms cubic-bezier(0.4,0,0.2,1);
   --transition-base:250ms cubic-bezier(0.4,0,0.2,1);
-  --transition-slow:350ms cubic-bezier(0.4,0,0.2,1);
-  --transition-bounce:400ms cubic-bezier(0.34,1.56,0.64,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -27,17 +25,12 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 
 @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes fadeInScale{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
-@keyframes slideInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.8}}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes ripple{to{transform:scale(4);opacity:0}}
-@keyframes bounceIn{0%{opacity:0;transform:scale(0.3)}50%{transform:scale(1.05)}70%{transform:scale(0.9)}100%{opacity:1;transform:scale(1)}}
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes toastSlide{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
 
 .animate-fade-in-up{animation:fadeInUp 0.5s var(--transition-base) forwards;opacity:0}
 .delay-100{animation-delay:100ms}
@@ -48,12 +41,10 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .skeleton{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-btn)}
 .skeleton-text{height:16px;margin-bottom:8px}
 
-/* LOGIN */
 .login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,var(--ku-dark-green) 0%,#1a5248 50%,var(--ku-green) 100%);background-size:200% 200%;animation:gradientShift 15s ease infinite;z-index:9999;display:none;justify-content:center;align-items:center;padding:24px}
 .login-overlay::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:0.6}
 .login-overlay.active{display:flex}
-.login-card{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius-modal);padding:40px;box-shadow:var(--shadow-lg);position:relative;z-index:2;transform:translateY(0);transition:transform 0.3s ease,box-shadow 0.3s ease}
-.login-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.login-card{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius-modal);padding:40px;box-shadow:var(--shadow-lg);position:relative;z-index:2}
 .login-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:32px;animation:fadeInUp 0.6s ease}
 .login-logo-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--ku-soft-green),var(--ku-light-blue));border-radius:var(--radius-avatar);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:var(--shadow-sm);animation:float 3s ease-in-out infinite}
 .login-logo-icon i{width:32px;height:32px;color:var(--ku-dark-green)}
@@ -64,15 +55,11 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .input-group input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;outline:none;background:var(--bg);transition:all var(--transition-fast)}
 .input-group input:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
 .login-btn{width:100%;padding:14px 24px;background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(68,118,108,0.3)}
-.login-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,0.2) 100%);opacity:0;transition:opacity 0.3s}
 .login-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.4)}
-.login-btn:hover::after{opacity:1}
-.login-btn:active{transform:translateY(0)}
 .login-btn i{width:20px;height:20px;transition:transform 0.3s}
 .login-btn:hover i{transform:translateX(4px)}
 .login-error{color:var(--danger);font-size:14px;text-align:center;margin-top:16px;display:none;padding:8px;background:#fef2f2;border-radius:var(--radius-btn);border:1px solid #fee2e2;animation:shake 0.4s ease}
 
-/* SIDEBAR */
 .sidebar{width:280px;background:var(--surface);height:100vh;position:fixed;left:0;top:0;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);overflow:visible;white-space:nowrap;box-shadow:var(--shadow-sm)}
 .sidebar.collapsed{width:80px}
 .sidebar.collapsed .logo span,.sidebar.collapsed .nav-item span,.sidebar.collapsed .nav-section,.sidebar.collapsed .sidebar-footer-links h4,.sidebar.collapsed .sidebar-footer-links li a span{opacity:0;width:0;pointer-events:none}
@@ -107,7 +94,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .sidebar-footer-links li a i{width:18px;height:18px;color:var(--text-secondary);transition:color 0.2s}
 .sidebar-footer-links li a:hover i{color:var(--ku-green)}
 
-/* MAIN */
 .main-wrapper{margin-left:280px;min-height:100vh;display:flex;flex-direction:column;transition:margin-left 0.35s cubic-bezier(0.4,0,0.2,1);flex:1}
 .main-wrapper.expanded{margin-left:80px}
 .top-bar{height:72px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 32px;position:sticky;top:0;z-index:90;transition:all var(--transition-fast)}
@@ -123,7 +109,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .page-content{display:none;width:100%;opacity:0;transform:translateY(16px);transition:opacity 0.3s ease,transform 0.3s ease}
 .page-content.active-page{display:block;opacity:1;transform:translateY(0);animation:fadeInUp 0.4s ease}
 
-/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:32px}
 .stat-card{background:var(--surface);padding:28px;border-radius:var(--radius-card);border:1px solid var(--border);box-shadow:var(--shadow-xs);transition:all var(--transition-base);position:relative;overflow:hidden;animation:fadeInUp 0.5s ease both}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));transform:scaleX(0);transition:transform 0.3s ease}
@@ -135,7 +120,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .stat-label{font-size:14px;color:var(--text-secondary);margin-bottom:8px;font-weight:500}
 .stat-value{font-size:32px;font-weight:700;color:var(--text-primary);line-height:1}
 
-/* WIDGET */
 .widget-card{background:var(--surface);border-radius:var(--radius-card);border:1px solid var(--border);padding:28px;box-shadow:var(--shadow-xs);transition:all var(--transition-base);position:relative;overflow:hidden}
 .widget-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-2px)}
 .widget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
@@ -143,11 +127,8 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .section-title{font-size:24px;margin-bottom:24px;color:var(--text-primary);font-weight:700;position:relative;display:inline-block}
 .section-title::after{content:'';position:absolute;bottom:-6px;left:0;width:40px;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));border-radius:2px}
 
-/* BUTTONS */
 .btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(68,118,108,0.25)}
-.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,0.15) 100%);opacity:0;transition:opacity 0.3s}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.35)}
-.btn-primary:hover::before{opacity:1}
 .btn-primary:active{transform:translateY(0)}
 .btn-primary i{width:18px;height:18px}
 .btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(239,68,68,0.25)}
@@ -160,7 +141,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .btn-icon.danger:hover{background:#fee2e2;color:var(--danger);border-color:var(--danger)}
 .btn-icon i{width:18px;height:18px}
 
-/* TABLES */
 .table-wrap{overflow-x:auto}
 .data-table{width:100%;border-collapse:separate;border-spacing:0}
 .data-table thead th{padding:16px;text-align:left;font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;border-bottom:2px solid var(--border);background:var(--bg);white-space:nowrap}
@@ -169,7 +149,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .data-table tbody td{padding:16px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle}
 .data-table tbody td:last-child{white-space:nowrap}
 
-/* FORMS */
 .form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary);font-weight:400;transition:all var(--transition-fast)}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
 .form-textarea{min-height:100px;resize:vertical}
@@ -179,7 +158,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .form-row{display:flex;gap:16px}
 .form-row .form-group{flex:1}
 
-/* BADGES */
 .badge{padding:5px 14px;border-radius:var(--radius-badge);font-weight:600;font-size:12px;display:inline-block;transition:transform 0.2s}
 .badge:hover{transform:scale(1.05)}
 .badge-success{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
@@ -188,10 +166,9 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .badge-info{background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e}
 .badge-gray{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);color:var(--text-secondary)}
 
-/* MODAL */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:1000;display:none;justify-content:center;align-items:center;padding:24px;opacity:0;transition:opacity 0.3s ease}
 .modal-overlay.active{display:flex;opacity:1}
-.modal-card{width:100%;max-width:560px;background:var(--surface);border-radius:var(--radius-modal);box-shadow:var(--shadow-lg);overflow:hidden;transform:scale(0.9) translateY(20px);transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);max-height:90vh;display:flex;flex-direction:column}
+.modal-card{width:100%;max-width:640px;background:var(--surface);border-radius:var(--radius-modal);box-shadow:var(--shadow-lg);overflow:hidden;transform:scale(0.9) translateY(20px);transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);max-height:90vh;display:flex;flex-direction:column}
 .modal-overlay.active .modal-card{transform:scale(1) translateY(0)}
 .modal-header{padding:24px;background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .modal-header h3{font-size:20px;font-weight:600}
@@ -201,7 +178,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .modal-body{padding:28px;overflow-y:auto;flex:1}
 .modal-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px;flex-shrink:0;background:var(--bg)}
 
-/* CANTEEN */
 .canteen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
 .canteen-location{border:1px solid var(--border);border-radius:var(--radius-card);padding:24px;transition:all var(--transition-base);background:var(--surface)}
 .canteen-location:hover{border-color:var(--ku-green);box-shadow:var(--shadow-sm)}
@@ -213,29 +189,48 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .meal-input{border:none;border-bottom:2px solid var(--border);background:transparent;font-family:'Poppins';font-size:14px;text-align:right;color:var(--text-primary);font-weight:500;padding:4px 8px;width:100%;max-width:200px;outline:none;transition:border-color 0.2s}
 .meal-input:focus{border-bottom-color:var(--ku-green)}
 
-/* LOADING */
+.room-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px}
+.room-student-card{border:1px solid var(--border);border-radius:var(--radius-card);padding:16px;background:var(--bg);transition:all 0.2s}
+.room-student-card:hover{border-color:var(--ku-green);box-shadow:var(--shadow-xs)}
+.room-student-card h5{font-size:13px;font-weight:600;color:var(--ku-dark-green);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.room-student-card h5 i{width:14px;height:14px}
+
+.toast-container{position:fixed;top:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:12px;pointer-events:none}
+.toast{pointer-events:auto;background:var(--surface);border-radius:var(--radius-card);padding:14px 18px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;min-width:280px;max-width:380px;animation:toastSlide 0.4s ease;border-left:4px solid var(--ku-green);font-size:14px;font-weight:500}
+.toast.success{border-left-color:var(--success)}
+.toast.error{border-left-color:var(--danger)}
+.toast.warning{border-left-color:var(--warning)}
+.toast i{width:20px;height:20px;flex-shrink:0}
+.toast.success i{color:var(--success)}
+.toast.error i{color:var(--danger)}
+.toast.warning i{color:var(--warning)}
+
+.profile-card{border:1px solid var(--border);border-radius:var(--radius-card);padding:20px;background:var(--surface);transition:all 0.2s;margin-bottom:16px}
+.profile-card:hover{border-color:var(--ku-green);box-shadow:var(--shadow-xs)}
+.profile-card h4{font-size:16px;font-weight:600;color:var(--ku-dark-green);margin-bottom:4px}
+.profile-card .profile-meta{font-size:12px;color:var(--text-secondary);margin-bottom:12px}
+.profile-field{margin-bottom:10px}
+.profile-field-label{font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
+.profile-field-value{font-size:14px;color:var(--text-primary);line-height:1.5}
+
 .loader-wrap{display:flex;justify-content:center;align-items:center;min-height:200px}
 .loader{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--ku-green);border-radius:50%;animation:spin 0.8s linear infinite}
-
-/* EMPTY */
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary);animation:fadeIn 0.4s ease}
 .empty-state i{width:64px;height:64px;margin-bottom:16px;opacity:0.4}
 .empty-state p{font-size:16px;font-weight:500}
 
-/* SCROLLBAR */
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
 
-/* FOCUS */
 *:focus-visible{outline:2px solid var(--ku-green);outline-offset:2px;border-radius:4px}
 button:focus-visible,a:focus-visible{outline-offset:3px}
 
-/* RESPONSIVE */
 @media (max-width:1023px){
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .form-row{flex-direction:column;gap:0}
+  .room-detail-grid{grid-template-columns:1fr}
 }
 @media (max-width:767px){
   .stats-grid{grid-template-columns:1fr}
@@ -245,7 +240,8 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   .sidebar .logo span,.sidebar .nav-item span,.sidebar .nav-section,.sidebar .sidebar-footer-links h4,.sidebar .sidebar-footer-links li a span{opacity:0;width:0;pointer-events:none}
   .sidebar .logo,.sidebar .nav-item,.sidebar .sidebar-footer-links li a{justify-content:center;padding:12px 16px;gap:0}
   .content-layout{padding:20px}
-  .modal-card{max-height:95vh}
+  .modal-card{max-height:95vh;max-width:95vw}
+  .canteen-grid{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
@@ -255,24 +251,25 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
 </head>
 <body>
 
-<!-- LOGIN -->
+<div class="toast-container" id="toastContainer"></div>
+
 <div class="login-overlay active" id="loginOverlay">
   <div class="login-card">
     <div class="login-logo">
       <div class="login-logo-icon"><i data-lucide="shield-check"></i></div>
       <h2>Admin Paneli</h2>
-      <p>Yataqxana İdarəetmə Sistemi</p>
+      <p>Yataqxana Idareetme Sistemi</p>
     </div>
     <form id="loginForm" onsubmit="handleLogin(event)">
       <div class="input-group">
-        <label>İstifadəçi adı</label>
-        <input type="text" id="loginEmail" placeholder="İstifadəçi adı (123)" required>
+        <label>Istifadeci adi</label>
+        <input type="text" id="loginEmail" placeholder="Istifadeci adi (123)" required>
       </div>
       <div class="input-group">
-        <label>Şifrə</label>
-        <input type="password" id="loginPassword" placeholder="Şifrə (123)" required>
+        <label>Sifre</label>
+        <input type="password" id="loginPassword" placeholder="Sifre (123)" required>
       </div>
-      <div class="login-error" id="loginError">Məlumatlar yanlışdır!</div>
+      <div class="login-error" id="loginError">Melumatlar yanlisdir!</div>
       <button type="submit" class="login-btn" id="loginBtn">
         <i data-lucide="log-in"></i> Daxil ol
       </button>
@@ -280,57 +277,58 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   </div>
 </div>
 
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="logo" onclick="toggleSidebar()">
     <i data-lucide="shield-check"></i>
     <span>Admin Panel</span>
   </div>
   <nav class="nav-menu">
-    <div class="nav-section">Ümumi</div>
+    <div class="nav-section">Umumi</div>
     <button class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)">
       <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
     </button>
-    <div class="nav-section">İdarəetmə</div>
+    <div class="nav-section">Idareetme</div>
     <button class="nav-item" data-menu="students" onclick="loadPage('students',this)">
-      <i data-lucide="users"></i><span>Tələbələr</span>
+      <i data-lucide="users"></i><span>Telebeler</span>
+    </button>
+    <button class="nav-item" data-menu="profiles" onclick="loadPage('profiles',this)">
+      <i data-lucide="user-circle"></i><span>Telebe Profilleri</span>
     </button>
     <button class="nav-item" data-menu="rooms" onclick="loadPage('rooms',this)">
-      <i data-lucide="door-open"></i><span>Otaqlar və Əşyalar</span>
+      <i data-lucide="door-open"></i><span>Otaqlar ve Esyalar</span>
     </button>
     <button class="nav-item" data-menu="applications" onclick="loadPage('applications',this)">
-      <i data-lucide="clipboard-list"></i><span>Müraciətlər</span>
+      <i data-lucide="clipboard-list"></i><span>Muracietler</span>
     </button>
-    <div class="nav-section">Məzmun</div>
+    <div class="nav-section">Mezmun</div>
     <button class="nav-item" data-menu="announcements" onclick="loadPage('announcements',this)">
       <i data-lucide="megaphone"></i><span>Elanlar</span>
     </button>
     <button class="nav-item" data-menu="surveys" onclick="loadPage('surveys',this)">
-      <i data-lucide="clipboard-check"></i><span>Anketlər</span>
+      <i data-lucide="clipboard-check"></i><span>Anketler</span>
     </button>
     <button class="nav-item" data-menu="canteen" onclick="loadPage('canteen',this)">
-      <i data-lucide="utensils"></i><span>Yeməkxana</span>
+      <i data-lucide="utensils"></i><span>Yemekxana</span>
     </button>
     <button class="nav-item" data-menu="laundry" onclick="loadPage('laundry',this)">
-      <i data-lucide="washing-machine"></i><span>Camaşırxana</span>
+      <i data-lucide="washing-machine"></i><span>Camasirxana</span>
     </button>
-    <div class="nav-section">Maliyyə</div>
+    <div class="nav-section">Maliyye</div>
     <button class="nav-item" data-menu="penalties" onclick="loadPage('penalties',this)">
-      <i data-lucide="receipt-text"></i><span>Cərimələr</span>
+      <i data-lucide="receipt-text"></i><span>Cerimeler</span>
     </button>
   </nav>
   <div class="sidebar-footer-links">
     <h4>Hesab</h4>
-    <ul><li><a onclick="logout()"><i data-lucide="log-out"></i><span>Çıxış</span></a></li></ul>
+    <ul><li><a onclick="logout()"><i data-lucide="log-out"></i><span>Cixis</span></a></li></ul>
   </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main-wrapper" id="mainWrapper">
   <header class="top-bar">
     <div>
       <h1 id="pageTitle">Dashboard</h1>
-      <div class="top-bar-desc" id="pageDesc">Ümumi statistika</div>
+      <div class="top-bar-desc" id="pageDesc">Umumi statistika</div>
     </div>
     <div class="top-bar-actions">
       <button class="icon-btn" onclick="toggleSidebar()" title="Menyu"><i data-lucide="panel-left"></i></button>
@@ -338,100 +336,100 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   </header>
 
   <main class="content-layout">
-    <!-- DASHBOARD -->
     <section id="page-dashboard" class="page-content active-page">
       <div class="stats-grid" id="dashboardStats">
-        <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Telebe sayi</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Aktiv Otaqlar</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
-        <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
-        <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gozleyen Muraciet</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Odenilmamis Cerime</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
       </div>
     </section>
 
-    <!-- STUDENTS -->
     <section id="page-students" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Tələbə Siyahısı</h3><button class="btn-primary" onclick="addStudentModal()"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
+        <div class="widget-header"><h3>Telebe Siyahisi</h3><button class="btn-primary" onclick="addStudentModal()"><i data-lucide="plus"></i> Yeni Telebe</button></div>
         <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchStudents" onkeyup="filterTable('searchStudents','studentsTable')" placeholder="Axtar..."></div>
-        <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr><th>ID</th><th>Ad Soyad</th><th>Email</th><th>İxtisas</th><th>Kurs</th><th>API Açarı</th><th>Əməliyyat</th></tr></thead><tbody id="studentsTbody"><tr><td colspan="7"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr><th>ID</th><th>Ad Soyad</th><th>Email</th><th>Ixtisas</th><th>Kurs</th><th>API Acari</th><th>Emeliyyat</th></tr></thead><tbody id="studentsTbody"><tr><td colspan="7"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
-    <!-- ROOMS -->
+    <section id="page-profiles" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Telebe Profilleri</h3></div>
+        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchProfiles" onkeyup="filterTable('searchProfiles','profilesTable')" placeholder="Axtar..."></div>
+        <div class="table-wrap"><table class="data-table" id="profilesTable"><thead><tr><th>Telebe</th><th>Yuxu Rejimi</th><th>Temizlik</th><th>Sosial Munasibet</th><th>Hayat Terzi</th><th>Emeliyyat</th></tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
     <section id="page-rooms" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button class="btn-primary" onclick="addRoomModal()"><i data-lucide="plus"></i> Yeni Otaq</button></div>
+        <div class="widget-header"><h3>Otaqlar ve Esyalar</h3><button class="btn-primary" onclick="addRoomModal()"><i data-lucide="plus"></i> Yeni Otaq</button></div>
         <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchRooms" onkeyup="filterTable('searchRooms','roomsTable')" placeholder="Axtar..."></div>
-        <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr><th>Otaq ID</th><th>Tələbə 1</th><th>Tələbə 2</th><th>Əməliyyat</th></tr></thead><tbody id="roomsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr><th>Otaq ID</th><th>Telebeler</th><th>Emeliyyat</th></tr></thead><tbody id="roomsTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
-    <!-- APPLICATIONS -->
     <section id="page-applications" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Müraciətlər</h3></div>
+        <div class="widget-header"><h3>Muracietler</h3><button class="btn-primary" onclick="addApplicationModal()"><i data-lucide="plus"></i> Yeni Muraciet</button></div>
         <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchApps" onkeyup="filterTable('searchApps','appsTable')" placeholder="Axtar..."></div>
-        <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr><th>Tələbə</th><th>Müraciət</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr><th>Telebe</th><th>Muraciet</th><th>Status</th><th>Emeliyyat</th></tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
-    <!-- ANNOUNCEMENTS -->
     <section id="page-announcements" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Elanlar</h3><button class="btn-primary" onclick="addContentModal('announcement','Elan')"><i data-lucide="plus"></i> Yeni Elan</button></div>
         <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchAnn" onkeyup="filterTable('searchAnn','annTable')" placeholder="Axtar..."></div>
-        <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr><th>Başlıq</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr><th>Basliq</th><th>Status</th><th>Emeliyyat</th></tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
-    <!-- SURVEYS -->
     <section id="page-surveys" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Anketlər</h3><button class="btn-primary" onclick="addContentModal('survey','Anket')"><i data-lucide="plus"></i> Yeni Anket</button></div>
+        <div class="widget-header"><h3>Anketler</h3><button class="btn-primary" onclick="addContentModal('survey','Anket')"><i data-lucide="plus"></i> Yeni Anket</button></div>
         <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchSur" onkeyup="filterTable('searchSur','surTable')" placeholder="Axtar..."></div>
-        <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr><th>Başlıq</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr><th>Basliq</th><th>Status</th><th>Emeliyyat</th></tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
-    <!-- PENALTIES -->
     <section id="page-penalties" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Cərimələr</h3><button class="btn-danger" onclick="addPenaltyModal()"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
+        <div class="widget-header"><h3>Cerimeler</h3><button class="btn-danger" onclick="addPenaltyModal()"><i data-lucide="plus"></i> Yeni Cerime</button></div>
         <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchPen" onkeyup="filterTable('searchPen','penTable')" placeholder="Axtar..."></div>
-        <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr><th>Tələbə</th><th>Səbəb</th><th>Məbləğ</th><th>Status</th><th>Əməliyyat</th></tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr><th>Telebe</th><th>Sebeb</th><th>Mebleg</th><th>Status</th><th>Emeliyyat</th></tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
-    <!-- CANTEEN -->
     <section id="page-canteen" class="page-content">
-      <h2 class="section-title">Həftəlik Menyu</h2>
+      <h2 class="section-title">Heftelik Menyu</h2>
       <div class="canteen-grid" id="canteenGrid"><div class="widget-card" style="display:flex;justify-content:center;align-items:center;min-height:200px"><div class="loader"></div></div></div>
     </section>
 
-    <!-- LAUNDRY -->
     <section id="page-laundry" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Camaşırxana</h3><button class="btn-primary" onclick="addLaundryModal()"><i data-lucide="plus"></i> Maşın Statusu Təyin Et</button></div>
+        <div class="widget-header"><h3>Camasirxana</h3><button class="btn-primary" onclick="addLaundryModal()"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
         <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchLaundry" onkeyup="filterTable('searchLaundry','laundryTable')" placeholder="Axtar..."></div>
-        <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr><th>Tələbə</th><th>Maşın 1</th><th>Maşın 2</th><th>Maşın 3</th><th>Əməliyyat</th></tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr><th>Telebe</th><th>Masin 1</th><th>Masin 2</th><th>Masin 3</th><th>Emeliyyat</th></tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
   </main>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="universalModal">
   <div class="modal-card">
     <div class="modal-header"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer" id="modalFooter" style="display:none"><button class="btn-secondary" onclick="closeModal()">Ləğv et</button></div>
+    <div class="modal-footer" id="modalFooter" style="display:none"><button class="btn-secondary" onclick="closeModal()">Legv et</button></div>
   </div>
 </div>
-
 <script>
 lucide.createIcons();
 let currentStudents=[];
 let isLoggedIn=false;
+let currentRooms=[];
+let currentApps=[];
+let currentProfiles=[];
 
 fetch('/api/admin/stats',{method:'GET'})
 .then(r=>{if(r.status===403){showLogin()}else{hideLogin();isLoggedIn=true;loadDashboard()}})
@@ -444,17 +442,28 @@ function handleLogin(e){
   e.preventDefault();
   const btn=document.getElementById('loginBtn');
   const original=btn.innerHTML;
-  btn.innerHTML='<i data-lucide="loader-2" style="animation:spin 1s linear infinite"></i> Yoxlanılır...';
+  btn.innerHTML='<i data-lucide="loader-2" style="animation:spin 1s linear infinite"></i> Yoxlanilir...';
   lucide.createIcons();
   fetch('/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('loginEmail').value,sifre:document.getElementById('loginPassword').value})})
   .then(r=>r.json()).then(data=>{
-    if(data.success){hideLogin();isLoggedIn=true;loadDashboard()}
+    if(data.success){hideLogin();isLoggedIn=true;loadDashboard();showToast('Ugurla daxil oldunuz!','success')}
     else{document.getElementById('loginError').style.display='block';btn.innerHTML=original;lucide.createIcons()}
   }).catch(()=>{document.getElementById('loginError').style.display='block';btn.innerHTML=original;lucide.createIcons()});
 }
 
-function logout(){fetch('/logout').then(()=>{isLoggedIn=false;showLogin()})}
+function logout(){fetch('/logout').then(()=>{isLoggedIn=false;showLogin();showToast('Cixis edildi','success')})}
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('collapsed');document.getElementById('mainWrapper').classList.toggle('expanded')}
+
+function showToast(message,type='success'){
+  const container=document.getElementById('toastContainer');
+  const toast=document.createElement('div');
+  toast.className='toast '+type;
+  const icon=type==='success'?'check-circle':(type==='error'?'x-circle':'alert-triangle');
+  toast.innerHTML='<i data-lucide="'+icon+'"></i><span>'+message+'</span>';
+  container.appendChild(toast);
+  lucide.createIcons();
+  setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(120%)';toast.style.transition='all 0.3s ease';setTimeout(()=>toast.remove(),300)},3000);
+}
 
 function apiAction(action,method='GET',body=null){
   return fetch(`/api/admin/${action}`,{method:method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):null})
@@ -484,11 +493,12 @@ function loadPage(page,el){
   document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
   if(el)el.classList.add('active');
   const titles={
-    dashboard:['Dashboard','Ümumi statistika'],students:['Tələbələr','Tələbə məlumatları'],
-    rooms:['Otaqlar və Əşyalar','İnventar idarəetməsi'],applications:['Müraciətlər','Yataqxana və Təmir sorğuları'],
-    announcements:['Elanlar','Rəsmi elanlar'],surveys:['Anketlər','Sorğular və anketlər'],
-    penalties:['Cərimələr','Cərimə əməliyyatları'],canteen:['Yeməkxana','Həftəlik menyu'],
-    laundry:['Camaşırxana','Maşın idarəetməsi']
+    dashboard:['Dashboard','Umumi statistika'],students:['Telebeler','Telebe melumatlari'],
+    profiles:['Telebe Profilleri','Telebe profil melumatlari'],
+    rooms:['Otaqlar ve Esyalar','Inventar idareetmesi'],applications:['Muracietler','Yataqxana ve Temir sorğulari'],
+    announcements:['Elanlar','Resmi elanlar'],surveys:['Anketler','Sorğular ve anketler'],
+    penalties:['Cerimeler','Cerime emeliyyatlari'],canteen:['Yemekxana','Heftelik menyu'],
+    laundry:['Camasirxana','Masin idareetmesi']
   };
   document.getElementById('pageTitle').innerText=titles[page][0];
   document.getElementById('pageDesc').innerText=titles[page][1];
@@ -497,6 +507,7 @@ function loadPage(page,el){
   if(target){target.classList.add('active-page');}
   if(page==='dashboard')loadDashboard();
   if(page==='students')loadStudents();
+  if(page==='profiles')loadProfiles();
   if(page==='rooms')loadRooms();
   if(page==='applications')loadApplications();
   if(page==='announcements')loadAnnouncements();
@@ -510,10 +521,10 @@ function loadDashboard(){
   apiAction('stats').then(data=>{
     const s=data.stats;
     document.getElementById('dashboardStats').innerHTML=`
-      <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="stat-value">${s.students}</div></div>
+      <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Telebe sayi</div><div class="stat-value">${s.students}</div></div>
       <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Aktiv Otaqlar</div><div class="stat-value">${s.rooms}</div></div>
-      <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="stat-value">${s.apps}</div></div>
-      <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">${s.penalties}</div></div>`;
+      <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gozleyen Muraciet</div><div class="stat-value">${s.apps}</div></div>
+      <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Odenilmamis Cerime</div><div class="stat-value">${s.penalties}</div></div>`;
     lucide.createIcons();
   });
 }
@@ -523,10 +534,10 @@ function loadStudents(){
     currentStudents=data.data;
     let html='';
     if(data.data.length===0){
-      html='<tr><td colspan="7"><div class="empty-state"><i data-lucide="users"></i><p>Tələbə yoxdur</p></div></td></tr>';
+      html='<tr><td colspan="7"><div class="empty-state"><i data-lucide="users"></i><p>Telebe yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((s,idx)=>{
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4">${s.id}</td><td class="p-4" style="font-weight:600">${s.ad_soyad}</td><td class="p-4">${s.email}</td><td class="p-4">${s.ixtisas}</td><td class="p-4">${s.kurs}</td><td class="p-4"><span class="badge ${s.api_key?'badge-success':'badge-gray'}">${s.api_key?'Var':'Yoxdur'}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editStudentModal(${s.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteStudent(${s.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4">${s.id}</td><td class="p-4" style="font-weight:600">${s.ad_soyad}</td><td class="p-4">${s.email}</td><td class="p-4">${s.ixtisas||'-'}</td><td class="p-4">${s.kurs||'-'}</td><td class="p-4"><span class="badge ${s.api_key?'badge-success':'badge-gray'}">${s.api_key?'Var':'Yoxdur'}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editStudentModal(${s.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteStudent(${s.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('studentsTbody').innerHTML=html;
@@ -534,27 +545,70 @@ function loadStudents(){
   });
 }
 function addStudentModal(){
-  openModal('Yeni Tələbə',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" placeholder="Ad Soyad"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" placeholder="Email"></div><div class="form-group"><label>İxtisas</label><input type="text" class="form-input" id="s_ixtisas" placeholder="İxtisas"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" placeholder="Kurs"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  openModal('Yeni Telebe',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" placeholder="Ad Soyad"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" placeholder="Email"></div><div class="form-group"><label>Sifre</label><input type="text" class="form-input" id="s_sifre" placeholder="Sifre (default: 12345)"></div><div class="form-group"><label>Ixtisas</label><input type="text" class="form-input" id="s_ixtisas" placeholder="Ixtisas"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" placeholder="Kurs"></div><div class="form-group"><label>API Acari</label><input type="text" class="form-input" id="s_api_key" placeholder="API Acari (opsional)"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
 }
 function editStudentModal(id){
-  const s=currentStudents.find(x=>x.id==id);
-  openModal('Tələbəni Redaktə Et',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" value="${s.ad_soyad}"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" value="${s.email}"></div><div class="form-group"><label>İxtisas</label><input type="text" class="form-input" id="s_ixtisas" value="${s.ixtisas}"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" value="${s.kurs}"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  apiAction('get_student_full','POST',{id:id}).then(res=>{
+    const s=res.data;
+    openModal('Telebeni Redakte Et',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" value="${s.ad_soyad}"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" value="${s.email}"></div><div class="form-group"><label>Yeni Sifre (bos saxla deyismesin)</label><input type="text" class="form-input" id="s_sifre" placeholder="Yeni sifre"></div><div class="form-group"><label>Ixtisas</label><input type="text" class="form-input" id="s_ixtisas" value="${s.ixtisas||''}"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" value="${s.kurs||''}"></div><div class="form-group"><label>API Acari</label><input type="text" class="form-input" id="s_api_key" value="${s.api_key||''}" placeholder="API Acari"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  });
 }
 function saveStudent(id){
-  apiAction('save_student','POST',{id:id,ad_soyad:document.getElementById('s_name').value,email:document.getElementById('s_email').value,ixtisas:document.getElementById('s_ixtisas').value,kurs:document.getElementById('s_kurs').value}).then(data=>{if(data.success){closeModal();loadStudents()}});
+  const payload={id:id,ad_soyad:document.getElementById('s_name').value,email:document.getElementById('s_email').value,ixtisas:document.getElementById('s_ixtisas').value,kurs:document.getElementById('s_kurs').value};
+  const sifre=document.getElementById('s_sifre').value;
+  if(sifre)payload.sifre=sifre;
+  payload.api_key=document.getElementById('s_api_key').value;
+  apiAction('save_student','POST',payload).then(data=>{if(data.success){closeModal();loadStudents();showToast(id?'Telebe yenilendi':'Yeni telebe elave edildi','success')}else{showToast(data.message||'Xeta bas verdi','error')}});
 }
-function deleteStudent(id){if(confirm('Silinsin?'))apiAction('delete_student','POST',{id:id}).then(data=>{if(data.success)loadStudents()})}
+function deleteStudent(id){if(confirm('Bu telebeni silmek istediyinize eminsiniz?'))apiAction('delete_student','POST',{id:id}).then(data=>{if(data.success){loadStudents();showToast('Telebe silindi','success')}})}
+
+function loadProfiles(){
+  apiAction('get_profiles').then(data=>{
+    currentProfiles=data.data;
+    let html='';
+    if(data.data.length===0){
+      html='<tr><td colspan="6"><div class="empty-state"><i data-lucide="user-circle"></i><p>Profil yoxdur</p></div></td></tr>';
+    }else{
+      data.data.forEach((p,idx)=>{
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${p.ad_soyad}</td><td class="p-4">${p.yuxu_rejimi||'-'}</td><td class="p-4">${p.temizlik||'-'}</td><td class="p-4">${p.sosial_munasibet||'-'}</td><td class="p-4">${p.hayat_terzi||'-'}</td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editProfileModal(${p.student_id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteProfile(${p.student_id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+      });
+    }
+    document.getElementById('profilesTbody').innerHTML=html;
+    lucide.createIcons();
+  });
+}
+function editProfileModal(student_id){
+  const p=currentProfiles.find(x=>x.student_id==student_id);
+  const opts=currentStudents.map(s=>`<option value="${s.id}" ${s.id==student_id?'selected':''}>${s.ad_soyad}</option>`).join('');
+  openModal('Profili Redakte Et',`<div class="form-group"><label>Telebe</label><select class="form-select" id="pr_student" ${p?'disabled':''}>${opts}</select></div><div class="form-group"><label>Yuxu Rejimi</label><textarea class="form-textarea" id="pr_yuxu" rows="3">${p?p.yuxu_rejimi||'':''}</textarea></div><div class="form-group"><label>Temizlik</label><textarea class="form-textarea" id="pr_temizlik" rows="3">${p?p.temizlik||'':''}</textarea></div><div class="form-group"><label>Sosial Munasibet</label><textarea class="form-textarea" id="pr_sosial" rows="3">${p?p.sosial_munasibet||'':''}</textarea></div><div class="form-group"><label>Hayat Terzi</label><textarea class="form-textarea" id="pr_hayat" rows="3">${p?p.hayat_terzi||'':''}</textarea></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveProfile(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function saveProfile(student_id){
+  apiAction('save_profile','POST',{student_id:student_id||document.getElementById('pr_student').value,yuxu_rejimi:document.getElementById('pr_yuxu').value,temizlik:document.getElementById('pr_temizlik').value,sosial_munasibet:document.getElementById('pr_sosial').value,hayat_terzi:document.getElementById('pr_hayat').value}).then(data=>{if(data.success){closeModal();loadProfiles();showToast('Profil yenilendi','success')}else{showToast(data.message||'Xeta','error')}});
+}
+function deleteProfile(student_id){if(confirm('Bu profil silinsin?'))apiAction('delete_profile','POST',{student_id:student_id}).then(data=>{if(data.success){loadProfiles();showToast('Profil silindi','success')}})}
 
 function loadRooms(){
   apiAction('get_rooms').then(data=>{
+    currentRooms=data.data;
     let html='';
     if(data.data.length===0){
-      html='<tr><td colspan="4"><div class="empty-state"><i data-lucide="door-open"></i><p>Otaq yoxdur</p></div></td></tr>';
+      html='<tr><td colspan="3"><div class="empty-state"><i data-lucide="door-open"></i><p>Otaq yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((r,idx)=>{
-        const t1=r.telebe_1_id?`İD:${r.telebe_1_id} (Y:${r.yataq_1_status?r.yataq_1_status[0]:'-'},Ş:${r.skaf_1_status?r.skaf_1_status[0]:'-'},O:${r.oturacaq_1_status?r.oturacaq_1_status[0]:'-'})`:'Boş';
-        const t2=r.telebe_2_id?`İD:${r.telebe_2_id} (Y:${r.yataq_2_status?r.yataq_2_status[0]:'-'},Ş:${r.skaf_2_status?r.skaf_2_status[0]:'-'},O:${r.oturacaq_2_status?r.oturacaq_2_status[0]:'-'})`:'Boş';
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:700">${r.id}</td><td class="p-4">${t1}</td><td class="p-4">${t2}</td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editRoomModal(${r.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteRoom(${r.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        let students=[];
+        for(let i=1;i<=6;i++){
+          const tid=r['telebe_'+i+'_id'];
+          if(tid){
+            const st=currentStudents.find(x=>x.id==tid);
+            const name=st?st.ad_soyad:'ID:'+tid;
+            const y=r['yataq_'+i+'_status']?r['yataq_'+i+'_status'][0]:'-';
+            const s=r['skaf_'+i+'_status']?r['skaf_'+i+'_status'][0]:'-';
+            const o=r['oturacaq_'+i+'_status']?r['oturacaq_'+i+'_status'][0]:'-';
+            students.push(`<div style="font-size:13px;padding:3px 0"><strong>${name}</strong> <span style="color:var(--text-secondary)">(Y:${y}, S:${s}, O:${o})</span></div>`);
+          }
+        }
+        const studentsHtml=students.length?students.join(''):'<span style="color:var(--text-secondary);font-size:13px">Bos otaq</span>';
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:700;font-size:16px">${r.id}</td><td class="p-4">${studentsHtml}</td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editRoomModal(${r.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteRoom(${r.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('roomsTbody').innerHTML=html;
@@ -565,41 +619,75 @@ function genStudentOptions(selectedId){
   return currentStudents.map(s=>`<option value="${s.id}" ${s.id==selectedId?'selected':''}>${s.id} - ${s.ad_soyad}</option>`).join('');
 }
 function genStatusOptions(selectedStatus){
-  const stats=['Yaxşı','Az zədəli','Zədəli'];
+  const stats=['Yaxsi','Az zedeli','Zedeli'];
   return stats.map(s=>`<option value="${s}" ${s==selectedStatus?'selected':''}>${s}</option>`).join('');
 }
+function buildRoomForm(r,id){
+  let html='';
+  if(!id){
+    html+=`<div class="form-group"><label>Otaq Nomresi</label><input type="number" class="form-input" id="r_id" placeholder="Mes: 105"></div>`;
+  }
+  for(let i=1;i<=6;i++){
+    const tid=r?r['telebe_'+i+'_id']:'';
+    const ys=r?r['yataq_'+i+'_status']:'Yaxsi';
+    const ss=r?r['skaf_'+i+'_status']:'Yaxsi';
+    const os=r?r['oturacaq_'+i+'_status']:'Yaxsi';
+    html+=`<div class="room-student-card"><h5><i data-lucide="user"></i> ${i}-ci Telebe</h5><div class="form-group"><select class="form-select" id="r_t${i}"><option value="">Bos</option>${genStudentOptions(tid)}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y${i}">${genStatusOptions(ys)}</select></div><div class="form-group"><label>Skaf</label><select class="form-select" id="r_s${i}">${genStatusOptions(ss)}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o${i}">${genStatusOptions(os)}</select></div></div></div>`;
+  }
+  html+=`<button class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${id||0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
+  return html;
+}
 function addRoomModal(){
-  if(currentStudents.length===0){alert('Əvvəl Tələbələr bölməsinə daxil olun!');return}
-  openModal('Yeni Otaq',`<div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" placeholder="Məs: 105"></div><h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-secondary)">1-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t1"><option value="">Boş</option>${genStudentOptions()}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y1">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s1">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o1">${genStatusOptions('Yaxşı')}</select></div></div><h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-secondary)">2-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t2"><option value="">Boş</option>${genStudentOptions()}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y2">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s2">${genStatusOptions('Yaxşı')}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o2">${genStatusOptions('Yaxşı')}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveRoom(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  if(currentStudents.length===0){alert('Evvel Telebeler bolmesine daxil olun!');return}
+  openModal('Yeni Otaq',buildRoomForm(null,0));
 }
 function editRoomModal(id){
-  apiAction('get_rooms').then(data=>{
-    const r=data.data.find(x=>x.id==id);
-    openModal('Otaq Redaktə: '+id,`<h4 style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)">1-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t1"><option value="">Boş</option>${genStudentOptions(r.telebe_1_id)}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y1">${genStatusOptions(r.yataq_1_status)}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s1">${genStatusOptions(r.skaf_1_status)}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o1">${genStatusOptions(r.oturacaq_1_status)}</select></div></div><h4 style="margin:16px 0 8px;font-size:14px;color:var(--text-secondary)">2-ci Tələbə</h4><div class="form-group"><select class="form-select" id="r_t2"><option value="">Boş</option>${genStudentOptions(r.telebe_2_id)}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y2">${genStatusOptions(r.yataq_2_status)}</select></div><div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s2">${genStatusOptions(r.skaf_2_status)}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o2">${genStatusOptions(r.oturacaq_2_status)}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveRoom(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
-  });
+  const r=currentRooms.find(x=>x.id==id);
+  openModal('Otaq Redakte: '+id,buildRoomForm(r,id));
 }
 function saveRoom(id){
-  const payload={id:id||document.getElementById('r_id').value,t1:document.getElementById('r_t1').value,y1:document.getElementById('r_y1').value,s1:document.getElementById('r_s1').value,o1:document.getElementById('r_o1').value,t2:document.getElementById('r_t2').value,y2:document.getElementById('r_y2').value,s2:document.getElementById('r_s2').value,o2:document.getElementById('r_o2').value};
-  apiAction('save_room','POST',payload).then(data=>{if(data.success){closeModal();loadRooms()}else alert(data.message)});
+  const payload={id:id||document.getElementById('r_id').value};
+  for(let i=1;i<=6;i++){
+    payload['t'+i]=document.getElementById('r_t'+i).value;
+    payload['y'+i]=document.getElementById('r_y'+i).value;
+    payload['s'+i]=document.getElementById('r_s'+i).value;
+    payload['o'+i]=document.getElementById('r_o'+i).value;
+  }
+  apiAction('save_room','POST',payload).then(data=>{if(data.success){closeModal();loadRooms();showToast(id?'Otaq yenilendi':'Yeni otaq elave edildi','success')}else{showToast(data.message||'Xeta bas verdi','error')}});
 }
-function deleteRoom(id){if(confirm('Bu otaq silinsin?'))apiAction('delete_room','POST',{id:id}).then(data=>{if(data.success)loadRooms()})}
+function deleteRoom(id){if(confirm('Bu otaq silinsin?'))apiAction('delete_room','POST',{id:id}).then(data=>{if(data.success){loadRooms();showToast('Otaq silindi','success')}})}
 
 function loadApplications(){
   apiAction('get_applications').then(data=>{
+    currentApps=data.data;
     let html='';
     if(data.data.length===0){
-      html='<tr><td colspan="4"><div class="empty-state"><i data-lucide="clipboard-list"></i><p>Müraciət yoxdur</p></div></td></tr>';
+      html='<tr><td colspan="4"><div class="empty-state"><i data-lucide="clipboard-list"></i><p>Muraciet yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((a,idx)=>{
-        let statusClass=a.status==='Təsdiqləndi'?'badge-success':(a.status==='Gözləmədə'?'badge-warning':'badge-danger');
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${a.ad_soyad}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td><td class="p-4"><div style="font-weight:600">${a.basliq}</div><div style="font-size:12px;color:var(--text-secondary)">${a.muraciet}</div><span class="badge badge-info" style="margin-top:4px">${a.priority}</span></td><td class="p-4"><span class="badge ${statusClass}">${a.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Təsdiqləndi')" title="Təsdiqlə"><i data-lucide="check"></i></button><button class="btn-icon danger" onclick="updateAppStatus(${a.id},'Rədd edildi')" title="Rədd et"><i data-lucide="x"></i></button></div></td></tr>`;
+        let statusClass=a.status==='Tesdiqlendi'?'badge-success':(a.status==='Gozlemede'?'badge-warning':'badge-danger');
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${a.ad_soyad}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td><td class="p-4"><div style="font-weight:600">${a.basliq}</div><div style="font-size:12px;color:var(--text-secondary)">${a.muraciet}</div><span class="badge badge-info" style="margin-top:4px">${a.priority}</span></td><td class="p-4"><span class="badge ${statusClass}">${a.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editApplicationModal(${a.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Tesdiqlendi')" title="Tesdiqle"><i data-lucide="check"></i></button><button class="btn-icon danger" onclick="updateAppStatus(${a.id},'Redd edildi')" title="Redd et"><i data-lucide="x"></i></button><button class="btn-icon danger" onclick="deleteApplication(${a.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('appsTbody').innerHTML=html;
     lucide.createIcons();
   });
 }
-function updateAppStatus(id,status){apiAction('update_app_status','POST',{id:id,status:status}).then(data=>{if(data.success)loadApplications()})}
+function addApplicationModal(){
+  if(currentStudents.length===0){alert('Evvel Telebeler bolmesine daxil olun!');return}
+  const opts=currentStudents.map(s=>`<option value="${s.id}">${s.ad_soyad}</option>`).join('');
+  openModal('Yeni Muraciet',`<div class="form-group"><label>Telebe</label><select class="form-select" id="app_student">${opts}</select></div><div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="app_basliq" placeholder="Basliq"></div><div class="form-group"><label>Muraciet Metni</label><textarea class="form-textarea" id="app_muraciet" rows="4" placeholder="Muraciet metni..."></textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="app_priority"><option>Asagi</option><option selected>Orta</option><option>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option selected>Gozlemede</option><option>Tesdiqlendi</option><option>Redd edildi</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function editApplicationModal(id){
+  const a=currentApps.find(x=>x.id==id);
+  const opts=currentStudents.map(s=>`<option value="${s.id}" ${s.id==a.student_id?'selected':''}>${s.ad_soyad}</option>`).join('');
+  openModal('Muracieti Redakte Et',`<div class="form-group"><label>Telebe</label><select class="form-select" id="app_student" disabled>${opts}</select></div><div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="app_basliq" value="${a.basliq}"></div><div class="form-group"><label>Muraciet Metni</label><textarea class="form-textarea" id="app_muraciet" rows="4">${a.muraciet}</textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="app_priority"><option ${a.priority=='Asagi'?'selected':''}>Asagi</option><option ${a.priority=='Orta'?'selected':''}>Orta</option><option ${a.priority=='Yuksek'?'selected':''}>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option ${a.status=='Gozlemede'?'selected':''}>Gozlemede</option><option ${a.status=='Tesdiqlendi'?'selected':''}>Tesdiqlendi</option><option ${a.status=='Redd edildi'?'selected':''}>Redd edildi</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+}
+function saveApplication(id){
+  apiAction('save_application','POST',{id:id,student_id:document.getElementById('app_student').value,basliq:document.getElementById('app_basliq').value,muraciet:document.getElementById('app_muraciet').value,priority:document.getElementById('app_priority').value,status:document.getElementById('app_status').value}).then(data=>{if(data.success){closeModal();loadApplications();showToast(id?'Muraciet yenilendi':'Yeni muraciet elave edildi','success')}else{showToast(data.message||'Xeta','error')}});
+}
+function updateAppStatus(id,status){apiAction('update_app_status','POST',{id:id,status:status}).then(data=>{if(data.success){loadApplications();showToast('Status yenilendi','success')}})}
+function deleteApplication(id){if(confirm('Bu muraciet silinsin?'))apiAction('delete_application','POST',{id:id}).then(data=>{if(data.success){loadApplications();showToast('Muraciet silindi','success')}})}
 
 function loadAnnouncements(){
   apiAction('get_announcements').then(data=>{
@@ -608,7 +696,7 @@ function loadAnnouncements(){
       html='<tr><td colspan="3"><div class="empty-state"><i data-lucide="megaphone"></i><p>Elan yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((c,idx)=>{
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yüksək'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('announcement',${c.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('announcement',${c.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yuksek'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('announcement',${c.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('announcement',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('annTbody').innerHTML=html;
@@ -622,7 +710,7 @@ function loadSurveys(){
       html='<tr><td colspan="3"><div class="empty-state"><i data-lucide="clipboard-check"></i><p>Anket yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((c,idx)=>{
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yüksək'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('survey',${c.id})"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('survey',${c.id})"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yuksek'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('survey',${c.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('survey',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('surTbody').innerHTML=html;
@@ -630,23 +718,23 @@ function loadSurveys(){
   });
 }
 function addContentModal(type,titleStr){
-  openModal('Yeni '+titleStr,`<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="c_title" placeholder="Başlıq"></div><div class="form-group"><label>Təsvir</label><textarea class="form-textarea" id="c_desc" placeholder="Təsvir" rows="4"></textarea></div><div class="form-row"><div class="form-group"><label>Öncəlik</label><select class="form-select" id="c_priority"><option>Normal</option><option>Yüksək</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option>Aktiv</option><option>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  openModal('Yeni '+titleStr,`<div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="c_title" placeholder="Basliq"></div><div class="form-group"><label>Tesvir</label><textarea class="form-textarea" id="c_desc" placeholder="Tesvir" rows="4"></textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="c_priority"><option>Normal</option><option>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option>Aktiv</option><option>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
 }
 function editContentModal(type,id){
   const action=type==='announcement'?'get_announcements':'get_surveys';
   apiAction(action).then(data=>{
     const c=data.data.find(x=>x.id==id);
-    openModal('Redaktə',`<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="c_title" value="${c.title}"></div><div class="form-group"><label>Təsvir</label><textarea class="form-textarea" id="c_desc" rows="4">${c.description}</textarea></div><div class="form-row"><div class="form-group"><label>Öncəlik</label><select class="form-select" id="c_priority"><option ${c.priority=='Normal'?'selected':''}>Normal</option><option ${c.priority=='Yüksək'?'selected':''}>Yüksək</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option ${c.status=='Aktiv'?'selected':''}>Aktiv</option><option ${c.status=='Passiv'?'selected':''}>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+    openModal('Redakte',`<div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="c_title" value="${c.title}"></div><div class="form-group"><label>Tesvir</label><textarea class="form-textarea" id="c_desc" rows="4">${c.description}</textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="c_priority"><option ${c.priority=='Normal'?'selected':''}>Normal</option><option ${c.priority=='Yuksek'?'selected':''}>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option ${c.status=='Aktiv'?'selected':''}>Aktiv</option><option ${c.status=='Passiv'?'selected':''}>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
   });
 }
 function saveContent(type,id){
   const action=type==='announcement'?'save_announcement':'save_survey';
-  apiAction(action,'POST',{id:id,title:document.getElementById('c_title').value,description:document.getElementById('c_desc').value,priority:document.getElementById('c_priority').value,status:document.getElementById('c_status').value}).then(data=>{if(data.success){closeModal();type==='announcement'?loadAnnouncements():loadSurveys()}});
+  apiAction(action,'POST',{id:id,title:document.getElementById('c_title').value,description:document.getElementById('c_desc').value,priority:document.getElementById('c_priority').value,status:document.getElementById('c_status').value}).then(data=>{if(data.success){closeModal();type==='announcement'?loadAnnouncements():loadSurveys();showToast(id?'Yenilendi':'Elave edildi','success')}else{showToast(data.message||'Xeta','error')}});
 }
 function deleteContent(type,id){
   if(confirm('Silinsin?')){
     const action=type==='announcement'?'delete_announcement':'delete_survey';
-    apiAction(action,'POST',{id:id}).then(data=>{if(data.success){type==='announcement'?loadAnnouncements():loadSurveys()}});
+    apiAction(action,'POST',{id:id}).then(data=>{if(data.success){type==='announcement'?loadAnnouncements():loadSurveys();showToast('Silindi','success')}});
   }
 }
 
@@ -654,11 +742,11 @@ function loadPenalties(){
   apiAction('get_penalties').then(data=>{
     let html='';
     if(data.data.length===0){
-      html='<tr><td colspan="5"><div class="empty-state"><i data-lucide="receipt-text"></i><p>Cərimə yoxdur</p></div></td></tr>';
+      html='<tr><td colspan="5"><div class="empty-state"><i data-lucide="receipt-text"></i><p>Cerime yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((p,idx)=>{
-        let statusClass=p.status==='Ödənilib'?'badge-success':'badge-danger';
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${p.ad_soyad}</td><td class="p-4">${p.reason}</td><td class="p-4" style="font-weight:700">${p.amount} AZN</td><td class="p-4"><span class="badge ${statusClass}">${p.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editPenaltyModal(${p.id})"><i data-lucide="edit-3"></i></button>${p.status==='Ödənilməmiş'?`<button class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ödə"><i data-lucide="check-circle"></i></button>`:''}</div></td></tr>`;
+        let statusClass=p.status==='Odenilib'?'badge-success':'badge-danger';
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${p.ad_soyad}</td><td class="p-4">${p.reason}</td><td class="p-4" style="font-weight:700">${p.amount} AZN</td><td class="p-4"><span class="badge ${statusClass}">${p.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editPenaltyModal(${p.id})" title="Redakte"><i data-lucide="edit-3"></i></button>${p.status==='Odenilmamis'?`<button class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ode"><i data-lucide="check-circle"></i></button>`:''}<button class="btn-icon danger" onclick="deletePenalty(${p.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('penTbody').innerHTML=html;
@@ -666,26 +754,27 @@ function loadPenalties(){
   });
 }
 function addPenaltyModal(){
-  if(currentStudents.length===0){alert('Əvvəl Tələbələr bölməsinə daxil olun!');return}
+  if(currentStudents.length===0){alert('Evvel Telebeler bolmesine daxil olun!');return}
   const opts=currentStudents.map(s=>`<option value="${s.id}">${s.ad_soyad}</option>`).join('');
-  openModal('Yeni Cərimə',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student">${opts}</select></div><div class="form-group"><label>Məbləğ (AZN)</label><input type="number" class="form-input" id="p_amount" placeholder="Məbləğ"></div><div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" placeholder="Səbəb"></div><button class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  openModal('Yeni Cerime',`<div class="form-group"><label>Telebe</label><select class="form-select" id="p_student">${opts}</select></div><div class="form-group"><label>Mebleg (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" placeholder="Mebleg"></div><div class="form-group"><label>Sebeb</label><input type="text" class="form-input" id="p_reason" placeholder="Sebeb"></div><button class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
 }
 function editPenaltyModal(id){
   apiAction('get_penalties').then(data=>{
     const p=data.data.find(x=>x.id==id);
     const opts=currentStudents.map(s=>`<option value="${s.id}" ${s.id==p.student_id?'selected':''}>${s.ad_soyad}</option>`).join('');
-    openModal('Cərimə Redaktə',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student" disabled>${opts}</select></div><div class="form-group"><label>Məbləğ (AZN)</label><input type="number" class="form-input" id="p_amount" value="${p.amount}"></div><div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="${p.reason}"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+    openModal('Cerime Redakte',`<div class="form-group"><label>Telebe</label><select class="form-select" id="p_student" disabled>${opts}</select></div><div class="form-group"><label>Mebleg (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="${p.amount}"></div><div class="form-group"><label>Sebeb</label><input type="text" class="form-input" id="p_reason" value="${p.reason}"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
   });
 }
 function savePenalty(id){
-  apiAction('save_penalty','POST',{id:id,student_id:document.getElementById('p_student').value,amount:document.getElementById('p_amount').value,reason:document.getElementById('p_reason').value}).then(data=>{if(data.success){closeModal();loadPenalties()}});
+  apiAction('save_penalty','POST',{id:id,student_id:document.getElementById('p_student').value,amount:document.getElementById('p_amount').value,reason:document.getElementById('p_reason').value}).then(data=>{if(data.success){closeModal();loadPenalties();showToast(id?'Cerime yenilendi':'Yeni cerime elave edildi','success')}else{showToast(data.message||'Xeta','error')}});
 }
-function payPenalty(id){apiAction('pay_penalty','POST',{id:id}).then(data=>{if(data.success)loadPenalties()})}
+function payPenalty(id){apiAction('pay_penalty','POST',{id:id}).then(data=>{if(data.success){loadPenalties();showToast('Cerime odenildi','success')}})}
+function deletePenalty(id){if(confirm('Bu cerime silinsin?'))apiAction('delete_penalty','POST',{id:id}).then(data=>{if(data.success){loadPenalties();showToast('Cerime silindi','success')}})}
 
 function loadCanteen(){
   apiAction('get_canteen').then(data=>{
     let html='';
-    const days=['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə','Bazar'];
+    const days=['','Bazar ertesi','Cersenbe axsami','Cersenbe','Cume axsami','Cume','Senbe','Bazar'];
     ['Yataqxana','Universitet'].forEach(loc=>{
       html+=`<div class="canteen-location"><h4><i data-lucide="${loc==='Yataqxana'?'hotel':'graduation-cap'}"></i> ${loc}</h4>`;
       for(let i=1;i<=7;i++){
@@ -700,7 +789,7 @@ function loadCanteen(){
     lucide.createIcons();
   });
 }
-function updateCanteen(id,val){apiAction('save_canteen','POST',{id:id,meal_name:val}).then(data=>{if(data.success)console.log('Yemək yeniləndi')})}
+function updateCanteen(id,val){apiAction('save_canteen','POST',{id:id,meal_name:val}).then(data=>{if(data.success)showToast('Yemek yenilendi','success')})}
 let canteenTimer;
 function updateCanteenDelayed(id,val){clearTimeout(canteenTimer);canteenTimer=setTimeout(()=>updateCanteen(id,val),800)}
 
@@ -708,10 +797,10 @@ function loadLaundry(){
   apiAction('get_laundry').then(data=>{
     let html='';
     if(data.data.length===0){
-      html='<tr><td colspan="5"><div class="empty-state"><i data-lucide="washing-machine"></i><p>Məlumat yoxdur</p></div></td></tr>';
+      html='<tr><td colspan="5"><div class="empty-state"><i data-lucide="washing-machine"></i><p>Melumat yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((l,idx)=>{
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${l.ad_soyad}</td><td class="p-4"><span class="badge ${l.machine_1_status==='Hazır'?'badge-success':(l.machine_1_status==='Gözlənilir'?'badge-warning':'badge-gray')}">${l.machine_1_status}</span></td><td class="p-4"><span class="badge ${l.machine_2_status==='Hazır'?'badge-success':(l.machine_2_status==='Gözlənilir'?'badge-warning':'badge-gray')}">${l.machine_2_status}</span></td><td class="p-4"><span class="badge ${l.machine_3_status==='Hazır'?'badge-success':(l.machine_3_status==='Gözlənilir'?'badge-warning':'badge-gray')}">${l.machine_3_status}</span></td><td class="p-4"><button class="btn-icon" onclick="editLaundryModal(${l.student_id})"><i data-lucide="edit-3"></i></button></td></tr>`;
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${l.ad_soyad}</td><td class="p-4"><span class="badge ${l.machine_1_status==='Hazir'?'badge-success':(l.machine_1_status==='Gozlenilir'?'badge-warning':'badge-gray')}">${l.machine_1_status}</span></td><td class="p-4"><span class="badge ${l.machine_2_status==='Hazir'?'badge-success':(l.machine_2_status==='Gozlenilir'?'badge-warning':'badge-gray')}">${l.machine_2_status}</span></td><td class="p-4"><span class="badge ${l.machine_3_status==='Hazir'?'badge-success':(l.machine_3_status==='Gozlenilir'?'badge-warning':'badge-gray')}">${l.machine_3_status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editLaundryModal(${l.student_id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteLaundry(${l.student_id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('laundryTbody').innerHTML=html;
@@ -719,24 +808,31 @@ function loadLaundry(){
   });
 }
 function genLaundryOptions(selected){
-  const stats=['Yoxdur','Gözlənilir','Hazır'];
+  const stats=['Yoxdur','Gozlenilir','Hazir'];
   return stats.map(s=>`<option value="${s}" ${s==selected?'selected':''}>${s}</option>`).join('');
 }
 function addLaundryModal(){
-  if(currentStudents.length===0){alert('Əvvəl Tələbələr bölməsinə daxil olun!');return}
-  const opts=currentStudents.map(s=>`<option value="${s.id}">${s.ad_soyad}</option>`).join('');
-  openModal('Yeni Camaşırxana Qeydi',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student">${opts}</select></div><div class="form-row"><div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions('Yoxdur')}</select></div><div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions('Yoxdur')}</select></div><div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions('Yoxdur')}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  if(currentStudents.length===0){alert('Evvel Telebeler bolmesine daxil olun!');return}
+  apiAction('get_laundry').then(data=>{
+    const existingIds=new Set();
+    data.data.forEach(l=>existingIds.add(l.student_id));
+    const available=currentStudents.filter(s=>!existingIds.has(s.id));
+    if(available.length===0){showToast('Butun telebeler artiq qeyd olunub','warning');return}
+    const opts=available.map(s=>`<option value="${s.id}">${s.ad_soyad}</option>`).join('');
+    openModal('Yeni Camasirxana Qeydi',`<div class="form-group"><label>Telebe</label><select class="form-select" id="l_student">${opts}</select></div><div class="form-row"><div class="form-group"><label>Masin 1</label><select class="form-select" id="l_m1">${genLaundryOptions('Yoxdur')}</select></div><div class="form-group"><label>Masin 2</label><select class="form-select" id="l_m2">${genLaundryOptions('Yoxdur')}</select></div><div class="form-group"><label>Masin 3</label><select class="form-select" id="l_m3">${genLaundryOptions('Yoxdur')}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  });
 }
 function editLaundryModal(student_id){
   apiAction('get_laundry').then(data=>{
     const l=data.data.find(x=>x.student_id==student_id);
     const opts=currentStudents.map(s=>`<option value="${s.id}" ${s.id==l.student_id?'selected':''}>${s.ad_soyad}</option>`).join('');
-    openModal('Redaktə',`<div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student" disabled>${opts}</select></div><div class="form-row"><div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions(l.machine_1_status)}</select></div><div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions(l.machine_2_status)}</select></div><div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions(l.machine_3_status)}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+    openModal('Redakte',`<div class="form-group"><label>Telebe</label><select class="form-select" id="l_student" disabled>${opts}</select></div><div class="form-row"><div class="form-group"><label>Masin 1</label><select class="form-select" id="l_m1">${genLaundryOptions(l.machine_1_status)}</select></div><div class="form-group"><label>Masin 2</label><select class="form-select" id="l_m2">${genLaundryOptions(l.machine_2_status)}</select></div><div class="form-group"><label>Masin 3</label><select class="form-select" id="l_m3">${genLaundryOptions(l.machine_3_status)}</select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
   });
 }
 function saveLaundry(student_id){
-  apiAction('save_laundry','POST',{student_id:student_id||document.getElementById('l_student').value,m1:document.getElementById('l_m1').value,m2:document.getElementById('l_m2').value,m3:document.getElementById('l_m3').value}).then(data=>{if(data.success){closeModal();loadLaundry()}});
+  apiAction('save_laundry','POST',{student_id:student_id||document.getElementById('l_student').value,m1:document.getElementById('l_m1').value,m2:document.getElementById('l_m2').value,m3:document.getElementById('l_m3').value}).then(data=>{if(data.success){closeModal();loadLaundry();showToast(student_id?'Yenilendi':'Elave edildi','success')}else{showToast(data.message||'Xeta','error')}});
 }
+function deleteLaundry(student_id){if(confirm('Bu qeyd silinsin?'))apiAction('delete_laundry','POST',{student_id:student_id}).then(data=>{if(data.success){loadLaundry();showToast('Silindi','success')}})}
 </script>
 </body>
 </html>
