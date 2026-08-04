@@ -66,8 +66,6 @@ Faktiki MySQL dump-a (`if0_42430459_students`, MyISAM, `utf8mb4_unicode_ci`) əs
 - **`canteen_menu`** — `id`, `location`, `day_of_week`, `meal_name`
 - **`laundry`** — `student_id`, `machine_1_status`, `machine_2_status`, `machine_3_status`
 
-> 💡 Qeyd: hazırkı `app.py` yalnız 2 tələbəlik otaq slotlarını (`telebe_1`/`telebe_2`) idarə edir, halbuki cədvəl 6-ya qədər dəstəkləyir; həmçinin `students` cədvəlinin `universitet`, `sifre`, `ev_deyisme_isteyi` sütunları və `students_profiles` cədvəli admin API-də hələ açılmayıb.
-
 ## 🌐 API marşrutları
 
 | Method | Route | |
