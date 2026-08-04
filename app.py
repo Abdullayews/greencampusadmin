@@ -39,14 +39,14 @@ def index():
 
 @app.route('/admin')
 def admin_panel():
-    return serve_html('index.html')
+    return serve_html('admin_panel.html')
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     email = data.get('email', '')
     sifre = data.get('sifre', '')
-    if email == 'Admin' and sifre == '123':
+    if email == 'admin' and sifre == '123':
         session['admin_logged_in'] = True
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Admin məlumatları yanlışdır!"})
@@ -119,6 +119,11 @@ def admin_api(action):
                 return jsonify({"success": True, "data": cur.fetchall()})
 
         elif action == 'save_room':
+            # Boş string telebe ID-lerini None cevir
+            for i in range(1,7):
+                k = f't{i}'
+                if data.get(k) == '':
+                    data[k] = None
             with conn.cursor() as cur:
                 if data.get('id'):
                     cur.execute("""UPDATE rooms SET telebe_1_id=%s, yataq_1_status=%s, skaf_1_status=%s, oturacaq_1_status=%s,
@@ -167,6 +172,8 @@ def admin_api(action):
                 return jsonify({"success": True, "data": cur.fetchall()})
 
         elif action == 'save_application':
+            if data.get('student_id') == '':
+                return jsonify({"success": False, "message": "Telebe secilmedi"})
             with conn.cursor() as cur:
                 if data.get('id'):
                     cur.execute("UPDATE applications SET student_id=%s, basliq=%s, muraciet=%s, priority=%s, status=%s WHERE id=%s",
@@ -280,6 +287,8 @@ def admin_api(action):
                 return jsonify({"success": True, "data": cur.fetchall()})
 
         elif action == 'save_laundry':
+            if data.get('student_id') == '':
+                return jsonify({"success": False, "message": "Telebe secilmedi"})
             with conn.cursor() as cur:
                 cur.execute("""INSERT INTO laundry (student_id, machine_1_status, machine_2_status, machine_3_status)
                               VALUES (%s, %s, %s, %s)
