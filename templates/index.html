@@ -267,7 +267,7 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
       </div>
       <div class="input-group">
         <label>Sifre</label>
-        <input type="password" id="loginPassword" placeholder="Sifrə" required>
+        <input type="password" id="loginPassword" placeholder="Şifrə" required>
       </div>
       <div class="login-error" id="loginError">Melumatlar yanlisdir!</div>
       <button type="submit" class="login-btn" id="loginBtn">
@@ -545,7 +545,7 @@ function loadStudents(){
   });
 }
 function addStudentModal(){
-  openModal('Yeni Telebe',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" placeholder="Ad Soyad"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" placeholder="Email"></div><div class="form-group"><label>Sifre</label><input type="text" class="form-input" id="s_sifre" placeholder="Sifre (default: 123)"></div><div class="form-group"><label>Ixtisas</label><input type="text" class="form-input" id="s_ixtisas" placeholder="Ixtisas"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" placeholder="Kurs"></div><div class="form-group"><label>API Acari</label><input type="text" class="form-input" id="s_api_key" placeholder="API Acari (opsional)"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  openModal('Yeni Telebe',`<div class="form-group"><label>Ad Soyad</label><input type="text" class="form-input" id="s_name" placeholder="Ad Soyad"></div><div class="form-group"><label>Email</label><input type="email" class="form-input" id="s_email" placeholder="Email"></div><div class="form-group"><label>Sifre</label><input type="text" class="form-input" id="s_sifre" placeholder="Sifre (default: 12345)"></div><div class="form-group"><label>Ixtisas</label><input type="text" class="form-input" id="s_ixtisas" placeholder="Ixtisas"></div><div class="form-group"><label>Kurs</label><input type="number" class="form-input" id="s_kurs" placeholder="Kurs"></div><div class="form-group"><label>API Acari</label><input type="text" class="form-input" id="s_api_key" placeholder="API Acari (opsional)"></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveStudent(0)"><i data-lucide="save"></i> Yadda Saxla</button>`);
 }
 function editStudentModal(id){
   apiAction('get_student_full','POST',{id:id}).then(res=>{
@@ -619,7 +619,7 @@ function genStudentOptions(selectedId){
   return currentStudents.map(s=>`<option value="${s.id}" ${s.id==selectedId?'selected':''}>${s.id} - ${s.ad_soyad}</option>`).join('');
 }
 function genStatusOptions(selectedStatus){
-  const stats=['Yaxsi','Az zedeli','Zedeli'];
+  const stats=['Yaxşı','Az zədəli','Zədəli'];
   return stats.map(s=>`<option value="${s}" ${s==selectedStatus?'selected':''}>${s}</option>`).join('');
 }
 function buildRoomForm(r,id){
@@ -629,9 +629,9 @@ function buildRoomForm(r,id){
   }
   for(let i=1;i<=6;i++){
     const tid=r?r['telebe_'+i+'_id']:'';
-    const ys=r?r['yataq_'+i+'_status']:'Yaxsi';
-    const ss=r?r['skaf_'+i+'_status']:'Yaxsi';
-    const os=r?r['oturacaq_'+i+'_status']:'Yaxsi';
+    const ys=r?r['yataq_'+i+'_status']:'Yaxşı';
+    const ss=r?r['skaf_'+i+'_status']:'Yaxşı';
+    const os=r?r['oturacaq_'+i+'_status']:'Yaxşı';
     html+=`<div class="room-student-card"><h5><i data-lucide="user"></i> ${i}-ci Telebe</h5><div class="form-group"><select class="form-select" id="r_t${i}"><option value="">Bos</option>${genStudentOptions(tid)}</select></div><div class="form-row"><div class="form-group"><label>Yataq</label><select class="form-select" id="r_y${i}">${genStatusOptions(ys)}</select></div><div class="form-group"><label>Skaf</label><select class="form-select" id="r_s${i}">${genStatusOptions(ss)}</select></div><div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o${i}">${genStatusOptions(os)}</select></div></div></div>`;
   }
   html+=`<button class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${id||0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
@@ -665,8 +665,8 @@ function loadApplications(){
       html='<tr><td colspan="4"><div class="empty-state"><i data-lucide="clipboard-list"></i><p>Muraciet yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((a,idx)=>{
-        let statusClass=a.status==='Tesdiqlendi'?'badge-success':(a.status==='Gozlemede'?'badge-warning':'badge-danger');
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${a.ad_soyad}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td><td class="p-4"><div style="font-weight:600">${a.basliq}</div><div style="font-size:12px;color:var(--text-secondary)">${a.muraciet}</div><span class="badge badge-info" style="margin-top:4px">${a.priority}</span></td><td class="p-4"><span class="badge ${statusClass}">${a.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editApplicationModal(${a.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Tesdiqlendi')" title="Tesdiqle"><i data-lucide="check"></i></button><button class="btn-icon danger" onclick="updateAppStatus(${a.id},'Redd edildi')" title="Redd et"><i data-lucide="x"></i></button><button class="btn-icon danger" onclick="deleteApplication(${a.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        let statusClass=a.status==='Təsdiqləndi'?'badge-success':(a.status==='Gözləmədə'?'badge-warning':'badge-danger');
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${a.ad_soyad}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td><td class="p-4"><div style="font-weight:600">${a.basliq}</div><div style="font-size:12px;color:var(--text-secondary)">${a.muraciet}</div><span class="badge badge-info" style="margin-top:4px">${a.priority}</span></td><td class="p-4"><span class="badge ${statusClass}">${a.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editApplicationModal(${a.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Təsdiqləndi')" title="Tesdiqle"><i data-lucide="check"></i></button><button class="btn-icon danger" onclick="updateAppStatus(${a.id},'Rədd edildi')" title="Redd et"><i data-lucide="x"></i></button><button class="btn-icon danger" onclick="deleteApplication(${a.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('appsTbody').innerHTML=html;
@@ -681,7 +681,7 @@ function addApplicationModal(){
 function editApplicationModal(id){
   const a=currentApps.find(x=>x.id==id);
   const opts=currentStudents.map(s=>`<option value="${s.id}" ${s.id==a.student_id?'selected':''}>${s.ad_soyad}</option>`).join('');
-  openModal('Muracieti Redakte Et',`<div class="form-group"><label>Telebe</label><select class="form-select" id="app_student" disabled>${opts}</select></div><div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="app_basliq" value="${a.basliq}"></div><div class="form-group"><label>Muraciet Metni</label><textarea class="form-textarea" id="app_muraciet" rows="4">${a.muraciet}</textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="app_priority"><option ${a.priority=='Asagi'?'selected':''}>Asagi</option><option ${a.priority=='Orta'?'selected':''}>Orta</option><option ${a.priority=='Yuksek'?'selected':''}>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option ${a.status=='Gozlemede'?'selected':''}>Gozlemede</option><option ${a.status=='Tesdiqlendi'?'selected':''}>Tesdiqlendi</option><option ${a.status=='Redd edildi'?'selected':''}>Redd edildi</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+  openModal('Muracieti Redakte Et',`<div class="form-group"><label>Telebe</label><select class="form-select" id="app_student" disabled>${opts}</select></div><div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="app_basliq" value="${a.basliq}"></div><div class="form-group"><label>Muraciet Metni</label><textarea class="form-textarea" id="app_muraciet" rows="4">${a.muraciet}</textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="app_priority"><option ${a.priority=='Aşağı'?'selected':''}>Asagi</option><option ${a.priority=='Orta'?'selected':''}>Orta</option><option ${a.priority=='Yüksək'?'selected':''}>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option ${a.status=='Gözləmədə'?'selected':''}>Gozlemede</option><option ${a.status=='Təsdiqləndi'?'selected':''}>Tesdiqlendi</option><option ${a.status=='Rədd edildi'?'selected':''}>Redd edildi</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
 }
 function saveApplication(id){
   apiAction('save_application','POST',{id:id,student_id:document.getElementById('app_student').value,basliq:document.getElementById('app_basliq').value,muraciet:document.getElementById('app_muraciet').value,priority:document.getElementById('app_priority').value,status:document.getElementById('app_status').value}).then(data=>{if(data.success){closeModal();loadApplications();showToast(id?'Muraciet yenilendi':'Yeni muraciet elave edildi','success')}else{showToast(data.message||'Xeta','error')}});
@@ -696,7 +696,7 @@ function loadAnnouncements(){
       html='<tr><td colspan="3"><div class="empty-state"><i data-lucide="megaphone"></i><p>Elan yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((c,idx)=>{
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yuksek'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('announcement',${c.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('announcement',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yüksək'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('announcement',${c.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('announcement',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('annTbody').innerHTML=html;
@@ -710,7 +710,7 @@ function loadSurveys(){
       html='<tr><td colspan="3"><div class="empty-state"><i data-lucide="clipboard-check"></i><p>Anket yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((c,idx)=>{
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yuksek'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('survey',${c.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('survey',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4"><div style="font-weight:600">${c.title}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${c.description}</div><span class="badge ${c.priority==='Yüksək'?'badge-danger':'badge-info'}" style="margin-top:6px">${c.priority}</span></td><td class="p-4"><span class="badge ${c.status==='Aktiv'?'badge-success':'badge-gray'}">${c.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editContentModal('survey',${c.id})" title="Redakte"><i data-lucide="edit-3"></i></button><button class="btn-icon danger" onclick="deleteContent('survey',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('surTbody').innerHTML=html;
@@ -724,7 +724,7 @@ function editContentModal(type,id){
   const action=type==='announcement'?'get_announcements':'get_surveys';
   apiAction(action).then(data=>{
     const c=data.data.find(x=>x.id==id);
-    openModal('Redakte',`<div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="c_title" value="${c.title}"></div><div class="form-group"><label>Tesvir</label><textarea class="form-textarea" id="c_desc" rows="4">${c.description}</textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="c_priority"><option ${c.priority=='Normal'?'selected':''}>Normal</option><option ${c.priority=='Yuksek'?'selected':''}>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option ${c.status=='Aktiv'?'selected':''}>Aktiv</option><option ${c.status=='Passiv'?'selected':''}>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
+    openModal('Redakte',`<div class="form-group"><label>Basliq</label><input type="text" class="form-input" id="c_title" value="${c.title}"></div><div class="form-group"><label>Tesvir</label><textarea class="form-textarea" id="c_desc" rows="4">${c.description}</textarea></div><div class="form-row"><div class="form-group"><label>Oncek</label><select class="form-select" id="c_priority"><option ${c.priority=='Normal'?'selected':''}>Normal</option><option ${c.priority=='Yüksək'?'selected':''}>Yuksek</option></select></div><div class="form-group"><label>Status</label><select class="form-select" id="c_status"><option ${c.status=='Aktiv'?'selected':''}>Aktiv</option><option ${c.status=='Passiv'?'selected':''}>Passiv</option></select></div></div><button class="btn-primary" style="width:100%;justify-content:center" onclick="saveContent('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`);
   });
 }
 function saveContent(type,id){
@@ -745,8 +745,8 @@ function loadPenalties(){
       html='<tr><td colspan="5"><div class="empty-state"><i data-lucide="receipt-text"></i><p>Cerime yoxdur</p></div></td></tr>';
     }else{
       data.data.forEach((p,idx)=>{
-        let statusClass=p.status==='Odenilib'?'badge-success':'badge-danger';
-        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${p.ad_soyad}</td><td class="p-4">${p.reason}</td><td class="p-4" style="font-weight:700">${p.amount} AZN</td><td class="p-4"><span class="badge ${statusClass}">${p.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editPenaltyModal(${p.id})" title="Redakte"><i data-lucide="edit-3"></i></button>${p.status==='Odenilmamis'?`<button class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ode"><i data-lucide="check-circle"></i></button>`:''}<button class="btn-icon danger" onclick="deletePenalty(${p.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        let statusClass=p.status==='Ödənilib'?'badge-success':'badge-danger';
+        html+=`<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms"><td class="p-4" style="font-weight:600">${p.ad_soyad}</td><td class="p-4">${p.reason}</td><td class="p-4" style="font-weight:700">${p.amount} AZN</td><td class="p-4"><span class="badge ${statusClass}">${p.status}</span></td><td class="p-4"><div style="display:flex;gap:8px"><button class="btn-icon" onclick="editPenaltyModal(${p.id})" title="Redakte"><i data-lucide="edit-3"></i></button>${p.status==='Ödənilməmiş'?`<button class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ode"><i data-lucide="check-circle"></i></button>`:''}<button class="btn-icon danger" onclick="deletePenalty(${p.id})" title="Sil"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
     }
     document.getElementById('penTbody').innerHTML=html;
@@ -808,7 +808,7 @@ function loadLaundry(){
   });
 }
 function genLaundryOptions(selected){
-  const stats=['Yoxdur','Gozlenilir','Hazir'];
+  const stats=['Yoxdur','Gözlənilir','Hazır'];
   return stats.map(s=>`<option value="${s}" ${s==selected?'selected':''}>${s}</option>`).join('');
 }
 function addLaundryModal(){
