@@ -2,11 +2,13 @@ import os
 from flask import Flask, request, jsonify, session, render_template_string
 from functools import wraps
 from config import get_db_connection
+from flasgger import Swagger
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 app = Flask(__name__)
+swagger = Swagger(app)
 app.secret_key = os.getenv("SECRET_KEY", "kampus-secret-key-2026")
 app.config['JSON_AS_ASCII'] = False
 
