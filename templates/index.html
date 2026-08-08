@@ -473,6 +473,7 @@ const PAGE_TITLES = {
 const CRUD_CONFIG = {
   student: {
     endpoint: 'students',
+    saveAction: 'save_student',
     loadFn: loadStudents,
     modalTitle: { add: 'Yeni Tələbə', edit: 'Tələbəni Redaktə Et' },
     deleteConfirm: 'Bu tələbəni silmək istədiyinizə əminsiniz?',
@@ -519,6 +520,7 @@ const CRUD_CONFIG = {
   },
   room: {
     endpoint: 'rooms',
+    saveAction: 'save_room',
     loadFn: loadRooms,
     modalTitle: { add: 'Yeni Otaq', edit: 'Otaq Redaktə' },
     deleteConfirm: 'Bu otaq silinsin?',
@@ -551,6 +553,7 @@ const CRUD_CONFIG = {
   },
   application: {
     endpoint: 'applications',
+    saveAction: 'save_application',
     loadFn: loadApplications,
     modalTitle: { add: 'Yeni Müraciət', edit: 'Müraciəti Redaktə Et' },
     deleteConfirm: 'Bu müraciət silinsin?',
@@ -574,6 +577,7 @@ const CRUD_CONFIG = {
   },
   announcement: {
     endpoint: 'announcements',
+    saveAction: 'save_announcement',
     loadFn: loadAnnouncements,
     modalTitle: { add: 'Yeni Elan', edit: 'Elanı Redaktə Et' },
     deleteConfirm: 'Bu elan silinsin?',
@@ -604,6 +608,7 @@ const CRUD_CONFIG = {
   },
   survey: {
     endpoint: 'surveys',
+    saveAction: 'save_survey',
     loadFn: loadSurveys,
     modalTitle: { add: 'Yeni Anket', edit: 'Anketi Redaktə Et' },
     deleteConfirm: 'Bu anket silinsin?',
@@ -634,6 +639,7 @@ const CRUD_CONFIG = {
   },
   penalty: {
     endpoint: 'penalties',
+    saveAction: 'save_penalty',
     loadFn: loadPenalties,
     modalTitle: { add: 'Yeni Cərimə', edit: 'Cəriməni Redaktə Et' },
     deleteConfirm: 'Bu cərimə silinsin?',
@@ -658,6 +664,7 @@ const CRUD_CONFIG = {
   },
   laundry: {
     endpoint: 'laundry',
+    saveAction: 'save_laundry',
     loadFn: loadLaundry,
     modalTitle: { add: 'Yeni Çamaşırxana Qeydi', edit: 'Çamaşırxana Redaktə' },
     deleteConfirm: 'Bu qeyd silinsin?',
@@ -890,7 +897,7 @@ async function saveGenericItem(type, id) {
   if (!cfg) return;
   try {
     const payload = cfg.buildPayload(id);
-    await apiAction(`save_${cfg.endpoint}`, 'POST', payload);
+    await apiAction(cfg.saveAction, 'POST', payload);
     closeModal();
     cfg.loadFn();
     showToast(id ? 'Yeniləndi' : 'Əlavə edildi', 'success');
