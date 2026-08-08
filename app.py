@@ -180,7 +180,7 @@ def admin_stats(cur):
     for key, sql in queries:
         cur.execute(sql)
         stats[key] = cur.fetchone()['c']
-    return ok(data={"stats": stats})
+    return ok(stats=stats)
 
 
 # ═══════════════════════════════════════════════════════════
