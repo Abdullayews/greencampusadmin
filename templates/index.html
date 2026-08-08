@@ -860,7 +860,17 @@ async function openEditModal(type, id) {
   let values = {};
   if (type === 'student') {
     const res = await apiAction('get_student_full', 'POST', { id });
-    values = res.data || {};
+    const d = res.data || {};
+    values = {
+      s_name: d.ad_soyad || '',
+      s_email: d.email || '',
+      s_sifre: '',
+      s_universitet: d.universitet || 'Qarabağ Universiteti',
+      s_ixtisas: d.ixtisas || '',
+      s_kurs: d.kurs !== null && d.kurs !== undefined ? d.kurs : '',
+      s_api_key: d.api_key || '',
+      s_ev_deyisme: d.ev_deyisme_isteyi !== null && d.ev_deyisme_isteyi !== undefined ? d.ev_deyisme_isteyi : '0'
+    };
   } else if (type === 'announcement' || type === 'survey') {
     const action = type === 'announcement' ? 'get_announcements' : 'get_surveys';
     const res = await apiAction(action);
