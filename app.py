@@ -350,7 +350,7 @@ def get_rooms(cur):
 @with_db
 def save_room(cur):
     """
-    Otaq yarat / yenilə (id avtomatik artır)
+    Otaq yarat / yenilə
     ---
     tags:
       - Otaqlar
@@ -376,13 +376,26 @@ def save_room(cur):
             data.get(f's{i}'), data.get(f'o{i}')
         ])
 
-    if data.get('id'):
+    room_id = data.get('id')
+    
+    # Otaq mövcuddurmu yoxla
+    if room_id:
+        cur.execute("SELECT 1 FROM rooms WHERE id = %s", [room_id])
+        exists = cur.fetchone() is not None
+    else:
+        exists = False
+
+    if exists:
         # UPDATE
         set_clause = ', '.join([f"{c}=%s" for c in cols])
-        vals.append(data['id'])
+        vals.append(room_id)
         cur.execute(f"UPDATE rooms SET {set_clause} WHERE id=%s", vals)
     else:
-        # INSERT — id avtomatik (AUTO_INCREMENT)
+        # INSERT (id əl ilə verilir — AUTO_INCREMENT yoxdur)
+        if not room_id:
+            return fail("Otaq nömrəsi daxil edilməyib", 400)
+        cols.insert(0, 'id')
+        vals.insert(0, room_id)
         placeholders = ', '.join(['%s'] * len(cols))
         cols_str = ', '.join(cols)
         cur.execute(f"INSERT INTO rooms ({cols_str}) VALUES ({placeholders})", vals)
