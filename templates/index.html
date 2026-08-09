@@ -247,7 +247,6 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
 }
 </style>
-
 <base target="_blank">
 </head>
 <body>
@@ -491,12 +490,8 @@ const CRUD_CONFIG = {
       { id: 's_ev_deyisme', label: 'Ev Dəyişmə İstəyi', type: 'select', options: [['0','Yoxdur'],['1','Var']] }
     ],
     buildPayload: (id) => {
-      const email = gv('s_email');
-      if (email && !email.includes('@')) {
-        throw new Error('Email formatı düzgün deyil');
-      }
       const p = {
-        id, ad_soyad: gv('s_name'), email: email, ixtisas: gv('s_ixtisas'),
+        id, ad_soyad: gv('s_name'), email: gv('s_email'), ixtisas: gv('s_ixtisas'),
         kurs: gv('s_kurs'), universitet: gv('s_universitet'), ev_deyisme_isteyi: parseInt(gv('s_ev_deyisme'))
       };
       const sifre = gv('s_sifre');
@@ -727,14 +722,6 @@ const debouncedFilter = debounce((inputId, tableId) => {
   }
 }, 250);
 
-function refreshIcons(container) {
-  if (container && container.querySelectorAll) {
-    lucide.createIcons({ nodes: [container] });
-  } else {
-    lucide.createIcons();
-  }
-}
-
 // ═══════════════════════════════════════════════════════════
 // API
 // ═══════════════════════════════════════════════════════════
@@ -766,6 +753,14 @@ async function apiAction(action, method = 'GET', body = null) {
 // ═══════════════════════════════════════════════════════════
 // UI — Toast, Modal, Login
 // ═══════════════════════════════════════════════════════════
+function refreshIcons(container) {
+  if (container && container.querySelectorAll) {
+    lucide.createIcons({ nodes: [container] });
+  } else {
+    lucide.createIcons();
+  }
+}
+
 function showToast(message, type = 'success') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -787,7 +782,7 @@ function openModal(title, bodyHtml, showFooter = false) {
   document.getElementById('modalBody').innerHTML = bodyHtml;
   document.getElementById('modalFooter').style.display = showFooter ? 'flex' : 'none';
   document.getElementById('universalModal').classList.add('active');
-  refreshIcons(document.getElementById(cfg.tbodyId));
+  refreshIcons(document.getElementById('modalBody'));
 }
 
 function closeModal() {
@@ -802,7 +797,7 @@ async function handleLogin(e) {
   const btn = document.getElementById('loginBtn');
   const original = btn.innerHTML;
   btn.innerHTML = '<i data-lucide="loader-2" style="animation:spin 1s linear infinite"></i> Yoxlanılır...';
-  refreshIcons(btn);
+  lucide.createIcons({ nodes: [btn] });
   try {
     const data = await fetch('/login', {
       method: 'POST',
@@ -910,17 +905,6 @@ async function openEditModal(type, id) {
 async function saveGenericItem(type, id) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
-
-  // Required field validation
-  if (cfg.fields) {
-    for (const f of cfg.fields) {
-      if (f.required && !gv(f.id)) {
-        showToast(`${f.label} sahəsi boş ola bilməz!`, 'warning');
-        return;
-      }
-    }
-  }
-
   try {
     const payload = cfg.buildPayload(id);
     await apiAction(cfg.saveAction, 'POST', payload);
@@ -978,7 +962,7 @@ async function loadDashboard() {
       <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Aktiv Otaqlar</div><div class="stat-value">${s.rooms}</div></div>
       <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="stat-value">${s.apps}</div></div>
       <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">${s.penalties}</div></div>`;
-    refreshIcons(document.getElementById(cfg.tbodyId));
+    refreshIcons(document.getElementById('dashboardStats'));
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1023,7 +1007,7 @@ async function loadProfiles() {
       });
     }
     document.getElementById('profilesTbody').innerHTML = html;
-    refreshIcons(document.getElementById(cfg.tbodyId));
+    refreshIcons(document.getElementById('profilesTbody'));
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1070,10 +1054,10 @@ async function deleteProfile(student_id) {
 // ROOMS
 // ═══════════════════════════════════════════════════════════
 async function loadRooms() {
+  if (currentStudents.length === 0) {
+    await loadStudents();
+  }
   try {
-    if (currentStudents.length === 0) {
-      await loadStudents();
-    }
     const data = await apiAction('get_rooms');
     currentRooms = data.data || [];
     renderTable('room', data.data);
@@ -1292,7 +1276,7 @@ async function loadCanteen() {
       html += `</div>`;
     });
     document.getElementById('canteenGrid').innerHTML = html;
-    refreshIcons(document.getElementById(cfg.tbodyId));
+    refreshIcons(document.getElementById('canteenGrid'));
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1400,7 +1384,7 @@ fetch('/api/admin/stats', { method: 'GET', credentials: 'same-origin' })
   })
   .catch(() => showLogin());
 
-refreshIcons(document.getElementById(cfg.tbodyId));
+lucide.createIcons();
 </script>
 </body>
 </html>
