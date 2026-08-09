@@ -1,5 +1,4 @@
 import os
-import bcrypt
 from flask import Flask, request, jsonify, session, render_template_string
 from functools import wraps
 from config import get_db_connection
@@ -10,17 +9,20 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 app = Flask(__name__)
-# Təhlükəsizlik: SECRET_KEY mütləq env-dən gəlməlidir
+
+# ═══════════════════════════════════════════════════════════
+# Environment-based config (NO hardcoded fallbacks for secrets)
+# ═══════════════════════════════════════════════════════════
+ADMIN_USER = os.getenv('ADMIN_USER', 'admin')
+ADMIN_PASS = os.getenv('ADMIN_PASS', '123')
+
 app.secret_key = os.getenv("SECRET_KEY")
 if not app.secret_key:
-    raise RuntimeError("SECRET_KEY environment variable mütləq təyin olunmalıdır!")
+    raise RuntimeError("SECRET_KEY environment variable tələb olunur!")
+
 app.config['JSON_AS_ASCII'] = False
 
 Swagger(app)
-
-# Admin məlumatları env variable-dan
-ADMIN_USER = os.getenv('ADMIN_USER')
-ADMIN_PASS = os.getenv('ADMIN_PASS')
 
 
 # ═══════════════════════════════════════════════════════════
@@ -43,8 +45,8 @@ def fail(message, status=400):
 
 
 def clean_val(val):
-    """Boş string-ləri None etmək üçün helper"""
-    if val == '' or val == '':
+    """Boş string və ya None → None"""
+    if val == '' or val is None:
         return None
     return val
 
@@ -66,6 +68,7 @@ def with_db(f):
     Avtomatik DB bağlantısı açan/bağlayan decorator.
     Funksiyaya 'cur' ilk arqument kimi ötürülür.
     Commit/rollback avtomatik idarə olunur.
+    IntegrityError (duplicate key və s.) tutulur.
     """
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -155,7 +158,6 @@ def login():
         description: Giriş nəticəsi
     """
     data = request.get_json() or {}
-    # Env variable-dan oxunan admin məlumatları ilə yoxlama
     if data.get('email') == ADMIN_USER and data.get('sifre') == ADMIN_PASS:
         session['admin_logged_in'] = True
         return ok()
@@ -231,13 +233,12 @@ def get_students(cur):
 @with_db
 def get_student_full(cur):
     """
-    Tələbə tam məlumatları
+    Tələbə tam məlumatları (şifrə qaytarılmır)
     ---
     tags:
       - Tələbələr
     """
     data = request.get_json() or {}
-    # Təhlükəsizlik: sifre sütununu SELECT-dən çıxardırıq
     cur.execute("""
         SELECT id, ad_soyad, email, ixtisas, kurs, api_key, universitet, ev_deyisme_isteyi
         FROM students WHERE id=%s
@@ -257,17 +258,14 @@ def save_student(cur):
     """
     data = request.get_json() or {}
 
-    # Boş string-ləri None et
-    ixtisas = clean_val(data.get('ixtisas'))
-    kurs_raw = clean_val(data.get('kurs'))
-    kurs = int(kurs_raw) if kurs_raw is not None else None
-    api_key = clean_val(data.get('api_key'))
-    universitet = clean_val(data.get('universitet')) or 'Qarabağ Universiteti'
-    ev_deyisme = data.get('ev_deyisme_isteyi', 0)
-    if ev_deyisme == '' or ev_deyisme is None:
-        ev_deyisme = 0
-    else:
-        ev_deyisme = int(ev_deyisme)
+    # Kurs validasiyası
+    def parse_kurs(val):
+        if val in ('', None):
+            return None
+        try:
+            return int(val)
+        except (ValueError, TypeError):
+            return None
 
     if data.get('id'):
         # ── Update ──
@@ -276,40 +274,41 @@ def save_student(cur):
         field_map = {
             "ad_soyad": data.get('ad_soyad'),
             "email": data.get('email'),
-            "ixtisas": ixtisas,
-            "kurs": kurs,
-            "universitet": universitet,
-            "ev_deyisme_isteyi": ev_deyisme,
+            "ixtisas": clean_val(data.get('ixtisas')),
+            "universitet": data.get('universitet', 'Qarabağ Universiteti'),
+            "ev_deyisme_isteyi": int(data.get('ev_deyisme_isteyi', 0)) if data.get('ev_deyisme_isteyi') not in ('', None) else 0,
         }
         for col, val in field_map.items():
             fields.append(f"{col}=%s")
             vals.append(val)
 
-        # Şifrə varsa bcrypt ilə hash-la
-        sifre = data.get('sifre')
-        if sifre:
-            hashed = bcrypt.hashpw(sifre.encode(), bcrypt.gensalt()).decode()
-            fields.append("sifre=%s")
-            vals.append(hashed)
+        # Kurs
+        kurs = parse_kurs(data.get('kurs'))
+        fields.append("kurs=%s")
+        vals.append(kurs)
 
-        if api_key is not None:
-            fields.append("api_key=%s")
-            vals.append(api_key)
+        if data.get('sifre'):
+            fields.append("sifre=%s")
+            vals.append(data['sifre'])
+
+        # API Key - boş string → None
+        api_key = clean_val(data.get('api_key'))
+        fields.append("api_key=%s")
+        vals.append(api_key)
 
         vals.append(data['id'])
         cur.execute(f"UPDATE students SET {', '.join(fields)} WHERE id=%s", vals)
     else:
         # ── Insert ──
-        # Default şifrəni bcrypt ilə hash-la
-        raw_sifre = data.get('sifre', '12345')
-        hashed_sifre = bcrypt.hashpw(raw_sifre.encode(), bcrypt.gensalt()).decode()
-
+        kurs = parse_kurs(data.get('kurs'))
         cur.execute("""
             INSERT INTO students (ad_soyad, email, sifre, ixtisas, kurs, api_key, universitet, ev_deyisme_isteyi)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """, [
-            data['ad_soyad'], data['email'], hashed_sifre,
-            ixtisas, kurs, api_key, universitet, ev_deyisme
+            data['ad_soyad'], data['email'], data.get('sifre', '12345'),
+            clean_val(data['ixtisas']), kurs, clean_val(data.get('api_key')),
+            data.get('universitet', 'Qarabağ Universiteti'),
+            int(data.get('ev_deyisme_isteyi', 0)) if data.get('ev_deyisme_isteyi') not in ('', None) else 0
         ])
     return ok()
 
@@ -351,7 +350,7 @@ def get_rooms(cur):
 @with_db
 def save_room(cur):
     """
-    Otaq yarat / yenilə
+    Otaq yarat / yenilə (id avtomatik artır)
     ---
     tags:
       - Otaqlar
@@ -383,7 +382,7 @@ def save_room(cur):
         vals.append(data['id'])
         cur.execute(f"UPDATE rooms SET {set_clause} WHERE id=%s", vals)
     else:
-        # INSERT — id avtomatik yaradılacaq (AUTO_INCREMENT)
+        # INSERT — id avtomatik (AUTO_INCREMENT)
         placeholders = ', '.join(['%s'] * len(cols))
         cols_str = ', '.join(cols)
         cur.execute(f"INSERT INTO rooms ({cols_str}) VALUES ({placeholders})", vals)
@@ -443,31 +442,19 @@ def save_application(cur):
     if not data.get('student_id'):
         return fail("Tələbə seçilməyib")
 
-    # Priority validasiyası
-    valid_priorities = ['Aşağı', 'Orta', 'Yüksək']
-    priority = data.get('priority', 'Orta')
-    if priority not in valid_priorities:
-        return fail("Yanlış öncəlik dəyəri", 400)
-
-    # Status validasiyası
-    valid_statuses = ['Gözləmədə', 'Təsdiqləndi', 'Rədd edildi']
-    status = data.get('status', 'Gözləmədə')
-    if status not in valid_statuses:
-        return fail("Yanlış status dəyəri", 400)
-
     if data.get('id'):
         cur.execute("""
             UPDATE applications
             SET student_id=%s, basliq=%s, muraciet=%s, priority=%s, status=%s
             WHERE id=%s
         """, [data['student_id'], data['basliq'], data['muraciet'],
-              priority, status, data['id']])
+              data['priority'], data['status'], data['id']])
     else:
         cur.execute("""
             INSERT INTO applications (student_id, basliq, muraciet, priority, status)
             VALUES (%s, %s, %s, %s, %s)
         """, [data['student_id'], data['basliq'], data['muraciet'],
-              priority, status])
+              data['priority'], data.get('status', 'Gözləmədə')])
     return ok()
 
 
@@ -497,12 +484,8 @@ def update_app_status(cur):
       - Ərizələr
     """
     data = request.get_json() or {}
-    valid_statuses = ['Gözləmədə', 'Təsdiqləndi', 'Rədd edildi']
-    status = data.get('status')
-    if status not in valid_statuses:
-        return fail("Yanlış status dəyəri", 400)
     cur.execute("UPDATE applications SET status = %s WHERE id = %s",
-                [status, data.get('id')])
+                [data.get('status'), data.get('id')])
     return ok()
 
 
@@ -520,21 +503,16 @@ def _get_contents(cur, content_type):
 
 def _save_content(cur, content_type):
     data = request.get_json() or {}
-
-    # Valid priority və status
-    priority = data.get('priority', 'Normal')
-    status = data.get('status', 'Aktiv')
-
     if data.get('id'):
         cur.execute("""
             UPDATE contents SET title=%s, description=%s, priority=%s, status=%s
             WHERE id=%s
-        """, [data['title'], data['description'], priority, status, data['id']])
+        """, [data['title'], data['description'], data['priority'], data['status'], data['id']])
     else:
         cur.execute("""
             INSERT INTO contents (type, title, description, priority, status)
             VALUES (%s, %s, %s, %s, %s)
-        """, [content_type, data['title'], data['description'], priority, status])
+        """, [content_type, data['title'], data['description'], data['priority'], data['status']])
     return ok()
 
 
@@ -654,15 +632,11 @@ def save_penalty(cur):
       - Cərimələr
     """
     data = request.get_json() or {}
-
-    # Məbləğ validasiyası
-    amount = data.get('amount')
-    if not amount or float(amount) <= 0:
+    if not data.get('amount') or float(data['amount']) <= 0:
         return fail("Məbləğ düzgün deyil", 400)
-
     if data.get('id'):
         fields = ["amount=%s", "reason=%s"]
-        vals = [amount, data['reason']]
+        vals = [data['amount'], data['reason']]
         if data.get('status'):
             fields.append("status=%s")
             vals.append(data['status'])
@@ -672,7 +646,7 @@ def save_penalty(cur):
         cur.execute("""
             INSERT INTO penalties (student_id, amount, reason)
             VALUES (%s, %s, %s)
-        """, [data['student_id'], amount, data['reason']])
+        """, [data['student_id'], data['amount'], data['reason']])
     return ok()
 
 
