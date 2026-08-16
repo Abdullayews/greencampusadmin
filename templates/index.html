@@ -249,12 +249,14 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
 
 /* Column Filters */
 .th-wrap{display:flex;flex-direction:column;gap:6px}
-.col-filter{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-family:'Poppins';font-size:12px;background:var(--bg);color:var(--text-primary);outline:none;transition:all var(--transition-fast)}
+.th-wrap>span:first-child{font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
+.col-filter{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-family:'Poppins';font-size:12px;background:var(--bg);color:var(--text-primary);outline:none;transition:all var(--transition-fast);margin-top:2px}
 .col-filter:focus{border-color:var(--ku-green);box-shadow:0 0 0 3px rgba(68,118,108,0.08);background:var(--surface)}
 .col-filter::placeholder{color:#94a3b8;font-size:11px}
-select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:14px;appearance:none}
-.data-table thead th{padding:10px 16px}
+select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;appearance:none}
+.data-table thead th{padding:10px 14px;vertical-align:top}
 </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -367,17 +369,17 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-students" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Siyahısı</h3><button class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchStudents" placeholder="Axtar..." oninput="debouncedFilter('searchStudents','studentsTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr>
-      <th><div class="th-wrap">ID</div></th>
-      <th><div class="th-wrap">Ad Soyad${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Email${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">İxtisas${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Kurs${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Universitet${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Ev Dəyişmə${buildColFilter('select',['Var','Yoxdur'])}</div></th>
-      <th><div class="th-wrap">API Açarı${buildColFilter('select',['Var','Yoxdur'])}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>ID</span></div></th>
+      <th><div class="th-wrap"><span>Ad Soyad</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
+      <th><div class="th-wrap"><span>Email</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
+      <th><div class="th-wrap"><span>İxtisas</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
+      <th><div class="th-wrap"><span>Kurs</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
+      <th><div class="th-wrap"><span>Universitet</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
+      <th><div class="th-wrap"><span>Ev Dəyişmə</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
+      <th><div class="th-wrap"><span>API Açarı</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="studentsTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -386,14 +388,14 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-profiles" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Profilləri</h3></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchProfiles" placeholder="Axtar..." oninput="debouncedFilter('searchProfiles','profilesTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="profilesTable"><thead><tr>
-      <th><div class="th-wrap">Tələbə${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Yuxu Rejimi${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Təmizlik${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Sosial Münasibət${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Həyat Tərzi${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
+      <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
+      <th><div class="th-wrap"><span>Təmizlik</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
+      <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
+      <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -402,11 +404,11 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-rooms" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button class="btn-primary" onclick="openAddModal('room')"><i data-lucide="plus"></i> Yeni Otaq</button></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchRooms" placeholder="Axtar..." oninput="debouncedFilter('searchRooms','roomsTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr>
-      <th><div class="th-wrap">Otaq ID${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Tələbələr${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
+      <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="roomsTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -415,12 +417,12 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-applications" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Müraciətlər</h3><button class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchApps" placeholder="Axtar..." oninput="debouncedFilter('searchApps','appsTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr>
-      <th><div class="th-wrap">Tələbə${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Müraciət${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Status${buildColFilter('select',['Gözləmədə','Təsdiqləndi','Rədd edildi'])}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('appsTable')"></div></th>
+      <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('appsTable')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('appsTable')"><option value="">Hamısı</option><option value="gözləmədə">Gözləmədə</option><option value="təsdiqləndi">Təsdiqləndi</option><option value="rədd edildi">Rədd edildi</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -429,11 +431,11 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-announcements" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Elanlar</h3><button class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchAnn" placeholder="Axtar..." oninput="debouncedFilter('searchAnn','annTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr>
-      <th><div class="th-wrap">Başlıq${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Status${buildColFilter('select',['Aktiv','Passiv'])}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('annTable')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('annTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -442,11 +444,11 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-surveys" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Anketlər</h3><button class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchSur" placeholder="Axtar..." oninput="debouncedFilter('searchSur','surTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr>
-      <th><div class="th-wrap">Başlıq${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Status${buildColFilter('select',['Aktiv','Passiv'])}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('annTable')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('annTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -455,13 +457,13 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-penalties" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Cərimələr</h3><button class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchPen" placeholder="Axtar..." oninput="debouncedFilter('searchPen','penTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr>
-      <th><div class="th-wrap">Tələbə${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Səbəb${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Məbləğ${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Status${buildColFilter('select',['Ödənilməmiş','Ödənilib'])}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
+      <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
+      <th><div class="th-wrap"><span>Məbləğ</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('penTable')"><option value="">Hamısı</option><option value="ödənilməmiş">Ödənilməmiş</option><option value="ödənilib">Ödənilib</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -476,13 +478,13 @@ select.col-filter{cursor:pointer;padding-right:24px;background-image:url("data:i
     <section id="page-laundry" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Çamaşırxana</h3><button class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
-        <div style="margin-bottom:20px;max-width:320px"><input type="text" class="form-input" id="searchLaundry" placeholder="Axtar..." oninput="debouncedFilter('searchLaundry','laundryTable')"></div>
+        
         <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr>
-      <th><div class="th-wrap">Tələbə${buildColFilter('text')}</div></th>
-      <th><div class="th-wrap">Maşın 1${buildColFilter('select',['Yoxdur','Gözlənilir','Hazır'])}</div></th>
-      <th><div class="th-wrap">Maşın 2${buildColFilter('select',['Yoxdur','Gözlənilir','Hazır'])}</div></th>
-      <th><div class="th-wrap">Maşın 3${buildColFilter('select',['Yoxdur','Gözlənilir','Hazır'])}</div></th>
-      <th><div class="th-wrap">Əməliyyat</div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('laundryTable')"></div></th>
+      <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Maşın 2</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Maşın 3</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
@@ -766,7 +768,7 @@ function debounce(fn, delay = 250) {
   };
 }
 
-const debouncedFilter = debounce((inputId, tableId) => {
+const debouncedFilter = debounce((tableId) => {
   applyAllFilters(tableId);
 }, 250);
 
@@ -775,8 +777,6 @@ function applyAllFilters(tableId) {
   if (!table) return;
   const tbody = table.getElementsByTagName('tbody')[0];
   const rows = Array.from(tbody.getElementsByTagName('tr'));
-  const searchInput = table.closest('.widget-card')?.querySelector('input[id^="search"]');
-  const globalQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
   const headers = Array.from(table.querySelectorAll('thead th'));
   const filters = headers.map(th => {
@@ -792,23 +792,14 @@ function applyAllFilters(tableId) {
     const cells = Array.from(row.getElementsByTagName('td'));
     let visible = true;
 
-    // Global search
-    if (globalQuery && !row.textContent.toLowerCase().includes(globalQuery)) {
-      visible = false;
-    }
-
-    // Column filters
-    if (visible) {
-      for (let i = 0; i < filters.length; i++) {
-        if (!filters[i]) continue;
-        const cell = cells[i];
-        if (!cell) continue;
-        // Get clean text (exclude hidden elements if any, but include visible text)
-        const cellText = cell.textContent.toLowerCase().trim();
-        if (!cellText.includes(filters[i])) {
-          visible = false;
-          break;
-        }
+    for (let i = 0; i < filters.length; i++) {
+      if (!filters[i]) continue;
+      const cell = cells[i];
+      if (!cell) continue;
+      const cellText = cell.textContent.toLowerCase().trim();
+      if (!cellText.includes(filters[i])) {
+        visible = false;
+        break;
       }
     }
 
@@ -816,16 +807,7 @@ function applyAllFilters(tableId) {
   });
 }
 
-function buildColFilter(type, options) {
-  if (type === 'select') {
-    let html = '<option value="">—</option>';
-    options.forEach(opt => {
-      html += `<option value="${opt.toLowerCase()}">${esc(opt)}</option>`;
-    });
-    return `<select class="col-filter" onchange="applyAllFilters(this.closest('table').id)">${html}</select>`;
-  }
-  return `<input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter(null,this.closest('table').id)">`;
-}
+
 
 // ═══════════════════════════════════════════════════════════
 // API
