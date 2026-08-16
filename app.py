@@ -50,6 +50,34 @@ def clean_val(val):
         return None
     return val
 
+def get_pagination_params():
+    """URL-dən paginasiya parametrlərini oxuyur."""
+    page = int(request.args.get('page', 1))
+    per_page = min(int(request.args.get('per_page', 50)), 100)  # max 100
+    search = request.args.get('search', '').strip()
+    return max(page, 1), per_page, search
+
+
+def paginated_response(cur, table, columns, where_clause="", params=None,
+                        order_by="id ASC", page=1, per_page=50):
+    """Paginasiyalı sorğu üçün köməkçi."""
+    if params is None:
+        params = []
+    offset = (page - 1) * per_page
+
+    # Ümumi say
+    cur.execute(f"SELECT COUNT(*) as c FROM {table} {where_clause}", params)
+    total = cur.fetchone()['c']
+
+    # Səhifəli data
+    cur.execute(f"""
+        SELECT {columns} FROM {table} {where_clause}
+        ORDER BY {order_by} LIMIT %s OFFSET %s
+    """, params + [per_page, offset])
+
+    return cur.fetchall(), total
+
+
 
 # ═══════════════════════════════════════════════════════════
 # Decorators
@@ -216,16 +244,35 @@ def admin_stats(cur):
 @with_db
 def get_students(cur):
     """
-    Tələbə siyahısı
+    Tələbə siyahısı (paginasiyalı)
     ---
     tags:
       - Tələbələr
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    cur.execute("""
-        SELECT id, ad_soyad, email, ixtisas, kurs, api_key, universitet, ev_deyisme_isteyi
-        FROM students ORDER BY id ASC
-    """)
-    return ok(data=cur.fetchall())
+    page, per_page, search = get_pagination_params()
+    where, params = "", []
+    if search:
+        where = "WHERE ad_soyad LIKE %s OR email LIKE %s OR ixtisas LIKE %s OR universitet LIKE %s"
+        params = [f'%{search}%'] * 4
+
+    data, total = paginated_response(
+        cur, 'students',
+        'id, ad_soyad, email, ixtisas, kurs, api_key, universitet, ev_deyisme_isteyi',
+        where, params, 'id ASC', page, per_page
+    )
+    return ok(data=data, total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/get_student_full', methods=['POST'])
@@ -336,13 +383,33 @@ def delete_student(cur):
 @with_db
 def get_rooms(cur):
     """
-    Otaq siyahısı
+    Otaq siyahısı (paginasiyalı)
     ---
     tags:
       - Otaqlar
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    cur.execute("SELECT * FROM rooms ORDER BY id ASC")
-    return ok(data=cur.fetchall())
+    page, per_page, search = get_pagination_params()
+    where, params = "", []
+    if search:
+        where = "WHERE id LIKE %s"
+        params = [f'%{search}%']
+
+    data, total = paginated_response(
+        cur, 'rooms', '*', where, params, 'id ASC', page, per_page
+    )
+    return ok(data=data, total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/save_room', methods=['POST'])
@@ -426,19 +493,46 @@ def delete_room(cur):
 @with_db
 def get_applications(cur):
     """
-    Ərizə siyahısı
+    Ərizə siyahısı (paginasiyalı)
     ---
     tags:
       - Ərizələr
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    cur.execute("""
+    page, per_page, search = get_pagination_params()
+    where, params = "", []
+    if search:
+        where = "WHERE s.ad_soyad LIKE %s OR a.basliq LIKE %s OR a.status LIKE %s"
+        params = [f'%{search}%', f'%{search}%', f'%{search}%']
+
+    offset = (page - 1) * per_page
+    cur.execute(f"""
+        SELECT COUNT(*) as c FROM applications a
+        JOIN students s ON a.student_id = s.id {where}
+    """, params)
+    total = cur.fetchone()['c']
+
+    cur.execute(f"""
         SELECT a.id, a.student_id, a.basliq, a.muraciet, a.priority, a.status,
                DATE_FORMAT(a.created_at, '%%d.%%m.%%Y') as tarix, s.ad_soyad
         FROM applications a
         JOIN students s ON a.student_id = s.id
-        ORDER BY a.created_at DESC
-    """)
-    return ok(data=cur.fetchall())
+        {where}
+        ORDER BY a.created_at DESC LIMIT %s OFFSET %s
+    """, params + [per_page, offset])
+
+    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/save_application', methods=['POST'])
@@ -534,12 +628,34 @@ def _save_content(cur, content_type):
 @with_db
 def get_announcements(cur):
     """
-    Elan siyahısı
+    Elan siyahısı (paginasiyalı)
     ---
     tags:
       - Elanlar
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    return _get_contents(cur, 'announcement')
+    page, per_page, search = get_pagination_params()
+    where, params = "WHERE type=%s", ['announcement']
+    if search:
+        where += " AND (title LIKE %s OR description LIKE %s OR status LIKE %s)"
+        params += [f'%{search}%'] * 3
+
+    data, total = paginated_response(
+        cur, 'contents', 'id, title, description, priority, status',
+        where, params, 'created_at DESC', page, per_page
+    )
+    return ok(data=data, total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/save_announcement', methods=['POST'])
@@ -575,12 +691,34 @@ def delete_announcement(cur):
 @with_db
 def get_surveys(cur):
     """
-    Sorğu siyahısı
+    Sorğu siyahısı (paginasiyalı)
     ---
     tags:
       - Sorğular
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    return _get_contents(cur, 'survey')
+    page, per_page, search = get_pagination_params()
+    where, params = "WHERE type=%s", ['survey']
+    if search:
+        where += " AND (title LIKE %s OR description LIKE %s OR status LIKE %s)"
+        params += [f'%{search}%'] * 3
+
+    data, total = paginated_response(
+        cur, 'contents', 'id, title, description, priority, status',
+        where, params, 'created_at DESC', page, per_page
+    )
+    return ok(data=data, total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/save_survey', methods=['POST'])
@@ -619,19 +757,46 @@ def delete_survey(cur):
 @with_db
 def get_penalties(cur):
     """
-    Cərimə siyahısı
+    Cərimə siyahısı (paginasiyalı)
     ---
     tags:
       - Cərimələr
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    cur.execute("""
+    page, per_page, search = get_pagination_params()
+    where, params = "", []
+    if search:
+        where = "WHERE s.ad_soyad LIKE %s OR p.reason LIKE %s OR p.status LIKE %s"
+        params = [f'%{search}%', f'%{search}%', f'%{search}%']
+
+    offset = (page - 1) * per_page
+    cur.execute(f"""
+        SELECT COUNT(*) as c FROM penalties p
+        JOIN students s ON p.student_id = s.id {where}
+    """, params)
+    total = cur.fetchone()['c']
+
+    cur.execute(f"""
         SELECT p.id, p.student_id, p.amount, p.reason, p.status,
                DATE_FORMAT(p.created_at, '%%d.%%m.%%Y') as tarix, s.ad_soyad
         FROM penalties p
         JOIN students s ON p.student_id = s.id
-        ORDER BY p.created_at DESC
-    """)
-    return ok(data=cur.fetchall())
+        {where}
+        ORDER BY p.created_at DESC LIMIT %s OFFSET %s
+    """, params + [per_page, offset])
+
+    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/save_penalty', methods=['POST'])
@@ -738,17 +903,45 @@ def save_canteen(cur):
 @with_db
 def get_laundry(cur):
     """
-    Camaşırxana statusu
+    Camaşırxana statusu (paginasiyalı)
     ---
     tags:
       - Camaşırxana
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    cur.execute("""
+    page, per_page, search = get_pagination_params()
+    where, params = "", []
+    if search:
+        where = "WHERE s.ad_soyad LIKE %s OR l.machine_1_status LIKE %s OR l.machine_2_status LIKE %s OR l.machine_3_status LIKE %s"
+        params = [f'%{search}%'] * 4
+
+    offset = (page - 1) * per_page
+    cur.execute(f"""
+        SELECT COUNT(*) as c FROM laundry l
+        JOIN students s ON l.student_id = s.id {where}
+    """, params)
+    total = cur.fetchone()['c']
+
+    cur.execute(f"""
         SELECT l.student_id, l.machine_1_status, l.machine_2_status, l.machine_3_status, s.ad_soyad
         FROM laundry l
         JOIN students s ON l.student_id = s.id
-    """)
-    return ok(data=cur.fetchall())
+        {where}
+        LIMIT %s OFFSET %s
+    """, params + [per_page, offset])
+
+    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/save_laundry', methods=['POST'])
@@ -797,17 +990,45 @@ def delete_laundry(cur):
 @with_db
 def get_profiles(cur):
     """
-    Tələbə profil siyahısı
+    Tələbə profil siyahısı (paginasiyalı)
     ---
     tags:
       - Profillər
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        default: 1
+      - name: per_page
+        in: query
+        type: integer
+        default: 50
+      - name: search
+        in: query
+        type: string
     """
-    cur.execute("""
+    page, per_page, search = get_pagination_params()
+    where, params = "", []
+    if search:
+        where = "WHERE s.ad_soyad LIKE %s OR sp.yuxu_rejimi LIKE %s OR sp.temizlik LIKE %s"
+        params = [f'%{search}%'] * 3
+
+    offset = (page - 1) * per_page
+    cur.execute(f"""
+        SELECT COUNT(*) as c FROM students_profiles sp
+        JOIN students s ON sp.student_id = s.id {where}
+    """, params)
+    total = cur.fetchone()['c']
+
+    cur.execute(f"""
         SELECT sp.student_id, sp.yuxu_rejimi, sp.temizlik, sp.sosial_munasibet, sp.hayat_terzi, s.ad_soyad
         FROM students_profiles sp
         JOIN students s ON sp.student_id = s.id
-    """)
-    return ok(data=cur.fetchall())
+        {where}
+        LIMIT %s OFFSET %s
+    """, params + [per_page, offset])
+
+    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/save_profile', methods=['POST'])
