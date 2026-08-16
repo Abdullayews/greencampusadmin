@@ -255,6 +255,15 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
 .col-filter::placeholder{color:#94a3b8;font-size:11px}
 select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;appearance:none}
 .data-table thead th{padding:10px 14px;vertical-align:top}
+
+/* Pagination */
+.pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap}
+.pagination-btn{min-width:36px;height:36px;padding:0 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:13px;font-weight:600;color:var(--text-primary);cursor:pointer;transition:all var(--transition-fast);display:inline-flex;align-items:center;justify-content:center}
+.pagination-btn:hover{background:var(--ku-soft-green);border-color:var(--ku-green);color:var(--ku-dark-green)}
+.pagination-btn.active{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border-color:var(--ku-green);box-shadow:0 2px 8px rgba(68,118,108,0.25)}
+.pagination-btn:disabled{opacity:0.4;cursor:not-allowed;background:var(--bg);border-color:var(--border);color:var(--text-secondary)}
+.pagination-btn:disabled:hover{background:var(--bg);border-color:var(--border);color:var(--text-secondary)}
+.pagination-info{font-size:13px;color:var(--text-secondary);font-weight:500;margin:0 8px}
 </style>
 <base target="_blank">
 <base target="_blank">
@@ -381,6 +390,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>API Açarı</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="studentsTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="studentsPagination"></div>
       </div>
     </section>
 
@@ -397,6 +407,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="profilesPagination"></div>
       </div>
     </section>
 
@@ -410,6 +421,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="roomsTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="roomsPagination"></div>
       </div>
     </section>
 
@@ -424,6 +436,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('appsTable')"><option value="">Hamısı</option><option value="gözləmədə">Gözləmədə</option><option value="təsdiqləndi">Təsdiqləndi</option><option value="rədd edildi">Rədd edildi</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="appsPagination"></div>
       </div>
     </section>
 
@@ -437,6 +450,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('annTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="annPagination"></div>
       </div>
     </section>
 
@@ -450,6 +464,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('annTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="surPagination"></div>
       </div>
     </section>
 
@@ -465,6 +480,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('penTable')"><option value="">Hamısı</option><option value="ödənilməmiş">Ödənilməmiş</option><option value="ödənilib">Ödənilib</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="penPagination"></div>
       </div>
     </section>
 
@@ -486,6 +502,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Maşın 3</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="laundryPagination"></div>
       </div>
     </section>
   </main>
@@ -511,6 +528,18 @@ let currentRooms = [];
 let currentApps = [];
 let currentProfiles = [];
 let isLoggedIn = false;
+
+// Paginasiya state-i
+const PAGINATION = {
+  students: { page: 1, per_page: 50, total: 0 },
+  rooms:    { page: 1, per_page: 50, total: 0 },
+  applications: { page: 1, per_page: 50, total: 0 },
+  profiles: { page: 1, per_page: 50, total: 0 },
+  announcements: { page: 1, per_page: 50, total: 0 },
+  surveys:  { page: 1, per_page: 50, total: 0 },
+  penalties:{ page: 1, per_page: 50, total: 0 },
+  laundry:  { page: 1, per_page: 50, total: 0 }
+};
 
 const PAGE_TITLES = {
   dashboard: ['Dashboard', 'Ümumi statistika'],
@@ -812,10 +841,15 @@ function applyAllFilters(tableId) {
 // ═══════════════════════════════════════════════════════════
 // API
 // ═══════════════════════════════════════════════════════════
-async function apiAction(action, method = 'GET', body = null) {
+async function apiAction(action, method = 'GET', body = null, query = null) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000);
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
   try {
+    let url = `/api/admin/${action}`;
+    if (query && method === 'GET') {
+      const qs = new URLSearchParams(query).toString();
+      if (qs) url += '?' + qs;
+    }
     const options = {
       method,
       headers: { 'Content-Type': 'application/json' },
@@ -823,7 +857,7 @@ async function apiAction(action, method = 'GET', body = null) {
       signal: controller.signal
     };
     if (body) options.body = JSON.stringify(body);
-    const res = await fetch(`/api/admin/${action}`, options);
+    const res = await fetch(url, options);
     clearTimeout(timeoutId);
     if (res.status === 403) { showLogin(); throw new Error('İcazə yoxdur'); }
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1058,11 +1092,16 @@ async function loadDashboard() {
 // ═══════════════════════════════════════════════════════════
 // STUDENTS
 // ═══════════════════════════════════════════════════════════
-async function loadStudents() {
+async function loadStudents(page = 1) {
   try {
-    const data = await apiAction('get_students');
+    PAGINATION.students.page = page;
+    const data = await apiAction('get_students', 'GET', null, {
+      page, per_page: PAGINATION.students.per_page
+    });
     currentStudents = data.data || [];
+    PAGINATION.students.total = data.total || 0;
     renderTable('student', data.data);
+    renderPagination('students', 'studentsPagination', 'loadStudents');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1071,10 +1110,14 @@ async function loadStudents() {
 // ═══════════════════════════════════════════════════════════
 // PROFILES
 // ═══════════════════════════════════════════════════════════
-async function loadProfiles() {
+async function loadProfiles(page = 1) {
   try {
-    const data = await apiAction('get_profiles');
+    PAGINATION.profiles.page = page;
+    const data = await apiAction('get_profiles', 'GET', null, {
+      page, per_page: PAGINATION.profiles.per_page
+    });
     currentProfiles = data.data || [];
+    PAGINATION.profiles.total = data.total || 0;
     let html = '';
     if (!data.data || data.data.length === 0) {
       html = emptyState('user-circle', 'Profil yoxdur');
@@ -1095,6 +1138,7 @@ async function loadProfiles() {
     }
     document.getElementById('profilesTbody').innerHTML = html;
     refreshIcons(document.getElementById('profilesTbody'));
+    renderPagination('profiles', 'profilesPagination', 'loadProfiles');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1140,14 +1184,16 @@ async function deleteProfile(student_id) {
 // ═══════════════════════════════════════════════════════════
 // ROOMS
 // ═══════════════════════════════════════════════════════════
-async function loadRooms() {
-  if (currentStudents.length === 0) {
-    await loadStudents();
-  }
+async function loadRooms(page = 1) {
   try {
-    const data = await apiAction('get_rooms');
+    PAGINATION.rooms.page = page;
+    const data = await apiAction('get_rooms', 'GET', null, {
+      page, per_page: PAGINATION.rooms.per_page
+    });
     currentRooms = data.data || [];
+    PAGINATION.rooms.total = data.total || 0;
     renderTable('room', data.data);
+    renderPagination('rooms', 'roomsPagination', 'loadRooms');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1210,11 +1256,16 @@ async function saveRoom(id) {
 // ═══════════════════════════════════════════════════════════
 // APPLICATIONS
 // ═══════════════════════════════════════════════════════════
-async function loadApplications() {
+async function loadApplications(page = 1) {
   try {
-    const data = await apiAction('get_applications');
+    PAGINATION.applications.page = page;
+    const data = await apiAction('get_applications', 'GET', null, {
+      page, per_page: PAGINATION.applications.per_page
+    });
     currentApps = data.data || [];
+    PAGINATION.applications.total = data.total || 0;
     renderTable('application', data.data);
+    renderPagination('applications', 'appsPagination', 'loadApplications');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1272,18 +1323,28 @@ async function updateAppStatus(id, status) {
 // ═══════════════════════════════════════════════════════════
 // ANNOUNCEMENTS & SURVEYS (generic loaders)
 // ═══════════════════════════════════════════════════════════
-async function loadAnnouncements() {
+async function loadAnnouncements(page = 1) {
   try {
-    const data = await apiAction('get_announcements');
+    PAGINATION.announcements.page = page;
+    const data = await apiAction('get_announcements', 'GET', null, {
+      page, per_page: PAGINATION.announcements.per_page
+    });
+    PAGINATION.announcements.total = data.total || 0;
     renderTable('announcement', data.data);
+    renderPagination('announcements', 'annPagination', 'loadAnnouncements');
   } catch (e) {
     showToast(e.message, 'error');
   }
 }
-async function loadSurveys() {
+async function loadSurveys(page = 1) {
   try {
-    const data = await apiAction('get_surveys');
+    PAGINATION.surveys.page = page;
+    const data = await apiAction('get_surveys', 'GET', null, {
+      page, per_page: PAGINATION.surveys.per_page
+    });
+    PAGINATION.surveys.total = data.total || 0;
     renderTable('survey', data.data);
+    renderPagination('surveys', 'surPagination', 'loadSurveys');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1292,10 +1353,15 @@ async function loadSurveys() {
 // ═══════════════════════════════════════════════════════════
 // PENALTIES
 // ═══════════════════════════════════════════════════════════
-async function loadPenalties() {
+async function loadPenalties(page = 1) {
   try {
-    const data = await apiAction('get_penalties');
+    PAGINATION.penalties.page = page;
+    const data = await apiAction('get_penalties', 'GET', null, {
+      page, per_page: PAGINATION.penalties.per_page
+    });
+    PAGINATION.penalties.total = data.total || 0;
     renderTable('penalty', data.data);
+    renderPagination('penalties', 'penPagination', 'loadPenalties');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1385,10 +1451,15 @@ function updateCanteenDelayed(id, val) {
 // ═══════════════════════════════════════════════════════════
 // LAUNDRY
 // ═══════════════════════════════════════════════════════════
-async function loadLaundry() {
+async function loadLaundry(page = 1) {
   try {
-    const data = await apiAction('get_laundry');
+    PAGINATION.laundry.page = page;
+    const data = await apiAction('get_laundry', 'GET', null, {
+      page, per_page: PAGINATION.laundry.per_page
+    });
+    PAGINATION.laundry.total = data.total || 0;
     renderTable('laundry', data.data);
+    renderPagination('laundry', 'laundryPagination', 'loadLaundry');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1459,8 +1530,45 @@ function renderTable(type, data) {
     tbody.innerHTML = data.map((item, idx) => cfg.renderRow(item, idx)).join('');
   }
   refreshIcons(document.getElementById(cfg.tbodyId));
-  // Re-apply any active column filters
+  // Column filter-ləri cari səhifə üzrə tətbiq et
   setTimeout(() => applyAllFilters(cfg.tableId), 50);
+}
+
+function renderPagination(key, containerId, loadFn) {
+  const pg = PAGINATION[key];
+  const container = document.getElementById(containerId);
+  if (!container || pg.total <= pg.per_page) {
+    if (container) container.innerHTML = '';
+    return;
+  }
+  const totalPages = Math.ceil(pg.total / pg.per_page);
+  let html = '';
+
+  // Prev
+  html += `<button class="pagination-btn" ${pg.page<=1?'disabled':''} onclick="${loadFn}(${pg.page-1})"><i data-lucide="chevron-left"></i></button>`;
+
+  // Pages
+  const maxButtons = 5;
+  let start = Math.max(1, pg.page - Math.floor(maxButtons/2));
+  let end = Math.min(totalPages, start + maxButtons - 1);
+  if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
+
+  if (start > 1) html += `<button class="pagination-btn" onclick="${loadFn}(1)">1</button>${start>2?'<span class="pagination-info">...</span>':''}`;
+  for (let i = start; i <= end; i++) {
+    html += `<button class="pagination-btn ${i===pg.page?'active':''}" onclick="${loadFn}(${i})">${i}</button>`;
+  }
+  if (end < totalPages) html += `${end<totalPages-1?'<span class="pagination-info">...</span>':''}<button class="pagination-btn" onclick="${loadFn}(${totalPages})">${totalPages}</button>`;
+
+  // Next
+  html += `<button class="pagination-btn" ${pg.page>=totalPages?'disabled':''} onclick="${loadFn}(${pg.page+1})"><i data-lucide="chevron-right"></i></button>`;
+
+  // Info
+  const from = (pg.page - 1) * pg.per_page + 1;
+  const to = Math.min(pg.page * pg.per_page, pg.total);
+  html += `<span class="pagination-info">${from}–${to} / ${pg.total}</span>`;
+
+  container.innerHTML = html;
+  refreshIcons(container);
 }
 
 // ═══════════════════════════════════════════════════════════
