@@ -55,7 +55,7 @@ Bağlantı default olaraq SSL üzərindən qurulur.
 
 ## 🗄️ Verilənlər bazası sxemi
 
-Faktiki MySQL dump-a (`if0_42430459_students`, MyISAM, `utf8mb4_unicode_ci`) əsaslanır:
+Faktiki MySQL dump-a (`students`, MyISAM, `utf8mb4_unicode_ci`) əsaslanır:
 
 - **`students`** — `id`, `ad_soyad`, `email` (unique), `sifre`, `universitet`, `ixtisas`, `kurs`, `ev_deyisme_isteyi`, `api_key`
 - **`students_profiles`** — `student_id`, `yuxu_rejimi`, `temizlik`, `sosial_munasibet`, `hayat_terzi` (otaq yoldaşı uyğunlaşdırması üçün)
