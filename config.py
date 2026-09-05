@@ -1,7 +1,6 @@
 import os
 import pymysql
 from pymysql.cursors import DictCursor
-from dbutils.pooled_db import PooledDB
 
 DB_CONFIG = {
     "host": os.getenv("DB_HOST"),
@@ -16,17 +15,29 @@ DB_CONFIG = {
 if os.getenv("DB_SSL", "true").lower() in ("true", "1", "yes"):
     DB_CONFIG["ssl"] = {"ssl": True}
 
-_pool = PooledDB(
-    creator=pymysql,
-    minconnections=2,
-    maxconnections=10,
-    maxusage=100,          # 100 sorğudan sonra bağlantı yenilənir
-    blocking=True,         # pool boşsa gözlə (xəta yox)
-    ping=1,                # ölü bağlantını avtomatik yoxla/yenilə
-    **DB_CONFIG
-)
+
+# --- Connection Pooling (DBUtils) ---
+# Hər request yeni TCP+SSL bağlantısı açmaq əvəzinə pool istifadə olunur.
+# DBUtils quraşdırılmayıbsa avtomatik köhnə üsula qayıdır.
+_pool = None
+try:
+    from dbutils.pooled_db import PooledDB
+    _pool = PooledDB(
+        creator=pymysql,
+        mincached=2,        # həmişə açıq saxlanan bağlantı
+        maxcached=8,        # pool-da maksimum boş bağlantı
+        maxconnections=20,  # ümumi limit
+        blocking=True,      # limit dolu olsa gözlə
+        ping=1,             # istifadədən əvvəl canlılıq yoxlaması
+        **DB_CONFIG
+    )
+except ImportError:
+    _pool = None
 
 
 def get_db_connection():
-    """Pool-dan bağlantı — close() onu geri qaytarır, bağlamır."""
-    return _pool.connection()
+    """Pool varsa pool-dan, yoxsa adi bağlantı.
+    Pool bağlantısının close() — ona görə mövcud kod dəyişmir."""
+    if _pool is not None:
+        return _pool.connection()
+    return pymysql.connect(**DB_CONFIG)
