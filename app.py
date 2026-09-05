@@ -1,13 +1,17 @@
 import os
 import csv
 import io
+import re
 import time
+import hmac
 import secrets
 import logging
+from collections import defaultdict
 from functools import wraps
 
 from flask import Flask, request, jsonify, session, render_template_string, Response
 from pymysql.err import IntegrityError
+from werkzeug.security import generate_password_hash
 
 from config import get_db_connection
 
@@ -31,17 +35,23 @@ if not _secret_key:
             f.write(_secret_key)
 app.secret_key = _secret_key
 
-app.config['JSON_AS_ASCII'] = False
+try:
+    app.json.ensure_ascii = False
+except Exception:
+    app.config['JSON_AS_ASCII'] = False
+
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = True
 
 log = logging.getLogger('admin')
 logging.basicConfig(level=logging.INFO)
 
-# ---------------------------------------------------------------------------
-# Stats Cache (30 saniyə)
-# ---------------------------------------------------------------------------
 _stats_cache = {"data": None, "ts": 0.0}
+
+_LOGIN_ATTEMPTS = defaultdict(list)
+_LOGIN_WINDOW = 300
+_LOGIN_MAX = 10
 
 
 # ---------------------------------------------------------------------------
@@ -110,7 +120,13 @@ def sync_ev_statuses(cur):
 
 
 def remove_student_from_room(cur, student_id):
+    cur.execute("SELECT group_id FROM students WHERE id = %s", (student_id,))
+    row = cur.fetchone()
+    gid = row['group_id'] if row else None
     cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
+    if gid is not None:
+        cur.execute("UPDATE students SET group_id = NULL WHERE id = %s", (student_id,))
+        dissolve_group_if_empty(cur, gid)
     sync_ev_statuses(cur)
 
 
@@ -188,11 +204,15 @@ def admin_required(f):
     return decorated
 
 
+class BizError(Exception):
+    """İş məntiqi xətası — rollback edilir və mesajla qaytarılır."""
+
+
 def with_db(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         try:
-            conn = get_db_connection()   # pool-dan
+            conn = get_db_connection()
         except Exception as e:
             return fail(f"DB Bağlantı xətası: {e}", 500)
         try:
@@ -200,12 +220,15 @@ def with_db(f):
                 result = f(cur, *args, **kwargs)
             conn.commit()
             return result
+        except BizError as e:
+            conn.rollback()
+            return fail(str(e), 400)
         except IntegrityError as e:
             conn.rollback()
             err_msg = str(e)
             if 'Duplicate entry' in err_msg and 'email' in err_msg:
                 return fail("Bu email ilə tələbə artıq mövcuddur!", 400)
-            if 'Duplicate entry' in err_msg and 'uq_slot_student' in err_msg:
+            if 'Duplicate entry' in err_msg and ('uq_slot_student' in err_msg or 'student_id' in err_msg):
                 return fail("Bu tələbə artıq bir evdə yaşayır!", 400)
             return fail(f"Məlumat uyğunsuzluğu: {e}", 400)
         except Exception as e:
@@ -213,7 +236,7 @@ def with_db(f):
             log.exception("Əməliyyat xətası")
             return fail(f"Əməliyyat xətası: {e}", 500)
         finally:
-            conn.close()   # pool-a qaytarır
+            conn.close()
     return decorated
 
 
@@ -231,6 +254,14 @@ def serve_html(filename, **context):
         return content
     except FileNotFoundError:
         return fail(f"{filename} tapılmadı", 404)
+
+
+@app.after_request
+def _security_headers(resp):
+    resp.headers.setdefault('X-Content-Type-Options', 'nosniff')
+    resp.headers.setdefault('X-Frame-Options', 'DENY')
+    resp.headers.setdefault('Referrer-Policy', 'strict-origin-when-cross-origin')
+    return resp
 
 
 # ---------------------------------------------------------------------------
@@ -251,13 +282,35 @@ def admin_panel():
 # Auth
 # ---------------------------------------------------------------------------
 
+def _client_ip():
+    xff = request.headers.get('X-Forwarded-For', '')
+    if xff:
+        return xff.split(',')[0].strip()
+    return request.remote_addr or 'unknown'
+
+
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json() or {}
-    if data.get('email') == ADMIN_USER and data.get('sifre') == ADMIN_PASS:
+    data = request.get_json(silent=True) or {}
+
+    ip = _client_ip()
+    now = time.time()
+    if len(_LOGIN_ATTEMPTS) > 10000:
+        _LOGIN_ATTEMPTS.clear()
+    attempts = [t for t in _LOGIN_ATTEMPTS[ip] if now - t < _LOGIN_WINDOW]
+    _LOGIN_ATTEMPTS[ip] = attempts
+    if len(attempts) >= _LOGIN_MAX:
+        return fail("Çoxlu uğursuz cəhd! 5 dəqiqə sonra yenidən cəhd edin.", 429)
+
+    user_ok = hmac.compare_digest(str(data.get('email') or ''), ADMIN_USER)
+    pass_ok = hmac.compare_digest(str(data.get('sifre') or ''), ADMIN_PASS)
+    if user_ok and pass_ok:
+        _LOGIN_ATTEMPTS.pop(ip, None)
         session['admin_logged_in'] = True
         session['admin_user'] = data.get('email')
         return ok()
+
+    _LOGIN_ATTEMPTS[ip].append(time.time())
     return fail("Admin məlumatları yanlışdır!", 401)
 
 
@@ -270,8 +323,6 @@ def logout():
 @app.route('/api/admin/check', methods=['GET'])
 @admin_required
 def admin_check():
-    """Yüngül sessiya yoxlaması — DB-yə toxunmur.
-    Real-time polling üçün ideal (30 san)."""
     return ok()
 
 
@@ -305,35 +356,28 @@ def search_students_query(cur):
 
 
 # ---------------------------------------------------------------------------
-# Dashboard — 30 SANLIQ CACHE
+# Dashboard
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/stats', methods=['GET'])
 @admin_required
-def admin_stats():
-    """Dashboard statistikası — 30 saniyəlik cache.
-    Cache hit halında DB-yə heç toxunulmur (real-time polling ucuzdur)."""
+@with_db
+def admin_stats(cur):
     now = time.time()
-    if _stats_cache["data"] is not None and (now - _stats_cache["ts"]) < 30:
-        return ok(stats=_stats_cache["data"])
+    cached = _stats_cache["data"]
+    if cached is not None and (now - _stats_cache["ts"]) < 30:
+        return ok(stats=cached)
 
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cur:
-            # "groups" rezerv söz olduğundan backtick içində
-            cur.execute("""
-                SELECT
-                  (SELECT COUNT(*) FROM students) AS students,
-                  (SELECT COUNT(*) FROM rooms) AS rooms,
-                  (SELECT COUNT(*) FROM applications WHERE status='Gözləmədə') AS apps,
-                  (SELECT COUNT(*) FROM penalties WHERE status='Ödənilməmiş') AS penalties,
-                  (SELECT COUNT(DISTINCT group_id) FROM students WHERE group_id IS NOT NULL) AS `groups`,
-                  (SELECT COUNT(*) FROM home_requests WHERE status='Gözləmədə') AS requests
-            """)
-            stats = dict(cur.fetchone() or {})
-        conn.commit()
-    finally:
-        conn.close()
+    cur.execute("""
+        SELECT
+          (SELECT COUNT(*) FROM students) AS students,
+          (SELECT COUNT(*) FROM rooms) AS rooms,
+          (SELECT COUNT(*) FROM applications WHERE status='Gözləmədə') AS apps,
+          (SELECT COUNT(*) FROM penalties WHERE status='Ödənilməmiş') AS penalties,
+          (SELECT COUNT(DISTINCT group_id) FROM students WHERE group_id IS NOT NULL) AS `groups`,
+          (SELECT COUNT(*) FROM home_requests WHERE status='Gözləmədə') AS requests
+    """)
+    stats = dict(cur.fetchone() or {})
 
     _stats_cache["data"] = stats
     _stats_cache["ts"] = now
@@ -348,8 +392,6 @@ def admin_stats():
 @admin_required
 @with_db
 def export_entity(cur, entity):
-    """CSV Export: students / penalties / applications / logs.
-    Excel-in Azərbaycan hərflərini düzgün açması üçün UTF-8 BOM ilə."""
     configs = {
         'students': (
             """SELECT s.id, s.ad_soyad, s.email, s.universitet, s.ixtisas, s.kurs, s.cins, s.ev,
@@ -409,7 +451,7 @@ def export_entity(cur, entity):
         writer.writerow(['' if row.get(c) is None else row.get(c) for c in cols])
 
     return Response(
-        "\ufeff" + out.getvalue(),   # BOM — Excel üçün
+        "\ufeff" + out.getvalue(),
         mimetype="text/csv; charset=utf-8",
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
@@ -468,7 +510,7 @@ def get_students(cur):
 @admin_required
 @with_db
 def get_student_full(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     sid = as_int(data.get('id'))
     if sid is None:
         return fail("ID düzgün deyil", 400)
@@ -479,14 +521,17 @@ def get_student_full(cur):
         LEFT JOIN room_slots rs ON rs.student_id = s.id
         WHERE s.id = %s
     """, (sid,))
-    return ok(data=cur.fetchone())
+    row = cur.fetchone()
+    if not row:
+        return fail("Tələbə tapılmadı!", 404)
+    return ok(data=row)
 
 
 @app.route('/api/admin/save_student', methods=['POST'])
 @admin_required
 @with_db
 def save_student(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
 
     cins = data.get('cins') or 'Kişi'
     if cins not in ('Kişi', 'Qadın'):
@@ -495,9 +540,20 @@ def save_student(cur):
     if ev not in ('Ev seçilib', 'Ev seçilməyib', 'Rədd edilib'):
         ev = 'Ev seçilməyib'
 
+    ad_soyad = (data.get('ad_soyad') or '').strip()
+    email = (data.get('email') or '').strip()
+    if not ad_soyad or not email:
+        return fail("Ad və email mütləqdir!")
+    if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+        return fail("Email formatı yanlışdır!")
+
     student_id = as_int(data.get('id'))
 
     if student_id is not None:
+        cur.execute("SELECT 1 FROM students WHERE id = %s", (student_id,))
+        if not cur.fetchone():
+            return fail("Tələbə tapılmadı!", 404)
+
         cur.execute("""
             SELECT r.cins FROM room_slots rs JOIN rooms r ON r.id = rs.room_id
             WHERE rs.student_id = %s
@@ -506,15 +562,20 @@ def save_student(cur):
         if room_row and room_row['cins'] and room_row['cins'] != cins:
             return fail("Tələbə hazırda əks cinsə aid evdə yaşayır — əvvəlcə Otaqlar bölməsindən çıxarın!", 400)
 
-        if not data.get('ad_soyad') or not data.get('email'):
-            return fail("Ad və email mütləqdir!", 400)
+        cur.execute("SELECT id FROM students WHERE email = %s AND id != %s", (email, student_id))
+        if cur.fetchone():
+            return fail("Bu email başqa tələbə tərəfindən istifadə olunur!")
 
-        fields, vals = [], []
-        field_map = {
-            "ad_soyad": data.get('ad_soyad'),
-            "email": data.get('email'),
+        if ev == 'Ev seçilib':
+            cur.execute("SELECT room_id FROM room_slots WHERE student_id = %s", (student_id,))
+            if not cur.fetchone():
+                return fail("'Ev seçilib' statusu üçün tələbə bir evdə yerləşdirilməlidir — əvvəlcə Otaqlar bölməsindən yerləşdirin!")
+
+        fields = {
+            "ad_soyad": ad_soyad,
+            "email": email,
             "ixtisas": clean_val(data.get('ixtisas')),
-            "universitet": data.get('universitet', 'Qarabağ Universiteti'),
+            "universitet": data.get('universitet') or 'Qarabağ Universiteti',
             "cins": cins,
             "ev": ev,
             "ev_deyisme_isteyi": int(data.get('ev_deyisme_isteyi', 0) or 0),
@@ -522,33 +583,35 @@ def save_student(cur):
             "api_key": clean_val(data.get('api_key')),
         }
         if data.get('sifre'):
-            field_map['sifre'] = data['sifre']
-        for col, val in field_map.items():
-            fields.append(f"{col}=%s")
-            vals.append(val)
-        vals.append(student_id)
-        cur.execute(f"UPDATE students SET {', '.join(fields)} WHERE id=%s", vals)
+            fields['sifre'] = generate_password_hash(str(data['sifre']))
+
+        set_clause = ", ".join(f"{k}=%s" for k in fields)
+        vals = list(fields.values()) + [student_id]
+        cur.execute(f"UPDATE students SET {set_clause} WHERE id=%s", vals)
 
         log_admin(cur, 'Tələbə yeniləndi', 'Tələbə', student_id,
-                  f"{data.get('ad_soyad')} — cins: {cins}, ev: {ev}")
+                  f"{ad_soyad} — cins: {cins}, ev: {ev}")
     else:
-        if not data.get('ad_soyad') or not data.get('email'):
-            return fail("Ad və email mütləqdir!", 400)
+        if ev == 'Ev seçilib':
+            return fail("Yeni tələbə 'Ev seçilib' statusu ilə yaradıla bilməz — əvvəlcə Otaqlar bölməsində yerləşdirin!")
 
+        cur.execute("SELECT id FROM students WHERE email = %s", (email,))
+        if cur.fetchone():
+            return fail("Bu email ilə tələbə artıq mövcuddur!")
+
+        sifre_plain = str(data.get('sifre') or '12345')
         cur.execute("""
             INSERT INTO students (ad_soyad, email, sifre, ixtisas, kurs, api_key,
                                   universitet, ev_deyisme_isteyi, cins, ev)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, [
-            data['ad_soyad'], data['email'], data.get('sifre', '12345'),
-            clean_val(data.get('ixtisas')), clean_val(data.get('kurs')) or '1',
-            clean_val(data.get('api_key')), data.get('universitet', 'Qarabağ Universiteti'),
-            int(data.get('ev_deyisme_isteyi', 0) or 0), cins, ev
-        ])
+        """, [ad_soyad, email, generate_password_hash(sifre_plain),
+              clean_val(data.get('ixtisas')), clean_val(data.get('kurs')) or '1',
+              clean_val(data.get('api_key')), data.get('universitet') or 'Qarabağ Universiteti',
+              int(data.get('ev_deyisme_isteyi', 0) or 0), cins, ev])
         student_id = cur.lastrowid
 
         log_admin(cur, 'Tələbə yaradıldı', 'Tələbə', student_id,
-                  f"{data.get('ad_soyad')} — cins: {cins}, email: {data.get('email')}")
+                  f"{ad_soyad} — cins: {cins}, email: {email}")
 
     if ev != 'Ev seçilib':
         cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
@@ -562,7 +625,7 @@ def save_student(cur):
 @admin_required
 @with_db
 def delete_student(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     student_id = as_int(data.get('id'))
     if student_id is None:
         return fail("ID düzgün deyil", 400)
@@ -665,7 +728,7 @@ def get_rooms(cur):
 @admin_required
 @with_db
 def save_room(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
 
     room_id = as_int(data.get('id'))
     if room_id is None:
@@ -677,13 +740,17 @@ def save_room(cur):
     cins = room_cins_by_id(room_id) or clean_val(data.get('cins'))
 
     placed = []
+    placed_ids = set()
+    item_statuses = ('Yaxşı', 'Az zədəli', 'Zədəli')
     for i in range(1, capacity + 1):
-        t = as_int(data.get(f't{i}'))
-        if data.get(f't{i}') and t is None:
-            return fail(f"{i}-ci yerdəki tələbə ID-si düzgün deyil", 400)
+        raw = data.get(f't{i}')
+        t = as_int(raw)
+        if raw and t is None:
+            return fail(f"{i}-ci yerdəki tələbə seçimi yanlışdır", 400)
         if t is not None:
-            if t in placed:
+            if t in placed_ids:
                 return fail("Eyni tələbə birdən çox yerdə seçilib!", 400)
+            placed_ids.add(t)
             placed.append((i, t))
 
     for i, t in placed:
@@ -693,6 +760,10 @@ def save_room(cur):
             return fail(f"{i}-ci yerdəki tələbə (ID {t}) tapılmadı!", 400)
         if cins and st['cins'] != cins:
             return fail(f"{i}-ci yerdəki tələbənin cinsi otağın cinsinə uyğun gəlmir!", 400)
+        for prefix in ('y', 's', 'o'):
+            val = data.get(f'{prefix}{i}') or 'Yaxşı'
+            if val not in item_statuses:
+                return fail(f"{i}-ci yerin əşya statusu yanlışdır!", 400)
 
     cur.execute("SELECT 1 FROM rooms WHERE id = %s", (room_id,))
     exists = cur.fetchone() is not None
@@ -705,16 +776,14 @@ def save_room(cur):
     heal_one_room_slots(cur, room_id)
     cur.execute("DELETE FROM room_slots WHERE room_id = %s AND slot > %s", (room_id, capacity))
 
+    cur.execute("UPDATE room_slots SET student_id = NULL WHERE room_id = %s", (room_id,))
+
     for i, t in placed:
         y = data.get(f'y{i}') or 'Yaxşı'
         s = data.get(f's{i}') or 'Yaxşı'
         o = data.get(f'o{i}') or 'Yaxşı'
 
-        cur.execute(
-            "UPDATE room_slots SET student_id = NULL WHERE student_id = %s "
-            "AND NOT (room_id = %s AND slot = %s)",
-            (t, room_id, i)
-        )
+        cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (t,))
         cur.execute(
             "UPDATE room_slots SET student_id = %s, yataq_status = %s, skaf_status = %s, oturacaq_status = %s "
             "WHERE room_id = %s AND slot = %s",
@@ -738,7 +807,7 @@ def save_room(cur):
 @admin_required
 @with_db
 def delete_room(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     room_id = as_int(data.get('id'))
     if room_id is None:
         return fail("ID düzgün deyil", 400)
@@ -746,6 +815,10 @@ def delete_room(cur):
     cur.execute("SELECT COUNT(*) AS c FROM room_slots WHERE room_id = %s AND student_id IS NOT NULL", (room_id,))
     dolu = cur.fetchone()['c']
 
+    cur.execute(
+        "UPDATE home_requests SET status = 'Rədd edildi' WHERE room_id = %s AND status = 'Gözləmədə'",
+        (room_id,)
+    )
     cur.execute("DELETE FROM room_slots WHERE room_id = %s", (room_id,))
     cur.execute("DELETE FROM rooms WHERE id = %s", (room_id,))
     sync_ev_statuses(cur)
@@ -799,15 +872,20 @@ def get_applications(cur):
 @admin_required
 @with_db
 def save_application(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
 
     sid = as_int(data.get('student_id'))
     if sid is None:
         return fail("Tələbə seçilməyib və ya ID düzgün deyil")
-    if not data.get('basliq') or not data.get('muraciet'):
+    basliq = (data.get('basliq') or '').strip()
+    muraciet = (data.get('muraciet') or '').strip()
+    if not basliq or not muraciet:
         return fail("Başlıq və müraciət mətni mütləqdir!")
 
-    status = data.get('status', 'Gözləmədə')
+    status = data.get('status') or 'Gözləmədə'
+    if status not in ('Gözləmədə', 'Təsdiqləndi', 'Rədd edildi'):
+        return fail("Status yanlışdır!", 400)
+    priority = data.get('priority') or 'Orta'
     notlar = clean_val(data.get('notlar'))
     if status == 'Təsdiqləndi' and not notlar:
         notlar = 'Müraciətiniz təsdiqləndi.'
@@ -817,18 +895,16 @@ def save_application(cur):
             UPDATE applications
             SET student_id=%s, basliq=%s, muraciet=%s, priority=%s, status=%s, notlar=%s
             WHERE id=%s
-        """, [sid, data['basliq'], data['muraciet'],
-              data['priority'], status, notlar, data['id']])
+        """, [sid, basliq, muraciet, priority, status, notlar, data['id']])
         log_admin(cur, 'Müraciət yeniləndi', 'Müraciət', data['id'],
-                  f"{data.get('basliq')} — status: {status}")
+                  f"{basliq} — status: {status}")
     else:
         cur.execute("""
             INSERT INTO applications (student_id, basliq, muraciet, priority, status, notlar)
             VALUES (%s, %s, %s, %s, %s, %s)
-        """, [sid, data['basliq'], data['muraciet'],
-              data['priority'], status, notlar])
+        """, [sid, basliq, muraciet, priority, status, notlar])
         log_admin(cur, 'Müraciət yaradıldı', 'Müraciət', cur.lastrowid,
-                  f"{data.get('basliq')} — status: {status}")
+                  f"{basliq} — status: {status}")
     return ok()
 
 
@@ -837,7 +913,7 @@ def save_application(cur):
 @admin_required
 @with_db
 def delete_application(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     app_id = as_int(data.get('id'))
     if app_id is None:
         return fail("ID düzgün deyil", 400)
@@ -853,12 +929,15 @@ def delete_application(cur):
 @admin_required
 @with_db
 def update_app_status(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     app_id = as_int(data.get('id'))
     if app_id is None:
         return fail("ID düzgün deyil", 400)
 
     status = data.get('status')
+    if status not in ('Gözləmədə', 'Təsdiqləndi', 'Rədd edildi'):
+        return fail("Status yanlışdır!", 400)
+
     notlar = clean_val(data.get('notlar'))
 
     if status == 'Təsdiqləndi' and not notlar:
@@ -884,24 +963,33 @@ def update_app_status(cur):
 # ---------------------------------------------------------------------------
 
 def _save_content(cur, content_type):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     label = 'Elan' if content_type == 'announcement' else 'Anket'
 
-    if not data.get('title'):
+    title = (data.get('title') or '').strip()
+    if not title:
         return fail("Başlıq mütləqdir!")
+
+    description = data.get('description') or ''
+    priority = data.get('priority') or 'Normal'
+    status = data.get('status') or 'Aktiv'
+    if status not in ('Aktiv', 'Passiv'):
+        return fail("Status yanlışdır!", 400)
+    if priority not in ('Normal', 'Yüksək'):
+        return fail("Öncəlik yanlışdır!", 400)
 
     if data.get('id'):
         cur.execute("""
             UPDATE contents SET title=%s, description=%s, priority=%s, status=%s
             WHERE id=%s
-        """, [data['title'], data['description'], data['priority'], data['status'], data['id']])
-        log_admin(cur, f'{label} yeniləndi', label, data['id'], data.get('title'))
+        """, [title, description, priority, status, data['id']])
+        log_admin(cur, f'{label} yeniləndi', label, data['id'], title)
     else:
         cur.execute("""
             INSERT INTO contents (type, title, description, priority, status)
             VALUES (%s, %s, %s, %s, %s)
-        """, [content_type, data['title'], data['description'], data['priority'], data['status']])
-        log_admin(cur, f'{label} yaradıldı', label, cur.lastrowid, data.get('title'))
+        """, [content_type, title, description, priority, status])
+        log_admin(cur, f'{label} yaradıldı', label, cur.lastrowid, title)
     return ok()
 
 
@@ -947,7 +1035,7 @@ def save_announcement(cur):
 @admin_required
 @with_db
 def delete_announcement(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     cid = as_int(data.get('id'))
     if cid is None:
         return fail("ID düzgün deyil", 400)
@@ -978,7 +1066,7 @@ def save_survey(cur):
 @admin_required
 @with_db
 def delete_survey(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     cid = as_int(data.get('id'))
     if cid is None:
         return fail("ID düzgün deyil", 400)
@@ -1035,11 +1123,15 @@ def get_penalties(cur):
 @admin_required
 @with_db
 def save_penalty(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
 
     sid = as_int(data.get('student_id'))
     if sid is None:
         return fail("Tələbə seçilməyib")
+
+    cur.execute("SELECT 1 FROM students WHERE id = %s", (sid,))
+    if not cur.fetchone():
+        return fail("Tələbə tapılmadı!", 404)
 
     try:
         amount = float(data.get('amount'))
@@ -1048,24 +1140,29 @@ def save_penalty(cur):
     if amount <= 0:
         return fail("Məbləğ düzgün deyil", 400)
 
+    reason = (data.get('reason') or '').strip()
+    if not reason:
+        return fail("Səbəb mütləqdir!")
+
+    status = data.get('status') or 'Ödənilməmiş'
+    if status not in ('Ödənilməmiş', 'Ödənilib'):
+        return fail("Status yanlışdır!", 400)
+
     if data.get('id'):
         pid = as_int(data['id'])
-        fields = ["amount=%s", "reason=%s"]
-        vals = [amount, data['reason']]
-        if data.get('status'):
-            fields.append("status=%s")
-            vals.append(data['status'])
-        vals.append(pid)
-        cur.execute(f"UPDATE penalties SET {', '.join(fields)} WHERE id=%s", vals)
+        cur.execute(
+            "UPDATE penalties SET amount=%s, reason=%s, status=%s WHERE id=%s",
+            [amount, reason, status, pid]
+        )
         log_admin(cur, 'Cərimə yeniləndi', 'Cərimə', pid,
-                  f"{amount} AZN — {data.get('reason')}")
+                  f"{amount} AZN — {reason}")
     else:
         cur.execute("""
-            INSERT INTO penalties (student_id, amount, reason)
-            VALUES (%s, %s, %s)
-        """, (sid, amount, data['reason']))
+            INSERT INTO penalties (student_id, amount, reason, status)
+            VALUES (%s, %s, %s, %s)
+        """, (sid, amount, reason, status))
         log_admin(cur, 'Cərimə yaradıldı', 'Cərimə', cur.lastrowid,
-                  f"{amount} AZN — {data.get('reason')}")
+                  f"{amount} AZN — {reason}")
     return ok()
 
 
@@ -1073,7 +1170,7 @@ def save_penalty(cur):
 @admin_required
 @with_db
 def pay_penalty(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     pid = as_int(data.get('id'))
     if pid is None:
         return fail("ID düzgün deyil", 400)
@@ -1088,7 +1185,7 @@ def pay_penalty(cur):
 @admin_required
 @with_db
 def delete_penalty(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     pid = as_int(data.get('id'))
     if pid is None:
         return fail("ID düzgün deyil", 400)
@@ -1118,14 +1215,15 @@ def get_canteen(cur):
 @admin_required
 @with_db
 def save_canteen(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     cid = as_int(data.get('id'))
     if cid is None:
         return fail("ID düzgün deyil", 400)
 
+    meal_name = (data.get('meal_name') or '').strip()
     cur.execute("UPDATE canteen_menu SET meal_name = %s WHERE id = %s",
-                (data.get('meal_name'), cid))
-    log_admin(cur, 'Menyu yeniləndi', 'Yeməkxana', cid, f"Yeni: {data.get('meal_name')}")
+                (meal_name, cid))
+    log_admin(cur, 'Menyu yeniləndi', 'Yeməkxana', cid, f"Yeni: {meal_name}")
     return ok()
 
 
@@ -1170,20 +1268,30 @@ def get_laundry(cur):
 @admin_required
 @with_db
 def save_laundry(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     sid = as_int(data.get('student_id'))
     if sid is None:
         return fail("Tələbə seçilməyib")
+
+    cur.execute("SELECT 1 FROM students WHERE id = %s", (sid,))
+    if not cur.fetchone():
+        return fail("Tələbə tapılmadı!", 404)
+
+    statuses = ('Yoxdur', 'Gözlənilir', 'Hazır')
+    m1 = data.get('m1') or 'Yoxdur'
+    m2 = data.get('m2') or 'Yoxdur'
+    m3 = data.get('m3') or 'Yoxdur'
+    if m1 not in statuses or m2 not in statuses or m3 not in statuses:
+        return fail("Maşın statusu yanlışdır!", 400)
 
     cur.execute("""
         INSERT INTO laundry (student_id, machine_1_status, machine_2_status, machine_3_status)
         VALUES (%s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
         machine_1_status=%s, machine_2_status=%s, machine_3_status=%s
-    """, [sid, data['m1'], data['m2'], data['m3'],
-          data['m1'], data['m2'], data['m3']])
+    """, [sid, m1, m2, m3, m1, m2, m3])
     log_admin(cur, 'Çamaşırxana yeniləndi', 'Çamaşırxana', sid,
-              f"M1: {data.get('m1')}, M2: {data.get('m2')}, M3: {data.get('m3')}")
+              f"M1: {m1}, M2: {m2}, M3: {m3}")
     return ok()
 
 
@@ -1192,8 +1300,10 @@ def save_laundry(cur):
 @admin_required
 @with_db
 def delete_laundry(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     sid = as_int(data.get('student_id'))
+    if sid is None:
+        sid = as_int(data.get('id'))
     if sid is None:
         return fail("ID düzgün deyil", 400)
 
@@ -1244,20 +1354,29 @@ def get_profiles(cur):
 @admin_required
 @with_db
 def save_profile(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     sid = as_int(data.get('student_id'))
     if sid is None:
         return fail("Tələbə seçilməyib")
+
+    cur.execute("SELECT 1 FROM students WHERE id = %s", (sid,))
+    if not cur.fetchone():
+        return fail("Tələbə tapılmadı!", 404)
+
+    yuxu = clean_val(data.get('yuxu_rejimi'))
+    temizlik = clean_val(data.get('temizlik'))
+    sosial = clean_val(data.get('sosial_munasibet'))
+    hayat = clean_val(data.get('hayat_terzi'))
 
     cur.execute("""
         INSERT INTO students_profiles (student_id, yuxu_rejimi, temizlik, sosial_munasibet, hayat_terzi)
         VALUES (%s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
-        yuxu_rejimi=%s, temizlik=%s, sosial_munasibet=%s, hayat_terzi=%s
-    """, [sid, data['yuxu_rejimi'], data['temizlik'],
-          data['sosial_munasibet'], data['hayat_terzi'],
-          data['yuxu_rejimi'], data['temizlik'],
-          data['sosial_munasibet'], data['hayat_terzi']])
+        yuxu_rejimi=VALUES(yuxu_rejimi),
+        temizlik=VALUES(temizlik),
+        sosial_munasibet=VALUES(sosial_munasibet),
+        hayat_terzi=VALUES(hayat_terzi)
+    """, [sid, yuxu, temizlik, sosial, hayat])
     log_admin(cur, 'Profil yeniləndi', 'Profil', sid, '')
     return ok()
 
@@ -1267,8 +1386,10 @@ def save_profile(cur):
 @admin_required
 @with_db
 def delete_profile(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     sid = as_int(data.get('student_id'))
+    if sid is None:
+        sid = as_int(data.get('id'))
     if sid is None:
         return fail("ID düzgün deyil", 400)
 
@@ -1278,7 +1399,7 @@ def delete_profile(cur):
 
 
 # ---------------------------------------------------------------------------
-# Groups — tam idarə
+# Groups
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_groups', methods=['GET'])
@@ -1318,9 +1439,46 @@ def get_groups(cur):
 @admin_required
 @with_db
 def admin_create_group(cur):
+    data = request.get_json(silent=True) or {}
+    member_ids = data.get('student_ids') or []
+
+    if not member_ids:
+        return fail("Qrup yaratmaq üçün ən azı 1 tələbə seçilməlidir!")
+    if len(member_ids) > 6:
+        return fail("Qrupda maksimum 6 üzv ola bilər!")
+
+    clean_ids = []
+    for m in member_ids:
+        mid = as_int(m)
+        if mid is None:
+            return fail("Üzv ID-ləri düzgün deyil!")
+        if mid not in clean_ids:
+            clean_ids.append(mid)
+
+    placeholders = ','.join(['%s'] * len(clean_ids))
+    cur.execute(f"SELECT id, ad_soyad, cins, ev, group_id FROM students WHERE id IN ({placeholders})", clean_ids)
+    rows = cur.fetchall()
+    if len(rows) != len(clean_ids):
+        return fail("Bəzi tələbələr tapılmadı!")
+
+    cins_set = {r['cins'] for r in rows}
+    if len(cins_set) > 1:
+        return fail("Qrup yalnız eyni cinsdən tələbələrdən ola bilər!")
+
+    for r in rows:
+        if r['group_id'] is not None:
+            return fail(f"{r['ad_soyad']} artıq başqa qrupdadır!")
+        if r['ev'] == 'Ev seçilib':
+            return fail(f"{r['ad_soyad']} üçün artıq ev seçilib!")
+
     cur.execute("INSERT INTO student_groups (created_at) VALUES (NOW())")
     gid = cur.lastrowid
-    log_admin(cur, 'Qrup yaradıldı (admin)', 'Qrup', gid, '')
+
+    cur.execute(f"UPDATE students SET group_id = %s WHERE id IN ({placeholders})", [gid] + clean_ids)
+
+    names = ', '.join(r['ad_soyad'] for r in rows)
+    log_admin(cur, 'Qrup yaradıldı (admin)', 'Qrup', gid,
+              f"{len(clean_ids)} üzv: {names}")
     return ok(group_id=gid)
 
 
@@ -1329,7 +1487,7 @@ def admin_create_group(cur):
 @admin_required
 @with_db
 def admin_add_group_member(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     gid = as_int(data.get('group_id'))
     sid = as_int(data.get('student_id'))
     if gid is None or sid is None:
@@ -1367,7 +1525,7 @@ def admin_add_group_member(cur):
 @admin_required
 @with_db
 def admin_remove_group_member(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     sid = as_int(data.get('student_id'))
     if sid is None:
         return fail("Tələbə seçilməlidir!")
@@ -1389,7 +1547,7 @@ def admin_remove_group_member(cur):
 @admin_required
 @with_db
 def delete_group(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     gid = as_int(data.get('id'))
     if gid is None:
         return fail("ID düzgün deyil", 400)
@@ -1401,20 +1559,16 @@ def delete_group(cur):
 
 
 # ---------------------------------------------------------------------------
-# Requests — tam idarə + ÖLÜ TƏLB TƏMİZLƏYİCİ
+# Requests
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_requests', methods=['GET'])
 @admin_required
 @with_db
 def get_requests(cur):
-    """Tələb siyahısı (səs sayı ilə).
-    Hər çağırışda ölü tələblər avtomatik təmizlənir —
-    real-time polling (30 san) üçün təhlükəsizdir."""
     page, per_page = get_pagination_params()
     offset = (page - 1) * per_page
 
-    # Ölü tələbləri bağla
     _cleanup_dead_requests(cur)
 
     cur.execute("SELECT COUNT(*) as c FROM home_requests")
@@ -1438,7 +1592,7 @@ def get_requests(cur):
 @admin_required
 @with_db
 def admin_create_request(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     req_type = data.get('type')
     target_id = as_int(data.get('target_id'))
     room_id = as_int(data.get('room_id'))
@@ -1452,6 +1606,13 @@ def admin_create_request(cur):
     st = cur.fetchone()
     if not st:
         return fail("Tələbə tapılmadı!", 404)
+
+    cur.execute(
+        "SELECT COUNT(*) AS c FROM home_requests WHERE target_id = %s AND type = %s AND status = 'Gözləmədə'",
+        (target_id, req_type)
+    )
+    if cur.fetchone()['c'] > 0:
+        return fail("Bu tələbə üçün bu tipdə aktiv tələb artıq var!")
 
     if req_type == 'invite':
         if room_id is None:
@@ -1521,7 +1682,7 @@ def get_request_votes(cur):
 @admin_required
 @with_db
 def resolve_request(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     req_id = as_int(data.get('id'))
     if req_id is None:
         return fail("ID düzgün deyil", 400)
@@ -1535,49 +1696,64 @@ def resolve_request(cur):
     if req['status'] != 'Gözləmədə':
         return fail("Bu tələb artıq həll olunub!")
 
-    if approve:
-        if req['type'] == 'invite':
-            cur.execute("SELECT cins, ev FROM students WHERE id = %s", (req['target_id'],))
-            st = cur.fetchone()
-            if not st:
-                return fail("Tələbə tapılmadı!")
-            if st['ev'] != 'Ev seçilməyib':
-                return fail("Tələbənin artıq evi var!")
-
-            cur.execute("SELECT cins FROM rooms WHERE id = %s", (req['room_id'],))
-            room = cur.fetchone()
-            if room and room['cins'] and room['cins'] != st['cins']:
-                return fail("Cins uyğunsuzluğu — bu ev qarşı cinsə aiddir!")
-
-            heal_one_room_slots(cur, req['room_id'])
-
-            cur.execute(
-                "SELECT slot FROM room_slots WHERE room_id = %s AND student_id IS NULL ORDER BY slot ASC LIMIT 1",
-                (req['room_id'],)
-            )
-            slot_row = cur.fetchone()
-            if not slot_row:
-                return fail("Evdə boş yer yoxdur!")
-
-            cur.execute(
-                "UPDATE room_slots SET student_id = %s WHERE room_id = %s AND slot = %s",
-                (req['target_id'], req['room_id'], slot_row['slot'])
-            )
-            cur.execute(
-                "UPDATE students SET ev = 'Ev seçilib', group_id = NULL WHERE id = %s",
-                (req['target_id'],)
-            )
-        else:
-            remove_student_from_room(cur, req['target_id'])
-
-        cur.execute("UPDATE home_requests SET status = 'Təsdiqləndi' WHERE id = %s", (req_id,))
-        log_admin(cur, 'Tələb admin tərəfindən təsdiq edildi', 'Tələb', req_id,
-                  f"Tip: {req['type']}, otaq: {req['room_id']}, hədəf ID: {req['target_id']}")
-    else:
+    if not approve:
         cur.execute("UPDATE home_requests SET status = 'Rədd edildi' WHERE id = %s", (req_id,))
         log_admin(cur, 'Tələb admin tərəfindən rədd edildi', 'Tələb', req_id,
                   f"Tip: {req['type']}, otaq: {req['room_id']}")
+        return ok()
 
+    cur.execute("SELECT ad_soyad, cins, ev, group_id FROM students WHERE id = %s", (req['target_id'],))
+    st = cur.fetchone()
+    if not st:
+        return fail("Hədəf tələbə tapılmadı!", 404)
+
+    if req['type'] == 'invite':
+        if st['ev'] != 'Ev seçilməyib':
+            return fail("Tələbənin artıq evi var!")
+
+        cur.execute("SELECT cins FROM rooms WHERE id = %s", (req['room_id'],))
+        room = cur.fetchone()
+        if not room:
+            return fail("Bu tələbin qeyd olunduğu ev artıq mövcud deyil!", 404)
+        if room['cins'] and room['cins'] != st['cins']:
+            return fail("Cins uyğunsuzluğu — bu ev qarşı cinsə aiddir!")
+
+        heal_one_room_slots(cur, req['room_id'])
+
+        cur.execute(
+            "SELECT slot FROM room_slots WHERE room_id = %s AND student_id IS NULL ORDER BY slot ASC LIMIT 1",
+            (req['room_id'],)
+        )
+        slot_row = cur.fetchone()
+        if not slot_row:
+            return fail("Evdə boş yer yoxdur!")
+
+        cur.execute(
+            "UPDATE room_slots SET student_id = %s WHERE room_id = %s AND slot = %s AND student_id IS NULL",
+            (req['target_id'], req['room_id'], slot_row['slot'])
+        )
+        if cur.rowcount == 0:
+            raise BizError("Bu əsnədə ev doldu — dəvət icra oluna bilmədi!")
+
+        if room['cins'] is None:
+            cur.execute("UPDATE rooms SET cins = %s WHERE id = %s", (st['cins'], req['room_id']))
+
+        gid = st['group_id']
+        cur.execute("UPDATE students SET ev = 'Ev seçilib', group_id = NULL WHERE id = %s", (req['target_id'],))
+        if gid is not None:
+            dissolve_group_if_empty(cur, gid)
+
+        cur.execute(
+            "UPDATE home_requests SET status = 'Rədd edildi' WHERE target_id = %s AND type = 'invite' "
+            "AND status = 'Gözləmədə' AND id != %s",
+            (req['target_id'], req_id)
+        )
+    else:
+        remove_student_from_room(cur, req['target_id'])
+
+    cur.execute("UPDATE home_requests SET status = 'Təsdiqləndi' WHERE id = %s", (req_id,))
+    log_admin(cur, 'Tələb admin tərəfindən təsdiq edildi', 'Tələb', req_id,
+              f"Tip: {req['type']}, otaq: {req['room_id']}, hədəf ID: {req['target_id']}")
     return ok()
 
 
@@ -1586,7 +1762,7 @@ def resolve_request(cur):
 @admin_required
 @with_db
 def delete_request(cur):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     req_id = as_int(data.get('id'))
     if req_id is None:
         return fail("ID düzgün deyil", 400)
