@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yataqxana İdarəetmə Paneli | KUDS</title>
+<title>Yaşıl Kampus Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -41,6 +41,9 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 
 .skeleton{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-btn)}
 .skeleton-text{height:16px;margin-bottom:8px}
+
+.section-title{font-size:24px;margin-bottom:24px;font-weight:700;position:relative;display:inline-block}
+.section-title::after{content:'';position:absolute;bottom:-6px;left:0;width:40px;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));border-radius:2px}
 
 .login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,var(--ku-dark-green) 0%,#1a5248 50%,var(--ku-green) 100%);background-size:200% 200%;animation:gradientShift 15s ease infinite;z-index:9999;display:none;justify-content:center;align-items:center;padding:24px}
 .login-overlay::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:0.6}
@@ -324,7 +327,7 @@ select.col-filter{cursor:pointer;padding-right:22px;appearance:none}
     <!-- DASHBOARD -->
     <section id="page-dashboard" class="page-content active-page">
       <div class="stats-grid" id="dashboardStats">
-        <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-raw-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Otaqlar</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
@@ -387,7 +390,7 @@ select.col-filter{cursor:pointer;padding-right:22px;appearance:none}
           <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
           <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" data-col="yuxu_rejimi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
           <th><div class="th-wrap"><span>Təmizlik</span><input type="text" class="col-filter" data-col="temizlik" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
-          <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" data-col="sosyal_munasibet" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+          <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" data-col="sosial_munasibet" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
           <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" data-col="hayat_terzi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
           <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
         </tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
@@ -475,7 +478,7 @@ select.col-filter{cursor:pointer;padding-right:22px;appearance:none}
       </div>
     </section>
 
-    <!-- SURVEYS / ANKETLƏR — DÜZGÜN -->
+    <!-- SURVEYS -->
     <section id="page-surveys" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Anketlər</h3><button type="button" class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
@@ -488,13 +491,13 @@ select.col-filter{cursor:pointer;padding-right:22px;appearance:none}
       </div>
     </section>
 
-    <!-- CANTEEN / YEMƏKXANA — DÜZGÜN -->
+    <!-- CANTEEN -->
     <section id="page-canteen" class="page-content">
       <h2 class="section-title">Həftəlik Menyu</h2>
       <div class="canteen-grid" id="canteenGrid"><div class="loader-wrap" style="min-height:200px;display:flex;justify-content:center;align-items:center"><div class="loader"></div></div></div>
     </section>
 
-    <!-- LAUNDRY / CAMAŞIRXANA — DÜZGÜN -->
+    <!-- LAUNDRY -->
     <section id="page-laundry" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Çamaşırxana</h3><button type="button" class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
@@ -509,7 +512,7 @@ select.col-filter{cursor:pointer;padding-right:22px;appearance:none}
       </div>
     </section>
 
-    <!-- PENALTIES / CƏRİMƏLƏR — DÜZGÜN -->
+    <!-- PENALTIES -->
     <section id="page-penalties" class="page-content">
       <div class="widget-card">
         <div class="widget-header">
@@ -556,6 +559,11 @@ let currentStudents = [];
 let currentRooms = [];
 let currentApps = [];
 let currentProfiles = [];
+let currentAnnouncements = [];
+let currentSurveys = [];
+let currentPenalties = [];
+let currentLaundry = [];
+let newGroupMembers = [];
 let isLoggedIn = false;
 let currentPage = 'dashboard';
 let dashboardTimer = null;
@@ -766,14 +774,14 @@ const CRUD_CONFIG = {
 
 // ═════════ UTILITIES ═════════
 function esc(str){
-  if(!str)return '';
+  if(str===null||str===undefined)return '';
   var d=document.createElement('div');
-  d.textContent=str;
-  return d.innerHTML;
+  d.textContent=String(str);
+  return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 function escAttr(str){
-  if(!str)return '';
-  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  if(str===null||str===undefined)return '';
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 function gv(id){
   var el=document.getElementById(id);
@@ -891,9 +899,18 @@ function spSearch(key,opts){
       item.addEventListener('click',function(){
         var st=spCache[key][parseInt(item.getAttribute('data-idx'),10)];
         if(!st)return;
-        input.value=st.ad_soyad;
-        input.classList.add('sp-selected');
-        document.getElementById('sp-hidden-'+key).value=st.id;
+        if(opts.onPick){
+          opts.onPick(st);
+          input.value='';
+          input.classList.remove('sp-selected');
+          var h1=document.getElementById('sp-hidden-'+key);
+          if(h1)h1.value='';
+        }else{
+          input.value=st.ad_soyad;
+          input.classList.add('sp-selected');
+          var h2=document.getElementById('sp-hidden-'+key);
+          if(h2)h2.value=st.id;
+        }
         dd.classList.remove('active');
       });
     });
@@ -915,14 +932,26 @@ function apiAction(action,method,body,query){
     if(body)opt.body=JSON.stringify(body);
     fetch(url,opt)
     .then(function(res){
-      if(res.status===403){showLogin();reject(new Error('İcazə yoxdur'));return;}
-      if(!res.ok){reject(new Error('HTTP '+res.status));return;}
-      return res.json();
-    })
-    .then(function(data){
-      if(!data){reject(new Error('Boş cavab'));return;}
-      if(!data.success){reject(new Error(data.message||'Naməlum xəta'));return;}
-      resolve(data);
+      return res.json().catch(function(){return null;}).then(function(data){
+        if(res.status===403){
+          showLogin();
+          reject(new Error(data&&data.message?data.message:'İcazə yoxdur'));
+          return;
+        }
+        if(!res.ok){
+          reject(new Error(data&&data.message?data.message:('HTTP '+res.status)));
+          return;
+        }
+        if(!data){
+          reject(new Error('Boş cavab'));
+          return;
+        }
+        if(!data.success){
+          reject(new Error(data.message||'Naməlum xəta'));
+          return;
+        }
+        resolve(data);
+      });
     })
     .catch(function(err){reject(err);});
   });
@@ -960,7 +989,8 @@ function closeModal(){
 var dlgCallback=null;
 var DLG_ICONS={danger:'trash-2',success:'check-circle-2',warning:'alert-triangle',info:'info',group:'users-round',logout:'log-out',pay:'credit-card'};
 function dialogBase(type,title,html,danger){
-  document.getElementById('dlgHeader').classList.toggle('danger-header',!!danger);
+  var isDanger=!!danger||type==='danger';
+  document.getElementById('dlgHeader').classList.toggle('danger-header',isDanger);
   document.getElementById('dlgTitleH').innerText=title;
   document.getElementById('dlgBody').innerHTML='<div class="dlg-icon '+type+'"><i data-lucide="'+(DLG_ICONS[type]||'info')+'"></i></div>'+html;
   document.getElementById('dialogOverlay').classList.add('active');
@@ -973,20 +1003,24 @@ function closeDialog(res){
 }
 function confirmDialog(title,text,cb,opts){
   opts=opts||{};
+  var isDanger=opts.type==='danger'||!!opts.danger;
   dlgCallback=cb;
   dialogBase(opts.type||'danger',title,
     '<p class="dlg-text">'+text+'</p>'+
     '<div class="dlg-actions">'+
     '<button type="button" class="btn-secondary" onclick="closeDialog(false)">'+(opts.noText||'Ləğv et')+'</button>'+
     '<button type="button" class="btn-danger" onclick="closeDialog(true)"><i data-lucide="check"></i> '+(opts.yesText||'Bəli')+'</button>'+
-    '</div>',opts.type==='danger');
+    '</div>',isDanger);
 }
 function infoDialog(title,html,type){
   dlgCallback=null;
   dialogBase(type||'info',title,html+'<div class="dlg-actions"><button type="button" class="btn-primary" onclick="closeDialog(false)">Bağla</button></div>',false);
 }
+function errorDialog(title,html){
+  dlgCallback=null;
+  dialogBase('danger',title,html+'<div class="dlg-actions"><button type="button" class="btn-danger" onclick="closeDialog(false)"><i data-lucide="x"></i> Bağla</button></div>',true);
+}
 
-// Escape — yalnız modal bağlamaq üçün
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){
     closeModal();
@@ -1003,6 +1037,7 @@ function handleLogin(e){
   e.preventDefault();
   var btn=document.getElementById('loginBtn');
   var orig=btn.innerHTML;
+  var eb=document.getElementById('loginError');
   btn.innerHTML='<i data-lucide="loader-2" style="animation:spin 1s linear infinite"></i> Yoxlanılır...';
   refreshIcons(btn);
   fetch('/login',{
@@ -1018,13 +1053,15 @@ function handleLogin(e){
       startDashboardPolling();
       showToast('Uğurla daxil oldunuz!','success');
     }else{
-      document.getElementById('loginError').style.display='block';
+      eb.textContent=data.message||'Məlumatlar yanlışdır!';
+      eb.style.display='block';
       btn.innerHTML=orig;
       refreshIcons(btn);
     }
   })
   .catch(function(){
-    document.getElementById('loginError').style.display='block';
+    eb.textContent='Serverə qoşulmaq mümkün olmadı.';
+    eb.style.display='block';
     btn.innerHTML=orig;
     refreshIcons(btn);
   });
@@ -1162,7 +1199,7 @@ function clearOldLogs(){
         infoDialog('Təmizləndi','<p class="dlg-text">'+esc(data.message)+'</p>','success');
         loadLogs();
       })
-      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+      .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
     },{yesText:'Bəli, təmizlə'});
 }
 
@@ -1198,7 +1235,7 @@ function loadProfiles(page){
           '<td style="font-weight:600">'+esc(p.ad_soyad)+'</td>'+
           '<td>'+esc(p.yuxu_rejimi||'-')+'</td>'+
           '<td>'+esc(p.temizlik||'-')+'</td>'+
-          '<td>'+esc(p.sosyal_munasibet||'-')+'</td>'+
+          '<td>'+esc(p.sosial_munasibet||'-')+'</td>'+
           '<td>'+esc(p.hayat_terzi||'-')+'</td>'+
           '<td><div style="display:flex;gap:8px">'+
           '<button type="button" class="btn-icon" onclick="editProfileModal('+p.student_id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
@@ -1226,7 +1263,7 @@ function editProfileModal(sid){
     '<input type="hidden" id="pr_student" value="'+sid+'"></div>'+
     '<div class="form-group"><label>Yuxu Rejimi</label><textarea class="form-textarea" id="pr_yuxu" rows="3">'+esc(p?(p.yuxu_rejimi||''):'')+'</textarea></div>'+
     '<div class="form-group"><label>Təmizlik</label><textarea class="form-textarea" id="pr_temizlik" rows="3">'+esc(p?(p.temizlik||''):'')+'</textarea></div>'+
-    '<div class="form-group"><label>Sosial Münasibət</label><textarea class="form-textarea" id="pr_sosial" rows="3">'+esc(p?(p.sosyal_munasibet||''):'')+'</textarea></div>'+
+    '<div class="form-group"><label>Sosial Münasibət</label><textarea class="form-textarea" id="pr_sosial" rows="3">'+esc(p?(p.sosial_munasibet||''):'')+'</textarea></div>'+
     '<div class="form-group"><label>Həyat Tərzi</label><textarea class="form-textarea" id="pr_hayat" rows="3">'+esc(p?(p.hayat_terzi||''):'')+'</textarea></div>'+
     '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveProfile('+sid+')"><i data-lucide="save"></i> Yadda Saxla</button>');
 }
@@ -1236,14 +1273,14 @@ function saveProfile(sid){
     student_id:sid||gv('pr_student'),
     yuxu_rejimi:gv('pr_yuxu'),
     temizlik:gv('pr_temizlik'),
-    sosyal_munasibet:gv('pr_sosial'),
+    sosial_munasibet:gv('pr_sosial'),
     hayat_terzi:gv('pr_hayat')
   })
   .then(function(){
     closeModal();loadProfiles();
     showToast('Profil yeniləndi','success');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 function deleteProfile(sid){
@@ -1257,7 +1294,7 @@ function deleteProfile(sid){
     function(){
       apiAction('delete_profile','POST',{student_id:sid})
       .then(function(){loadProfiles();showToast('Profil silindi','success');})
-      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+      .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
     },{yesText:'Bəli, sil'});
 }
 
@@ -1303,7 +1340,6 @@ function buildRoomForm(r,id){
   if(auto){
     html+='<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Bu otaq nömrəsi '+(auto==='Kişi'?'oğlan (101-120)':'qız (121-140)')+' binasına aiddir — cins avtomatik təyin olunub.</p>';
   }
-  var fc=auto||(r?r.cins:'');
   for(var i=1;i<=6;i++){
     var slot=null;
     if(r&&r.slots){
@@ -1368,25 +1404,26 @@ function initRoomPickers(){
 }
 
 function saveRoom(id){
-  for(var i=1;i<=6;i++){
+  var cap=Math.max(1,Math.min(6,parseInt(gv('r_capacity'))||6));
+  for(var i=1;i<=cap;i++){
     if(!spValidate('room-t'+i)){
-      infoDialog('Tələbə Seçilməyib','<p class="dlg-text">'+i+'-ci yerdə ad yazılıb, amma tələbə seçilməyib.<span class="dlg-highlight">Siyahıdan seçin və ya təmizləyin</span></p>','warning');
+      errorDialog('Tələbə Seçilməyib','<p class="dlg-text">'+i+'-ci yerdə ad yazılıb, amma tələbə seçilməyib.<span class="dlg-highlight">Siyahıdan seçin və ya təmizləyin</span></p>');
       return;
     }
   }
   var payload={id:id||gv('r_id'),capacity:gv('r_capacity')||6,cins:gv('r_cins')};
-  for(var i=1;i<=6;i++){
-    payload['t'+i]=spGetValue('room-t'+i);
-    payload['y'+i]=gv('r_y'+i);
-    payload['s'+i]=gv('r_s'+i);
-    payload['o'+i]=gv('r_o'+i);
+  for(var k=1;k<=6;k++){
+    payload['t'+k]=spGetValue('room-t'+k);
+    payload['y'+k]=gv('r_y'+k);
+    payload['s'+k]=gv('r_s'+k);
+    payload['o'+k]=gv('r_o'+k);
   }
   apiAction('save_room','POST',payload)
   .then(function(){
     closeModal();loadRooms();
     showToast(id?'Otaq yeniləndi':'Yeni otaq yaradıldı','success');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 // ═════════ APPLICATIONS ═════════
@@ -1438,7 +1475,7 @@ function editApplicationModal(id){
 function saveApplication(id){
   var sid=id?gv('app_student'):spGetValue('app-student');
   if(!sid){
-    infoDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>','warning');
+    errorDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>');
     return;
   }
   apiAction('save_application','POST',{
@@ -1450,7 +1487,7 @@ function saveApplication(id){
     closeModal();loadApplications();
     showToast(id?'Müraciət yeniləndi':'Yeni müraciət əlavə edildi','success');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 function updateAppStatus(id,status){
@@ -1465,7 +1502,7 @@ function updateAppStatus(id,status){
     function(){
       apiAction('update_app_status','POST',{id:safeId(id),status:status})
       .then(function(){loadApplications();showToast('Status yeniləndi','success');})
-      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+      .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
     },{type:ap?'success':'warning',yesText:ap?'Bəli, təsdiqlə':'Bəli, rədd et'});
 }
 
@@ -1525,21 +1562,16 @@ function openEditModal(type,id){
     return;
   }
 
-  if(type==='announcement'||type==='surveys'||type==='survey'){
-    var action=type==='announcement'?'get_announcements':'get_surveys';
-    apiAction(action)
-    .then(function(res){
-      var item=null;
-      var items=res.data||[];
-      for(var i=0;i<items.length;i++){
-        if(items[i].id==id){item=items[i];break;}
-      }
-      var vals={c_title:'',c_desc:'',c_priority:'Normal',c_status:'Aktiv'};
-      if(item)vals={c_title:item.title,c_desc:item.description,c_priority:item.priority,c_status:item.status};
-      openModal(cfg.modalTitle.edit,buildFormFields(cfg.fields,vals)+
-        '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\''+type+'\','+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
-    })
-    .catch(function(e){showToast(e.message,'error');});
+  if(type==='announcement'||type==='survey'){
+    var list=type==='announcement'?currentAnnouncements:currentSurveys;
+    var item=null;
+    for(var i=0;i<list.length;i++){
+      if(list[i].id==id){item=list[i];break;}
+    }
+    if(!item){showToast('Element tapılmadı','error');return;}
+    var vals={c_title:item.title,c_desc:item.description,c_priority:item.priority,c_status:item.status};
+    openModal(cfg.modalTitle.edit,buildFormFields(cfg.fields,vals)+
+      '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\''+type+'\','+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
     return;
   }
 }
@@ -1553,7 +1585,7 @@ function saveGenericItem(type,id){
     closeModal();cfg.loadFn();
     showToast(id?'Yeniləndi':'Əlavə edildi','success');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 var DELETE_MSGS={
@@ -1573,9 +1605,9 @@ function deleteItem(type,id){
   confirmDialog('Silməni Təsdiqlə',
     DELETE_MSGS[type]||'Bu elementi silmək istəyirsiniz?<span class="dlg-highlight">ID: '+id+'</span>',
     function(){
-      apiAction('delete_'+cfg.endpoint,'POST',{id:id})
+      apiAction('delete_'+cfg.endpoint,'POST',{id:id,student_id:id})
       .then(function(){cfg.loadFn();showToast('Silindi','success');})
-      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+      .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
     },{yesText:'Bəli, sil'});
 }
 
@@ -1586,6 +1618,7 @@ function loadAnnouncements(page){
   var f=getColFilters('annTable');
   apiAction('get_announcements','GET',null,Object.assign({page:page,per_page:PAGINATION.announcements.per_page},f))
   .then(function(data){
+    currentAnnouncements=data.data||[];
     PAGINATION.announcements.total=data.total||0;
     renderTable('announcement',data.data);
     renderPagination('announcements','annPagination','loadAnnouncements');
@@ -1593,13 +1626,13 @@ function loadAnnouncements(page){
   .catch(function(e){showToast(e.message,'error');});
 }
 
-// ═════════ SURVEYS / ANKETLƏR — DÜZGÜN ═════════
 function loadSurveys(page){
   page=page||PAGINATION.surveys.page;
   PAGINATION.surveys.page=page;
   var f=getColFilters('surTable');
   apiAction('get_surveys','GET',null,Object.assign({page:page,per_page:PAGINATION.surveys.per_page},f))
   .then(function(data){
+    currentSurveys=data.data||[];
     PAGINATION.surveys.total=data.total||0;
     renderTable('survey',data.data);
     renderPagination('surveys','surPagination','loadSurveys');
@@ -1607,7 +1640,7 @@ function loadSurveys(page){
   .catch(function(e){showToast(e.message,'error');});
 }
 
-// ═════════ CANTEEN / YEMƏKXANA — DÜZGÜN ═════════
+// ═════════ CANTEEN ═════════
 function loadCanteen(){
   apiAction('get_canteen')
   .then(function(data){
@@ -1629,7 +1662,7 @@ function loadCanteen(){
       html+='</div>';
     });
     document.getElementById('canteenGrid').innerHTML=html;
-    refreshIcons(document.getElementById('canteGrid'));
+    refreshIcons(document.getElementById('canteenGrid'));
   })
   .catch(function(e){showToast(e.message,'error');});
 }
@@ -1645,13 +1678,14 @@ function updateCanteen(id,val){
   .catch(function(e){showToast(e.message,'error');});
 }
 
-// ═════════ PENALTIES / CƏRİMƏLƏR — DÜZGÜN ═════════
+// ═════════ PENALTIES ═════════
 function loadPenalties(page){
   page=page||PAGINATION.penalties.page;
   PAGINATION.penalties.page=page;
   var f=getColFilters('penTable');
   apiAction('get_penalties','GET',null,Object.assign({page:page,per_page:PAGINATION.penalties.per_page},f))
   .then(function(data){
+    currentPenalties=data.data||[];
     PAGINATION.penalties.total=data.total||0;
     renderTable('penalty',data.data);
     renderPagination('penalties','penPagination','loadPenalties');
@@ -1670,28 +1704,23 @@ function addPenaltyModal(){
 
 function editPenaltyModal(id){
   id=safeId(id);
-  apiAction('get_penalties')
-  .then(function(data){
-    var p=null;
-    var items=data.data||[];
-    for(var i=0;i<items.length;i++){
-      if(items[i].id==id){p=items[i];break;}
-    }
-    if(!p)return;
-    openModal('Cərimə Redaktə',
-      '<div class="form-group"><label>Tələbə</label><input type="text" class="form-input" value="'+escAttr(p.ad_soyad)+'" disabled style="background:#f1f5f9"><input type="hidden" id="p_student" value="'+p.student_id+'"></div>'+
-      '<div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="'+p.amount+'"></div>'+
-      '<div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="'+escAttr(p.reason)+'"></div>'+
-      '<div class="form-group"><label>Status</label><select class="form-select" id="p_status"><option'+(p.status=='Ödənilməmiş'?' selected':'')+'>Ödənilməmiş</option><option'+(p.status=='Ödənilib'?' selected':'')+'>Ödənilib</option></select></div>'+
-      '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty('+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
-  })
-  .catch(function(e){showToast(e.message,'error');});
+  var p=null;
+  for(var i=0;i<currentPenalties.length;i++){
+    if(currentPenalties[i].id==id){p=currentPenalties[i];break;}
+  }
+  if(!p){showToast('Cərimə tapılmadı','error');return;}
+  openModal('Cərimə Redaktə',
+    '<div class="form-group"><label>Tələbə</label><input type="text" class="form-input" value="'+escAttr(p.ad_soyad)+'" disabled style="background:#f1f5f9"><input type="hidden" id="p_student" value="'+p.student_id+'"></div>'+
+    '<div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="'+p.amount+'"></div>'+
+    '<div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="'+escAttr(p.reason)+'"></div>'+
+    '<div class="form-group"><label>Status</label><select class="form-select" id="p_status"><option'+(p.status=='Ödənilməmiş'?' selected':'')+'>Ödənilməmiş</option><option'+(p.status=='Ödənilib'?' selected':'')+'>Ödənilib</option></select></div>'+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty('+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
 }
 
 function savePenalty(id){
   var sid=id?gv('p_student'):spGetValue('pen-student');
   if(!sid){
-    infoDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>','warning');
+    errorDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>');
     return;
   }
   apiAction('save_penalty','POST',{
@@ -1701,7 +1730,7 @@ function savePenalty(id){
     closeModal();loadPenalties();
     showToast(id?'Cərimə yeniləndi':'Yeni cərimə əlavə edildi','success');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 function payPenalty(id){
@@ -1710,17 +1739,18 @@ function payPenalty(id){
     function(){
       apiAction('pay_penalty','POST',{id:safeId(id)})
       .then(function(){loadPenalties();showToast('Cərimə ödənildi','success');})
-      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+      .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
     },{type:'pay',yesText:'Bəli, ödə'});
 }
 
-// ═════════ LAUNDRY / CAMAŞIRXANA — DÜZGÜN ═════════
+// ═════════ LAUNDRY ═════════
 function loadLaundry(page){
   page=page||PAGINATION.laundry.page;
   PAGINATION.laundry.page=page;
   var f=getColFilters('laundryTable');
   apiAction('get_laundry','GET',null,Object.assign({page:page,per_page:PAGINATION.laundry.per_page},f))
   .then(function(data){
+    currentLaundry=data.data||[];
     PAGINATION.laundry.total=data.total||0;
     renderTable('laundry',data.data);
     renderPagination('laundry','laundryPagination','loadLaundry');
@@ -1746,29 +1776,24 @@ function addLaundryModal(){
 
 function editLaundryModal(sid){
   sid=safeId(sid);
-  apiAction('get_laundry')
-  .then(function(data){
-    var l=null;
-    var items=data.data||[];
-    for(var i=0;i<items.length;i++){
-      if(items[i].student_id==sid){l=items[i];break;}
-    }
-    if(!l)return;
-    openModal('Redaktə',
-      '<div class="form-group"><label>Tələbə</label><input type="text" class="form-input" value="'+escAttr(l.ad_soyad)+'" disabled style="background:#f1f5f9"><input type="hidden" id="l_student" value="'+l.student_id+'"></div>'+
-      '<div class="form-row">'+
-      '<div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">'+genLaundryOptions(l.machine_1_status)+'</select></div>'+
-      '<div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">'+genLaundryOptions(l.machine_2_status)+'</select></div>'+
-      '<div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">'+genLaundryOptions(l.machine_3_status)+'</select></div></div>'+
-      '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry('+sid+')"><i data-lucide="save"></i> Yadda Saxla</button>');
-  })
-  .catch(function(e){showToast(e.message,'error');});
+  var l=null;
+  for(var i=0;i<currentLaundry.length;i++){
+    if(currentLaundry[i].student_id==sid){l=currentLaundry[i];break;}
+  }
+  if(!l){showToast('Qeyd tapılmadı','error');return;}
+  openModal('Redaktə',
+    '<div class="form-group"><label>Tələbə</label><input type="text" class="form-input" value="'+escAttr(l.ad_soyad)+'" disabled style="background:#f1f5f9"><input type="hidden" id="l_student" value="'+l.student_id+'"></div>'+
+    '<div class="form-row">'+
+    '<div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">'+genLaundryOptions(l.machine_1_status)+'</select></div>'+
+    '<div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">'+genLaundryOptions(l.machine_2_status)+'</select></div>'+
+    '<div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">'+genLaundryOptions(l.machine_3_status)+'</select></div></div>'+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry('+sid+')"><i data-lucide="save"></i> Yadda Saxla</button>');
 }
 
 function saveLaundry(sid){
   var id=sid?gv('l_student'):spGetValue('lnd-student');
   if(!id){
-    infoDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>','warning');
+    errorDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>');
     return;
   }
   apiAction('save_laundry','POST',{
@@ -1779,7 +1804,7 @@ function saveLaundry(sid){
     closeModal();loadLaundry();
     showToast(sid?'Yeniləndi':'Əlavə edildi','success');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 // ═════════ GROUPS ═════════
@@ -1808,14 +1833,63 @@ function loadGroups(){
 }
 
 function adminCreateGroup(){
-  confirmDialog('Yeni Qrup','Boş qrup yaradılsın?',function(){
-    apiAction('create_group','POST',{})
-    .then(function(data){
-      infoDialog('Qrup Yaradıldı!','<p class="dlg-text">Qrup #'+data.group_id+' yaradıldı. İndi üzv əlavə edin.</p>','group');
-      loadGroups();
-    })
-    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
-  },{type:'group',yesText:'Yarat'});
+  newGroupMembers=[];
+  openModal('Yeni Qrup',
+    '<div class="form-group"><label>Tələbə axtarışı</label>'+
+    spContainerHtml('grp-new',{placeholder:'Ad yazın — siyahıdan seçin...'})+
+    '<div class="sp-hint">Yalnız qrupda olmayan və ev seçməmiş tələbələr; maksimum 6 üzv</div></div>'+
+    '<div class="form-group"><label>Seçilmiş üzvlər <span id="grpCount" style="color:var(--text-secondary);font-weight:400">(minimum 1)</span></label>'+
+    '<div id="grpMemberList"><p class="sp-empty" style="border:1px dashed var(--border);border-radius:8px">Hələ üzv seçilməyib</p></div></div>'+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="submitNewGroup()"><i data-lucide="check"></i> Qrupu Yarat</button>');
+  initStudentPicker('grp-new',{exclude:'no_group',onPick:function(st){addGroupMemberCandidate(st);}});
+}
+
+function addGroupMemberCandidate(st){
+  if(newGroupMembers.length>=6){
+    errorDialog('Limit Aşıldı','<p class="dlg-text">Qrupda maksimum <b>6 üzv</b> ola bilər!</p>');
+    return;
+  }
+  for(var i=0;i<newGroupMembers.length;i++){
+    if(newGroupMembers[i].id==st.id)return;
+  }
+  newGroupMembers.push(st);
+  renderNewGroupMembers();
+  var input=document.getElementById('sp-input-grp-new');
+  if(input)input.value='';
+}
+
+function renderNewGroupMembers(){
+  var box=document.getElementById('grpMemberList');
+  if(!box)return;
+  var cnt=document.getElementById('grpCount');
+  if(cnt)cnt.textContent='('+newGroupMembers.length+'/6)';
+  if(!newGroupMembers.length){
+    box.innerHTML='<p class="sp-empty" style="border:1px dashed var(--border);border-radius:8px">Hələ üzv seçilməyib</p>';
+    return;
+  }
+  box.innerHTML=newGroupMembers.map(function(m){
+    return '<span class="badge badge-gray" style="margin:2px 4px 2px 0;cursor:pointer" title="Siyahıdan çıxart" onclick="removeGroupCandidate('+m.id+')">'+esc(m.ad_soyad)+' ✕</span>';
+  }).join('');
+}
+
+function removeGroupCandidate(id){
+  newGroupMembers=newGroupMembers.filter(function(m){return m.id!=id;});
+  renderNewGroupMembers();
+}
+
+function submitNewGroup(){
+  if(!newGroupMembers.length){
+    errorDialog('Üzv Seçilməyib','<p class="dlg-text">Qrup yaratmaq üçün ən azı <b>1 tələbə</b> seçilməlidir.<span class="dlg-highlight">Axtarışdan üzv əlavə edin</span></p>');
+    return;
+  }
+  var ids=newGroupMembers.map(function(m){return m.id;});
+  apiAction('create_group','POST',{student_ids:ids})
+  .then(function(data){
+    closeModal();
+    loadGroups();
+    infoDialog('Qrup Yaradıldı!','<p class="dlg-text">Qrup <b>#'+data.group_id+'</b> yaradıldı — '+ids.length+' üzv ilə.</p>','group');
+  })
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 function addMemberModal(gid){
@@ -1827,17 +1901,17 @@ function addMemberModal(gid){
 
 function saveGroupMember(gid){
   var sid=spGetValue('grp-add');
-  if(!sid){infoDialog('Seçilməyib','<p class="dlg-text">Tələbə seçin.</p>','warning');return;}
+  if(!sid){errorDialog('Seçilməyib','<p class="dlg-text">Tələbə seçin.</p>');return;}
   apiAction('add_group_member','POST',{group_id:gid,student_id:sid})
   .then(function(){closeModal();loadGroups();showToast('Üzv əlavə edildi','success');})
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 function removeGroupMember(sid,gid){
   confirmDialog('Üzvü Çıxart','Bu tələbə qrupdan çıxarılsın? Son üzv olarsa qrup silinəcək.',function(){
     apiAction('remove_group_member','POST',{student_id:sid})
     .then(function(){loadGroups();showToast('Üzv çıxarıldı','success');})
-    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
   },{type:'group',yesText:'Bəli, çıxart'});
 }
 
@@ -1846,7 +1920,7 @@ function deleteGroup(gid){
   confirmDialog('Qrupu Ləğv Et','Bu qrup tamamilə ləğv edilsin? Üzvlər qalır, qrup silinir.',function(){
     apiAction('delete_group','POST',{id:gid})
     .then(function(){loadGroups();showToast('Qrup ləğv edildi','success');})
-    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></span></p>','danger');});
+    .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
   },{type:'group',yesText:'Bəli, ləğv et'});
 }
 
@@ -1894,28 +1968,33 @@ function loadRequests(page){
 
 function adminCreateRequestModal(){
   openModal('Yeni Tələb (Admin)',
-    '<div class="form-group"><label>Tip</label><select class="form-select" id="req_type">'+
+    '<div class="form-group"><label>Tip</label><select class="form-select" id="req_type" onchange="toggleReqRoom()">'+
     '<option value="invite">Dəvət (evə çağırış)</option>'+
     '<option value="kick">Qovma (evdən çıxart)</option>'+
     '<option value="leave">Çıxma (öz istəyi)</option></select></div>'+
     '<div class="form-group"><label>Hədəf Tələbə</label>'+spContainerHtml('req-student')+'<div class="sp-hint">Minimum 2 hərf</div></div>'+
-    '<div class="form-group"><label>Otaq Nömrəsi (yalnız dəvət üçün)</label><input type="number" class="form-input" id="req_room" placeholder="Məs: 105"></div>'+
+    '<div class="form-group" id="reqRoomGroup"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="req_room" placeholder="Məs: 105"><div class="sp-hint">Yalnız Dəvət tipi üçün lazımdır</div></div>'+
     '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveAdminRequest()"><i data-lucide="plus"></i> Yarat</button>');
   initStudentPicker('req-student');
+}
+
+function toggleReqRoom(){
+  var rg=document.getElementById('reqRoomGroup');
+  if(rg)rg.style.display=(gv('req_type')==='invite')?'':'none';
 }
 
 function saveAdminRequest(){
   var sid=spGetValue('req-student');
   var type=gv('req_type');
   var room=gv('req_room');
-  if(!sid){infoDialog('Seçilməyib','<p class="dlg-text">Hədəf tələbəni seçin.</p>','warning');return;}
-  if(type==='invite'&&!room){infoDialog('Otaq Lazımdır','<p class="dlg-text">Dəvət üçün otaq yazın.</p>','warning');return;}
+  if(!sid){errorDialog('Seçilməyib','<p class="dlg-text">Hədəf tələbəni seçin.</p>');return;}
+  if(type==='invite'&&!room){errorDialog('Otaq Lazımdır','<p class="dlg-text">Dəvət üçün otaq nömrəsi yazın.</p>');return;}
   apiAction('create_request','POST',{type:type,target_id:sid,room_id:room?parseInt(room):null})
   .then(function(){
     closeModal();loadRequests();
     showToast('Tələb yaradıldı','success');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
 }
 
 function viewRequestVotes(reqId){
@@ -1933,18 +2012,18 @@ function viewRequestVotes(reqId){
     }
     infoDialog('Səslər — Tələb #'+reqId,html,'info');
   })
-  .catch(function(e){infoDialog('Xəta','<p class="dlg-text">'+esc(e.message)+'</p>','danger');});
+  .catch(function(e){errorDialog('Xəta','<p class="dlg-text">'+esc(e.message)+'</p>');});
 }
 
 function resolveRequest(id,approve){
   id=safeId(id);
   confirmDialog(approve?'Tələbi Təsdiq Et':'Tələbi Rədd Et',
-    approve?'Bu tələb admin səlahiyyəti ilə təsdiq edilsin?<span class="dlg-highlight">Tələb #'+id+'</span>Qovma → şəxs evdən çıxarılacaq. Dəvət → evə yerləəşdiriləcək.'
+    approve?'Bu tələb admin səlahiyyəti ilə təsdiq edilsin?<span class="dlg-highlight">Tələb #'+id+'</span>Qovma → şəxs evdən çıxarılacaq. Dəvət → evə yerləşdiriləcək.'
            :'Bu tələb rədd edilsin?<span class="dlg-highlight">Tələb #'+id+'</span>Tələb bağlanacaq.',
     function(){
       apiAction('resolve_request','POST',{id:id,approve:approve})
       .then(function(){loadRequests();showToast('Tələb '+(approve?'təsdiq edildi':'rədd edildi'),'success');})
-      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+      .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
     },{type:approve?'success':'warning',yesText:approve?'Bəli, təsdiq et':'Bəli, rədd et'});
 }
 
@@ -1953,7 +2032,7 @@ function deleteRequest(id){
   confirmDialog('Tələbi Sil','Bu tələb tamamilə silinsin? Səslər də silinəcək.',function(){
     apiAction('delete_request','POST',{id:id})
     .then(function(){loadRequests();showToast('Tələb silindi','success');})
-    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    .catch(function(e){errorDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>');});
   },{yesText:'Bəli, sil'});
 }
 
