@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yataqxana İdarəetmə Paneli | KUDS</title>
+<title>Yaşıl Kampus Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -1757,14 +1757,22 @@ function renderPagination(key, containerId, loadFn) {
 }
 
 // ═════════ INIT ═════════
-fetch('/api/admin/stats', { method: 'GET', credentials: 'same-origin' })
+fetch('/api/admin/check', { method: 'GET', credentials: 'same-origin' })
   .then(r => {
-    if (r.status === 403) { showLogin(); }
-    else { hideLogin(); isLoggedIn = true; loadDashboard(); }
+    if (r.ok) { hideLogin(); isLoggedIn = true; loadDashboard(); }
+    else { showLogin(); }
   })
   .catch(() => showLogin());
 
 lucide.createIcons();
+// Sessiya hələ də aktivdirmi? — səhifə görünəndə yoxla (DB-siz, yüngül)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && isLoggedIn) {
+    fetch('/api/admin/check', { credentials: 'same-origin' })
+      .then(r => { if (!r.ok) { isLoggedIn = false; showLogin(); } })
+      .catch(() => {});
+  }
+});
 </script>
 </body>
 </html>
