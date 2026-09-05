@@ -63,10 +63,9 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 
 .sidebar{width:280px;background:var(--surface);height:100vh;position:fixed;left:0;top:0;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);overflow:visible;white-space:nowrap;box-shadow:var(--shadow-sm)}
 .sidebar.collapsed{width:80px}
-.sidebar.collapsed .logo span,.sidebar.collapsed .nav-item span,.sidebar.collapsed .nav-section,.sidebar.collapsed .sidebar-footer-links h4,.sidebar.collapsed .sidebar-footer-links li a span{opacity:0;width:0;pointer-events:none}
+.sidebar.collapsed .logo span,.sidebar.collapsed .nav-item span,.sidebar.collapsed .nav-section{opacity:0;width:0;pointer-events:none}
 .sidebar.collapsed .logo{padding:0;justify-content:center;gap:0}
 .sidebar.collapsed .nav-item{justify-content:center;padding:12px 16px;gap:0}
-.sidebar.collapsed .sidebar-footer-links li a{justify-content:center;padding:8px 16px;gap:0}
 .logo{height:72px;padding:0 24px;font-size:22px;font-weight:700;color:var(--ku-dark-green);display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:all var(--transition-base);position:relative;overflow:hidden}
 .logo::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ku-green);transform:scaleY(0);transition:transform 0.3s ease}
 .logo:hover::before{transform:scaleY(1)}
@@ -86,14 +85,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .nav-item.active{background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface);box-shadow:0 4px 12px rgba(22,66,60,0.25)}
 .nav-item.active i{color:var(--surface)}
 .nav-item.active::before{display:none}
-.sidebar-footer-links{padding:16px;border-top:1px solid var(--border)}
-.sidebar-footer-links h4{font-size:11px;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;transition:opacity 0.2s;font-weight:600}
-.sidebar-footer-links ul{list-style:none}
-.sidebar-footer-links li{margin-bottom:4px}
-.sidebar-footer-links li a{display:flex;align-items:center;gap:12px;color:var(--text-primary);text-decoration:none;font-size:14px;padding:8px 16px;border-radius:var(--radius-btn);transition:all var(--transition-fast);cursor:pointer;position:relative;overflow:hidden}
-.sidebar-footer-links li a:hover{background:var(--bg);color:var(--ku-green);transform:translateX(4px)}
-.sidebar-footer-links li a i{width:18px;height:18px;color:var(--text-secondary);transition:color 0.2s}
-.sidebar-footer-links li a:hover i{color:var(--ku-green)}
 
 .main-wrapper{margin-left:280px;min-height:100vh;display:flex;flex-direction:column;transition:margin-left 0.35s cubic-bezier(0.4,0,0.2,1);flex:1}
 .main-wrapper.expanded{margin-left:80px}
@@ -103,9 +94,7 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .top-bar-actions{display:flex;align-items:center;gap:16px}
 .icon-btn{width:44px;height:44px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;position:relative;transition:all var(--transition-fast)}
 .icon-btn:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
-.icon-btn:active{transform:translateY(0)}
 .icon-btn i{width:20px;height:20px;transition:transform 0.2s}
-.icon-btn:hover i{transform:scale(1.1)}
 .content-layout{padding:32px;flex:1}
 .page-content{display:none;width:100%;opacity:0;transform:translateY(16px);transition:opacity 0.3s ease,transform 0.3s ease}
 .page-content.active-page{display:block;opacity:1;transform:translateY(0);animation:fadeInUp 0.4s ease}
@@ -130,15 +119,12 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 
 .btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(68,118,108,0.25)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.35)}
-.btn-primary:active{transform:translateY(0)}
 .btn-primary i{width:18px;height:18px}
 .btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(239,68,68,0.25)}
 .btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35)}
-.btn-danger:active{transform:translateY(0)}
 .btn-danger i{width:18px;height:18px}
 .btn-secondary{background:var(--bg);color:var(--text-primary);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
 .btn-secondary:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px)}
-.btn-secondary i{width:18px;height:18px}
 .btn-icon{width:36px;height:36px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);display:inline-flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;transition:all var(--transition-fast)}
 .btn-icon:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:scale(1.1)}
 .btn-icon.danger:hover{background:#fee2e2;color:var(--danger);border-color:var(--danger)}
@@ -233,8 +219,8 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   .top-bar h1{font-size:22px}
   .sidebar{width:80px}
   .main-wrapper{margin-left:80px}
-  .sidebar .logo span,.sidebar .nav-item span,.sidebar .nav-section,.sidebar .sidebar-footer-links h4,.sidebar .sidebar-footer-links li a span{opacity:0;width:0;pointer-events:none}
-  .sidebar .logo,.sidebar .nav-item,.sidebar .sidebar-footer-links li a{justify-content:center;padding:12px 16px;gap:0}
+  .sidebar .logo span,.sidebar .nav-item span,.sidebar .nav-section{opacity:0;width:0;pointer-events:none}
+  .sidebar .logo,.sidebar .nav-item{justify-content:center;padding:12px 16px;gap:0}
   .content-layout{padding:20px}
   .modal-card{max-height:95vh;max-width:95vw}
   .canteen-grid{grid-template-columns:1fr}
@@ -243,7 +229,7 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
 }
 
-/* Column Filters */
+/* Column Filters (server-side axtarış üçün inputlar) */
 .th-wrap{display:flex;flex-direction:column;gap:6px}
 .th-wrap>span:first-child{font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
 .col-filter{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-family:'Poppins';font-size:12px;background:var(--bg);color:var(--text-primary);outline:none;transition:all var(--transition-fast);margin-top:2px}
@@ -290,7 +276,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </div>
 </div>
 
-<!-- SIDEBAR -->
+<!-- SIDEBAR (çıxış yoxdur — yalnız loqo ilə yığılıb açılır) -->
 <aside class="sidebar" id="sidebar">
   <div class="logo" onclick="toggleSidebar()">
     <i data-lucide="shield-check"></i>
@@ -300,6 +286,9 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <div class="nav-section">Ümumi</div>
     <button class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)">
       <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+    </button>
+    <button class="nav-item" data-menu="logs" onclick="loadPage('logs',this)">
+      <i data-lucide="history"></i><span>Log Tarixçəsi</span>
     </button>
     <div class="nav-section">İdarəetmə</div>
     <button class="nav-item" data-menu="students" onclick="loadPage('students',this)">
@@ -338,10 +327,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <i data-lucide="receipt-text"></i><span>Cərimələr</span>
     </button>
   </nav>
-  <div class="sidebar-footer-links">
-    <h4>Hesab</h4>
-    <ul><li><a onclick="logout()"><i data-lucide="log-out"></i><span>Çıxış</span></a></li></ul>
-  </div>
 </aside>
 
 <!-- MAIN WRAPPER -->
@@ -352,7 +337,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="top-bar-desc" id="pageDesc">Ümumi statistika</div>
     </div>
     <div class="top-bar-actions">
-      <button class="icon-btn" onclick="toggleSidebar()" title="Menyu"><i data-lucide="panel-left"></i></button>
+      <button class="btn-danger" onclick="logout()"><i data-lucide="log-out"></i> Çıxış</button>
     </div>
   </header>
 
@@ -367,20 +352,36 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
+    <!-- LOGS (YENİ) -->
+    <section id="page-logs" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Əməliyyat Tarixçəsi — son 1 ay</h3></div>
+        <div class="table-wrap"><table class="data-table" id="logsTable"><thead><tr>
+      <th><div class="th-wrap"><span>Tarix</span><input type="text" class="col-filter" data-col="tarix" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+      <th><div class="th-wrap"><span>Admin</span><input type="text" class="col-filter" data-col="admin" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+      <th><div class="th-wrap"><span>Mövzu</span><input type="text" class="col-filter" data-col="action" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+      <th><div class="th-wrap"><span>Obyekt</span><input type="text" class="col-filter" data-col="entity" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+      <th><div class="th-wrap"><span>ID</span><input type="text" class="col-filter" data-col="entity_id" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+      <th><div class="th-wrap"><span>Təfərrüat</span><input type="text" class="col-filter" data-col="details" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+    </tr></thead><tbody id="logsTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="logsPagination"></div>
+      </div>
+    </section>
+
     <!-- STUDENTS -->
     <section id="page-students" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Siyahısı</h3><button class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
         <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr>
       <th><div class="th-wrap"><span>ID</span></div></th>
-      <th><div class="th-wrap"><span>Ad Soyad</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
-      <th><div class="th-wrap"><span>Email</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
-      <th><div class="th-wrap"><span>İxtisas</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
-      <th><div class="th-wrap"><span>Kurs</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
-      <th><div class="th-wrap"><span>Cins</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="kişi">Kişi</option><option value="qadın">Qadın</option></select></div></th>
-      <th><div class="th-wrap"><span>Ev Statusu</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="ev seçilib">Ev seçilib</option><option value="ev seçilməyib">Ev seçilməyib</option><option value="rədd edilib">Rədd edilib</option></select></div></th>
-      <th><div class="th-wrap"><span>Otaq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
-      <th><div class="th-wrap"><span>API Açarı</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
+      <th><div class="th-wrap"><span>Ad Soyad</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+      <th><div class="th-wrap"><span>Email</span><input type="text" class="col-filter" data-col="email" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+      <th><div class="th-wrap"><span>İxtisas</span><input type="text" class="col-filter" data-col="ixtisas" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+      <th><div class="th-wrap"><span>Kurs</span><input type="text" class="col-filter" data-col="kurs" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+      <th><div class="th-wrap"><span>Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="Kişi">Kişi</option><option value="Qadın">Qadın</option></select></div></th>
+      <th><div class="th-wrap"><span>Ev Statusu</span><select class="col-filter" data-col="ev" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="Ev seçilib">Ev seçilib</option><option value="Ev seçilməyib">Ev seçilməyib</option><option value="Rədd edilib">Rədd edilib</option></select></div></th>
+      <th><div class="th-wrap"><span>Otaq</span><input type="text" class="col-filter" data-col="otaq" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+      <th><div class="th-wrap"><span>API Açarı</span><select class="col-filter" data-col="api_key" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="studentsTbody"><tr><td colspan="10"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="studentsPagination"></div>
@@ -392,11 +393,11 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Profilləri</h3></div>
         <div class="table-wrap"><table class="data-table" id="profilesTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
-      <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
-      <th><div class="th-wrap"><span>Təmizlik</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
-      <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
-      <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+      <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" data-col="yuxu_rejimi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+      <th><div class="th-wrap"><span>Təmizlik</span><input type="text" class="col-filter" data-col="temizlik" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+      <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" data-col="sosial_munasibet" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+      <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" data-col="hayat_terzi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="profilesPagination"></div>
@@ -408,17 +409,17 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="widget-card">
         <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button class="btn-primary" onclick="openAddModal('room')"><i data-lucide="plus"></i> Yeni Otaq</button></div>
         <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr>
-      <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
-      <th><div class="th-wrap"><span>Bina / Cins</span><select class="col-filter" onchange="applyAllFilters('roomsTable')"><option value="">Hamısı</option><option value="kişi">Kişi (oğlan)</option><option value="qadın">Qadın (qız)</option></select></div></th>
-      <th><div class="th-wrap"><span>Tutum</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
-      <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
+      <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" data-col="id" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
+      <th><div class="th-wrap"><span>Bina / Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('rooms')"><option value="">Hamısı</option><option value="Kişi">Kişi (oğlan)</option><option value="Qadın">Qadın (qız)</option></select></div></th>
+      <th><div class="th-wrap"><span>Tutum</span><input type="text" class="col-filter" data-col="dolu" placeholder="Məs: 2/6" oninput="debouncedServerFilter('rooms')"></div></th>
+      <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" data-col="occupants" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="roomsTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="roomsPagination"></div>
       </div>
     </section>
 
-    <!-- GROUPS (YENİ) -->
+    <!-- GROUPS -->
     <section id="page-groups" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Qruplar</h3></div>
@@ -431,7 +432,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- REQUESTS (YENİ) -->
+    <!-- REQUESTS -->
     <section id="page-requests" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələblər — Dəvət / Qovma / Çıxma</h3></div>
@@ -446,6 +447,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <th><div class="th-wrap"><span>Tarix</span></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="reqTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="reqPagination"></div>
       </div>
     </section>
 
@@ -454,9 +456,9 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="widget-card">
         <div class="widget-header"><h3>Müraciətlər</h3><button class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button></div>
         <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('appsTable')"></div></th>
-      <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('appsTable')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('appsTable')"><option value="">Hamısı</option><option value="gözləmədə">Gözləmədə</option><option value="təsdiqləndi">Təsdiqləndi</option><option value="rədd edildi">Rədd edildi</option></select></div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
+      <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" data-col="muraciet" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('applications')"><option value="">Hamısı</option><option value="Gözləmədə">Gözləmədə</option><option value="Təsdiqləndi">Təsdiqləndi</option><option value="Rədd edildi">Rədd edildi</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="appsPagination"></div>
@@ -468,8 +470,8 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="widget-card">
         <div class="widget-header"><h3>Elanlar</h3><button class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
         <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr>
-      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('annTable')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('annTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
+      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('announcements')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('announcements')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="annPagination"></div>
@@ -481,8 +483,8 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="widget-card">
         <div class="widget-header"><h3>Anketlər</h3><button class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
         <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr>
-      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('surTable')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('surTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
+      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('surveys')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('surveys')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="surPagination"></div>
@@ -494,10 +496,10 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="widget-card">
         <div class="widget-header"><h3>Cərimələr</h3><button class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
         <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
-      <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
-      <th><div class="th-wrap"><span>Məbləğ</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('penTable')"><option value="">Hamısı</option><option value="ödənilməmiş">Ödənilməmiş</option><option value="ödənilib">Ödənilib</option></select></div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+      <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" data-col="reason" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+      <th><div class="th-wrap"><span>Məbləğ</span><input type="text" class="col-filter" data-col="amount" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('penalties')"><option value="">Hamısı</option><option value="Ödənilməmiş">Ödənilməmiş</option><option value="Ödənilib">Ödənilib</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="penPagination"></div>
@@ -515,10 +517,10 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="widget-card">
         <div class="widget-header"><h3>Çamaşırxana</h3><button class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
         <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('laundryTable')"></div></th>
-      <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
-      <th><div class="th-wrap"><span>Maşın 2</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
-      <th><div class="th-wrap"><span>Maşın 3</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('laundry')"></div></th>
+      <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" data-col="m1" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Maşın 2</span><select class="col-filter" data-col="m2" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Maşın 3</span><select class="col-filter" data-col="m3" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="laundryPagination"></div>
@@ -542,21 +544,25 @@ let currentStudents = [];
 let currentRooms = [];
 let currentApps = [];
 let currentProfiles = [];
+let ALL_STUDENTS = [];
 let isLoggedIn = false;
 
 const PAGINATION = {
-  students: { page: 1, per_page: 50, total: 0 },
-  rooms:    { page: 1, per_page: 50, total: 0 },
-  applications: { page: 1, per_page: 50, total: 0 },
-  profiles: { page: 1, per_page: 50, total: 0 },
-  announcements: { page: 1, per_page: 50, total: 0 },
-  surveys:  { page: 1, per_page: 50, total: 0 },
-  penalties:{ page: 1, per_page: 50, total: 0 },
-  laundry:  { page: 1, per_page: 50, total: 0 }
+  students: { page: 1, per_page: 20, total: 0 },
+  rooms:    { page: 1, per_page: 20, total: 0 },
+  applications: { page: 1, per_page: 20, total: 0 },
+  profiles: { page: 1, per_page: 20, total: 0 },
+  announcements: { page: 1, per_page: 20, total: 0 },
+  surveys:  { page: 1, per_page: 20, total: 0 },
+  penalties:{ page: 1, per_page: 20, total: 0 },
+  laundry:  { page: 1, per_page: 20, total: 0 },
+  requests: { page: 1, per_page: 20, total: 0 },
+  logs:     { page: 1, per_page: 20, total: 0 }
 };
 
 const PAGE_TITLES = {
   dashboard: ['Dashboard', 'Ümumi statistika'],
+  logs: ['Log Tarixçəsi', 'Son 1 ayın admin əməliyyatları'],
   students: ['Tələbələr', 'Tələbə məlumatları'],
   profiles: ['Tələbə Profilləri', 'Tələbə profil məlumatları'],
   rooms: ['Otaqlar və Əşyalar', 'İnventar və yerləşdirmə idarəetməsi'],
@@ -803,7 +809,7 @@ function gv(id) {
   return el ? el.value : '';
 }
 
-function debounce(fn, delay = 250) {
+function debounce(fn, delay = 300) {
   let timer;
   return (...args) => {
     clearTimeout(timer);
@@ -811,44 +817,36 @@ function debounce(fn, delay = 250) {
   };
 }
 
-const debouncedFilter = debounce((tableId) => {
-  applyAllFilters(tableId);
-}, 250);
-
-function applyAllFilters(tableId) {
+// ═══════════════ SERVER-SIDE COLUMN SEARCH ═══════════════
+function getColFilters(tableId) {
+  const out = {};
   const table = document.getElementById(tableId);
-  if (!table) return;
-  const tbody = table.getElementsByTagName('tbody')[0];
-  const rows = Array.from(tbody.getElementsByTagName('tr'));
-
-  const headers = Array.from(table.querySelectorAll('thead th'));
-  const filters = headers.map(th => {
-    const sel = th.querySelector('.col-filter');
-    return sel ? sel.value.toLowerCase().trim() : '';
+  if (!table) return out;
+  table.querySelectorAll('thead .col-filter').forEach(el => {
+    const col = el.getAttribute('data-col');
+    const v = el.value.trim();
+    if (col && v) out[col] = v;
   });
-
-  rows.forEach(row => {
-    if (row.querySelector('.empty-state') || row.querySelector('.loader-wrap')) {
-      row.style.display = '';
-      return;
-    }
-    const cells = Array.from(row.getElementsByTagName('td'));
-    let visible = true;
-
-    for (let i = 0; i < filters.length; i++) {
-      if (!filters[i]) continue;
-      const cell = cells[i];
-      if (!cell) continue;
-      const cellText = cell.textContent.toLowerCase().trim();
-      if (!cellText.includes(filters[i])) {
-        visible = false;
-        break;
-      }
-    }
-
-    row.style.display = visible ? '' : 'none';
-  });
+  return out;
 }
+
+const FILTER_LOADERS = {
+  students: () => loadStudents(1),
+  profiles: () => loadProfiles(1),
+  rooms: () => loadRooms(1),
+  applications: () => loadApplications(1),
+  announcements: () => loadAnnouncements(1),
+  surveys: () => loadSurveys(1),
+  penalties: () => loadPenalties(1),
+  laundry: () => loadLaundry(1),
+  logs: () => loadLogs(1)
+};
+
+function serverFilter(key) {
+  if (FILTER_LOADERS[key]) FILTER_LOADERS[key]();
+}
+
+const debouncedServerFilter = debounce(serverFilter, 350);
 
 // ═══════════════ API ═══════════════
 async function apiAction(action, method = 'GET', body = null, query = null) {
@@ -1073,7 +1071,7 @@ function loadPage(page, el) {
 
   const loaders = {
     dashboard: loadDashboard, students: loadStudents, profiles: loadProfiles,
-    rooms: loadRooms, groups: loadGroups, requests: loadRequests,
+    rooms: loadRooms, groups: loadGroups, requests: loadRequests, logs: loadLogs,
     applications: loadApplications, announcements: loadAnnouncements,
     surveys: loadSurveys, penalties: loadPenalties, canteen: loadCanteen, laundry: loadLaundry
   };
@@ -1098,12 +1096,45 @@ async function loadDashboard() {
   }
 }
 
+// ═══════════════ LOGS (YENİ) ═══════════════
+async function loadLogs(page = 1) {
+  try {
+    PAGINATION.logs.page = page;
+    const filters = getColFilters('logsTable');
+    const data = await apiAction('get_logs', 'GET', null, {
+      page, per_page: PAGINATION.logs.per_page, ...filters
+    });
+    PAGINATION.logs.total = data.total || 0;
+    const items = data.data || [];
+    let html = '';
+    if (!items.length) {
+      html = emptyState('history', 'Son 1 ayda əməliyyat yoxdur');
+    } else {
+      items.forEach((l, idx) => {
+        html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*40}ms">
+          <td class="p-4" style="font-size:13px;color:var(--text-secondary);white-space:nowrap">${esc(l.tarix)}</td>
+          <td class="p-4">${esc(l.admin_user)}</td>
+          <td class="p-4"><span class="badge badge-info">${esc(l.action)}</span></td>
+          <td class="p-4">${esc(l.entity||'-')}</td>
+          <td class="p-4">${esc(l.entity_id||'-')}</td>
+          <td class="p-4" style="font-size:13px">${esc(l.details||'')}</td>
+        </tr>`;
+      });
+    }
+    document.getElementById('logsTbody').innerHTML = html;
+    renderPagination('logs', 'logsPagination', 'loadLogs');
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
 // ═══════════════ STUDENTS ═══════════════
 async function loadStudents(page = 1) {
   try {
     PAGINATION.students.page = page;
+    const filters = getColFilters('studentsTable');
     const data = await apiAction('get_students', 'GET', null, {
-      page, per_page: PAGINATION.students.per_page
+      page, per_page: PAGINATION.students.per_page, ...filters
     });
     currentStudents = data.data || [];
     PAGINATION.students.total = data.total || 0;
@@ -1114,12 +1145,23 @@ async function loadStudents(page = 1) {
   }
 }
 
+async function ensureStudentsLoaded() {
+  if (ALL_STUDENTS.length === 0) {
+    try {
+      const d = await apiAction('get_students_light');
+      ALL_STUDENTS = d.data || [];
+    } catch (e) { /* səssiz keç */ }
+  }
+  return ALL_STUDENTS;
+}
+
 // ═══════════════ PROFILES ═══════════════
 async function loadProfiles(page = 1) {
   try {
     PAGINATION.profiles.page = page;
+    const filters = getColFilters('profilesTable');
     const data = await apiAction('get_profiles', 'GET', null, {
-      page, per_page: PAGINATION.profiles.per_page
+      page, per_page: PAGINATION.profiles.per_page, ...filters
     });
     currentProfiles = data.data || [];
     PAGINATION.profiles.total = data.total || 0;
@@ -1150,8 +1192,9 @@ async function loadProfiles(page = 1) {
 }
 
 async function editProfileModal(student_id) {
+  await ensureStudentsLoaded();
   const p = currentProfiles.find(x => x.student_id == student_id);
-  const opts = currentStudents.map(s => `<option value="${s.id}" ${s.id==student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
+  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Profili Redaktə Et', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="pr_student" ${p?'disabled':''}>${opts}</select></div>
     <div class="form-group"><label>Yuxu Rejimi</label><textarea class="form-textarea" id="pr_yuxu" rows="3">${esc(p?p.yuxu_rejimi||'':'')}</textarea></div>
@@ -1186,12 +1229,13 @@ async function deleteProfile(student_id) {
   }
 }
 
-// ═══════════════ ROOMS (room_slots) ═══════════════
+// ═══════════════ ROOMS ═══════════════
 async function loadRooms(page = 1) {
   try {
     PAGINATION.rooms.page = page;
+    const filters = getColFilters('roomsTable');
     const data = await apiAction('get_rooms', 'GET', null, {
-      page, per_page: PAGINATION.rooms.per_page
+      page, per_page: PAGINATION.rooms.per_page, ...filters
     });
     currentRooms = data.data || [];
     PAGINATION.rooms.total = data.total || 0;
@@ -1199,15 +1243,6 @@ async function loadRooms(page = 1) {
     renderPagination('rooms', 'roomsPagination', 'loadRooms');
   } catch (e) {
     showToast(e.message, 'error');
-  }
-}
-
-async function ensureStudentsLoaded() {
-  if (currentStudents.length === 0) {
-    try {
-      const data = await apiAction('get_students', 'GET', null, { page: 1, per_page: 100 });
-      currentStudents = data.data || [];
-    } catch (e) { /* səssiz keç */ }
   }
 }
 
@@ -1219,7 +1254,7 @@ function roomCinsById(rid) {
 }
 
 function genStudentOptions(selectedId, cins) {
-  const list = cins ? currentStudents.filter(s => s.cins === cins) : currentStudents;
+  const list = cins ? ALL_STUDENTS.filter(s => s.cins === cins) : ALL_STUDENTS;
   return list.map(s => `<option value="${s.id}" ${s.id==selectedId?'selected':''}>${s.id} - ${esc(s.ad_soyad)}</option>`).join('');
 }
 
@@ -1296,7 +1331,7 @@ function refreshRoomStudentSelects() {
 
 async function addRoomModal() {
   await ensureStudentsLoaded();
-  if (currentStudents.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
+  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
   openModal('Yeni Otaq', buildRoomForm(null, 0));
   setTimeout(toggleSlotCards, 100);
 }
@@ -1334,8 +1369,9 @@ async function saveRoom(id) {
 async function loadApplications(page = 1) {
   try {
     PAGINATION.applications.page = page;
+    const filters = getColFilters('appsTable');
     const data = await apiAction('get_applications', 'GET', null, {
-      page, per_page: PAGINATION.applications.per_page
+      page, per_page: PAGINATION.applications.per_page, ...filters
     });
     currentApps = data.data || [];
     PAGINATION.applications.total = data.total || 0;
@@ -1346,9 +1382,10 @@ async function loadApplications(page = 1) {
   }
 }
 
-function addApplicationModal() {
-  if (currentStudents.length === 0) { showToast('Əvvəl Tələbələr bölməsinə daxil olun!', 'warning'); return; }
-  const opts = currentStudents.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
+async function addApplicationModal() {
+  await ensureStudentsLoaded();
+  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
+  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
   openModal('Yeni Müraciət', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="app_student">${opts}</select></div>
     <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" placeholder="Başlıq"></div>
@@ -1361,10 +1398,11 @@ function addApplicationModal() {
     <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
-function editApplicationModal(id) {
+async function editApplicationModal(id) {
+  await ensureStudentsLoaded();
   const a = currentApps.find(x => x.id == id);
   if (!a) return;
-  const opts = currentStudents.map(s => `<option value="${s.id}" ${s.id==a.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
+  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==a.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Müraciəti Redaktə Et', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="app_student" disabled>${opts}</select></div>
     <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" value="${esc(a.basliq)}"></div>
@@ -1399,7 +1437,7 @@ async function updateAppStatus(id, status) {
   }
 }
 
-// ═══════════════ GROUPS (YENİ) ═══════════════
+// ═══════════════ GROUPS ═══════════════
 async function loadGroups() {
   try {
     const data = await apiAction('get_groups');
@@ -1436,12 +1474,16 @@ async function deleteGroup(gid) {
   }
 }
 
-// ═══════════════ REQUESTS (YENİ) ═══════════════
+// ═══════════════ REQUESTS ═══════════════
 const REQ_TYPE_MAP = { invite: ['Dəvət','badge-info'], kick: ['Qovma','badge-danger'], leave: ['Çıxma','badge-warning'] };
 
-async function loadRequests() {
+async function loadRequests(page = 1) {
   try {
-    const data = await apiAction('get_requests');
+    PAGINATION.requests.page = page;
+    const data = await apiAction('get_requests', 'GET', null, {
+      page, per_page: PAGINATION.requests.per_page
+    });
+    PAGINATION.requests.total = data.total || 0;
     const reqs = data.data || [];
     let html = '';
     if (!reqs.length) {
@@ -1471,6 +1513,7 @@ async function loadRequests() {
     }
     document.getElementById('reqTbody').innerHTML = html;
     refreshIcons(document.getElementById('reqTbody'));
+    renderPagination('requests', 'reqPagination', 'loadRequests');
   } catch (e) {
     showToast(e.message, 'error');
   }
@@ -1503,8 +1546,9 @@ async function deleteRequest(id) {
 async function loadAnnouncements(page = 1) {
   try {
     PAGINATION.announcements.page = page;
+    const filters = getColFilters('annTable');
     const data = await apiAction('get_announcements', 'GET', null, {
-      page, per_page: PAGINATION.announcements.per_page
+      page, per_page: PAGINATION.announcements.per_page, ...filters
     });
     PAGINATION.announcements.total = data.total || 0;
     renderTable('announcement', data.data);
@@ -1516,8 +1560,9 @@ async function loadAnnouncements(page = 1) {
 async function loadSurveys(page = 1) {
   try {
     PAGINATION.surveys.page = page;
+    const filters = getColFilters('surTable');
     const data = await apiAction('get_surveys', 'GET', null, {
-      page, per_page: PAGINATION.surveys.per_page
+      page, per_page: PAGINATION.surveys.per_page, ...filters
     });
     PAGINATION.surveys.total = data.total || 0;
     renderTable('survey', data.data);
@@ -1531,8 +1576,9 @@ async function loadSurveys(page = 1) {
 async function loadPenalties(page = 1) {
   try {
     PAGINATION.penalties.page = page;
+    const filters = getColFilters('penTable');
     const data = await apiAction('get_penalties', 'GET', null, {
-      page, per_page: PAGINATION.penalties.per_page
+      page, per_page: PAGINATION.penalties.per_page, ...filters
     });
     PAGINATION.penalties.total = data.total || 0;
     renderTable('penalty', data.data);
@@ -1542,9 +1588,10 @@ async function loadPenalties(page = 1) {
   }
 }
 
-function addPenaltyModal() {
-  if (currentStudents.length === 0) { showToast('Əvvəl Tələbələr bölməsinə daxil olun!', 'warning'); return; }
-  const opts = currentStudents.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
+async function addPenaltyModal() {
+  await ensureStudentsLoaded();
+  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
+  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
   openModal('Yeni Cərimə', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student">${opts}</select></div>
     <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" placeholder="Məbləğ"></div>
@@ -1553,9 +1600,10 @@ function addPenaltyModal() {
   `);
 }
 async function editPenaltyModal(id) {
+  await ensureStudentsLoaded();
   const data = await apiAction('get_penalties');
   const p = data.data.find(x => x.id == id);
-  const opts = currentStudents.map(s => `<option value="${s.id}" ${s.id==p.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
+  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==p.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Cərimə Redaktə', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student" disabled>${opts}</select></div>
     <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="${p.amount}"></div>
@@ -1625,8 +1673,9 @@ function updateCanteenDelayed(id, val) {
 async function loadLaundry(page = 1) {
   try {
     PAGINATION.laundry.page = page;
+    const filters = getColFilters('laundryTable');
     const data = await apiAction('get_laundry', 'GET', null, {
-      page, per_page: PAGINATION.laundry.per_page
+      page, per_page: PAGINATION.laundry.per_page, ...filters
     });
     PAGINATION.laundry.total = data.total || 0;
     renderTable('laundry', data.data);
@@ -1641,10 +1690,11 @@ function genLaundryOptions(selected) {
   return stats.map(s => `<option value="${s}" ${s==selected?'selected':''}>${s}</option>`).join('');
 }
 async function addLaundryModal() {
-  if (currentStudents.length === 0) { showToast('Əvvəl Tələbələr bölməsinə daxil olun!', 'warning'); return; }
+  await ensureStudentsLoaded();
+  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
   const data = await apiAction('get_laundry');
   const existingIds = new Set(data.data.map(l => l.student_id));
-  const available = currentStudents.filter(s => !existingIds.has(s.id));
+  const available = ALL_STUDENTS.filter(s => !existingIds.has(s.id));
   if (available.length === 0) { showToast('Bütün tələbələr artıq qeyd olunub', 'warning'); return; }
   const opts = available.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
   openModal('Yeni Çamaşırxana Qeydi', `
@@ -1658,9 +1708,10 @@ async function addLaundryModal() {
   `);
 }
 async function editLaundryModal(student_id) {
+  await ensureStudentsLoaded();
   const data = await apiAction('get_laundry');
   const l = data.data.find(x => x.student_id == student_id);
-  const opts = currentStudents.map(s => `<option value="${s.id}" ${s.id==l.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
+  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==l.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Redaktə', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student" disabled>${opts}</select></div>
     <div class="form-row">
@@ -1699,7 +1750,6 @@ function renderTable(type, data) {
     tbody.innerHTML = data.map((item, idx) => cfg.renderRow(item, idx)).join('');
   }
   refreshIcons(document.getElementById(cfg.tbodyId));
-  setTimeout(() => applyAllFilters(cfg.tableId), 50);
 }
 
 function renderPagination(key, containerId, loadFn) {
