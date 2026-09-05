@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yaşıl Kampus Admin</title>
+<title>Yataqxana İdarəetmə Paneli | KUDS</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -260,14 +260,29 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 .dlg-highlight{display:block;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:12px;font-weight:600;color:var(--text-primary);text-align:center}
 .dlg-actions{display:flex;gap:12px;margin-top:24px}
 .dlg-actions .btn-primary,.dlg-actions .btn-danger,.dlg-actions .btn-secondary{flex:1;justify-content:center}
+
+/* ═════════ TƏLƏBƏ AXTARIŞ PICKER (typeahead) ═════════ */
+.sp-picker{position:relative}
+.sp-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary);font-weight:400;transition:all var(--transition-fast)}
+.sp-input:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
+.sp-input.sp-selected{border-color:var(--ku-green);background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);font-weight:600;color:var(--ku-dark-green)}
+.sp-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);box-shadow:var(--shadow-md);max-height:240px;overflow-y:auto;z-index:120;display:none}
+.sp-dropdown.active{display:block}
+.sp-item{padding:10px 14px;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;border-bottom:1px solid var(--border)}
+.sp-item:last-child{border-bottom:none}
+.sp-item:hover{background:var(--ku-soft-green)}
+.sp-item-name{font-weight:500}
+.sp-item-meta{font-size:11px;color:var(--text-secondary)}
+.sp-empty{padding:14px;text-align:center;font-size:13px;color:var(--text-secondary)}
+.sp-hint{font-size:11px;color:var(--text-secondary);margin-top:4px}
 </style>
 </head>
 <body>
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- LOGIN -->
-<div class="login-overlay active" id="loginOverlay">
+<!-- LOGIN — server-side vəziyyət: sessiya VARSA bir an belə görünmir -->
+<div class="login-overlay {% if not is_logged_in %}active{% endif %}" id="loginOverlay">
   <div class="login-card">
     <div class="login-logo">
       <div class="login-logo-icon"><i data-lucide="shield-check"></i></div>
@@ -509,12 +524,12 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 </div>
 
 <script>
+{% raw %}
 // ═════════ STATE & CONFIG ═════════
 let currentStudents = [];
 let currentRooms = [];
 let currentApps = [];
 let currentProfiles = [];
-let ALL_STUDENTS = [];
 let isLoggedIn = false;
 
 const PAGINATION = {
@@ -552,7 +567,6 @@ const CRUD_CONFIG = {
     saveAction: 'save_student',
     loadFn: loadStudents,
     modalTitle: { add: 'Yeni Tələbə', edit: 'Tələbəni Redaktə Et' },
-    deleteConfirm: 'Bu tələbəni silmək istədiyinizə əminsiniz? (Profil, cərimə, müraciət, camaşırxana və tələbləri də silinəcək)',
     tableId: 'studentsTable', tbodyId: 'studentsTbody',
     emptyIcon: 'users', emptyText: 'Tələbə yoxdur',
     fields: [
@@ -606,7 +620,6 @@ const CRUD_CONFIG = {
     saveAction: 'save_room',
     loadFn: loadRooms,
     modalTitle: { add: 'Yeni Otaq', edit: 'Otaq Redaktə' },
-    deleteConfirm: 'Bu otaq silinsin? (Sakinlər "Ev seçilməyib" statusuna keçəcək)',
     tableId: 'roomsTable', tbodyId: 'roomsTbody',
     emptyIcon: 'door-open', emptyText: 'Otaq yoxdur',
     customModal: true,
@@ -631,7 +644,6 @@ const CRUD_CONFIG = {
     saveAction: 'save_application',
     loadFn: loadApplications,
     modalTitle: { add: 'Yeni Müraciət', edit: 'Müraciəti Redaktə Et' },
-    deleteConfirm: 'Bu müraciət silinsin?',
     tableId: 'appsTable', tbodyId: 'appsTbody',
     emptyIcon: 'clipboard-list', emptyText: 'Müraciət yoxdur',
     customModal: true,
@@ -656,7 +668,6 @@ const CRUD_CONFIG = {
     saveAction: 'save_announcement',
     loadFn: loadAnnouncements,
     modalTitle: { add: 'Yeni Elan', edit: 'Elanı Redaktə Et' },
-    deleteConfirm: 'Bu elan silinsin? (Tələbə panelindən də silinəcək)',
     tableId: 'annTable', tbodyId: 'annTbody',
     emptyIcon: 'megaphone', emptyText: 'Elan yoxdur',
     fields: [
@@ -687,7 +698,6 @@ const CRUD_CONFIG = {
     saveAction: 'save_survey',
     loadFn: loadSurveys,
     modalTitle: { add: 'Yeni Anket', edit: 'Anketi Redaktə Et' },
-    deleteConfirm: 'Bu anket silinsin? (Cavablar da itəcək)',
     tableId: 'surTable', tbodyId: 'surTbody',
     emptyIcon: 'clipboard-check', emptyText: 'Anket yoxdur',
     fields: [
@@ -718,7 +728,6 @@ const CRUD_CONFIG = {
     saveAction: 'save_penalty',
     loadFn: loadPenalties,
     modalTitle: { add: 'Yeni Cərimə', edit: 'Cəriməni Redaktə Et' },
-    deleteConfirm: 'Bu cərimə silinsin? (Tarixçədən tam silinəcək)',
     tableId: 'penTable', tbodyId: 'penTbody',
     emptyIcon: 'receipt-text', emptyText: 'Cərimə yoxdur',
     customModal: true,
@@ -743,7 +752,6 @@ const CRUD_CONFIG = {
     saveAction: 'save_laundry',
     loadFn: loadLaundry,
     modalTitle: { add: 'Yeni Çamaşırxana Qeydi', edit: 'Çamaşırxana Redaktə' },
-    deleteConfirm: 'Bu qeyd silinsin? (3 maşın statusu sıfırlanacaq)',
     tableId: 'laundryTable', tbodyId: 'laundryTbody',
     emptyIcon: 'washing-machine', emptyText: 'Məlumat yoxdur',
     customModal: true,
@@ -773,6 +781,11 @@ function esc(str) {
   return div.innerHTML;
 }
 
+function escAttr(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 function gv(id) {
   const el = document.getElementById(id);
   return el ? el.value : '';
@@ -789,6 +802,106 @@ function debounce(fn, delay = 350) {
     clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
   };
+}
+
+// ═════════ TƏLƏBƏ AXTARIŞ PICKER (typeahead) ═════════
+const spTimers = {};
+const spCache = {};
+
+function spContainerHtml(key, opts = {}) {
+    const val = opts.value || '';
+    const selected = opts.valueId ? ' sp-selected' : '';
+    return `
+    <div class="sp-picker" id="sp-${key}">
+        <input type="text" class="sp-input${selected}" id="sp-input-${key}" value="${escAttr(val)}"
+               placeholder="${escAttr(opts.placeholder || 'Tələbə adını yazın...')}" autocomplete="off">
+        <input type="hidden" id="sp-hidden-${key}" value="${escAttr(opts.valueId || '')}">
+        <div class="sp-dropdown" id="sp-dd-${key}"></div>
+    </div>`;
+}
+
+function spGetValue(key) {
+    const hidden = document.getElementById('sp-hidden-' + key);
+    return hidden ? (hidden.value || '') : '';
+}
+
+// Input-da ad yazılıb, amma siyahıdan seçilməyibsə false
+function spValidate(key) {
+    const input = document.getElementById('sp-input-' + key);
+    const hidden = document.getElementById('sp-hidden-' + key);
+    if (!input || !hidden) return true;
+    return !(input.value.trim() && !hidden.value);
+}
+
+async function spSearch(key, opts) {
+    const input = document.getElementById('sp-input-' + key);
+    const dd = document.getElementById('sp-dd-' + key);
+    if (!input || !dd) return;
+
+    const q = input.value.trim();
+    if (q.length < 2) { dd.classList.remove('active'); return; }
+
+    dd.innerHTML = '<div class="sp-empty">Axtarılır...</div>';
+    dd.classList.add('active');
+
+    try {
+        const params = { q };
+        const cins = opts.cinsFn ? opts.cinsFn() : (opts.cins || null);
+        if (cins) params.cins = cins;
+        if (opts.exclude) params.exclude = opts.exclude;
+
+        const data = await apiAction('search_students_query', 'GET', null, params);
+        const students = data.data || [];
+        spCache[key] = students;
+
+        if (!students.length) {
+            dd.innerHTML = `<div class="sp-empty">"${esc(q)}" üzrə nəticə tapılmadı</div>`;
+            return;
+        }
+
+        dd.innerHTML = students.map((st, idx) => `
+            <div class="sp-item" data-idx="${idx}">
+                <span class="sp-item-name">${esc(st.ad_soyad)}</span>
+                <span class="sp-item-meta">${esc(st.cins || '')} • ID:${st.id}</span>
+            </div>`).join('');
+
+        dd.querySelectorAll('.sp-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const st = spCache[key][parseInt(item.getAttribute('data-idx'), 10)];
+                if (!st) return;
+                input.value = st.ad_soyad;
+                input.classList.add('sp-selected');
+                document.getElementById('sp-hidden-' + key).value = st.id;
+                dd.classList.remove('active');
+                if (opts.onSelect) opts.onSelect(st.id, st.ad_soyad);
+            });
+        });
+    } catch (e) {
+        dd.innerHTML = `<div class="sp-empty">Xəta: ${esc(e.message)}</div>`;
+    }
+}
+
+function initStudentPicker(key, opts = {}) {
+    const input = document.getElementById('sp-input-' + key);
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+        input.classList.remove('sp-selected');
+        const hidden = document.getElementById('sp-hidden-' + key);
+        if (hidden) hidden.value = '';
+        clearTimeout(spTimers[key]);
+        spTimers[key] = setTimeout(() => spSearch(key, opts), 300);
+    });
+
+    input.addEventListener('focus', () => {
+        if (input.value.trim().length >= 2) spSearch(key, opts);
+    });
+
+    document.addEventListener('click', (e) => {
+        const picker = document.getElementById('sp-' + key);
+        const dd = document.getElementById('sp-dd-' + key);
+        if (picker && dd && !picker.contains(e.target)) dd.classList.remove('active');
+    });
 }
 
 // ═════════ SERVER-SIDE FILTERS ═════════
@@ -970,9 +1083,9 @@ function buildFormFields(fields, values = {}) {
       return `<div class="form-group"><label>${f.label}</label><select class="form-select" id="${f.id}">${opts}</select></div>`;
     }
     if (f.type === 'textarea') {
-      return `<div class="form-group"><label>${f.label}</label><textarea class="form-textarea" id="${f.id}" rows="${f.rows||3}" placeholder="${f.placeholder||''}">${esc(val)}</textarea></div>`;
+      return `<div class="form-group"><label>${f.label}</label><textarea class="form-textarea" id="${f.id}" rows="${f.rows||3}" placeholder="${escAttr(f.placeholder||'')}">${esc(val)}</textarea></div>`;
     }
-    return `<div class="form-group"><label>${f.label}</label><input type="${f.type}" class="form-input" id="${f.id}" value="${esc(val)}" placeholder="${f.placeholder||''}"></div>`;
+    return `<div class="form-group"><label>${f.label}</label><input type="${f.type}" class="form-input" id="${f.id}" value="${escAttr(val)}" placeholder="${escAttr(f.placeholder||'')}"></div>`;
   }).join('');
 }
 
@@ -1154,13 +1267,6 @@ async function loadStudents(page = 1) {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
-async function ensureStudentsLoaded() {
-  if (ALL_STUDENTS.length === 0) {
-    try { const d = await apiAction('get_students_light'); ALL_STUDENTS = d.data || []; } catch (e) {}
-  }
-  return ALL_STUDENTS;
-}
-
 // ═════════ PROFILES ═════════
 async function loadProfiles(page = 1) {
   try {
@@ -1192,13 +1298,14 @@ async function loadProfiles(page = 1) {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
-async function editProfileModal(student_id) {
-  await ensureStudentsLoaded();
+function editProfileModal(student_id) {
   student_id = safeId(student_id);
   const p = currentProfiles.find(x => x.student_id == student_id);
-  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Profili Redaktə Et', `
-    <div class="form-group"><label>Tələbə</label><select class="form-select" id="pr_student" ${p?'disabled':''}>${opts}</select></div>
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(p ? p.ad_soyad : '')}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="pr_student" value="${student_id}">
+    </div>
     <div class="form-group"><label>Yuxu Rejimi</label><textarea class="form-textarea" id="pr_yuxu" rows="3">${esc(p?p.yuxu_rejimi||'':'')}</textarea></div>
     <div class="form-group"><label>Təmizlik</label><textarea class="form-textarea" id="pr_temizlik" rows="3">${esc(p?p.temizlik||'':'')}</textarea></div>
     <div class="form-group"><label>Sosial Münasibət</label><textarea class="form-textarea" id="pr_sosial" rows="3">${esc(p?p.sosial_munasibet||'':'')}</textarea></div>
@@ -1210,7 +1317,7 @@ async function editProfileModal(student_id) {
 async function saveProfile(student_id) {
   try {
     await apiAction('save_profile', 'POST', {
-      student_id: student_id || gv('pr_student'),
+      student_id: gv('pr_student'),
       yuxu_rejimi: gv('pr_yuxu'), temizlik: gv('pr_temizlik'),
       sosial_munasibet: gv('pr_sosial'), hayat_terzi: gv('pr_hayat')
     });
@@ -1230,7 +1337,7 @@ function deleteProfile(student_id) {
   }, { type: 'danger', yesText: 'Bəli, sil' });
 }
 
-// ═════════ ROOMS ═════════
+// ═════════ ROOMS — picker ilə ═════════
 async function loadRooms(page = 1) {
   try {
     PAGINATION.rooms.page = page;
@@ -1250,11 +1357,6 @@ function roomCinsById(rid) {
   return '';
 }
 
-function genStudentOptions(selectedId, cins) {
-  const list = cins ? ALL_STUDENTS.filter(s => s.cins === cins) : ALL_STUDENTS;
-  return list.map(s => `<option value="${s.id}" ${s.id==selectedId?'selected':''}>${s.id} - ${esc(s.ad_soyad)}</option>`).join('');
-}
-
 function genStatusOptions(selectedStatus) {
   const stats = ['Yaxşı','Az zədəli','Zədəli'];
   return stats.map(s => `<option value="${s}" ${s==selectedStatus?'selected':''}>${s}</option>`).join('');
@@ -1265,9 +1367,9 @@ function buildRoomForm(r, id) {
   const autoCins = roomCinsById(isEdit ? id : '');
   let html = '';
   html += `<div class="form-row">
-    <div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" value="${isEdit ? esc(id) : ''}" ${isEdit ? 'disabled' : ''} placeholder="Məs: 105" oninput="syncRoomCins()"></div>
+    <div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" value="${escAttr(isEdit ? id : '')}" ${isEdit ? 'disabled' : ''} placeholder="Məs: 105" oninput="syncRoomCins()"></div>
     <div class="form-group"><label>Tutum (maks. 6)</label><input type="number" min="1" max="6" class="form-input" id="r_capacity" value="${r ? r.capacity : 6}" oninput="toggleSlotCards()"></div>
-    <div class="form-group"><label>Bina / Cins</label><select class="form-select" id="r_cins" onchange="refreshRoomStudentSelects()" ${autoCins ? 'disabled' : ''}>
+    <div class="form-group"><label>Bina / Cins</label><select class="form-select" id="r_cins" ${autoCins ? 'disabled' : ''}>
       <option value="">Təyin edilməyib</option>
       <option value="Kişi" ${(autoCins || (r && r.cins)) === 'Kişi' ? 'selected' : ''}>Kişi (oğlan binası)</option>
       <option value="Qadın" ${(autoCins || (r && r.cins)) === 'Qadın' ? 'selected' : ''}>Qadın (qız binası)</option>
@@ -1276,15 +1378,18 @@ function buildRoomForm(r, id) {
   if (autoCins) {
     html += `<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Bu otaq nömrəsi ${autoCins === 'Kişi' ? 'oğlan (101-120)' : 'qız (121-140)'} binasına aiddir — cins avtomatik təyin olunub.</p>`;
   }
-  const formCins = autoCins || (r ? r.cins : '');
   for (let i = 1; i <= 6; i++) {
     const slot = r && r.slots ? r.slots.find(s => s.slot === i) : null;
-    const tid = slot && slot.student_id ? slot.student_id : '';
+    const curName = slot && slot.student_id ? (slot.ad_soyad || '') : '';
+    const curId = slot && slot.student_id ? slot.student_id : '';
     const ys = slot ? slot.yataq_status : 'Yaxşı';
     const ss = slot ? slot.skaf_status : 'Yaxşı';
     const os = slot ? slot.oturacaq_status : 'Yaxşı';
     html += `<div class="room-student-card" id="slotCard${i}"><h5><i data-lucide="user"></i> ${i}-ci Yer</h5>
-      <div class="form-group"><select class="form-select" id="r_t${i}"><option value="">Boş</option>${genStudentOptions(tid, formCins)}</select></div>
+      <div class="form-group"><label>Tələbə</label>
+        ${spContainerHtml('room-t' + i, { value: curName, valueId: curId, placeholder: 'Boş — ad yazın, axtarın...' })}
+        <div class="sp-hint">Ad yazıb siyahıdan seçin; boş saxlasanız yer boş qalacaq</div>
+      </div>
       <div class="form-row">
         <div class="form-group"><label>Yataq</label><select class="form-select" id="r_y${i}">${genStatusOptions(ys)}</select></div>
         <div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s${i}">${genStatusOptions(ss)}</select></div>
@@ -1294,6 +1399,12 @@ function buildRoomForm(r, id) {
   }
   html += `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${isEdit ? id : 0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
   return html;
+}
+
+function initRoomPickers() {
+  for (let i = 1; i <= 6; i++) {
+    initStudentPicker('room-t' + i, { cinsFn: () => gv('r_cins') || null });
+  }
 }
 
 function toggleSlotCards() {
@@ -1311,40 +1422,34 @@ function syncRoomCins() {
   const sel = document.getElementById('r_cins');
   if (c) { sel.value = c; sel.disabled = true; }
   else { sel.disabled = false; }
-  refreshRoomStudentSelects();
 }
 
-function refreshRoomStudentSelects() {
-  const cins = gv('r_cins');
-  for (let i = 1; i <= 6; i++) {
-    const sel = document.getElementById('r_t' + i);
-    if (!sel) continue;
-    const cur = sel.value;
-    sel.innerHTML = '<option value="">Boş</option>' + genStudentOptions(cur, cins);
-    sel.value = cur;
-  }
-}
-
-async function addRoomModal() {
-  await ensureStudentsLoaded();
-  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
+function addRoomModal() {
   openModal('Yeni Otaq', buildRoomForm(null, 0));
+  initRoomPickers();
   setTimeout(toggleSlotCards, 100);
 }
 
-async function editRoomModal(id) {
-  await ensureStudentsLoaded();
+function editRoomModal(id) {
   id = safeId(id);
   const r = currentRooms.find(x => x.id == id);
   if (!r) { showToast('Otaq tapılmadı', 'error'); return; }
   openModal('Otaq Redaktə: ' + id, buildRoomForm(r, id));
+  initRoomPickers();
   setTimeout(toggleSlotCards, 100);
 }
 
 async function saveRoom(id) {
+  for (let i = 1; i <= 6; i++) {
+    if (!spValidate('room-t' + i)) {
+      infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">${i}-ci yerdə ad yazılıb, amma tələbə seçilməyib.<span class="dlg-highlight">Siyahıdan tələbəni seçin və ya sahəni təmizləyin</span></p>`, 'warning');
+      return;
+    }
+  }
+
   const payload = { id: id || gv('r_id'), capacity: gv('r_capacity') || 6, cins: gv('r_cins') };
   for (let i = 1; i <= 6; i++) {
-    payload['t'+i] = gv('r_t'+i);
+    payload['t'+i] = spGetValue('room-t' + i);
     payload['y'+i] = gv('r_y'+i);
     payload['s'+i] = gv('r_s'+i);
     payload['o'+i] = gv('r_o'+i);
@@ -1356,7 +1461,7 @@ async function saveRoom(id) {
   } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
-// ═════════ APPLICATIONS ═════════
+// ═════════ APPLICATIONS — picker ilə ═════════
 async function loadApplications(page = 1) {
   try {
     PAGINATION.applications.page = page;
@@ -1369,12 +1474,12 @@ async function loadApplications(page = 1) {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
-async function addApplicationModal() {
-  await ensureStudentsLoaded();
-  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
-  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
+function addApplicationModal() {
   openModal('Yeni Müraciət', `
-    <div class="form-group"><label>Tələbə</label><select class="form-select" id="app_student">${opts}</select></div>
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('app-student', { placeholder: 'Tələbə adını yazın...' })}
+      <div class="sp-hint">Minimum 2 hərf yazın, siyahıdan seçin</div>
+    </div>
     <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" placeholder="Başlıq"></div>
     <div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4" placeholder="Müraciət mətni..."></textarea></div>
     <div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Təsdiq zamanı tələbəyə görünəcək qeyd"></textarea></div>
@@ -1384,17 +1489,19 @@ async function addApplicationModal() {
     </div>
     <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
+  initStudentPicker('app-student');
 }
 
-async function editApplicationModal(id) {
-  await ensureStudentsLoaded();
+function editApplicationModal(id) {
   id = safeId(id);
   const a = currentApps.find(x => x.id == id);
   if (!a) return;
-  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==a.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Müraciəti Redaktə Et', `
-    <div class="form-group"><label>Tələbə</label><select class="form-select" id="app_student" disabled>${opts}</select></div>
-    <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" value="${esc(a.basliq)}"></div>
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(a.ad_soyad)}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="app_student" value="${a.student_id}">
+    </div>
+    <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" value="${escAttr(a.basliq)}"></div>
     <div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4">${esc(a.muraciet)}</textarea></div>
     <div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Tələbəyə görünəcək qeyd">${esc(a.notlar||'')}</textarea></div>
     <div class="form-row">
@@ -1406,9 +1513,14 @@ async function editApplicationModal(id) {
 }
 
 async function saveApplication(id) {
+  const studentId = id ? gv('app_student') : spGetValue('app-student');
+  if (!studentId) {
+    infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">Axtarış sahəsinə tələbə adını yazıb siyahıdan seçin.<span class="dlg-highlight">Minimum 2 hərf yazın</span></p>`, 'warning');
+    return;
+  }
   try {
     await apiAction('save_application', 'POST', {
-      id, student_id: gv('app_student'), basliq: gv('app_basliq'),
+      id, student_id: studentId, basliq: gv('app_basliq'),
       muraciet: gv('app_muraciet'), priority: gv('app_priority'),
       status: gv('app_status'), notlar: gv('app_notlar')
     });
@@ -1557,7 +1669,7 @@ async function loadSurveys(page = 1) {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
-// ═════════ PENALTIES ═════════
+// ═════════ PENALTIES — picker ilə ═════════
 async function loadPenalties(page = 1) {
   try {
     PAGINATION.penalties.page = page;
@@ -1569,38 +1681,45 @@ async function loadPenalties(page = 1) {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
-async function addPenaltyModal() {
-  await ensureStudentsLoaded();
-  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
-  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
+function addPenaltyModal() {
   openModal('Yeni Cərimə', `
-    <div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student">${opts}</select></div>
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('pen-student', { placeholder: 'Tələbə adını yazın...' })}
+      <div class="sp-hint">Minimum 2 hərf yazın, siyahıdan seçin</div>
+    </div>
     <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" placeholder="Məbləğ"></div>
     <div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" placeholder="Səbəb"></div>
     <button type="button" class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `, true);
+  initStudentPicker('pen-student');
 }
 
 async function editPenaltyModal(id) {
-  await ensureStudentsLoaded();
   id = safeId(id);
   const data = await apiAction('get_penalties');
   const p = data.data.find(x => x.id == id);
   if (!p) return;
-  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==p.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Cərimə Redaktə', `
-    <div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student" disabled>${opts}</select></div>
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(p.ad_soyad)}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="p_student" value="${p.student_id}">
+    </div>
     <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="${p.amount}"></div>
-    <div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="${esc(p.reason)}"></div>
+    <div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="${escAttr(p.reason)}"></div>
     <div class="form-group"><label>Status</label><select class="form-select" id="p_status"><option ${p.status=='Ödənilməmiş'?'selected':''}>Ödənilməmiş</option><option ${p.status=='Ödənilib'?'selected':''}>Ödənilib</option></select></div>
     <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
 
 async function savePenalty(id) {
+  const studentId = id ? gv('p_student') : spGetValue('pen-student');
+  if (!studentId) {
+    infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">Axtarışdan tələbə seçin.<span class="dlg-highlight">Ad yazıb siyahıdan klikləyin</span></p>`, 'warning');
+    return;
+  }
   try {
     await apiAction('save_penalty', 'POST', {
-      id, student_id: gv('p_student'), amount: gv('p_amount'),
+      id, student_id: studentId, amount: gv('p_amount'),
       reason: gv('p_reason'), status: gv('p_status')
     });
     closeModal(); loadPenalties();
@@ -1630,7 +1749,7 @@ async function loadCanteen() {
       for (let i = 1; i <= 7; i++) {
         let item = data.data.find(x => x.location === loc && x.day_of_week == i);
         if (item) {
-          html += `<div class="meal-row"><span class="meal-day">${days[i]}</span><input type="text" class="meal-input" value="${esc(item.meal_name)}" onchange="updateCanteen(${item.id},this.value)" onkeyup="updateCanteenDelayed(${item.id},this.value)"></div>`;
+          html += `<div class="meal-row"><span class="meal-day">${days[i]}</span><input type="text" class="meal-input" value="${escAttr(item.meal_name)}" onchange="updateCanteen(${item.id},this.value)" onkeyup="updateCanteenDelayed(${item.id},this.value)"></div>`;
         }
       }
       html += `</div>`;
@@ -1653,7 +1772,7 @@ function updateCanteenDelayed(id, val) {
   canteenTimer = setTimeout(() => updateCanteen(id, val), 800);
 }
 
-// ═════════ LAUNDRY ═════════
+// ═════════ LAUNDRY — picker ilə ═════════
 async function loadLaundry(page = 1) {
   try {
     PAGINATION.laundry.page = page;
@@ -1670,16 +1789,12 @@ function genLaundryOptions(selected) {
   return stats.map(s => `<option value="${s}" ${s==selected?'selected':''}>${s}</option>`).join('');
 }
 
-async function addLaundryModal() {
-  await ensureStudentsLoaded();
-  if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
-  const data = await apiAction('get_laundry');
-  const existingIds = new Set(data.data.map(l => l.student_id));
-  const available = ALL_STUDENTS.filter(s => !existingIds.has(s.id));
-  if (available.length === 0) { showToast('Bütün tələbələr artıq qeyd olunub', 'warning'); return; }
-  const opts = available.map(s => `<option value="${s.id}">${esc(s.ad_soyad)}</option>`).join('');
+function addLaundryModal() {
   openModal('Yeni Çamaşırxana Qeydi', `
-    <div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student">${opts}</select></div>
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('lnd-student', { placeholder: 'Tələbə adını yazın...', exclude: 'laundry' })}
+      <div class="sp-hint">Artıq qeydi olan tələbələr axtarışda görsənmir</div>
+    </div>
     <div class="form-row">
       <div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions('Yoxdur')}</select></div>
       <div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions('Yoxdur')}</select></div>
@@ -1687,17 +1802,19 @@ async function addLaundryModal() {
     </div>
     <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
+  initStudentPicker('lnd-student', { exclude: 'laundry' });
 }
 
 async function editLaundryModal(student_id) {
-  await ensureStudentsLoaded();
   student_id = safeId(student_id);
   const data = await apiAction('get_laundry');
   const l = data.data.find(x => x.student_id == student_id);
   if (!l) return;
-  const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==l.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Redaktə', `
-    <div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student" disabled>${opts}</select></div>
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(l.ad_soyad)}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="l_student" value="${l.student_id}">
+    </div>
     <div class="form-row">
       <div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions(l.machine_1_status)}</select></div>
       <div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions(l.machine_2_status)}</select></div>
@@ -1708,9 +1825,14 @@ async function editLaundryModal(student_id) {
 }
 
 async function saveLaundry(student_id) {
+  const sid = student_id ? gv('l_student') : spGetValue('lnd-student');
+  if (!sid) {
+    infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">Axtarışdan tələbə seçin.</p>`, 'warning');
+    return;
+  }
   try {
     await apiAction('save_laundry', 'POST', {
-      student_id: student_id || gv('l_student'),
+      student_id: sid,
       m1: gv('l_m1'), m2: gv('l_m2'), m3: gv('l_m3')
     });
     closeModal(); loadLaundry();
@@ -1756,16 +1878,7 @@ function renderPagination(key, containerId, loadFn) {
   refreshIcons(container);
 }
 
-// ═════════ INIT ═════════
-fetch('/api/admin/check', { method: 'GET', credentials: 'same-origin' })
-  .then(r => {
-    if (r.ok) { hideLogin(); isLoggedIn = true; loadDashboard(); }
-    else { showLogin(); }
-  })
-  .catch(() => showLogin());
-
-lucide.createIcons();
-// Sessiya hələ də aktivdirmi? — səhifə görünəndə yoxla (DB-siz, yüngül)
+// ═════════ SESSİYA YOXLAMASI (tab-a qayıdanda) ═════════
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && isLoggedIn) {
     fetch('/api/admin/check', { credentials: 'same-origin' })
@@ -1773,6 +1886,22 @@ document.addEventListener('visibilitychange', () => {
       .catch(() => {});
   }
 });
+
+// ═════════ INIT — yalnız 200-də panel (500/502 → login) ═════════
+fetch('/api/admin/check', { method: 'GET', credentials: 'same-origin' })
+  .then(r => {
+    if (r.ok) {
+      hideLogin();
+      isLoggedIn = true;
+      loadDashboard();
+    } else {
+      showLogin();
+    }
+  })
+  .catch(() => showLogin());
+
+lucide.createIcons();
+{% endraw %}
 </script>
 </body>
 </html>
