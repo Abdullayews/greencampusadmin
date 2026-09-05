@@ -206,17 +206,17 @@ def serve_html(filename, **context):
 
 
 # ---------------------------------------------------------------------------
-# Views
+# Views — server-side sessiya vəziyyəti ilə render (login parıltısı yoxdur)
 # ---------------------------------------------------------------------------
 
 @app.route('/')
 def index():
-    return serve_html('index.html')
+    return serve_html('index.html', is_logged_in=bool(session.get('admin_logged_in')))
 
 
 @app.route('/admin')
 def admin_panel():
-    return serve_html('index.html')
+    return serve_html('index.html', is_logged_in=bool(session.get('admin_logged_in')))
 
 
 # ---------------------------------------------------------------------------
@@ -243,8 +243,36 @@ def logout():
 @admin_required
 def admin_check():
     """Yüngül sessiya yoxlaması — DB-yə toxunmur.
-    Frontend yalnız 200 cavabında paneli açır (500/502 halında login görünür)."""
+    Frontend yalnız 200 cavabında paneli açır."""
     return ok()
+
+
+# ---------------------------------------------------------------------------
+# Typeahead axtarış (tələbə picker)
+# ---------------------------------------------------------------------------
+
+@app.route('/api/admin/search_students_query', methods=['GET'])
+@admin_required
+@with_db
+def search_students_query(cur):
+    """Canlı tələbə axtarışı — modal picker-lər üçün (maks. 20 nəticə)."""
+    q = qarg('q')
+    cins = clean_val(qarg('cins'))
+    exclude = qarg('exclude')
+
+    sql = "SELECT id, ad_soyad, cins FROM students WHERE 1=1"
+    params = []
+    if q:
+        sql += " AND ad_soyad LIKE %s"
+        params.append(f"%{q}%")
+    if cins:
+        sql += " AND cins = %s"
+        params.append(cins)
+    if exclude == 'laundry':
+        sql += " AND id NOT IN (SELECT student_id FROM laundry WHERE student_id IS NOT NULL)"
+    sql += " ORDER BY ad_soyad ASC LIMIT 20"
+    cur.execute(sql, params)
+    return ok(data=cur.fetchall())
 
 
 # ---------------------------------------------------------------------------
@@ -255,7 +283,6 @@ def admin_check():
 @admin_required
 @with_db
 def admin_stats(cur):
-    # QEYD: "groups" rezerv söz olduğundan backtick içində
     cur.execute("""
         SELECT
           (SELECT COUNT(*) FROM students) AS students,
@@ -316,14 +343,6 @@ def get_students(cur):
         ORDER BY s.id ASC LIMIT %s OFFSET %s
     """, params + [per_page, offset])
     return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
-
-
-@app.route('/api/admin/get_students_light', methods=['GET'])
-@admin_required
-@with_db
-def get_students_light(cur):
-    cur.execute("SELECT id, ad_soyad, cins FROM students ORDER BY ad_soyad ASC LIMIT 5000")
-    return ok(data=cur.fetchall())
 
 
 @app.route('/api/admin/get_student_full', methods=['POST'])
