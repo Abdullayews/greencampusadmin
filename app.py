@@ -206,7 +206,7 @@ def serve_html(filename, **context):
 
 
 # ---------------------------------------------------------------------------
-# Views — server-side sessiya vəziyyəti ilə render (login parıltısı yoxdur)
+# Views
 # ---------------------------------------------------------------------------
 
 @app.route('/')
@@ -242,20 +242,18 @@ def logout():
 @app.route('/api/admin/check', methods=['GET'])
 @admin_required
 def admin_check():
-    """Yüngül sessiya yoxlaması — DB-yə toxunmur.
-    Frontend yalnız 200 cavabında paneli açır."""
+    """Yüngül sessiya yoxlaması — DB-yə toxunmur."""
     return ok()
 
 
 # ---------------------------------------------------------------------------
-# Typeahead axtarış (tələbə picker)
+# Typeahead axtarış
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/search_students_query', methods=['GET'])
 @admin_required
 @with_db
 def search_students_query(cur):
-    """Canlı tələbə axtarışı — modal picker-lər üçün (maks. 20 nəticə)."""
     q = qarg('q')
     cins = clean_val(qarg('cins'))
     exclude = qarg('exclude')
@@ -270,6 +268,8 @@ def search_students_query(cur):
         params.append(cins)
     if exclude == 'laundry':
         sql += " AND id NOT IN (SELECT student_id FROM laundry WHERE student_id IS NOT NULL)"
+    elif exclude == 'no_group':
+        sql += " AND group_id IS NULL AND ev = 'Ev seçilməyib'"
     sql += " ORDER BY ad_soyad ASC LIMIT 20"
     cur.execute(sql, params)
     return ok(data=cur.fetchall())
@@ -1159,7 +1159,7 @@ def delete_profile(cur):
 
 
 # ---------------------------------------------------------------------------
-# Groups
+# Groups — TAM idarə (YENİ: create / add / remove member)
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_groups', methods=['GET'])
@@ -1194,6 +1194,80 @@ def get_groups(cur):
     return ok(data=list(groups.values()))
 
 
+@app.route('/api/admin/create_group', methods=['POST'])
+@app.route('/api/admin/create_groups', methods=['POST'])
+@admin_required
+@with_db
+def admin_create_group(cur):
+    """Admin boş qrup yaradır."""
+    cur.execute("INSERT INTO student_groups (created_at) VALUES (NOW())")
+    gid = cur.lastrowid
+    log_admin(cur, 'Qrup yaradıldı (admin)', 'Qrup', gid, '')
+    return ok(group_id=gid)
+
+
+@app.route('/api/admin/add_group_member', methods=['POST'])
+@app.route('/api/admin/add_group_members', methods=['POST'])
+@admin_required
+@with_db
+def admin_add_group_member(cur):
+    """Admin qrupa üzv əlavə edir (cins + 6 üzv limiti ilə)."""
+    data = request.get_json() or {}
+    gid = as_int(data.get('group_id'))
+    sid = as_int(data.get('student_id'))
+    if gid is None or sid is None:
+        return fail("Qrup və tələbə seçilməlidir!")
+
+    cur.execute("SELECT 1 FROM student_groups WHERE id = %s", (gid,))
+    if not cur.fetchone():
+        return fail("Qrup tapılmadı!", 404)
+
+    cur.execute("SELECT cins, ev, group_id FROM students WHERE id = %s", (sid,))
+    st = cur.fetchone()
+    if not st:
+        return fail("Tələbə tapılmadı!", 404)
+    if st['group_id'] is not None:
+        return fail("Bu tələbə artıq başqa qrupdadır!")
+    if st['ev'] == 'Ev seçilib':
+        return fail("Bu tələbənin artıq evi var!")
+
+    cur.execute("SELECT cins FROM students WHERE group_id = %s LIMIT 1", (gid,))
+    member = cur.fetchone()
+    if member and member['cins'] != st['cins']:
+        return fail("Qrupda qarşı cinsdən üzv var — qrup tək cinsdən olmalıdır!")
+
+    cur.execute("SELECT COUNT(*) AS c FROM students WHERE group_id = %s", (gid,))
+    if cur.fetchone()['c'] >= 6:
+        return fail("Qrup doludur (maksimum 6 üzv)!")
+
+    cur.execute("UPDATE students SET group_id = %s WHERE id = %s", (gid, sid))
+    log_admin(cur, 'Qrupa üzv əlavə edildi (admin)', 'Qrup', gid, f"Tələbə ID: {sid}")
+    return ok()
+
+
+@app.route('/api/admin/remove_group_member', methods=['POST'])
+@app.route('/api/admin/remove_group_members', methods=['POST'])
+@admin_required
+@with_db
+def admin_remove_group_member(cur):
+    """Admin qrupdan üzv çıxarır; qrup boşalırsa ləğv olunur."""
+    data = request.get_json() or {}
+    sid = as_int(data.get('student_id'))
+    if sid is None:
+        return fail("Tələbə seçilməlidir!")
+
+    cur.execute("SELECT group_id FROM students WHERE id = %s", (sid,))
+    row = cur.fetchone()
+    if not row or row['group_id'] is None:
+        return fail("Bu tələbə heç bir qrupda deyil!")
+
+    gid = row['group_id']
+    cur.execute("UPDATE students SET group_id = NULL WHERE id = %s", (sid,))
+    dissolve_group_if_empty(cur, gid)
+    log_admin(cur, 'Qrupdan üzv çıxarıldı (admin)', 'Qrup', gid, f"Tələbə ID: {sid}")
+    return ok()
+
+
 @app.route('/api/admin/delete_group', methods=['POST'])
 @app.route('/api/admin/delete_groups', methods=['POST'])
 @admin_required
@@ -1211,7 +1285,7 @@ def delete_group(cur):
 
 
 # ---------------------------------------------------------------------------
-# Requests
+# Requests — TAM idarə (YENİ: create / votes baxışı)
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_requests', methods=['GET'])
@@ -1235,6 +1309,93 @@ def get_requests(cur):
         ORDER BY hr.created_at DESC LIMIT %s OFFSET %s
     """, [per_page, offset])
     return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
+
+
+@app.route('/api/admin/create_request', methods=['POST'])
+@app.route('/api/admin/create_requests', methods=['POST'])
+@admin_required
+@with_db
+def admin_create_request(cur):
+    """Admin birbaşa tələb yaradır: dəvət / qovma / çıxma."""
+    data = request.get_json() or {}
+    req_type = data.get('type')
+    target_id = as_int(data.get('target_id'))
+    room_id = as_int(data.get('room_id'))
+
+    if req_type not in ('invite', 'kick', 'leave'):
+        return fail("Tip yanlışdır (invite/kick/leave)!")
+    if target_id is None:
+        return fail("Tələbə seçilməlidir!")
+
+    cur.execute("SELECT cins, ev FROM students WHERE id = %s", (target_id,))
+    st = cur.fetchone()
+    if not st:
+        return fail("Tələbə tapılmadı!", 404)
+
+    if req_type == 'invite':
+        if room_id is None:
+            return fail("Dəvət üçün otaq nömrəsi lazımdır!")
+        if st['ev'] != 'Ev seçilməyib':
+            return fail("Bu tələbənin artıq evi var!")
+
+        cur.execute("SELECT cins FROM rooms WHERE id = %s", (room_id,))
+        room = cur.fetchone()
+        if not room:
+            return fail("Otaq tapılmadı!", 404)
+        if room['cins'] and room['cins'] != st['cins']:
+            return fail("Cins uyğunsuzluğu — bu ev qarşı cinsə aiddir!")
+
+        heal_one_room_slots(cur, room_id)
+        cur.execute(
+            "SELECT COUNT(*) AS c FROM room_slots WHERE room_id = %s AND student_id IS NULL",
+            (room_id,)
+        )
+        if cur.fetchone()['c'] == 0:
+            return fail("Bu evdə boş yer yoxdur!")
+    else:
+        cur.execute("SELECT room_id FROM room_slots WHERE student_id = %s", (target_id,))
+        row = cur.fetchone()
+        if not row:
+            return fail("Bu tələbə heç bir evdə yaşamır — qovma/çıxma tələbi üçün evdə olmalıdır!")
+        room_id = row['room_id']
+
+    # Requester: kick üçün otaqdakı başqa sakin, yoxsa targetin özü
+    if req_type == 'kick':
+        cur.execute(
+            "SELECT student_id FROM room_slots WHERE room_id = %s AND student_id IS NOT NULL "
+            "AND student_id != %s LIMIT 1",
+            (room_id, target_id)
+        )
+        req_row = cur.fetchone()
+        requester_id = req_row['student_id'] if req_row else target_id
+    else:
+        requester_id = target_id
+
+    cur.execute(
+        "INSERT INTO home_requests (type, room_id, target_id, requester_id) VALUES (%s, %s, %s, %s)",
+        (req_type, room_id, target_id, requester_id)
+    )
+    log_admin(cur, 'Tələb yaradıldı (admin)', 'Tələb', cur.lastrowid,
+              f"Tip: {req_type}, otaq: {room_id}, hədəf: {target_id}")
+    return ok()
+
+
+@app.route('/api/admin/get_request_votes', methods=['GET'])
+@admin_required
+@with_db
+def get_request_votes(cur):
+    """Tələb üzrə səslər (kim, nə verib)."""
+    req_id = as_int(qarg('request_id'))
+    if req_id is None:
+        return fail("request_id lazımdır!")
+
+    cur.execute("""
+        SELECT v.voter_id, v.vote, s.ad_soyad
+        FROM home_request_votes v
+        JOIN students s ON s.id = v.voter_id
+        WHERE v.request_id = %s
+    """, (req_id,))
+    return ok(data=cur.fetchall())
 
 
 @app.route('/api/admin/resolve_request', methods=['POST'])
@@ -1359,6 +1520,17 @@ def get_logs(cur):
     """, params + [per_page, offset])
 
     return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
+
+
+@app.route('/api/admin/clear_old_logs', methods=['POST'])
+@admin_required
+@with_db
+def clear_old_logs(cur):
+    """1 aydan köhnə logları silir (cədvəl böyüməsin deyə)."""
+    cur.execute("DELETE FROM admin_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 1 MONTH)")
+    deleted = cur.rowcount
+    log_admin(cur, f'Köhnə loglar təmizləndi ({deleted} sətir)', 'Loglar', '', '')
+    return ok(deleted=deleted, message=f"{deleted} köhnə log sətri silindi.")
 
 
 # ---------------------------------------------------------------------------
