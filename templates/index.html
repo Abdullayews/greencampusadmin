@@ -37,6 +37,7 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .delay-200{animation-delay:200ms}
 .delay-300{animation-delay:300ms}
 .delay-400{animation-delay:400ms}
+.delay-500{animation-delay:500ms}
 
 .skeleton{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-btn)}
 .skeleton-text{height:16px;margin-bottom:8px}
@@ -134,8 +135,10 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(239,68,68,0.25)}
 .btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35)}
 .btn-danger:active{transform:translateY(0)}
+.btn-danger i{width:18px;height:18px}
 .btn-secondary{background:var(--bg);color:var(--text-primary);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
 .btn-secondary:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px)}
+.btn-secondary i{width:18px;height:18px}
 .btn-icon{width:36px;height:36px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);display:inline-flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;transition:all var(--transition-fast)}
 .btn-icon:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:scale(1.1)}
 .btn-icon.danger:hover{background:#fee2e2;color:var(--danger);border-color:var(--danger)}
@@ -143,10 +146,10 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 
 .table-wrap{overflow-x:auto}
 .data-table{width:100%;border-collapse:separate;border-spacing:0}
-.data-table thead th{padding:16px;text-align:left;font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;border-bottom:2px solid var(--border);background:var(--bg);white-space:nowrap}
+.data-table thead th{padding:10px 14px;text-align:left;font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;border-bottom:2px solid var(--border);background:var(--bg);white-space:nowrap;vertical-align:top}
 .data-table tbody tr{transition:all 0.2s ease}
 .data-table tbody tr:hover{background:var(--bg);transform:scale(1.002);box-shadow:var(--shadow-xs)}
-.data-table tbody td{padding:16px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tbody td{padding:16px 14px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle}
 .data-table tbody td:last-child{white-space:nowrap}
 
 .form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary);font-weight:400;transition:all var(--transition-fast)}
@@ -165,6 +168,7 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .badge-danger{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
 .badge-info{background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e}
 .badge-gray{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);color:var(--text-secondary)}
+.badge-purple{background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce}
 
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:1000;display:none;justify-content:center;align-items:center;padding:24px;opacity:0;transition:opacity 0.3s ease}
 .modal-overlay.active{display:flex;opacity:1}
@@ -204,14 +208,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .toast.success i{color:var(--success)}
 .toast.error i{color:var(--danger)}
 .toast.warning i{color:var(--warning)}
-
-.profile-card{border:1px solid var(--border);border-radius:var(--radius-card);padding:20px;background:var(--surface);transition:all 0.2s;margin-bottom:16px}
-.profile-card:hover{border-color:var(--ku-green);box-shadow:var(--shadow-xs)}
-.profile-card h4{font-size:16px;font-weight:600;color:var(--ku-dark-green);margin-bottom:4px}
-.profile-card .profile-meta{font-size:12px;color:var(--text-secondary);margin-bottom:12px}
-.profile-field{margin-bottom:10px}
-.profile-field-label{font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
-.profile-field-value{font-size:14px;color:var(--text-primary);line-height:1.5}
 
 .loader-wrap{display:flex;justify-content:center;align-items:center;min-height:200px}
 .loader{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--ku-green);border-radius:50%;animation:spin 0.8s linear infinite}
@@ -254,7 +250,6 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
 .col-filter:focus{border-color:var(--ku-green);box-shadow:0 0 0 3px rgba(68,118,108,0.08);background:var(--surface)}
 .col-filter::placeholder{color:#94a3b8;font-size:11px}
 select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;appearance:none}
-.data-table thead th{padding:10px 14px;vertical-align:top}
 
 /* Pagination */
 .pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap}
@@ -265,16 +260,12 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 .pagination-btn:disabled:hover{background:var(--bg);border-color:var(--border);color:var(--text-secondary)}
 .pagination-info{font-size:13px;color:var(--text-secondary);font-weight:500;margin:0 8px}
 </style>
-<base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     LOGIN OVERLAY
-     ═══════════════════════════════════════════════════════════ -->
+<!-- LOGIN OVERLAY -->
 <div class="login-overlay active" id="loginOverlay">
   <div class="login-card">
     <div class="login-logo">
@@ -299,9 +290,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SIDEBAR
-     ═══════════════════════════════════════════════════════════ -->
+<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="logo" onclick="toggleSidebar()">
     <i data-lucide="shield-check"></i>
@@ -321,6 +310,12 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     </button>
     <button class="nav-item" data-menu="rooms" onclick="loadPage('rooms',this)">
       <i data-lucide="door-open"></i><span>Otaqlar və Əşyalar</span>
+    </button>
+    <button class="nav-item" data-menu="groups" onclick="loadPage('groups',this)">
+      <i data-lucide="users-round"></i><span>Qruplar</span>
+    </button>
+    <button class="nav-item" data-menu="requests" onclick="loadPage('requests',this)">
+      <i data-lucide="inbox"></i><span>Tələblər</span>
     </button>
     <button class="nav-item" data-menu="applications" onclick="loadPage('applications',this)">
       <i data-lucide="clipboard-list"></i><span>Müraciətlər</span>
@@ -349,9 +344,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </div>
 </aside>
 
-<!-- ═══════════════════════════════════════════════════════════
-     MAIN WRAPPER
-     ═══════════════════════════════════════════════════════════ -->
+<!-- MAIN WRAPPER -->
 <div class="main-wrapper" id="mainWrapper">
   <header class="top-bar">
     <div>
@@ -368,7 +361,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-dashboard" class="page-content active-page">
       <div class="stats-grid" id="dashboardStats">
         <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
-        <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Aktiv Otaqlar</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Otaqlar</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
       </div>
@@ -378,18 +371,18 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-students" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Siyahısı</h3><button class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
-        
         <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr>
       <th><div class="th-wrap"><span>ID</span></div></th>
       <th><div class="th-wrap"><span>Ad Soyad</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
       <th><div class="th-wrap"><span>Email</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
       <th><div class="th-wrap"><span>İxtisas</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
       <th><div class="th-wrap"><span>Kurs</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
-      <th><div class="th-wrap"><span>Universitet</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
-      <th><div class="th-wrap"><span>Ev Dəyişmə</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
+      <th><div class="th-wrap"><span>Cins</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="kişi">Kişi</option><option value="qadın">Qadın</option></select></div></th>
+      <th><div class="th-wrap"><span>Ev Statusu</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="ev seçilib">Ev seçilib</option><option value="ev seçilməyib">Ev seçilməyib</option><option value="rədd edilib">Rədd edilib</option></select></div></th>
+      <th><div class="th-wrap"><span>Otaq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('studentsTable')"></div></th>
       <th><div class="th-wrap"><span>API Açarı</span><select class="col-filter" onchange="applyAllFilters('studentsTable')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="studentsTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+    </tr></thead><tbody id="studentsTbody"><tr><td colspan="10"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="studentsPagination"></div>
       </div>
     </section>
@@ -398,7 +391,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-profiles" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Profilləri</h3></div>
-        
         <div class="table-wrap"><table class="data-table" id="profilesTable"><thead><tr>
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
       <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('profilesTable')"></div></th>
@@ -415,13 +407,45 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-rooms" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button class="btn-primary" onclick="openAddModal('room')"><i data-lucide="plus"></i> Yeni Otaq</button></div>
-        
         <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr>
       <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
+      <th><div class="th-wrap"><span>Bina / Cins</span><select class="col-filter" onchange="applyAllFilters('roomsTable')"><option value="">Hamısı</option><option value="kişi">Kişi (oğlan)</option><option value="qadın">Qadın (qız)</option></select></div></th>
+      <th><div class="th-wrap"><span>Tutum</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
       <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('roomsTable')"></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="roomsTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+    </tr></thead><tbody id="roomsTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="roomsPagination"></div>
+      </div>
+    </section>
+
+    <!-- GROUPS (YENİ) -->
+    <section id="page-groups" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Qruplar</h3></div>
+        <div class="table-wrap"><table class="data-table" id="groupsTable"><thead><tr>
+      <th><div class="th-wrap"><span>Qrup ID</span></div></th>
+      <th><div class="th-wrap"><span>Üzv Sayı</span></div></th>
+      <th><div class="th-wrap"><span>Üzvlər</span></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="groupsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- REQUESTS (YENİ) -->
+    <section id="page-requests" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Tələblər — Dəvət / Qovma / Çıxma</h3></div>
+        <div class="table-wrap"><table class="data-table" id="reqTable"><thead><tr>
+      <th><div class="th-wrap"><span>ID</span></div></th>
+      <th><div class="th-wrap"><span>Tip</span></div></th>
+      <th><div class="th-wrap"><span>Otaq</span></div></th>
+      <th><div class="th-wrap"><span>Kimdən</span></div></th>
+      <th><div class="th-wrap"><span>Kim barəsində</span></div></th>
+      <th><div class="th-wrap"><span>Səs</span></div></th>
+      <th><div class="th-wrap"><span>Status</span></div></th>
+      <th><div class="th-wrap"><span>Tarix</span></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="reqTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
@@ -429,7 +453,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-applications" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Müraciətlər</h3><button class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button></div>
-        
         <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr>
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('appsTable')"></div></th>
       <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('appsTable')"></div></th>
@@ -444,7 +467,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-announcements" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Elanlar</h3><button class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
-        
         <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr>
       <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('annTable')"></div></th>
       <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('annTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
@@ -458,10 +480,9 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-surveys" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Anketlər</h3><button class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
-        
         <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr>
-      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('annTable')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('annTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
+      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('surTable')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" onchange="applyAllFilters('surTable')"><option value="">Hamısı</option><option value="aktiv">Aktiv</option><option value="passiv">Passiv</option></select></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="surPagination"></div>
@@ -472,7 +493,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-penalties" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Cərimələr</h3><button class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
-        
         <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr>
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
       <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('penTable')"></div></th>
@@ -494,7 +514,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <section id="page-laundry" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Çamaşırxana</h3><button class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
-        
         <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr>
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" placeholder="Filtr..." oninput="debouncedFilter('laundryTable')"></div></th>
       <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" onchange="applyAllFilters('laundryTable')"><option value="">Hamısı</option><option value="yoxdur">Yoxdur</option><option value="gözlənilir">Gözlənilir</option><option value="hazır">Hazır</option></select></div></th>
@@ -508,9 +527,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </main>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     MODAL
-     ═══════════════════════════════════════════════════════════ -->
+<!-- MODAL -->
 <div class="modal-overlay" id="universalModal">
   <div class="modal-card">
     <div class="modal-header"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
@@ -520,16 +537,13 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// STATE & CONFIG
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ STATE & CONFIG ═══════════════
 let currentStudents = [];
 let currentRooms = [];
 let currentApps = [];
 let currentProfiles = [];
 let isLoggedIn = false;
 
-// Paginasiya state-i
 const PAGINATION = {
   students: { page: 1, per_page: 50, total: 0 },
   rooms:    { page: 1, per_page: 50, total: 0 },
@@ -545,7 +559,9 @@ const PAGE_TITLES = {
   dashboard: ['Dashboard', 'Ümumi statistika'],
   students: ['Tələbələr', 'Tələbə məlumatları'],
   profiles: ['Tələbə Profilləri', 'Tələbə profil məlumatları'],
-  rooms: ['Otaqlar və Əşyalar', 'İnventar idarəetməsi'],
+  rooms: ['Otaqlar və Əşyalar', 'İnventar və yerləşdirmə idarəetməsi'],
+  groups: ['Qruplar', 'Ev seçmə qrupları'],
+  requests: ['Tələblər', 'Dəvət, qovma və çıxma tələbləri'],
   applications: ['Müraciətlər', 'Yataqxana və Təmir sorğuları'],
   announcements: ['Elanlar', 'Rəsmi elanlar'],
   surveys: ['Anketlər', 'Sorğular və anketlər'],
@@ -554,20 +570,21 @@ const PAGE_TITLES = {
   laundry: ['Çamaşırxana', 'Maşın idarəetməsi']
 };
 
-// CRUD konfiqurasiyası — bütün modullar üçün
 const CRUD_CONFIG = {
   student: {
     endpoint: 'students',
     saveAction: 'save_student',
     loadFn: loadStudents,
     modalTitle: { add: 'Yeni Tələbə', edit: 'Tələbəni Redaktə Et' },
-    deleteConfirm: 'Bu tələbəni silmək istədiyinizə əminsiniz?',
+    deleteConfirm: 'Bu tələbəni silmək istədiyinizə əminsiniz? (Profil, cərimə, müraciət, camaşırxana və tələbləri də silinəcək)',
     tableId: 'studentsTable', tbodyId: 'studentsTbody',
     emptyIcon: 'users', emptyText: 'Tələbə yoxdur',
     fields: [
       { id: 's_name', label: 'Ad Soyad', type: 'text', required: true },
       { id: 's_email', label: 'Email', type: 'email', required: true },
       { id: 's_sifre', label: 'Şifrə', type: 'text', placeholder: 'Boş saxla dəyişməsin' },
+      { id: 's_cins', label: 'Cins', type: 'select', options: [['Kişi','Kişi'],['Qadın','Qadın']] },
+      { id: 's_ev', label: 'Ev Statusu', type: 'select', options: [['Ev seçilməyib','Ev seçilməyib'],['Ev seçilib','Ev seçilib'],['Rədd edilib','Rədd edilib']] },
       { id: 's_universitet', label: 'Universitet', type: 'text', default: 'Qarabağ Universiteti' },
       { id: 's_ixtisas', label: 'İxtisas', type: 'text' },
       { id: 's_kurs', label: 'Kurs', type: 'number' },
@@ -577,7 +594,10 @@ const CRUD_CONFIG = {
     buildPayload: (id) => {
       const p = {
         id, ad_soyad: gv('s_name'), email: gv('s_email'), ixtisas: gv('s_ixtisas'),
-        kurs: gv('s_kurs'), universitet: gv('s_universitet'), ev_deyisme_isteyi: parseInt(gv('s_ev_deyisme'))
+        kurs: gv('s_kurs'), universitet: gv('s_universitet'),
+        ev_deyisme_isteyi: parseInt(gv('s_ev_deyisme')) || 0,
+        cins: gv('s_cins') || 'Kişi',
+        ev: gv('s_ev') || 'Ev seçilməyib'
       };
       const sifre = gv('s_sifre');
       if (sifre) p.sifre = sifre;
@@ -587,14 +607,17 @@ const CRUD_CONFIG = {
     renderRow: (s, idx) => {
       const evCls = s.ev_deyisme_isteyi ? 'badge-warning' : 'badge-gray';
       const apiCls = s.api_key ? 'badge-success' : 'badge-gray';
+      const cinsCls = s.cins === 'Qadın' ? 'badge-purple' : 'badge-info';
+      const evStatCls = s.ev === 'Ev seçilib' ? 'badge-success' : (s.ev === 'Rədd edilib' ? 'badge-danger' : 'badge-warning');
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
         <td class="p-4">${s.id}</td>
         <td class="p-4" style="font-weight:600">${esc(s.ad_soyad)}</td>
         <td class="p-4">${esc(s.email)}</td>
         <td class="p-4">${esc(s.ixtisas||'-')}</td>
         <td class="p-4">${esc(s.kurs||'-')}</td>
-        <td class="p-4">${esc(s.universitet||'-')}</td>
-        <td class="p-4"><span class="badge ${evCls}">${s.ev_deyisme_isteyi?'Var':'Yoxdur'}</span></td>
+        <td class="p-4"><span class="badge ${cinsCls}">${esc(s.cins||'-')}</span></td>
+        <td class="p-4"><span class="badge ${evStatCls}">${esc(s.ev||'-')}</span></td>
+        <td class="p-4">${s.otaq ? `<span class="badge badge-info">Ev ${s.otaq}</span>` : '-'}</td>
         <td class="p-4"><span class="badge ${apiCls}">${s.api_key?'Var':'Yoxdur'}</span></td>
         <td class="p-4"><div style="display:flex;gap:8px">
           <button class="btn-icon" onclick="openEditModal('student',${s.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
@@ -608,30 +631,22 @@ const CRUD_CONFIG = {
     saveAction: 'save_room',
     loadFn: loadRooms,
     modalTitle: { add: 'Yeni Otaq', edit: 'Otaq Redaktə' },
-    deleteConfirm: 'Bu otaq silinsin?',
+    deleteConfirm: 'Bu otaq silinsin? (Sakinlər "Ev seçilməyib" statusuna keçəcək)',
     tableId: 'roomsTable', tbodyId: 'roomsTbody',
     emptyIcon: 'door-open', emptyText: 'Otaq yoxdur',
     customModal: true,
     renderRow: (r, idx) => {
-      let students = [];
-      for (let i = 1; i <= 6; i++) {
-        const tid = r['telebe_'+i+'_id'];
-        if (tid) {
-          const st = currentStudents.find(x => x.id == tid);
-          const name = st ? st.ad_soyad : 'ID:'+tid;
-          const y = r['yataq_'+i+'_status'] ? r['yataq_'+i+'_status'][0] : '-';
-          const s = r['skaf_'+i+'_status'] ? r['skaf_'+i+'_status'][0] : '-';
-          const o = r['oturacaq_'+i+'_status'] ? r['oturacaq_'+i+'_status'][0] : '-';
-          students.push(`<div style="font-size:13px;padding:3px 0"><strong>${esc(name)}</strong> <span style="color:var(--text-secondary)">(Y:${y}, S:${s}, O:${o})</span></div>`);
-        }
-      }
-      const studentsHtml = students.length ? students.join('') : '<span style="color:var(--text-secondary);font-size:13px">Boş otaq</span>';
+      const cinsCls = r.cins === 'Kişi' ? 'badge-info' : (r.cins === 'Qadın' ? 'badge-purple' : 'badge-gray');
+      const names = (r.slots || []).filter(s => s.student_id).map(s => esc(s.ad_soyad));
+      const studentsHtml = names.length ? names.join(', ') : '<span style="color:var(--text-secondary);font-size:13px">Boş ev</span>';
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
         <td class="p-4" style="font-weight:700;font-size:16px">${esc(r.id)}</td>
+        <td class="p-4"><span class="badge ${cinsCls}">${r.cins ? esc(r.cins) : 'Təyin edilməyib'}</span></td>
+        <td class="p-4" style="font-weight:600">${r.dolu}/${r.capacity}</td>
         <td class="p-4">${studentsHtml}</td>
         <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('room','${r.id}')" title="Redaktə"><i data-lucide="edit-3"></i></button>
-          <button class="btn-icon danger" onclick="deleteItem('room','${r.id}')" title="Sil"><i data-lucide="trash-2"></i></button>
+          <button class="btn-icon" onclick="openEditModal('room',${r.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button class="btn-icon danger" onclick="deleteItem('room',${r.id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -647,9 +662,10 @@ const CRUD_CONFIG = {
     customModal: true,
     renderRow: (a, idx) => {
       let statusClass = a.status==='Təsdiqləndi' ? 'badge-success' : (a.status==='Gözləmədə' ? 'badge-warning' : 'badge-danger');
+      const notlarHtml = a.notlar ? `<div style="font-size:12px;color:var(--ku-dark-green);background:var(--ku-soft-green);padding:4px 8px;border-radius:6px;margin-top:6px"><strong>Qeyd:</strong> ${esc(a.notlar)}</div>` : '';
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
         <td class="p-4"><div style="font-weight:600">${esc(a.ad_soyad)}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td>
-        <td class="p-4"><div style="font-weight:600">${esc(a.basliq)}</div><div style="font-size:12px;color:var(--text-secondary)">${esc(a.muraciet)}</div><span class="badge badge-info" style="margin-top:4px">${esc(a.priority)}</span></td>
+        <td class="p-4"><div style="font-weight:600">${esc(a.basliq)}</div><div style="font-size:12px;color:var(--text-secondary)">${esc(a.muraciet)}</div><span class="badge badge-info" style="margin-top:4px">${esc(a.priority)}</span>${notlarHtml}</td>
         <td class="p-4"><span class="badge ${statusClass}">${esc(a.status)}</span></td>
         <td class="p-4"><div style="display:flex;gap:8px">
           <button class="btn-icon" onclick="openEditModal('application',${a.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
@@ -774,9 +790,7 @@ const CRUD_CONFIG = {
   }
 };
 
-// ═══════════════════════════════════════════════════════════
-// UTILITIES
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ UTILITIES ═══════════════
 function esc(str) {
   if (!str) return '';
   const div = document.createElement('div');
@@ -836,11 +850,7 @@ function applyAllFilters(tableId) {
   });
 }
 
-
-
-// ═══════════════════════════════════════════════════════════
-// API
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ API ═══════════════
 async function apiAction(action, method = 'GET', body = null, query = null) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
@@ -871,9 +881,7 @@ async function apiAction(action, method = 'GET', body = null, query = null) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// UI — Toast, Modal, Login
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ UI ═══════════════
 function refreshIcons(container) {
   if (container && container.querySelectorAll) {
     lucide.createIcons({ nodes: [container] });
@@ -953,9 +961,7 @@ function toggleSidebar() {
   document.getElementById('mainWrapper').classList.toggle('expanded');
 }
 
-// ═══════════════════════════════════════════════════════════
-// GENERIC CRUD
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ GENERIC CRUD ═══════════════
 function buildFormFields(fields, values = {}) {
   return fields.map(f => {
     const val = values[f.id] !== undefined ? values[f.id] : (f.default || '');
@@ -970,17 +976,19 @@ function buildFormFields(fields, values = {}) {
   }).join('');
 }
 
+function studentFormHint() {
+  return `<p style="font-size:12px;color:var(--text-secondary);margin-top:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Ev statusu "Rədd edilib" və ya "Ev seçilməyib" seçilsə, tələbə otaqdan (varsa) çıxarılır. Yerləşdirmə "Otaqlar" bölməsindən aparılır.</p>`;
+}
+
 function openAddModal(type) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
-  if (type === 'room' || type === 'application' || type === 'penalty' || type === 'laundry') {
-    // Custom modal handlers
-    if (type === 'room') { addRoomModal(); return; }
-    if (type === 'application') { addApplicationModal(); return; }
-    if (type === 'penalty') { addPenaltyModal(); return; }
-    if (type === 'laundry') { addLaundryModal(); return; }
-  }
-  const html = buildFormFields(cfg.fields) +
+  if (type === 'room') { addRoomModal(); return; }
+  if (type === 'application') { addApplicationModal(); return; }
+  if (type === 'penalty') { addPenaltyModal(); return; }
+  if (type === 'laundry') { addLaundryModal(); return; }
+  const hint = type === 'student' ? studentFormHint() : '';
+  const html = buildFormFields(cfg.fields) + hint +
     `<button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`;
   openModal(cfg.modalTitle.add, html);
 }
@@ -994,7 +1002,6 @@ async function openEditModal(type, id) {
   if (type === 'penalty') { editPenaltyModal(id); return; }
   if (type === 'laundry') { editLaundryModal(id); return; }
 
-  // Fetch full data for edit
   let values = {};
   if (type === 'student') {
     const res = await apiAction('get_student_full', 'POST', { id });
@@ -1003,6 +1010,8 @@ async function openEditModal(type, id) {
       s_name: d.ad_soyad || '',
       s_email: d.email || '',
       s_sifre: '',
+      s_cins: d.cins || 'Kişi',
+      s_ev: d.ev || 'Ev seçilməyib',
       s_universitet: d.universitet || 'Qarabağ Universiteti',
       s_ixtisas: d.ixtisas || '',
       s_kurs: d.kurs !== null && d.kurs !== undefined ? d.kurs : '',
@@ -1018,7 +1027,8 @@ async function openEditModal(type, id) {
     }
   }
 
-  const html = buildFormFields(cfg.fields, values) +
+  const hint = type === 'student' ? studentFormHint() : '';
+  const html = buildFormFields(cfg.fields, values) + hint +
     `<button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`;
   openModal(cfg.modalTitle.edit, html);
 }
@@ -1050,9 +1060,7 @@ async function deleteItem(type, id) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// PAGE LOADING
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ PAGE LOADING ═══════════════
 function loadPage(page, el) {
   document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
   if (el) el.classList.add('active');
@@ -1065,33 +1073,32 @@ function loadPage(page, el) {
 
   const loaders = {
     dashboard: loadDashboard, students: loadStudents, profiles: loadProfiles,
-    rooms: loadRooms, applications: loadApplications, announcements: loadAnnouncements,
+    rooms: loadRooms, groups: loadGroups, requests: loadRequests,
+    applications: loadApplications, announcements: loadAnnouncements,
     surveys: loadSurveys, penalties: loadPenalties, canteen: loadCanteen, laundry: loadLaundry
   };
   if (loaders[page]) loaders[page]();
 }
 
-// ═══════════════════════════════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ DASHBOARD ═══════════════
 async function loadDashboard() {
   try {
     const data = await apiAction('stats');
     const s = data.stats;
     document.getElementById('dashboardStats').innerHTML = `
       <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="stat-value">${s.students}</div></div>
-      <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Aktiv Otaqlar</div><div class="stat-value">${s.rooms}</div></div>
+      <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Otaqlar</div><div class="stat-value">${s.rooms}</div></div>
       <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="stat-value">${s.apps}</div></div>
-      <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">${s.penalties}</div></div>`;
+      <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">${s.penalties}</div></div>
+      <div class="stat-card delay-500"><div class="stat-icon" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce"><i data-lucide="users-round"></i></div><div class="stat-label">Aktiv Qruplar</div><div class="stat-value">${s.groups}</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-cream),#fde68a);color:#92400e"><i data-lucide="inbox"></i></div><div class="stat-label">Gözləyən Tələblər</div><div class="stat-value">${s.requests}</div></div>`;
     refreshIcons(document.getElementById('dashboardStats'));
   } catch (e) {
     showToast(e.message, 'error');
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// STUDENTS
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ STUDENTS ═══════════════
 async function loadStudents(page = 1) {
   try {
     PAGINATION.students.page = page;
@@ -1107,9 +1114,7 @@ async function loadStudents(page = 1) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// PROFILES
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ PROFILES ═══════════════
 async function loadProfiles(page = 1) {
   try {
     PAGINATION.profiles.page = page;
@@ -1181,9 +1186,7 @@ async function deleteProfile(student_id) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// ROOMS
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ ROOMS (room_slots) ═══════════════
 async function loadRooms(page = 1) {
   try {
     PAGINATION.rooms.page = page;
@@ -1199,25 +1202,58 @@ async function loadRooms(page = 1) {
   }
 }
 
-function genStudentOptions(selectedId) {
-  return currentStudents.map(s => `<option value="${s.id}" ${s.id==selectedId?'selected':''}>${s.id} - ${esc(s.ad_soyad)}</option>`).join('');
+async function ensureStudentsLoaded() {
+  if (currentStudents.length === 0) {
+    try {
+      const data = await apiAction('get_students', 'GET', null, { page: 1, per_page: 100 });
+      currentStudents = data.data || [];
+    } catch (e) { /* səssiz keç */ }
+  }
 }
+
+function roomCinsById(rid) {
+  const n = parseInt(rid);
+  if (n >= 101 && n <= 120) return 'Kişi';
+  if (n >= 121 && n <= 140) return 'Qadın';
+  return '';
+}
+
+function genStudentOptions(selectedId, cins) {
+  const list = cins ? currentStudents.filter(s => s.cins === cins) : currentStudents;
+  return list.map(s => `<option value="${s.id}" ${s.id==selectedId?'selected':''}>${s.id} - ${esc(s.ad_soyad)}</option>`).join('');
+}
+
 function genStatusOptions(selectedStatus) {
   const stats = ['Yaxşı','Az zədəli','Zədəli'];
   return stats.map(s => `<option value="${s}" ${s==selectedStatus?'selected':''}>${s}</option>`).join('');
 }
+
 function buildRoomForm(r, id) {
+  const isEdit = !!id;
+  const autoCins = roomCinsById(isEdit ? id : '');
   let html = '';
-  if (!id) {
-    html += `<div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" placeholder="Məs: 105"></div>`;
+  html += `<div class="form-row">
+    <div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" value="${isEdit ? esc(id) : ''}" ${isEdit ? 'disabled' : ''} placeholder="Məs: 105" oninput="syncRoomCins()"></div>
+    <div class="form-group"><label>Tutum (maks. 6)</label><input type="number" min="1" max="6" class="form-input" id="r_capacity" value="${r ? r.capacity : 6}" oninput="toggleSlotCards()"></div>
+    <div class="form-group"><label>Bina / Cins</label><select class="form-select" id="r_cins" onchange="refreshRoomStudentSelects()" ${autoCins ? 'disabled' : ''}>
+      <option value="">Təyin edilməyib</option>
+      <option value="Kişi" ${(autoCins || (r && r.cins)) === 'Kişi' ? 'selected' : ''}>Kişi (oğlan binası)</option>
+      <option value="Qadın" ${(autoCins || (r && r.cins)) === 'Qadın' ? 'selected' : ''}>Qadın (qız binası)</option>
+    </select></div>
+  </div>`;
+  if (autoCins) {
+    html += `<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Bu otaq nömrəsi ${autoCins === 'Kişi' ? 'oğlan (101-120)' : 'qız (121-140)'} binasına aiddir — cins avtomatik təyin olunub.</p>`;
   }
+
+  const formCins = autoCins || (r ? r.cins : '');
   for (let i = 1; i <= 6; i++) {
-    const tid = r ? r['telebe_'+i+'_id'] : '';
-    const ys = r ? r['yataq_'+i+'_status'] : 'Yaxşı';
-    const ss = r ? r['skaf_'+i+'_status'] : 'Yaxşı';
-    const os = r ? r['oturacaq_'+i+'_status'] : 'Yaxşı';
-    html += `<div class="room-student-card"><h5><i data-lucide="user"></i> ${i}-ci Tələbə</h5>
-      <div class="form-group"><select class="form-select" id="r_t${i}"><option value="">Boş</option>${genStudentOptions(tid)}</select></div>
+    const slot = r && r.slots ? r.slots.find(s => s.slot === i) : null;
+    const tid = slot && slot.student_id ? slot.student_id : '';
+    const ys = slot ? slot.yataq_status : 'Yaxşı';
+    const ss = slot ? slot.skaf_status : 'Yaxşı';
+    const os = slot ? slot.oturacaq_status : 'Yaxşı';
+    html += `<div class="room-student-card" id="slotCard${i}"><h5><i data-lucide="user"></i> ${i}-ci Yer</h5>
+      <div class="form-group"><select class="form-select" id="r_t${i}"><option value="">Boş</option>${genStudentOptions(tid, formCins)}</select></div>
       <div class="form-row">
         <div class="form-group"><label>Yataq</label><select class="form-select" id="r_y${i}">${genStatusOptions(ys)}</select></div>
         <div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s${i}">${genStatusOptions(ss)}</select></div>
@@ -1225,37 +1261,76 @@ function buildRoomForm(r, id) {
       </div>
     </div>`;
   }
-  html += `<button class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${id||0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
+  html += `<button class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${isEdit ? id : 0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
   return html;
 }
-function addRoomModal() {
-  if (currentStudents.length === 0) { showToast('Əvvəl Tələbələr bölməsinə daxil olun!', 'warning'); return; }
-  openModal('Yeni Otaq', buildRoomForm(null, 0));
-}
-function editRoomModal(id) {
-  const r = currentRooms.find(x => x.id == id);
-  openModal('Otaq Redaktə: ' + id, buildRoomForm(r, id));
-}
-async function saveRoom(id) {
-  const payload = { id: id || document.getElementById('r_id').value };
+
+function toggleSlotCards() {
+  const cap = Math.max(1, Math.min(6, parseInt(gv('r_capacity')) || 6));
   for (let i = 1; i <= 6; i++) {
-    payload['t'+i] = document.getElementById('r_t'+i).value;
-    payload['y'+i] = document.getElementById('r_y'+i).value;
-    payload['s'+i] = document.getElementById('r_s'+i).value;
-    payload['o'+i] = document.getElementById('r_o'+i).value;
+    const card = document.getElementById('slotCard' + i);
+    if (card) card.style.display = i <= cap ? '' : 'none';
+  }
+}
+
+function syncRoomCins() {
+  const idInput = document.getElementById('r_id');
+  if (!idInput || idInput.disabled) return;
+  const c = roomCinsById(gv('r_id'));
+  const sel = document.getElementById('r_cins');
+  if (c) { sel.value = c; sel.disabled = true; }
+  else { sel.disabled = false; }
+  refreshRoomStudentSelects();
+}
+
+function refreshRoomStudentSelects() {
+  const cins = gv('r_cins');
+  for (let i = 1; i <= 6; i++) {
+    const sel = document.getElementById('r_t' + i);
+    if (!sel) continue;
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Boş</option>' + genStudentOptions(cur, cins);
+    sel.value = cur;
+  }
+}
+
+async function addRoomModal() {
+  await ensureStudentsLoaded();
+  if (currentStudents.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
+  openModal('Yeni Otaq', buildRoomForm(null, 0));
+  setTimeout(toggleSlotCards, 100);
+}
+
+async function editRoomModal(id) {
+  await ensureStudentsLoaded();
+  const r = currentRooms.find(x => x.id == id);
+  if (!r) { showToast('Otaq tapılmadı', 'error'); return; }
+  openModal('Otaq Redaktə: ' + id, buildRoomForm(r, id));
+  setTimeout(toggleSlotCards, 100);
+}
+
+async function saveRoom(id) {
+  const payload = {
+    id: id || gv('r_id'),
+    capacity: gv('r_capacity') || 6,
+    cins: gv('r_cins')
+  };
+  for (let i = 1; i <= 6; i++) {
+    payload['t'+i] = gv('r_t'+i);
+    payload['y'+i] = gv('r_y'+i);
+    payload['s'+i] = gv('r_s'+i);
+    payload['o'+i] = gv('r_o'+i);
   }
   try {
     await apiAction('save_room', 'POST', payload);
     closeModal(); loadRooms();
-    showToast(id ? 'Otaq yeniləndi' : 'Yeni otaq əlavə edildi', 'success');
+    showToast(id ? 'Otaq yeniləndi' : 'Yeni otaq yaradıldı', 'success');
   } catch (e) {
     showToast(e.message, 'error');
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// APPLICATIONS
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ APPLICATIONS ═══════════════
 async function loadApplications(page = 1) {
   try {
     PAGINATION.applications.page = page;
@@ -1278,6 +1353,7 @@ function addApplicationModal() {
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="app_student">${opts}</select></div>
     <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" placeholder="Başlıq"></div>
     <div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4" placeholder="Müraciət mətni..."></textarea></div>
+    <div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Təsdiq zamanı tələbəyə görünəcək qeyd"></textarea></div>
     <div class="form-row">
       <div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option>Aşağı</option><option selected>Orta</option><option>Yüksək</option></select></div>
       <div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option selected>Gözləmədə</option><option>Təsdiqləndi</option><option>Rədd edildi</option></select></div>
@@ -1287,11 +1363,13 @@ function addApplicationModal() {
 }
 function editApplicationModal(id) {
   const a = currentApps.find(x => x.id == id);
+  if (!a) return;
   const opts = currentStudents.map(s => `<option value="${s.id}" ${s.id==a.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Müraciəti Redaktə Et', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="app_student" disabled>${opts}</select></div>
     <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" value="${esc(a.basliq)}"></div>
     <div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4">${esc(a.muraciet)}</textarea></div>
+    <div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Tələbəyə görünəcək qeyd">${esc(a.notlar||'')}</textarea></div>
     <div class="form-row">
       <div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option ${a.priority=='Aşağı'?'selected':''}>Aşağı</option><option ${a.priority=='Orta'?'selected':''}>Orta</option><option ${a.priority=='Yüksək'?'selected':''}>Yüksək</option></select></div>
       <div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option ${a.status=='Gözləmədə'?'selected':''}>Gözləmədə</option><option ${a.status=='Təsdiqləndi'?'selected':''}>Təsdiqləndi</option><option ${a.status=='Rədd edildi'?'selected':''}>Rədd edildi</option></select></div>
@@ -1303,7 +1381,8 @@ async function saveApplication(id) {
   try {
     await apiAction('save_application', 'POST', {
       id, student_id: gv('app_student'), basliq: gv('app_basliq'),
-      muraciet: gv('app_muraciet'), priority: gv('app_priority'), status: gv('app_status')
+      muraciet: gv('app_muraciet'), priority: gv('app_priority'),
+      status: gv('app_status'), notlar: gv('app_notlar')
     });
     closeModal(); loadApplications();
     showToast(id ? 'Müraciət yeniləndi' : 'Yeni müraciət əlavə edildi', 'success');
@@ -1320,9 +1399,107 @@ async function updateAppStatus(id, status) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// ANNOUNCEMENTS & SURVEYS (generic loaders)
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ GROUPS (YENİ) ═══════════════
+async function loadGroups() {
+  try {
+    const data = await apiAction('get_groups');
+    const groups = data.data || [];
+    let html = '';
+    if (!groups.length) {
+      html = emptyState('users-round', 'Aktiv qrup yoxdur');
+    } else {
+      groups.forEach((g, idx) => {
+        const chips = g.members.map(m =>
+          `<span class="badge badge-gray" style="margin:2px 4px 2px 0">${esc(m.ad_soyad)}</span>`).join('');
+        html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+          <td class="p-4" style="font-weight:700">Qrup #${g.id}</td>
+          <td class="p-4"><span class="badge badge-info">${g.members.length} üzv</span></td>
+          <td class="p-4">${chips}</td>
+          <td class="p-4"><button class="btn-icon danger" onclick="deleteGroup(${g.id})" title="Qrupu ləğv et"><i data-lucide="trash-2"></i></button></td>
+        </tr>`;
+      });
+    }
+    document.getElementById('groupsTbody').innerHTML = html;
+    refreshIcons(document.getElementById('groupsTbody'));
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function deleteGroup(gid) {
+  if (!confirm(`Qrup #${gid} ləğv edilsin? Üzvlər qrupdan çıxarılacaq.`)) return;
+  try {
+    await apiAction('delete_group', 'POST', { id: gid });
+    loadGroups(); showToast('Qrup ləğv edildi', 'success');
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+// ═══════════════ REQUESTS (YENİ) ═══════════════
+const REQ_TYPE_MAP = { invite: ['Dəvət','badge-info'], kick: ['Qovma','badge-danger'], leave: ['Çıxma','badge-warning'] };
+
+async function loadRequests() {
+  try {
+    const data = await apiAction('get_requests');
+    const reqs = data.data || [];
+    let html = '';
+    if (!reqs.length) {
+      html = emptyState('inbox', 'Tələb yoxdur');
+    } else {
+      reqs.forEach((rq, idx) => {
+        const [tName, tCls] = REQ_TYPE_MAP[rq.type] || ['?','badge-gray'];
+        const sCls = rq.status === 'Gözləmədə' ? 'badge-warning' : (rq.status === 'Təsdiqləndi' ? 'badge-success' : 'badge-danger');
+        let actions = '';
+        if (rq.status === 'Gözləmədə') {
+          actions += `<button class="btn-icon" style="color:var(--success)" onclick="resolveRequest(${rq.id}, true)" title="Təsdiq et"><i data-lucide="check"></i></button>`;
+          actions += `<button class="btn-icon danger" onclick="resolveRequest(${rq.id}, false)" title="Rədd et"><i data-lucide="x"></i></button>`;
+        }
+        actions += `<button class="btn-icon danger" onclick="deleteRequest(${rq.id})" title="Sil"><i data-lucide="trash-2"></i></button>`;
+        html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+          <td class="p-4">${rq.id}</td>
+          <td class="p-4"><span class="badge ${tCls}">${tName}</span></td>
+          <td class="p-4" style="font-weight:600">Ev ${rq.room_id}</td>
+          <td class="p-4">${esc(rq.requester_name)}</td>
+          <td class="p-4" style="font-weight:600">${esc(rq.target_name)}</td>
+          <td class="p-4">${rq.vote_count} səs</td>
+          <td class="p-4"><span class="badge ${sCls}">${esc(rq.status)}</span></td>
+          <td class="p-4" style="font-size:12px;color:var(--text-secondary)">${esc(rq.tarix||'')}</td>
+          <td class="p-4"><div style="display:flex;gap:8px">${actions}</div></td>
+        </tr>`;
+      });
+    }
+    document.getElementById('reqTbody').innerHTML = html;
+    refreshIcons(document.getElementById('reqTbody'));
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function resolveRequest(id, approve) {
+  const msg = approve
+    ? 'Bu tələb təsdiq edilsin? (Qovma/çıxma → şəxs evdən çıxarılacaq, dəvət → evə yerləşdiriləcək)'
+    : 'Bu tələb rədd edilsin?';
+  if (!confirm(msg)) return;
+  try {
+    await apiAction('resolve_request', 'POST', { id, approve });
+    loadRequests(); showToast(approve ? 'Tələb təsdiq edildi' : 'Tələb rədd edildi', 'success');
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function deleteRequest(id) {
+  if (!confirm('Bu tələb silinsin?')) return;
+  try {
+    await apiAction('delete_request', 'POST', { id });
+    loadRequests(); showToast('Tələb silindi', 'success');
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+// ═══════════════ ANNOUNCEMENTS & SURVEYS ═══════════════
 async function loadAnnouncements(page = 1) {
   try {
     PAGINATION.announcements.page = page;
@@ -1350,9 +1527,7 @@ async function loadSurveys(page = 1) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// PENALTIES
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ PENALTIES ═══════════════
 async function loadPenalties(page = 1) {
   try {
     PAGINATION.penalties.page = page;
@@ -1410,9 +1585,7 @@ async function payPenalty(id) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// CANTEEN
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ CANTEEN ═══════════════
 async function loadCanteen() {
   try {
     const data = await apiAction('get_canteen');
@@ -1448,9 +1621,7 @@ function updateCanteenDelayed(id, val) {
   canteenTimer = setTimeout(() => updateCanteen(id, val), 800);
 }
 
-// ═══════════════════════════════════════════════════════════
-// LAUNDRY
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ LAUNDRY ═══════════════
 async function loadLaundry(page = 1) {
   try {
     PAGINATION.laundry.page = page;
@@ -1513,9 +1684,7 @@ async function saveLaundry(student_id) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// GENERIC TABLE RENDERER
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ GENERIC TABLE RENDERER ═══════════════
 function emptyState(icon, text) {
   return `<tr><td colspan="99"><div class="empty-state"><i data-lucide="${icon}"></i><p>${text}</p></div></td></tr>`;
 }
@@ -1530,7 +1699,6 @@ function renderTable(type, data) {
     tbody.innerHTML = data.map((item, idx) => cfg.renderRow(item, idx)).join('');
   }
   refreshIcons(document.getElementById(cfg.tbodyId));
-  // Column filter-ləri cari səhifə üzrə tətbiq et
   setTimeout(() => applyAllFilters(cfg.tableId), 50);
 }
 
@@ -1544,10 +1712,8 @@ function renderPagination(key, containerId, loadFn) {
   const totalPages = Math.ceil(pg.total / pg.per_page);
   let html = '';
 
-  // Prev
   html += `<button class="pagination-btn" ${pg.page<=1?'disabled':''} onclick="${loadFn}(${pg.page-1})"><i data-lucide="chevron-left"></i></button>`;
 
-  // Pages
   const maxButtons = 5;
   let start = Math.max(1, pg.page - Math.floor(maxButtons/2));
   let end = Math.min(totalPages, start + maxButtons - 1);
@@ -1559,10 +1725,8 @@ function renderPagination(key, containerId, loadFn) {
   }
   if (end < totalPages) html += `${end<totalPages-1?'<span class="pagination-info">...</span>':''}<button class="pagination-btn" onclick="${loadFn}(${totalPages})">${totalPages}</button>`;
 
-  // Next
   html += `<button class="pagination-btn" ${pg.page>=totalPages?'disabled':''} onclick="${loadFn}(${pg.page+1})"><i data-lucide="chevron-right"></i></button>`;
 
-  // Info
   const from = (pg.page - 1) * pg.per_page + 1;
   const to = Math.min(pg.page * pg.per_page, pg.total);
   html += `<span class="pagination-info">${from}–${to} / ${pg.total}</span>`;
@@ -1571,9 +1735,7 @@ function renderPagination(key, containerId, loadFn) {
   refreshIcons(container);
 }
 
-// ═══════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════
+// ═══════════════ INIT ═══════════════
 fetch('/api/admin/stats', { method: 'GET', credentials: 'same-origin' })
   .then(r => {
     if (r.status === 403) { showLogin(); }
