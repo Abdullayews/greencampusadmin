@@ -1,103 +1,69 @@
-# 🛠️ GreenCampus Admin
+🛠️ GreenCampus Admin
 
-> [GreenCampus](https://github.com/Abdullayews/greencampus) tələbə portalının administrativ paneli — bir yerdən tələbələr, otaqlar, ərizələr, elanlar, cərimələr, yeməkxana və camaşırxananı idarə et.
+    GreenCampus tələbə portalının administrativ paneli — tələbələr, otaqlar, qruplar, tələblər, ərizələr, elanlar, cərimələr, yeməkxana və camaşırxananı bir yerdən idarə et.
 
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white)
-![MySQL](https://img.shields.io/badge/Database-TiDB%20Cloud-4479A1?logo=mysql&logoColor=white)
-![Deploy](https://img.shields.io/badge/Hosted%20on-Render-46E3B7?logo=render&logoColor=white)
+PythonFlaskMySQLDeploy
+✨ Nə edir?
+	
+🔐 Admin auth	Sessiya əsaslı giriş, bütün API-lər admin_required ilə qorunur
+📊 Dashboard	Tələbə / otaq / gözləyən müraciət / cərimə / qrup / tələb sayı
+🎓 Tələbələr	Yarat, yenilə, sil (kaskad) — cins + ev statusu idarəsi, otaq göstərişi
+🚪 Otaqlar	room_slots əsaslı: 6 yer × (tələbə + yataq/şkaf/oturacaq), bina cinsi avtomatik (101–120 oğlan, 121–140 qız)
+👥 Qruplar	Baxış + ləğv (boş qruplar avtomatik silinir)
+📨 Tələblər	Dəvət / qovma / çıxma tələblərinin baxışı + admin müdaxiləsi (məcburi təsdiq/rədd)
+📝 Ərizələr	Status + notlar (təsdiqdə avtomatik default qeyd)
+📢 Elanlar & anketlər	Yarat, yenilə, sil
+💸 Cərimələr	Kəs, ödə, sil
+🍽️ Yeməkxana	Həftəlik menyu (canlı redaktə)
+🧺 Camaşırxana	Maşın statusları
+👤 Profillər	Xarakteristikaların idarəsi
+🛠️ Stack
 
----
+Backend: Python · FlaskDatabase: MySQL-uyğun (TiDB Cloud, SSL, PyMySQL) — greencampus ilə paylaşılan sxemServer: Gunicorn (Procfile)Deploy: Render + GitHub
+📁 Struktur
 
-## ✨ Nə edir?
-
-| | |
-|---|---|
-| 🔐 **Admin auth** | Sessiya əsaslı giriş, bütün API-lər `admin_required` ilə qorunur |
-| 📊 **Dashboard** | Tələbə / gözləyən ərizə / ödənilməmiş cərimə / otaq sayı |
-| 🎓 **Tələbələr** | Yarat, yenilə, sil |
-| 🏘️ **Otaqlar** | Çarpayı/şkaf/oturacaq statusunu idarə et |
-| 📝 **Ərizələr** | Baxış + status yeniləmə |
-| 📢 **Elanlar & sorğular** | Yarat, yenilə, sil |
-| 💸 **Cərimələr** | Kəs, ödənilmiş kimi işarələ |
-| 🍽️ **Yeməkxana** | Günlük menyunu yenilə |
-| 🧺 **Camaşırxana** | Maşın statuslarını izlə |
-
-## 🛠️ Stack
-
-**Backend:** Python · Flask
-**Database:** MySQL-uyğun (TiDB Cloud üzərində, SSL bağlantı, `PyMySQL`, `greencampus` ilə paylaşılan sxem)
-**Server:** Gunicorn (`Procfile`)
-**Deploy:** Render + GitHub
-
-## 📁 Struktur
-
-```
 greencampusadmin/
-├── app.py              # Flask app, route-lar, bütün /api/admin/<action> handler-ləri
+├── app.py              # Flask app + bütün /api/admin/* handler-ləri
 ├── config.py            # DB bağlantısı (PyMySQL, SSL)
-├── templates/            # index.html (tələbə görünüşü) & admin_panel.html
+├── templates/index.html # Admin panel (tək səhifə)
 ├── requirements.txt
 └── Procfile
-```
+text
+ 
+  
+ 
+ 
 
 ## 🔑 Environment
 
 | Dəyişən | Təsvir |
 |---|---|
-| `DB_HOST` | MySQL host |
-| `DB_PORT` | Port (default `4000`, TiDB Cloud) |
-| `DB_NAME` | Baza adı |
-| `DB_USER` | İstifadəçi |
-| `DB_PASSWORD` | Şifrə |
+| `DB_HOST` / `DB_PORT` / `DB_NAME` / `DB_USER` / `DB_PASSWORD` | DB bağlantısı |
+| `ADMIN_USER` / `ADMIN_PASS` | Admin girişi (default: `admin` / `123`) |
+| `SECRET_KEY` | Session açarı (fallback: `secret_key.txt`) |
 
-Bağlantı default olaraq SSL üzərindən qurulur.
+## 🗄️ Sxem (tələbə saytı ilə ortaq)
 
-## 🗄️ Verilənlər bazası sxemi
-
-Faktiki MySQL dump-a (`students`, MyISAM, `utf8mb4_unicode_ci`) əsaslanır:
-
-- **`students`** — `id`, `ad_soyad`, `email` (unique), `sifre`, `universitet`, `ixtisas`, `kurs`, `ev_deyisme_isteyi`, `api_key`
-- **`students_profiles`** — `student_id`, `yuxu_rejimi`, `temizlik`, `sosial_munasibet`, `hayat_terzi` (otaq yoldaşı uyğunlaşdırması üçün)
-- **`rooms`** — `id` + `telebe_N_id`, `yataq_N_status`, `skaf_N_status`, `oturacaq_N_status` (`N` = 1–6, cədvəl 6 tələbəyə qədər dəstəkləyir)
-- **`applications`** — `id`, `student_id`, `basliq`, `muraciet`, `priority`, `status` (default `Gözləmədə`), `created_at`
-- **`contents`** — `id`, `type` (`announcement`/`survey`), `title`, `description`, `priority`, `status`, `created_at`
-- **`penalties`** — `id`, `student_id`, `amount`, `reason`, `status` (`Ödənilməmiş`/`Ödənilib`), `created_at`
-- **`canteen_menu`** — `id`, `location`, `day_of_week`, `meal_name`
-- **`laundry`** — `student_id`, `machine_1_status`, `machine_2_status`, `machine_3_status`
+`students` (cins, ev, group_id) · `rooms` (capacity, cins) · `room_slots` · `student_groups` · `home_requests` · `home_request_votes` · `applications` (notlar) · `students_profiles` · `contents` · `penalties` · `canteen_menu` · `laundry`
 
 ## 🌐 API marşrutları
 
 | Method | Route | |
 |---|---|---|
-| GET | `/` | Tələbə görünüşü |
-| GET | `/admin` | Admin panel görünüşü |
-| POST | `/login` | Admin girişi |
-| GET | `/logout` | Admin çıxışı |
-| GET/POST | `/api/admin/stats` | Dashboard rəqəmləri |
-| GET/POST | `/api/admin/get_students` | Tələbə siyahısı |
-| GET/POST | `/api/admin/save_student` | Tələbə yarat/yenilə |
-| GET/POST | `/api/admin/delete_student` | Tələbə sil |
-| GET/POST | `/api/admin/get_rooms` | Otaq siyahısı |
-| GET/POST | `/api/admin/save_room` | Otaq yarat/yenilə |
-| GET/POST | `/api/admin/delete_room` | Otaq sil |
-| GET/POST | `/api/admin/get_applications` | Ərizə siyahısı |
-| GET/POST | `/api/admin/update_app_status` | Ərizə statusunu yenilə |
-| GET/POST | `/api/admin/get_announcements` | Elan siyahısı |
-| GET/POST | `/api/admin/save_announcement` | Elan yarat/yenilə |
-| GET/POST | `/api/admin/delete_announcement` | Elan sil |
-| GET/POST | `/api/admin/get_surveys` | Sorğu siyahısı |
-| GET/POST | `/api/admin/save_survey` | Sorğu yarat/yenilə |
-| GET/POST | `/api/admin/delete_survey` | Sorğu sil |
-| GET/POST | `/api/admin/get_penalties` | Cərimə siyahısı |
-| GET/POST | `/api/admin/save_penalty` | Cərimə yarat/yenilə |
-| GET/POST | `/api/admin/pay_penalty` | Cəriməni ödənilmiş et |
-| GET/POST | `/api/admin/get_canteen` | Yeməkxana menyusu |
-| GET/POST | `/api/admin/save_canteen` | Menyunu yenilə |
-| GET/POST | `/api/admin/get_laundry` | Camaşırxana statusu |
-| GET/POST | `/api/admin/save_laundry` | Camaşırxana statusunu yenilə |
-
-Bütün `/api/admin/*` marşrutları aktiv admin sessiyası tələb edir; girişsiz sorğulara `403` və `{"success": false, "message": "İcazə yoxdur!"}` qaytarılır.
+| GET | `/` , `/admin` | Admin panel |
+| POST | `/login` / GET `/logout` | Auth |
+| GET/POST | `/api/admin/stats` | Dashboard (6 göstərici) |
+| GET/POST | `/api/admin/get_students` · `save_student` · `delete_student` · `get_student_full` | Tələbələr |
+| GET/POST | `/api/admin/get_rooms` · `save_room` · `delete_room` | Otaqlar (room_slots) |
+| GET/POST | `/api/admin/get_groups` · `delete_group` | Qruplar |
+| GET/POST | `/api/admin/get_requests` · `resolve_request` · `delete_request` | Tələblər |
+| GET/POST | `/api/admin/get_applications` · `save_application` · `update_app_status` · `delete_application` | Müraciətlər |
+| GET/POST | `/api/admin/get_announcements` · `save_announcement` · `delete_announcement` | Elanlar |
+| GET/POST | `/api/admin/get_surveys` · `save_survey` · `delete_survey` | Anketlər |
+| GET/POST | `/api/admin/get_penalties` · `save_penalty` · `pay_penalty` · `delete_penalty` | Cərimələr |
+| GET/POST | `/api/admin/get_canteen` · `save_canteen` | Yeməkxana |
+| GET/POST | `/api/admin/get_laundry` · `save_laundry` · `delete_laundry` | Camaşırxana |
+| GET/POST | `/api/admin/get_profiles` · `save_profile` · `delete_profile` | Profillər |
 
 ## 🔗 Bağlı repo
 
