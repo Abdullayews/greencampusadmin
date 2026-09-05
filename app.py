@@ -265,7 +265,7 @@ def admin_stats(cur):
           (SELECT COUNT(*) FROM rooms) AS rooms,
           (SELECT COUNT(*) FROM applications WHERE status='Gözləmədə') AS apps,
           (SELECT COUNT(*) FROM penalties WHERE status='Ödənilməmiş') AS penalties,
-          (SELECT COUNT(DISTINCT group_id) FROM students WHERE group_id IS NOT NULL) AS groups,
+          (SELECT COUNT(DISTINCT group_id) FROM students WHERE group_id IS NOT NULL) AS `groups`,
           (SELECT COUNT(*) FROM home_requests WHERE status='Gözləmədə') AS requests
     """)
     stats = dict(cur.fetchone() or {})
