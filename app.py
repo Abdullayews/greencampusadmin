@@ -289,7 +289,7 @@ def get_students(cur):
 @admin_required
 @with_db
 def get_students_light(cur):
-    """Modal seçimləri üçün yüngül siyahı (paginasiyasız)."""
+    """Modal seçimləri üçün yüngül siyahı."""
     cur.execute("SELECT id, ad_soyad, cins FROM students ORDER BY ad_soyad ASC")
     return ok(data=cur.fetchall())
 
@@ -377,7 +377,9 @@ def save_student(cur):
     return ok()
 
 
+# Silmə: həm tək, həm cəm URL (404-ün qarşısını alır)
 @app.route('/api/admin/delete_student', methods=['POST'])
+@app.route('/api/admin/delete_students', methods=['POST'])
 @admin_required
 @with_db
 def delete_student(cur):
@@ -570,7 +572,9 @@ def save_room(cur):
     return ok()
 
 
+# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_room', methods=['POST'])
+@app.route('/api/admin/delete_rooms', methods=['POST'])
 @admin_required
 @with_db
 def delete_room(cur):
@@ -666,7 +670,9 @@ def save_application(cur):
     return ok()
 
 
+# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_application', methods=['POST'])
+@app.route('/api/admin/delete_applications', methods=['POST'])
 @admin_required
 @with_db
 def delete_application(cur):
@@ -764,7 +770,9 @@ def save_announcement(cur):
     return _save_content(cur, 'announcement')
 
 
+# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_announcement', methods=['POST'])
+@app.route('/api/admin/delete_announcements', methods=['POST'])
 @admin_required
 @with_db
 def delete_announcement(cur):
@@ -790,7 +798,9 @@ def save_survey(cur):
     return _save_content(cur, 'survey')
 
 
+# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_survey', methods=['POST'])
+@app.route('/api/admin/delete_surveys', methods=['POST'])
 @admin_required
 @with_db
 def delete_survey(cur):
@@ -880,7 +890,9 @@ def pay_penalty(cur):
     return ok()
 
 
+# Silmə: həm tək, həm cəm URL — 404 DÜZƏLDİLDİ
 @app.route('/api/admin/delete_penalty', methods=['POST'])
+@app.route('/api/admin/delete_penalties', methods=['POST'])
 @admin_required
 @with_db
 def delete_penalty(cur):
@@ -974,7 +986,9 @@ def save_laundry(cur):
     return ok()
 
 
+# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_laundry', methods=['POST'])
+@app.route('/api/admin/delete_laundries', methods=['POST'])
 @admin_required
 @with_db
 def delete_laundry(cur):
@@ -1040,7 +1054,9 @@ def save_profile(cur):
     return ok()
 
 
+# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_profile', methods=['POST'])
+@app.route('/api/admin/delete_profiles', methods=['POST'])
 @admin_required
 @with_db
 def delete_profile(cur):
@@ -1087,6 +1103,7 @@ def get_groups(cur):
 
 
 @app.route('/api/admin/delete_group', methods=['POST'])
+@app.route('/api/admin/delete_groups', methods=['POST'])
 @admin_required
 @with_db
 def delete_group(cur):
@@ -1194,6 +1211,7 @@ def resolve_request(cur):
 
 
 @app.route('/api/admin/delete_request', methods=['POST'])
+@app.route('/api/admin/delete_requests', methods=['POST'])
 @admin_required
 @with_db
 def delete_request(cur):
@@ -1205,7 +1223,7 @@ def delete_request(cur):
 
 
 # ---------------------------------------------------------------------------
-# Logs (YENİ — son 1 ay)
+# Logs (son 1 ay)
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_logs', methods=['GET'])
