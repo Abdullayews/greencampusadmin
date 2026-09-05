@@ -91,12 +91,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .top-bar h1{font-size:28px;font-weight:700;color:var(--text-primary);opacity:0;animation:fadeInUp 0.4s ease forwards}
 .top-bar-desc{font-size:14px;color:var(--text-secondary);font-weight:400;margin-top:2px}
 .top-bar-actions{display:flex;align-items:center;gap:16px}
-.live-dot{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--ku-green);background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);padding:6px 12px;border-radius:var(--radius-badge)}
-.live-dot::before{content:'';width:8px;height:8px;background:var(--ku-green);border-radius:50%;animation:pulse 2s infinite}
-.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(239,68,68,0.25)}
-.btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35)}
-.btn-danger i{width:18px;height:18px}
-
 .content-layout{padding:32px;flex:1}
 .page-content{display:none;width:100%;opacity:0;transform:translateY(16px);transition:opacity 0.3s ease,transform 0.3s ease}
 .page-content.active-page{display:block;opacity:1;transform:translateY(0);animation:fadeInUp 0.4s ease}
@@ -111,18 +105,17 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .stat-icon i{width:24px;height:24px}
 .stat-label{font-size:14px;color:var(--text-secondary);margin-bottom:8px;font-weight:500}
 .stat-value{font-size:32px;font-weight:700;color:var(--text-primary);line-height:1}
-.stat-updated{font-size:11px;color:var(--text-secondary);margin-top:8px;font-weight:400}
 
 .widget-card{background:var(--surface);border-radius:var(--radius-card);border:1px solid var(--border);padding:28px;box-shadow:var(--shadow-xs);transition:all var(--transition-base);position:relative;overflow:hidden}
 .widget-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-2px)}
 .widget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .widget-header h3{font-size:18px;font-weight:600}
-.section-title{font-size:24px;margin-bottom:24px;font-weight:700;position:relative;display:inline-block}
-.section-title::after{content:'';position:absolute;bottom:-6px;left:0;width:40px;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));border-radius:2px}
-
 .btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(68,118,108,0.25)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.35)}
 .btn-primary i{width:18px;height:18px}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(239,68,68,0.25)}
+.btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35)}
+.btn-danger i{width:18px;height:18px}
 .btn-secondary{background:var(--bg);color:var(--text-primary);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
 .btn-secondary:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px)}
 .btn-secondary i{width:18px;height:18px}
@@ -168,7 +161,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .modal-header .close-btn:hover{background:rgba(255,255,255,0.2);transform:rotate(90deg)}
 .modal-header .close-btn i{width:20px;height:20px}
 .modal-body{padding:28px;overflow-y:auto;flex:1}
-.modal-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px;flex-shrink:0;background:var(--bg)}
 
 .canteen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
 .canteen-location{border:1px solid var(--border);border-radius:var(--radius-card);padding:24px;transition:all var(--transition-base);background:var(--surface)}
@@ -208,9 +200,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
 
-*:focus-visible{outline:2px solid var(--ku-green);outline-offset:2px;border-radius:4px}
-button:focus-visible,a:focus-visible{outline-offset:3px}
-
 @media (max-width:1023px){
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .form-row{flex-direction:column;gap:0}
@@ -226,10 +215,6 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   .content-layout{padding:20px}
   .modal-card{max-height:95vh;max-width:95vw}
   .canteen-grid{grid-template-columns:1fr}
-  .live-dot{display:none}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
 }
 
 /* Column Filters */
@@ -238,36 +223,33 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
 .col-filter{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-family:'Poppins';font-size:12px;background:var(--bg);color:var(--text-primary);outline:none;transition:all var(--transition-fast);margin-top:2px}
 .col-filter:focus{border-color:var(--ku-green);box-shadow:0 0 0 3px rgba(68,118,108,0.08);background:var(--surface)}
 .col-filter::placeholder{color:#94a3b8;font-size:11px}
-select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;appearance:none}
+select.col-filter{cursor:pointer;padding-right:22px;appearance:none}
 
 /* Pagination */
 .pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap}
 .pagination-btn{min-width:36px;height:36px;padding:0 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:13px;font-weight:600;color:var(--text-primary);cursor:pointer;transition:all var(--transition-fast);display:inline-flex;align-items:center;justify-content:center}
 .pagination-btn:hover{background:var(--ku-soft-green);border-color:var(--ku-green);color:var(--ku-dark-green)}
-.pagination-btn.active{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border-color:var(--ku-green);box-shadow:0 2px 8px rgba(68,118,108,0.25)}
-.pagination-btn:disabled{opacity:0.4;cursor:not-allowed;background:var(--bg);border-color:var(--border);color:var(--text-secondary)}
+.pagination-btn.active{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border-color:var(--ku-green)}
+.pagination-btn:disabled{opacity:0.4;cursor:not-allowed}
 .pagination-info{font-size:13px;color:var(--text-secondary);font-weight:500;margin:0 8px}
 
-/* XUSUSI DIALOG SISTEMI */
+/* Dialog */
 .dlg-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
 .dlg-icon i{width:28px;height:28px}
 .dlg-icon.danger{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
 .dlg-icon.success{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
 .dlg-icon.warning{background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)}
 .dlg-icon.info{background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e}
-.dlg-icon.kick{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
-.dlg-icon.invite{background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e}
-.dlg-icon.room{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
 .dlg-icon.group{background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce}
-.dlg-icon.pay{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
 .dlg-icon.logout{background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)}
+.dlg-icon.pay{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
 .dlg-text{font-size:14px;color:var(--text-secondary);line-height:1.65;text-align:center}
 .dlg-text b,.dlg-text strong{color:var(--text-primary)}
 .dlg-highlight{display:block;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:12px;font-weight:600;color:var(--text-primary);text-align:center}
 .dlg-actions{display:flex;gap:12px;margin-top:24px}
 .dlg-actions .btn-primary,.dlg-actions .btn-danger,.dlg-actions .btn-secondary{flex:1;justify-content:center}
 
-/* TELEBE AXTARIS PICKER (typeahead) */
+/* Student Picker */
 .sp-picker{position:relative}
 .sp-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary);font-weight:400;transition:all var(--transition-fast)}
 .sp-input:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
@@ -287,7 +269,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- LOGIN: server-side sessiya varsa bir an beler gorunmur -->
+<!-- LOGIN -->
 <div class="login-overlay {% if not is_logged_in %}active{% endif %}" id="loginOverlay">
   <div class="login-card">
     <div class="login-logo">
@@ -333,205 +315,221 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   <header class="top-bar">
     <div><h1 id="pageTitle">Dashboard</h1><div class="top-bar-desc" id="pageDesc">Ümumi statistika</div></div>
     <div class="top-bar-actions">
-      <span class="live-dot" id="liveDot" title="Hər 30 saniyədə avtomatik yenilənir">Canlı</span>
       <button type="button" class="btn-danger" onclick="logout()"><i data-lucide="log-out"></i> Çıxış</button>
     </div>
   </header>
 
   <main class="content-layout">
+
+    <!-- DASHBOARD -->
     <section id="page-dashboard" class="page-content active-page">
       <div class="stats-grid" id="dashboardStats">
-        <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
+        <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-raw-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Otaqlar</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
         <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
       </div>
     </section>
 
+    <!-- LOGS -->
     <section id="page-logs" class="page-content">
       <div class="widget-card">
         <div class="widget-header">
           <h3>Əməliyyat Tarixçəsi — son 1 ay</h3>
-          <button type="button" class="btn-secondary" onclick="clearOldLogs()"><i data-lucide="trash-2"></i> Köhnə Logları Təmizlə</button>
-          <a class="btn-primary" style="text-decoration:none" href="/api/admin/export/logs" download><i data-lucide="download"></i> CSV Yüklə</a>
+          <div style="display:flex;gap:12px;">
+            <button type="button" class="btn-secondary" onclick="exportCSV('logs')"><i data-lucide="download"></i> CSV</button>
+            <button type="button" class="btn-danger" onclick="clearOldLogs()"><i data-lucide="trash-2"></i> Köhnə Logları Təmizlə</button>
+          </div>
         </div>
         <div class="table-wrap"><table class="data-table" id="logsTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tarix</span><input type="text" class="col-filter" data-col="tarix" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
-      <th><div class="th-wrap"><span>Admin</span><input type="text" class="col-filter" data-col="admin" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
-      <th><div class="th-wrap"><span>Mövzu</span><input type="text" class="col-filter" data-col="action" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
-      <th><div class="th-wrap"><span>Obyekt</span><input type="text" class="col-filter" data-col="entity" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
-      <th><div class="th-wrap"><span>ID</span><input type="text" class="col-filter" data-col="entity_id" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
-      <th><div class="th-wrap"><span>Təfərrüat</span><input type="text" class="col-filter" data-col="details" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
-    </tr></thead><tbody id="logsTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Tarix</span><input type="text" class="col-filter" data-col="tarix" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+          <th><div class="th-wrap"><span>Admin</span><input type="text" class="col-filter" data-col="admin" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+          <th><div class="th-wrap"><span>Mövzu</span><input type="text" class="col-filter" data-col="action" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+          <th><div class="th-wrap"><span>Obyekt</span><input type="text" class="col-filter" data-col="entity" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+          <th><div class="th-wrap"><span>ID</span><input type="text" class="col-filter" data-col="entity_id" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+          <th><div class="th-wrap"><span>Təfərrüat</span><input type="text" class="col-filter" data-col="details" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
+        </tr></thead><tbody id="logsTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="logsPagination"></div>
       </div>
     </section>
 
+    <!-- STUDENTS -->
     <section id="page-students" class="page-content">
       <div class="widget-card">
         <div class="widget-header">
           <h3>Tələbə Siyahısı</h3>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <a class="btn-secondary" style="text-decoration:none" href="/api/admin/export/students" download><i data-lucide="download"></i> CSV Yüklə</a>
+          <div style="display:flex;gap:12px;">
+            <button type="button" class="btn-secondary" onclick="exportCSV('students')"><i data-lucide="download"></i> CSV</button>
             <button type="button" class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button>
           </div>
         </div>
         <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr>
-      <th><div class="th-wrap"><span>ID</span></div></th>
-      <th><div class="th-wrap"><span>Ad Soyad</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
-      <th><div class="th-wrap"><span>Email</span><input type="text" class="col-filter" data-col="email" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
-      <th><div class="th-wrap"><span>İxtisas</span><input type="text" class="col-filter" data-col="ixtisas" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
-      <th><div class="th-wrap"><span>Kurs</span><input type="text" class="col-filter" data-col="kurs" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
-      <th><div class="th-wrap"><span>Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="Kişi">Kişi</option><option value="Qadın">Qadın</option></select></div></th>
-      <th><div class="th-wrap"><span>Ev Statusu</span><select class="col-filter" data-col="ev" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="Ev seçilib">Ev seçilib</option><option value="Ev seçilməyib">Ev seçilməyib</option><option value="Rədd edilib">Rədd edilib</option></select></div></th>
-      <th><div class="th-wrap"><span>Otaq</span><input type="text" class="col-filter" data-col="otaq" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
-      <th><div class="th-wrap"><span>API Açarı</span><select class="col-filter" data-col="api_key" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="studentsTbody"><tr><td colspan="10"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>ID</span></div></th>
+          <th><div class="th-wrap"><span>Ad Soyad</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+          <th><div class="th-wrap"><span>Email</span><input type="text" class="col-filter" data-col="email" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+          <th><div class="th-wrap"><span>İxtisas</span><input type="text" class="col-filter" data-col="ixtisas" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+          <th><div class="th-wrap"><span>Kurs</span><input type="text" class="col-filter" data-col="kurs" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+          <th><div class="th-wrap"><span>Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="Kişi">Kişi</option><option value="Qadın">Qadın</option></select></div></th>
+          <th><div class="th-wrap"><span>Ev Statusu</span><select class="col-filter" data-col="ev" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="Ev seçilib">Ev seçilib</option><option value="Ev seçilməyib">Ev seçilməyib</option><option value="Rədd edilib">Rədd edilib</option></select></div></th>
+          <th><div class="th-wrap"><span>Otaq</span><input type="text" class="col-filter" data-col="otaq" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
+          <th><div class="th-wrap"><span>API Açarı</span><select class="col-filter" data-col="api_key" onchange="serverFilter('students')"><option value="">Hamısı</option><option value="var">Var</option><option value="yoxdur">Yoxdur</option></select></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="studentsTbody"><tr><td colspan="10"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="studentsPagination"></div>
       </div>
     </section>
 
+    <!-- PROFILES -->
     <section id="page-profiles" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Profilləri</h3></div>
         <div class="table-wrap"><table class="data-table" id="profilesTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
-      <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" data-col="yuxu_rejimi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
-      <th><div class="th-wrap"><span>Təmizlik</span><input type="text" class="col-filter" data-col="temizlik" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
-      <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" data-col="sosial_munasibet" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
-      <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" data-col="hayat_terzi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+          <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" data-col="yuxu_rejimi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+          <th><div class="th-wrap"><span>Təmizlik</span><input type="text" class="col-filter" data-col="temizlik" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+          <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" data-col="sosyal_munasibet" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+          <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" data-col="hayat_terzi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="profilesPagination"></div>
       </div>
     </section>
 
+    <!-- ROOMS -->
     <section id="page-rooms" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button type="button" class="btn-primary" onclick="openAddModal('room')"><i data-lucide="plus"></i> Yeni Otaq</button></div>
         <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr>
-      <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" data-col="id" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
-      <th><div class="th-wrap"><span>Bina / Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('rooms')"><option value="">Hamısı</option><option value="Kişi">Kişi (oğlan)</option><option value="Qadın">Qadın (qız)</option></select></div></th>
-      <th><div class="th-wrap"><span>Tutum</span><input type="text" class="col-filter" data-col="dolu" placeholder="Məs: 2/6" oninput="debouncedServerFilter('rooms')"></div></th>
-      <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" data-col="occupants" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="roomsTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" data-col="id" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
+          <th><div class="th-wrap"><span>Bina / Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('rooms')"><option value="">Hamısı</option><option value="Kişi">Kişi (oğlan)</option><option value="Qadın">Qadın (qız)</option></select></div></th>
+          <th><div class="th-wrap"><span>Tutum</span><input type="text" class="col-filter" data-col="dolu" placeholder="Məs: 2/6" oninput="debouncedServerFilter('rooms')"></div></th>
+          <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" data-col="occupants" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="roomsTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="roomsPagination"></div>
       </div>
     </section>
 
+    <!-- GROUPS -->
     <section id="page-groups" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Qruplar</h3><button type="button" class="btn-primary" onclick="adminCreateGroup()"><i data-lucide="plus"></i> Yeni Qrup</button></div>
         <div class="table-wrap"><table class="data-table" id="groupsTable"><thead><tr>
-      <th><div class="th-wrap"><span>Qrup ID</span></div></th>
-      <th><div class="th-wrap"><span>Üzv Sayı</span></div></th>
-      <th><div class="th-wrap"><span>Üzvlər</span></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="groupsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Qrup ID</span></div></th>
+          <th><div class="th-wrap"><span>Üzv Sayı</span></div></th>
+          <th><div class="th-wrap"><span>Üzvlər</span></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="groupsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
       </div>
     </section>
 
+    <!-- REQUESTS -->
     <section id="page-requests" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələblər — Dəvət / Qovma / Çıxma</h3><button type="button" class="btn-primary" onclick="adminCreateRequestModal()"><i data-lucide="plus"></i> Yeni Tələb</button></div>
         <div class="table-wrap"><table class="data-table" id="reqTable"><thead><tr>
-      <th><div class="th-wrap"><span>ID</span></div></th>
-      <th><div class="th-wrap"><span>Tip</span></div></th>
-      <th><div class="th-wrap"><span>Otaq</span></div></th>
-      <th><div class="th-wrap"><span>Kimdən</span></div></th>
-      <th><div class="th-wrap"><span>Kim barəsində</span></div></th>
-      <th><div class="th-wrap"><span>Səs</span></div></th>
-      <th><div class="th-wrap"><span>Status</span></div></th>
-      <th><div class="th-wrap"><span>Tarix</span></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="reqTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>ID</span></div></th>
+          <th><div class="th-wrap"><span>Tip</span></div></th>
+          <th><div class="th-wrap"><span>Otaq</span></div></th>
+          <th><div class="th-wrap"><span>Kimdən</span></div></th>
+          <th><div class="th-wrap"><span>Kim barəsində</span></div></th>
+          <th><div class="th-wrap"><span>Səs</span></div></th>
+          <th><div class="th-wrap"><span>Status</span></div></th>
+          <th><div class="th-wrap"><span>Tarix</span></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="reqTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="reqPagination"></div>
       </div>
     </section>
 
+    <!-- APPLICATIONS -->
     <section id="page-applications" class="page-content">
       <div class="widget-card">
         <div class="widget-header">
           <h3>Müraciətlər</h3>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <a class="btn-secondary" style="text-decoration:none" href="/api/admin/export/applications" download><i data-lucide="download"></i> CSV Yüklə</a>
+          <div style="display:flex;gap:12px;">
+            <button type="button" class="btn-secondary" onclick="exportCSV('applications')"><i data-lucide="download"></i> CSV</button>
             <button type="button" class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button>
           </div>
         </div>
         <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
-      <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" data-col="muraciet" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('applications')"><option value="">Hamısı</option><option value="Gözləmədə">Gözləmədə</option><option value="Təsdiqləndi">Təsdiqləndi</option><option value="Rədd edildi">Rədd edildi</option></select></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
+          <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" data-col="muraciet" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
+          <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('applications')"><option value="">Hamısı</option><option value="Gözləmədə">Gözləmədə</option><option value="Təsdiqləndi">Təsdiqləndi</option><option value="Rədd edildi">Rədd edildi</option></select></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="appsPagination"></div>
       </div>
     </section>
 
+    <!-- ANNOUNCEMENTS -->
     <section id="page-announcements" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Elanlar</h3><button type="button" class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
         <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr>
-      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('announcements')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('announcements')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('announcements')"></div></th>
+          <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('announcements')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="annPagination"></div>
       </div>
     </section>
 
+    <!-- SURVEYS / ANKETLƏR — DÜZGÜN -->
     <section id="page-surveys" class="page-content">
       <div class="widget-card">
-        <div="widget-header"><h3>Anketlər</h3><button type="button" class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
+        <div class="widget-header"><h3>Anketlər</h3><button type="button" class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
         <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr>
-      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('surveys')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('surveys')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('surveys')"></div></th>
+          <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('surveys')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="surPagination"></div>
       </div>
     </section>
 
-    <section id="page-penalties" class="page-content">
-      <div class="widget-card">
-        <div class="widget-header">
-          <h3>Cərimələr</h3>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <a class="btn-secondary" style="text-decoration:none" href="/api/admin/export/penalties" download><i data-lucide="download"></i> CSV Yüklə</a>
-            <button type="button" class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button>
-          </div>
-        </div>
-        <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
-      <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" data-col="reason" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
-      <th><div class="th-wrap"><span>Məbləğ</span><input type="text" class="col-filter" data-col="amount" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
-      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('penalties')"><option value="">Hamısı</option><option value="Ödənilməmiş">Ödənilməmiş</option><option value="Ödənilib">Ödənilib</option></select></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
-        <div class="pagination" id="penPagination"></div>
-      </div>
-    </section>
-
+    <!-- CANTEEN / YEMƏKXANA — DÜZGÜN -->
     <section id="page-canteen" class="page-content">
       <h2 class="section-title">Həftəlik Menyu</h2>
-      <div class="canteen-grid" id="canteenGrid"><div class="widget-card" style="display:flex;justify-content:center;align-items:center;min-height:200px"><div class="loader"></div></div></div>
+      <div class="canteen-grid" id="canteenGrid"><div class="loader-wrap" style="min-height:200px;display:flex;justify-content:center;align-items:center"><div class="loader"></div></div></div>
     </section>
 
+    <!-- LAUNDRY / CAMAŞIRXANA — DÜZGÜN -->
     <section id="page-laundry" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Çamaşırxana</h3><button type="button" class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
         <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr>
-      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('laundry')"></div></th>
-      <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" data-col="m1" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
-      <th><div class="th-wrap"><span>Maşın 2</span><select class="col-filter" data-col="m2" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
-      <th><div class="th-wrap"><span>Maşın 3</span><select class="col-filter" data-col="m3" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
-      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
-    </tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+          <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('laundry')"></div></th>
+          <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" data-col="m1" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+          <th><div class="th-wrap"><span>Maşın 2</span><select class="col-filter" data-col="m2" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+          <th><div class="th-wrap"><span>Maşın 3</span><select class="col-filter" data-col="m3" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
         <div class="pagination" id="laundryPagination"></div>
       </div>
     </section>
+
+    <!-- PENALTIES / CƏRİMƏLƏR — DÜZGÜN -->
+    <section id="page-penalties" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header">
+          <h3>Cərimələr</h3>
+          <div style="display:flex;gap:12px;">
+            <button type="button" class="btn-secondary" onclick="exportCSV('penalties')"><i data-lucide="download"></i> CSV</button>
+            <button type="button" class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr>
+          <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+          <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" data-col="reason" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+          <th><div class="th-wrap"><span>Məbləğ</span><input type="text" class="col-filter" data-col="amount" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+          <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('penalties')"><option value="">Hamısı</option><option value="Ödənilməmiş">Ödənilməmiş</option><option value="Ödənilib">Ödənilib</option></select></div></th>
+          <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+        </tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="penPagination"></div>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -540,1542 +538,1471 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   <div class="modal-card">
     <div class="modal-header" id="modalHeader"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer" id="modalFooter" style="display:none"><button type="button" class="btn-secondary" onclick="closeModal()">Ləğv et</button></div>
   </div>
 </div>
 
-<!-- XUSUSI DIALOG -->
-<div class="modal-overlay" id="dialogOverlay" style="z-index: 2000;">
-  <div class="modal-card" style="max-width: 430px;">
+<!-- XÜSUSİ DİALOQ -->
+<div class="modal-overlay" id="dialogOverlay" style="z-index:2000;">
+  <div class="modal-card" style="max-width:430px;">
     <div class="modal-header" id="dlgHeader"><h3 id="dlgTitleH">Təsdiq</h3></div>
-    <div class="modal-body" id="dlgBody" style="text-align: center; padding: 32px 24px;"></div>
+    <div class="modal-body" id="dlgBody" style="text-align:center;padding:32px 24px;"></div>
   </div>
 </div>
 
 <script>
 {% raw %}
-// ================= STATE & CONFIG =================
+// ═════════ STATE ═════════
 let currentStudents = [];
 let currentRooms = [];
 let currentApps = [];
 let currentProfiles = [];
 let isLoggedIn = false;
-let pollTimer = null;
+let currentPage = 'dashboard';
+let dashboardTimer = null;
 
 const PAGINATION = {
-  students: { page: 1, per_page: 20, total: 0 },
-  rooms:    { page: 1, per_page: 20, total: 0 },
-  applications: { page: 1, per_page: 20, total: 0 },
-  profiles: { page: 1, per_page: 20, total: 0 },
-  announcements: { page: 1, per_page: 20, total: 0 },
-  surveys:  { page: 1, per_page: 20, total: 0 },
-  penalties:{ page: 1, per_page: 20, total: 0 },
-  laundry:  { page: 1, per_page: 20, total: 0 },
-  requests: { page: 1, per_page: 20, total: 0 },
-  logs:     { page: 1, per_page: 20, total: 0 }
+  students:{page:1,per_page:20,total:0},
+  rooms:{page:1,per_page:20,total:0},
+  applications:{page:1,per_page:20,total:0},
+  profiles:{page:1,per_page:20,total:0},
+  announcements:{page:1,per_page:20,total:0},
+  surveys:{page:1,per_page:20,total:0},
+  penalties:{page:1,per_page:20,total:0},
+  laundry:{page:1,per_page:20,total:0},
+  requests:{page:1,per_page:20,total:0},
+  logs:{page:1,per_page:20,total:0}
 };
 
 const PAGE_TITLES = {
-  dashboard: ['Dashboard', 'Ümumi statistika'],
-  logs: ['Log Tarixçəsi', 'Son 1 ayın admin əməliyyatları'],
-  students: ['Tələbələr', 'Tələbə məlumatları'],
-  profiles: ['Tələbə Profilləri', 'Tələbə profil məlumatları'],
-  rooms: ['Otaqlar və Əşyalar', 'İnventar və yerləşdirmə idarəetməsi'],
-  groups: ['Qruplar', 'Ev seçmə qrupları'],
-  requests: ['Tələblər', 'Dəvət, qovma və çıxma tələbləri'],
-  applications: ['Müraciətlər', 'Yataqxana və Təmir sorğuları'],
-  announcements: ['Elanlar', 'Rəsmi elanlar'],
-  surveys: ['Anketlər', 'Sorğular və anketlər'],
-  penalties: ['Cərimələr', 'Cərimə əməliyyatları'],
-  canteen: ['Yeməkxana', 'Həftəlik menyu'],
-  laundry: ['Çamaşırxana', 'Maşın idarəetməsi']
+  dashboard:['Dashboard','Ümumi statistika'],
+  logs:['Log Tarixçəsi','Son 1 ayın admin əməliyyatları'],
+  students:['Tələbələr','Tələbə məlumatları'],
+  profiles:['Tələbə Profilləri','Tələbə profil məlumatları'],
+  rooms:['Otaqlar və Əşyalar','İnventar və yerləşdirmə idarəetməsi'],
+  groups:['Qruplar','Ev seçmə qrupları'],
+  requests:['Tələblər','Dəvət, qovma və çıxma tələbləri'],
+  applications:['Müraciətlər','Yataqxana və Təmir sorğuları'],
+  announcements:['Elanlar','Rəsmi elanlar'],
+  surveys:['Anketlər','Sorğular və anketlər'],
+  canteen:['Yeməkxana','Həftəlik menyu'],
+  laundry:['Çamaşırxana','Maşın idarəetməsi'],
+  penalties:['Cərimələr','Cərimə əməliyyatları']
 };
 
 const CRUD_CONFIG = {
-  student: {
-    endpoint: 'students',
-    saveAction: 'save_student',
-    loadFn: loadStudents,
-    modalTitle: { add: 'Yeni Tələbə', edit: 'Tələbəni Redaktə Et' },
-    tableId: 'studentsTable', tbodyId: 'studentsTbody',
-    emptyIcon: 'users', emptyText: 'Tələbə yoxdur',
-    fields: [
-      { id: 's_name', label: 'Ad Soyad', type: 'text', required: true },
-      { id: 's_email', label: 'Email', type: 'email', required: true },
-      { id: 's_sifre', label: 'Şifrə', type: 'text', placeholder: 'Boş saxla dəyişməsin' },
-      { id: 's_cins', label: 'Cins', type: 'select', options: [['Kişi','Kişi'],['Qadın','Qadın']] },
-      { id: 's_ev', label: 'Ev Statusu', type: 'select', options: [['Ev seçilməyib','Ev seçilməyib'],['Ev seçilib','Ev seçilib'],['Rədd edilib','Rədd edilib']] },
-      { id: 's_universitet', label: 'Universitet', type: 'text', default: 'Qarabağ Universiteti' },
-      { id: 's_ixtisas', label: 'İxtisas', type: 'text' },
-      { id: 's_kurs', label: 'Kurs', type: 'number' },
-      { id: 's_api_key', label: 'API Açarı', type: 'text' },
-      { id: 's_ev_deyisme', label: 'Ev Dəyişmə İstəyi', type: 'select', options: [['0','Yoxdur'],['1','Var']] }
+  student:{
+    endpoint:'students', saveAction:'save_student', loadFn:loadStudents,
+    modalTitle:{add:'Yeni Tələbə',edit:'Tələbəni Redaktə Et'},
+    tableId:'studentsTable', tbodyId:'studentsTbody',
+    emptyIcon:'users', emptyText:'Tələbə yoxdur',
+    fields:[
+      {id:'s_name',label:'Ad Soyad',type:'text'},
+      {id:'s_email',label:'Email',type:'email'},
+      {id:'s_sifre',label:'Şifrə',type:'text',placeholder:'Boş saxla dəyişməsin'},
+      {id:'s_cins',label:'Cins',type:'select',options:[['Kişi','Kişi'],['Qadın','Qadın']]},
+      {id:'s_ev',label:'Ev Statusu',type:'select',options:[['Ev seçilməyib','Ev seçilməyib'],['Ev seçilib','Ev seçilib'],['Rədd edilib','Rədd edilib']]},
+      {id:'s_universitet',label:'Universitet',type:'text',def:'Qarabağ Universiteti'},
+      {id:'s_ixtisas',label:'İxtisas',type:'text'},
+      {id:'s_kurs',label:'Kurs',type:'number'},
+      {id:'s_api_key',label:'API Açarı',type:'text'},
+      {id:'s_ev_deyisme',label:'Ev Dəyişmə İstəyi',type:'select',options:[['0','Yoxdur'],['1','Var']]}
     ],
-    buildPayload: function(id) {
-      var p = {
-        id: id, ad_soyad: gv('s_name'), email: gv('s_email'), ixtisas: gv('s_ixtisas'),
-        kurs: gv('s_kurs'), universitet: gv('s_universitet'),
-        ev_deyisme_isteyi: parseInt(gv('s_ev_deyisme')) || 0,
-        cins: gv('s_cins') || 'Kişi',
-        ev: gv('s_ev') || 'Ev seçilməyib'
-      };
-      var sifre = gv('s_sifre');
-      if (sifre) { p.sifre = sifre; }
-      p.api_key = gv('s_api_key');
+    buildPayload:(id)=>{
+      var p={id:id,ad_soyad:gv('s_name'),email:gv('s_email'),ixtisas:gv('s_ixtisas'),kurs:gv('s_kurs'),universitet:gv('s_universitet'),ev_deyisme_isteyi:parseInt(gv('s_ev_deyisme'))||0,cins:gv('s_cins')||'Kişi',ev:gv('s_ev')||'Ev seçilməyib'};
+      var s=gv('s_sifre');
+      if(s)p.sifre=s;
+      p.api_key=gv('s_api_key');
       return p;
     },
-    renderRow: function(s, idx) {
-      var apiCls = s.api_key ? 'badge-success' : 'badge-gray';
-      var cinsCls = s.cins === 'Qadın' ? 'badge-purple' : 'badge-info';
-      var evStatCls = s.ev === 'Ev seçilib' ? 'badge-success' : (s.ev === 'Rədd edilib' ? 'badge-danger' : 'badge-warning');
-      return '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-        '<td>' + s.id + '</td>' +
-        '<td style="font-weight:600">' + esc(s.ad_soyad) + '</td>' +
-        '<td>' + esc(s.email) + '</td>' +
-        '<td>' + esc(s.ixtisas||'-') + '</td>' +
-        '<td>' + esc(s.kurs||'-') + '</td>' +
-        '<td><span class="badge ' + cinsCls + '">' + esc(s.cins||'-') + '</span></td>' +
-        '<td><span class="badge ' + evStatCls + '">' + esc(s.ev||'-') + '</span></td>' +
-        '<td>' + (s.otaq ? '<span class="badge badge-info">Ev ' + esc(s.otaq) + '</span>' : '-') + '</td>' +
-        '<td><span class="badge ' + apiCls + '">' + (s.api_key?'Var':'Yoxdur') + '</span></td>' +
-        '<td><div style="display:flex;gap:8px">' +
-        '<button type="button" class="btn-icon" onclick="openEditModal(\'student\',' + s.id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'student\',' + s.id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+    renderRow:(s,idx)=>{
+      var apiCls=s.api_key?'badge-success':'badge-gray';
+      var cinsCls=s.cins==='Qadın'?'badge-purple':'badge-info';
+      var evCls=s.ev==='Ev seçilib'?'badge-success':(s.ev==='Rədd edilib'?'badge-danger':'badge-warning');
+      return '<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+        '<td>'+s.id+'</td>'+
+        '<td style="font-weight:600">'+esc(s.ad_soyad)+'</td>'+
+        '<td>'+esc(s.email)+'</td>'+
+        '<td>'+esc(s.ixtisas||'-')+'</td>'+
+        '<td>'+esc(s.kurs||'-')+'</td>'+
+        '<td><span class="badge '+cinsCls+'">'+esc(s.cins||'-')+'</span></td>'+
+        '<td><span class="badge '+evCls+'">'+esc(s.ev||'-')+'</span></td>'+
+        '<td>'+(s.otaq?'<span class="badge badge-info">Ev '+s.otaq+'</span>':'-')+'</td>'+
+        '<td><span class="badge '+apiCls+'">'+(s.api_key?'Var':'Yoxdur')+'</span></td>'+
+        '<td><div style="display:flex;gap:8px">'+
+        '<button type="button" class="btn-icon" onclick="openEditModal(\'student\','+s.id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'student\','+s.id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
         '</div></td></tr>';
     }
   },
-  room: {
-    endpoint: 'rooms',
-    saveAction: 'save_room',
-    loadFn: loadRooms,
-    modalTitle: { add: 'Yeni Otaq', edit: 'Otaq Redaktə' },
-    tableId: 'roomsTable', tbodyId: 'roomsTbody',
-    emptyIcon: 'door-open', emptyText: 'Otaq yoxdur',
-    customModal: true,
-    renderRow: function(r, idx) {
-      var cinsCls = r.cins === 'Kişi' ? 'badge-info' : (r.cins === 'Qadın' ? 'badge-purple' : 'badge-gray');
-      var names = (r.slots || []).filter(function(s) { return s.student_id; }).map(function(s) { return esc(s.ad_soyad); });
-      var studentsHtml = names.length ? names.join(', ') : '<span style="color:var(--text-secondary);font-size:13px">Boş ev</span>';
-      return '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-        '<td style="font-weight:700;font-size:16px">' + esc(r.id) + '</td>' +
-        '<td><span class="badge ' + cinsCls + '">' + (r.cins ? esc(r.cins) : 'Təyin edilməyib') + '</span></td>' +
-        '<td style="font-weight:600">' + r.dolu + '/' + r.capacity + '</td>' +
-        '<td>' + studentsHtml + '</td>' +
-        '<td><div style="display:flex;gap:8px">' +
-        '<button type="button" class="btn-icon" onclick="openEditModal(\'room\',' + r.id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'room\',' + r.id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+  room:{
+    endpoint:'rooms', saveAction:'save_room', loadFn:loadRooms,
+    modalTitle:{add:'Yeni Otaq',edit:'Otaq Redaktə'},
+    tableId:'roomsTable', tbodyId:'roomsTbody',
+    emptyIcon:'door-open', emptyText:'Otaq yoxdur',
+    renderRow:(r,idx)=>{
+      var cinsCls=r.cins==='Kişi'?'badge-info':(r.cins==='Qadın'?'badge-purple':'badge-gray');
+      var names=(r.slots||[]).filter(function(s){return s.student_id;}).map(function(s){return esc(s.ad_soyad);});
+      var stHtml=names.length?names.join(', '):'<span style="color:var(--text-secondary);font-size:13px">Boş ev</span>';
+      return '<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+        '<td style="font-weight:700;font-size:16px">'+esc(r.id)+'</td>'+
+        '<td><span class="badge '+cinsCls+'">'+(r.cins?esc(r.cins):'Təyin edilməyib')+'</span></td>'+
+        '<td style="font-weight:600">'+r.dolu+'/'+r.capacity+'</td>'+
+        '<td>'+stHtml+'</td>'+
+        '<td><div style="display:flex;gap:8px">'+
+        '<button type="button" class="btn-icon" onclick="openEditModal(\'room\','+r.id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'room\','+r.id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
         '</div></td></tr>';
     }
   },
-  application: {
-    endpoint: 'applications',
-    saveAction: 'save_application',
-    loadFn: loadApplications,
-    modalTitle: { add: 'Yeni Müraciət', edit: 'Müraciəti Redaktə Et' },
-    tableId: 'appsTable', tbodyId: 'appsTbody',
-    emptyIcon: 'clipboard-list', emptyText: 'Müraciət yoxdur',
-    customModal: true,
-    renderRow: function(a, idx) {
-      var statusClass = a.status==='Təsdiqləndi' ? 'badge-success' : (a.status==='Gözləmədə' ? 'badge-warning' : 'badge-danger');
-      var notlarHtml = a.notlar ? '<div style="font-size:12px;color:var(--ku-dark-green);background:var(--ku-soft-green);padding:4px 8px;border-radius:6px;margin-top:6px"><strong>Qeyd:</strong> ' + esc(a.notlar) + '</div>' : '';
-      return '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-        '<td><div style="font-weight:600">' + esc(a.ad_soyad) + '</div><div style="font-size:12px;color:var(--text-secondary)">' + a.tarix + '</div></td>' +
-        '<td><div style="font-weight:600">' + esc(a.basliq) + '</div><div style="font-size:12px;color:var(--text-secondary)">' + esc(a.muraciet) + '</div><span class="badge badge-info" style="margin-top:4px">' + esc(a.priority) + '</span>' + notlarHtml + '</td>' +
-        '<td><span class="badge ' + statusClass + '">' + esc(a.status) + '</span></td>' +
-        '<td><div style="display:flex;gap:8px">' +
-        '<button type="button" class="btn-icon" onclick="openEditModal(\'application\',' + a.id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-        '<button type="button" class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(' + a.id + ',\'Təsdiqləndi\')" title="Təsdiqlə"><i data-lucide="check"></i></button>' +
-        '<button type="button" class="btn-icon danger" onclick="updateAppStatus(' + a.id + ',\'Rədd edildi\')" title="Rədd et"><i data-lucide="x"></i></button>' +
-        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'application\',' + a.id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+  application:{
+    endpoint:'applications', saveAction:'save_application', loadFn:loadApplications,
+    modalTitle:{add:'Yeni Müraciət',edit:'Müraciəti Redaktə Et'},
+    tableId:'appsTable', tbodyId:'appsTbody',
+    emptyIcon:'clipboard-list', emptyText:'Müraciət yoxdur',
+    renderRow:(a,idx)=>{
+      var sc=a.status==='Təsdiqləndi'?'badge-success':(a.status==='Gözləmədə'?'badge-warning':'badge-danger');
+      var nh=a.notlar?'<div style="font-size:12px;color:var(--ku-dark-green);background:var(--ku-soft-green);padding:4px 8px;border-radius:6px;margin-top:6px"><strong>Qeyd:</strong> '+esc(a.notlar)+'</div>':'';
+      return '<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+        '<td><div style="font-weight:600">'+esc(a.ad_soyad)+'</div><div style="font-size:12px;color:var(--text-secondary)">'+a.tarix+'</div></td>'+
+        '<td><div style="font-weight:600">'+esc(a.basliq)+'</div><div style="font-size:12px;color:var(--text-secondary)">'+esc(a.muraciet)+'</div><span class="badge badge-info" style="margin-top:4px">'+esc(a.priority)+'</span>'+nh+'</td>'+
+        '<td><span class="badge '+sc+'">'+esc(a.status)+'</span></td>'+
+        '<td><div style="display:flex;gap:8px">'+
+        '<button type="button" class="btn-icon" onclick="openEditModal(\'application\','+a.id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+        '<button type="button" class="btn-icon" style="color:var(--success)" onclick="updateAppStatus('+a.id+',\'Təsdiqləndi\')" title="Təsdiqlə"><i data-lucide="check"></i></button>'+
+        '<button type="button" class="btn-icon danger" onclick="updateAppStatus('+a.id+',\'Rədd edildi\')" title="Rədd et"><i data-lucide="x"></i></button>'+
+        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'application\','+a.id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
         '</div></td></tr>';
     }
   },
-  announcement: {
-    endpoint: 'announcements',
-    saveAction: 'save_announcement',
-    loadFn: loadAnnouncements,
-    modalTitle: { add: 'Yeni Elan', edit: 'Elanı Redaktə Et' },
-    tableId: 'annTable', tbodyId: 'annTbody',
-    emptyIcon: 'megaphone', emptyText: 'Elan yoxdur',
-    fields: [
-      { id: 'c_title', label: 'Başlıq', type: 'text', required: true },
-      { id: 'c_desc', label: 'Təsvir', type: 'textarea', rows: 4 },
-      { id: 'c_priority', label: 'Öncəlik', type: 'select', options: [['Normal','Normal'],['Yüksək','Yüksək']] },
-      { id: 'c_status', label: 'Status', type: 'select', options: [['Aktiv','Aktiv'],['Passiv','Passiv']] }
+  announcement:{
+    endpoint:'announcements', saveAction:'save_announcement', loadFn:loadAnnouncements,
+    modalTitle:{add:'Yeni Elan',edit:'Elanı Redaktə Et'},
+    tableId:'annTable', tbodyId:'annTbody',
+    emptyIcon:'megaphone', emptyText:'Elan yoxdur',
+    fields:[
+      {id:'c_title',label:'Başlıq',type:'text'},
+      {id:'c_desc',label:'Təsvir',type:'textarea',rows:4},
+      {id:'c_priority',label:'Öncəlik',type:'select',options:[['Normal','Normal'],['Yüksək','Yüksək']]},
+      {id:'c_status',label:'Status',type:'select',options:[['Aktiv','Aktiv'],['Passiv','Passiv']]}
     ],
-    buildPayload: function(id) {
-      return { id: id, title: gv('c_title'), description: gv('c_desc'), priority: gv('c_priority'), status: gv('c_status') };
-    },
-    renderRow: function(c, idx) {
-      var priCls = c.priority==='Yüksək' ? 'badge-danger' : 'badge-info';
-      var statCls = c.status==='Aktiv' ? 'badge-success' : 'badge-gray';
-      return '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-        '<td><div style="font-weight:600">' + esc(c.title) + '</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">' + esc(c.description) + '</div><span class="badge ' + priCls + '" style="margin-top:6px">' + esc(c.priority) + '</span></td>' +
-        '<td><span class="badge ' + statCls + '">' + esc(c.status) + '</span></td>' +
-        '<td><div style="display:flex;gap:8px">' +
-        '<button type="button" class="btn-icon" onclick="openEditModal(\'announcement\',' + c.id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'announcement\',' + c.id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+    buildPayload:(id)=>({id:id,title:gv('c_title'),description:gv('c_desc'),priority:gv('c_priority'),status:gv('c_status')}),
+    renderRow:(c,idx)=>{
+      var pc=c.priority==='Yüksək'?'badge-danger':'badge-info';
+      var sc=c.status==='Aktiv'?'badge-success':'badge-gray';
+      return '<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+        '<td><div style="font-weight:600">'+esc(c.title)+'</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">'+esc(c.description)+'</div><span class="badge '+pc+'" style="margin-top:6px">'+esc(c.priority)+'</span></td>'+
+        '<td><span class="badge '+sc+'">'+esc(c.status)+'</span></td>'+
+        '<td><div style="display:flex;gap:8px">'+
+        '<button type="button" class="btn-icon" onclick="openEditModal(\'announcement\','+c.id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'announcement\','+c.id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
         '</div></td></tr>';
     }
   },
-  survey: {
-    endpoint: 'surveys',
-    saveAction: 'save_survey',
-    loadFn: loadSurveys,
-    modalTitle: { add: 'Yeni Anket', edit: 'Anketi Redaktə Et' },
-    tableId: 'surTable', tbodyId: 'surTbody',
-    emptyIcon: 'clipboard-check', emptyText: 'Anket yoxdur',
-    fields: [
-      { id: 'c_title', label: 'Başlıq', type: 'text', required: true },
-      { id: 'c_desc', label: 'Təsvir', type: 'textarea', rows: 4 },
-      { id: 'c_priority', label: 'Öncəlik', type: 'select', options: [['Normal','Normal'],['Yüksək','Yüksək']] },
-      { id: 'c_status', label: 'Status', type: 'select', options: [['Aktiv','Aktiv'],['Passiv','Passiv']] }
+  survey:{
+    endpoint:'surveys', saveAction:'save_survey', loadFn:loadSurveys,
+    modalTitle:{add:'Yeni Anket',edit:'Anketi Redaktə Et'},
+    tableId:'surTable', tbodyId:'surTbody',
+    emptyIcon:'clipboard-check', emptyText:'Anket yoxdur',
+    fields:[
+      {id:'c_title',label:'Başlıq',type:'text'},
+      {id:'c_desc',label:'Təsvir',type:'textarea',rows:4},
+      {id:'c_priority',label:'Öncəlik',type:'select',options:[['Normal','Normal'],['Yüksək','Yüksək']]},
+      {id:'c_status',label:'Status',type:'select',options:[['Aktiv','Aktiv'],['Passiv','Passiv']]}
     ],
-    buildPayload: function(id) {
-      return { id: id, title: gv('c_title'), description: gv('c_desc'), priority: gv('c_priority'), status: gv('c_status') };
-    },
-    renderRow: function(c, idx) {
-      var priCls = c.priority==='Yüksək' ? 'badge-danger' : 'badge-info';
-      var statCls = c.status==='Aktiv' ? 'badge-success' : 'badge-gray';
-      return '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-        '<td><div style="font-weight:600">' + esc(c.title) + '</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">' + esc(c.description) + '</div><span class="badge ' + priCls + '" style="margin-top:6px">' + esc(c.priority) + '</span></td>' +
-        '<td><span class="badge ' + statCls + '">' + esc(c.status) + '</span></td>' +
-        '<td><div style="display:flex;gap:8px">' +
-        '<button type="button" class="btn-icon" onclick="openEditModal(\'survey\',' + c.id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'survey\',' + c.id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+    buildPayload:(id)=>({id:id,title:gv('c_title'),description:gv('c_desc'),priority:gv('c_priority'),status:gv('c_status')}),
+    renderRow:(c,idx)=>{
+      var pc=c.priority==='Yüksək'?'badge-danger':'badge-info';
+      var sc=c.status==='Aktiv'?'badge-success':'badge-gray';
+      return '<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+        '<td><div style="font-weight:600">'+esc(c.title)+'</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">'+esc(c.description)+'</div><span class="badge '+pc+'" style="margin-top:6px">'+esc(c.priority)+'</span></td>'+
+        '<td><span class="badge '+sc+'">'+esc(c.status)+'</span></td>'+
+        '<td><div style="display:flex;gap:8px">'+
+        '<button type="button" class="btn-icon" onclick="openEditModal(\'survey\','+c.id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'survey\','+c.id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
         '</div></td></tr>';
     }
   },
-  penalty: {
-    endpoint: 'penalties',
-    saveAction: 'save_penalty',
-    loadFn: loadPenalties,
-    modalTitle: { add: 'Yeni Cərimə', edit: 'Cəriməni Redaktə Et' },
-    tableId: 'penTable', tbodyId: 'penTbody',
-    emptyIcon: 'receipt-text', emptyText: 'Cərimə yoxdur',
-    customModal: true,
-    renderRow: function(p, idx) {
-      var statusClass = p.status==='Ödənilib' ? 'badge-success' : 'badge-danger';
-      var payBtn = p.status==='Ödənilməmiş' ? '<button type="button" class="btn-icon" style="color:var(--success)" onclick="payPenalty(' + p.id + ')" title="Ödə"><i data-lucide="check-circle"></i></button>' : '';
-      return '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-        '<td style="font-weight:600">' + esc(p.ad_soyad) + '</td>' +
-        '<td>' + esc(p.reason) + '</td>' +
-        '<td style="font-weight:700">' + p.amount + ' AZN</td>' +
-        '<td><span class="badge ' + statusClass + '">' + esc(p.status) + '</span></td>' +
-        '<td><div style="display:flex;gap:8px">' +
-        '<button type="button" class="btn-icon" onclick="openEditModal(\'penalty\',' + p.id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-        payBtn +
-        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'penalty\',' + p.id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+  penalty:{
+    endpoint:'penalties', saveAction:'save_penalty', loadFn:loadPenalties,
+    modalTitle:{add:'Yeni Cərimə',edit:'Cəriməni Redaktə Et'},
+    tableId:'penTable', tbodyId:'penTbody',
+    emptyIcon:'receipt-text', emptyText:'Cərimə yoxdur',
+    renderRow:(p,idx)=>{
+      var sc=p.status==='Ödənilib'?'badge-success':'badge-danger';
+      var pb=p.status==='Ödənilməmiş'?'<button type="button" class="btn-icon" style="color:var(--success)" onclick="payPenalty('+p.id+')" title="Ödə"><i data-lucide="check-circle"></i></button>':'';
+      return '<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+        '<td style="font-weight:600">'+esc(p.ad_soyad)+'</td>'+
+        '<td>'+esc(p.reason)+'</td>'+
+        '<td style="font-weight:700">'+p.amount+' AZN</td>'+
+        '<td><span class="badge '+sc+'">'+esc(p.status)+'</span></td>'+
+        '<td><div style="display:flex;gap:8px">'+
+        '<button type="button" class="btn-icon" onclick="openEditModal(\'penalty\','+p.id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+        pb+
+        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'penalty\','+p.id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
         '</div></td></tr>';
     }
   },
-  laundry: {
-    endpoint: 'laundry',
-    saveAction: 'save_laundry',
-    loadFn: loadLaundry,
-    modalTitle: { add: 'Yeni Çamaşırxana Qeydi', edit: 'Çamaşırxana Redaktə' },
-    tableId: 'laundryTable', tbodyId: 'laundryTbody',
-    emptyIcon: 'washing-machine', emptyText: 'Məlumat yoxdur',
-    customModal: true,
-    renderRow: function(l, idx) {
-      var m1c = l.machine_1_status==='Hazır' ? 'badge-success' : (l.machine_1_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
-      var m2c = l.machine_2_status==='Hazır' ? 'badge-success' : (l.machine_2_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
-      var m3c = l.machine_3_status==='Hazır' ? 'badge-success' : (l.machine_3_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
-      return '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-        '<td style="font-weight:600">' + esc(l.ad_soyad) + '</td>' +
-        '<td><span class="badge ' + m1c + '">' + esc(l.machine_1_status) + '</span></td>' +
-        '<td><span class="badge ' + m2c + '">' + esc(l.machine_2_status) + '</span></td>' +
-        '<td><span class="badge ' + m3c + '">' + esc(l.machine_3_status) + '</span></td>' +
-        '<td><div style="display:flex;gap:8px">' +
-        '<button type="button" class="btn-icon" onclick="openEditModal(\'laundry\',' + l.student_id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'laundry\',' + l.student_id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+  laundry:{
+    endpoint:'laundry', saveAction:'save_laundry', loadFn:loadLaundry,
+    modalTitle:{add:'Yeni Çamaşırxana Qeydi',edit:'Çamaşırxana Redaktə'},
+    tableId:'laundryTable', tbodyId:'laundryTbody',
+    emptyIcon:'washing-machine', emptyText:'Məlumat yoxdur',
+    renderRow:(l,idx)=>{
+      var m1=l.machine_1_status==='Hazır'?'badge-success':(l.machine_1_status==='Gözlənilir'?'badge-warning':'badge-gray');
+      var m2=l.machine_2_status==='Hazır'?'badge-success':(l.machine_2_status==='Gözlənilir'?'badge-warning':'badge-gray');
+      var m3=l.machine_3_status==='Hazır'?'badge-success':(l.machine_3_status==='Gözlənilir'?'badge-warning':'badge-gray');
+      return '<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+        '<td style="font-weight:600">'+esc(l.ad_soyad)+'</td>'+
+        '<td><span class="badge '+m1+'">'+esc(l.machine_1_status)+'</span></td>'+
+        '<td><span class="badge '+m2+'">'+esc(l.machine_2_status)+'</span></td>'+
+        '<td><span class="badge '+m3+'">'+esc(l.machine_3_status)+'</span></td>'+
+        '<td><div style="display:flex;gap:8px">'+
+        '<button type="button" class="btn-icon" onclick="openEditModal(\'laundry\','+l.student_id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+        '<button type="button" class="btn-icon danger" onclick="deleteItem(\'laundry\','+l.student_id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
         '</div></td></tr>';
     }
   }
 };
 
-// ================= UTILITIES =================
-function esc(str) {
-  if (!str) { return ''; }
-  var div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+// ═════════ UTILITIES ═════════
+function esc(str){
+  if(!str)return '';
+  var d=document.createElement('div');
+  d.textContent=str;
+  return d.innerHTML;
 }
-
-function escAttr(str) {
-  if (!str) { return ''; }
+function escAttr(str){
+  if(!str)return '';
   return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-
-function gv(id) {
-  var el = document.getElementById(id);
-  return el ? el.value : '';
+function gv(id){
+  var el=document.getElementById(id);
+  return el?el.value:'';
 }
-
-function safeId(v) {
-  var n = parseInt(v, 10);
-  return Number.isInteger(n) ? n : 0;
+function safeId(v){
+  var n=parseInt(v,10);
+  return Number.isInteger(n)?n:0;
 }
-
-function debounce(fn, delay) {
+function debounce(fn,delay){
   var timer;
-  return function() {
-    var args = Array.prototype.slice.call(arguments);
+  return function(){
+    var args=arguments;
     clearTimeout(timer);
-    timer = setTimeout(function() { fn.apply(null, args); }, delay || 350);
+    timer=setTimeout(function(){fn.apply(null,args);},delay||350);
   };
 }
-
-// ================= TELEBE AXTARIS PICKER (typeahead) =================
-var spTimers = {};
-var spCache = {};
-
-function spContainerHtml(key, opts) {
-  opts = opts || {};
-  var val = opts.value || '';
-  var selected = opts.valueId ? ' sp-selected' : '';
-  return '<div class="sp-picker" id="sp-' + key + '">' +
-    '<input type="text" class="sp-input' + selected + '" id="sp-input-' + key + '" value="' + escAttr(val) + '" placeholder="' + escAttr(opts.placeholder || 'Tələbə adını yazın...') + '" autocomplete="off">' +
-    '<input type="hidden" id="sp-hidden-' + key + '" value="' + escAttr(opts.valueId || '') + '">' +
-    '<div class="sp-dropdown" id="sp-dd-' + key + '"></div></div>';
+function refreshIcons(c){
+  if(c&&c.querySelectorAll){lucide.createIcons({nodes:[c]});}
+  else{lucide.createIcons();}
 }
 
-function spGetValue(key) {
-  var hidden = document.getElementById('sp-hidden-' + key);
-  return hidden ? (hidden.value || '') : '';
-}
-
-function spValidate(key) {
-  var input = document.getElementById('sp-input-' + key);
-  var hidden = document.getElementById('sp-hidden-' + key);
-  if (!input || !hidden) { return true; }
-  return !(input.value.trim() && !hidden.value);
-}
-
-function spSearch(key, opts) {
-  var input = document.getElementById('sp-input-' + key);
-  var dd = document.getElementById('sp-dd-' + key);
-  if (!input || !dd) { return; }
-
-  var q = input.value.trim();
-  if (q.length < 2) { dd.classList.remove('active'); return; }
-
-  dd.innerHTML = '<div class="sp-empty">Axtarılır...</div>';
-  dd.classList.add('active');
-
-  var params = { q: q };
-  var cins = opts.cinsFn ? opts.cinsFn() : (opts.cins || null);
-  if (cins) { params.cins = cins; }
-  if (opts.exclude) { params.exclude = opts.exclude; }
-
-  apiAction('search_students_query', 'GET', null, params).then(function(data) {
-    var students = data.data || [];
-    spCache[key] = students;
-
-    if (!students.length) {
-      dd.innerHTML = '<div class="sp-empty">"' + esc(q) + '" üzrə nəticə tapılmadı</div>';
-      return;
-    }
-
-    var html = '';
-    for (var i = 0; i < students.length; i++) {
-      var st = students[i];
-      html += '<div class="sp-item" data-idx="' + i + '"><span class="sp-item-name">' + esc(st.ad_soyad) + '</span><span class="sp-item-meta">' + esc(st.cins || '') + ' &bull; ID:' + st.id + '</span></div>';
-    }
-    dd.innerHTML = html;
-
-    var items = dd.querySelectorAll('.sp-item');
-    for (var j = 0; j < items.length; j++) {
-      (function(item) {
-        item.addEventListener('click', function() {
-          var idx = parseInt(item.getAttribute('data-idx'), 10);
-          var st = spCache[key][idx];
-          if (!st) { return; }
-          input.value = st.ad_soyad;
-          input.classList.add('sp-selected');
-          document.getElementById('sp-hidden-' + key).value = st.id;
-          dd.classList.remove('active');
-          if (opts.onSelect) { opts.onSelect(st.id, st.ad_soyad); }
-        });
-      })(items[j]);
-    }
-  }).catch(function(e) {
-    dd.innerHTML = '<div class="sp-empty">Xəta: ' + esc(e.message) + '</div>';
-  });
-}
-
-function initStudentPicker(key, opts) {
-  opts = opts || {};
-  var input = document.getElementById('sp-input-' + key);
-  if (!input) { return; }
-
-  input.addEventListener('input', function() {
-    input.classList.remove('sp-selected');
-    var hidden = document.getElementById('sp-hidden-' + key);
-    if (hidden) { hidden.value = ''; }
-    clearTimeout(spTimers[key]);
-    spTimers[key] = setTimeout(function() { spSearch(key, opts); }, 300);
-  });
-
-  input.addEventListener('focus', function() {
-    if (input.value.trim().length >= 2) { spSearch(key, opts); }
-  });
-
-  document.addEventListener('click', function(e) {
-    var picker = document.getElementById('sp-' + key);
-    var dd = document.getElementById('sp-dd-' + key);
-    if (picker && dd && !picker.contains(e.target)) { dd.classList.remove('active'); }
-  });
-}
-
-// ================= SERVER-SIDE FILTERS =================
-function getColFilters(tableId) {
-  var out = {};
-  var table = document.getElementById(tableId);
-  if (!table) { return out; }
-  table.querySelectorAll('thead .col-filter').forEach(function(el) {
-    var col = el.getAttribute('data-col');
-    var v = el.value.trim();
-    if (col && v) { out[col] = v; }
+// ═════════ SERVER FILTERS ═════════
+function getColFilters(tid){
+  var out={};
+  var t=document.getElementById(tid);
+  if(!t)return out;
+  t.querySelectorAll('thead .col-filter').forEach(function(el){
+    var col=el.getAttribute('data-col');
+    var v=el.value.trim();
+    if(col&&v)out[col]=v;
   });
   return out;
 }
-
-var FILTER_LOADERS = {
-  students: function() { loadStudents(1); },
-  profiles: function() { loadProfiles(1); },
-  rooms: function() { loadRooms(1); },
-  applications: function() { loadApplications(1); },
-  announcements: function() { loadAnnouncements(1); },
-  surveys: function() { loadSurveys(1); },
-  penalties: function() { loadPenalties(1); },
-  laundry: function() { loadLaundry(1); },
-  logs: function() { loadLogs(1); }
+var FILTER_LOADERS={
+  students:function(){loadStudents(1);},
+  profiles:function(){loadProfiles(1);},
+  rooms:function(){loadRooms(1);},
+  applications:function(){loadApplications(1);},
+  announcements:function(){loadAnnouncements(1);},
+  surveys:function(){loadSurveys(1);},
+  penalties:function(){loadPenalties(1);},
+  laundry:function(){loadLaundry(1);},
+  logs:function(){loadLogs(1);}
 };
+function serverFilter(key){if(FILTER_LOADERS[key])FILTER_LOADERS[key]();}
+var debouncedServerFilter=debounce(function(key){serverFilter(key);},350);
 
-function serverFilter(key) {
-  if (FILTER_LOADERS[key]) { FILTER_LOADERS[key](); }
+// ═════════ STUDENT PICKER (typeahead) ═════════
+var spTimers={};
+var spCache={};
+
+function spContainerHtml(key,opts){
+  opts=opts||{};
+  var val=opts.value||'';
+  var sel=opts.valueId?' sp-selected':'';
+  return '<div class="sp-picker" id="sp-'+key+'">'+
+    '<input type="text" class="sp-input'+sel+'" id="sp-input-'+key+'" value="'+escAttr(val)+'" placeholder="'+escAttr(opts.placeholder||'Tələbə adını yazın...')+'" autocomplete="off">'+
+    '<input type="hidden" id="sp-hidden-'+key+'" value="'+escAttr(opts.valueId||'')+'">'+
+    '<div class="sp-dropdown" id="sp-dd-'+key+'"></div></div>';
 }
-
-var debouncedServerFilter = debounce(serverFilter, 350);
-
-// ================= API =================
-function apiAction(action, method, body, query) {
-  method = method || 'GET';
-  body = body || null;
-  query = query || null;
-
-  var controller = new AbortController();
-  var timeoutId = setTimeout(function() { controller.abort(); }, 15000);
-  var url = '/api/admin/' + action;
-  if (query && method === 'GET') {
-    var qs = new URLSearchParams(query).toString();
-    if (qs) { url += '?' + qs; }
-  }
-  var options = { method: method, headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', signal: controller.signal };
-  if (body) { options.body = JSON.stringify(body); }
-
-  return fetch(url, options).then(function(res) {
-    clearTimeout(timeoutId);
-    if (res.status === 403) { showLogin(); throw new Error('İcazə yoxdur'); }
-    if (!res.ok) { throw new Error('HTTP ' + res.status); }
-    return res.json();
-  }).then(function(data) {
-    if (!data.success) { throw new Error(data.message || 'Naməlum xəta'); }
-    return data;
-  }).catch(function(err) {
-    clearTimeout(timeoutId);
-    if (err.name === 'AbortError') { throw new Error('Sorğu çox uzun sürdü (15 san)'); }
-    throw err;
+function spGetValue(key){
+  var h=document.getElementById('sp-hidden-'+key);
+  return h?(h.value||''):'';
+}
+function spValidate(key){
+  var i=document.getElementById('sp-input-'+key);
+  var h=document.getElementById('sp-hidden-'+key);
+  if(!i||!h)return true;
+  return !(i.value.trim()&&!h.value);
+}
+function initStudentPicker(key,opts){
+  opts=opts||{};
+  var input=document.getElementById('sp-input-'+key);
+  if(!input)return;
+  input.addEventListener('input',function(){
+    input.classList.remove('sp-selected');
+    var h=document.getElementById('sp-hidden-'+key);
+    if(h)h.value='';
+    clearTimeout(spTimers[key]);
+    spTimers[key]=setTimeout(function(){spSearch(key,opts);},300);
+  });
+  input.addEventListener('focus',function(){
+    if(input.value.trim().length>=2)spSearch(key,opts);
+  });
+  document.addEventListener('click',function(e){
+    var pk=document.getElementById('sp-'+key);
+    var dd=document.getElementById('sp-dd-'+key);
+    if(pk&&dd&&!pk.contains(e.target))dd.classList.remove('active');
+  });
+}
+function spSearch(key,opts){
+  var input=document.getElementById('sp-input-'+key);
+  var dd=document.getElementById('sp-dd-'+key);
+  if(!input||!dd)return;
+  var q=input.value.trim();
+  if(q.length<2){dd.classList.remove('active');return;}
+  dd.innerHTML='<div class="sp-empty">Axtarılır...</div>';
+  dd.classList.add('active');
+  var params={q:q};
+  if(opts.cinsFn)params.cins=opts.cinsFn();
+  else if(opts.cins)params.cins=opts.cins;
+  if(opts.exclude)params.exclude=opts.exclude;
+  fetch('/api/admin/search_students_query?'+new URLSearchParams(params).toString(),{credentials:'same-origin'})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(!data.success){dd.innerHTML='<div class="sp-empty">Xəta</div>';return;}
+    var students=data.data||[];
+    spCache[key]=students;
+    if(!students.length){dd.innerHTML='<div class="sp-empty">Nəticə tapılmadı</div>';return;}
+    dd.innerHTML=students.map(function(st,idx){
+      return '<div class="sp-item" data-idx="'+idx+'"><span class="sp-item-name">'+esc(st.ad_soyad)+'</span><span class="sp-item-meta">'+esc(st.cins||'')+' • ID:'+st.id+'</span></div>';
+    }).join('');
+    dd.querySelectorAll('.sp-item').forEach(function(item){
+      item.addEventListener('click',function(){
+        var st=spCache[key][parseInt(item.getAttribute('data-idx'),10)];
+        if(!st)return;
+        input.value=st.ad_soyad;
+        input.classList.add('sp-selected');
+        document.getElementById('sp-hidden-'+key).value=st.id;
+        dd.classList.remove('active');
+      });
+    });
+  })
+  .catch(function(){
+    dd.innerHTML='<div class="sp-empty">Xəta baş verdi</div>';
   });
 }
 
-// ================= UI =================
-function refreshIcons(container) {
-  if (container && container.querySelectorAll) {
-    lucide.createIcons({ nodes: [container] });
-  } else {
-    lucide.createIcons();
-  }
+// ═════════ API ═════════
+function apiAction(action,method,body,query){
+  return new Promise(function(resolve,reject){
+    var url='/api/admin/'+action;
+    if(query&&(!method||method==='GET')){
+      var qs=new URLSearchParams(query).toString();
+      if(qs)url+='?'+qs;
+    }
+    var opt={method:method||'GET',headers:{'Content-Type':'application/json'},credentials:'same-origin'};
+    if(body)opt.body=JSON.stringify(body);
+    fetch(url,opt)
+    .then(function(res){
+      if(res.status===403){showLogin();reject(new Error('İcazə yoxdur'));return;}
+      if(!res.ok){reject(new Error('HTTP '+res.status));return;}
+      return res.json();
+    })
+    .then(function(data){
+      if(!data){reject(new Error('Boş cavab'));return;}
+      if(!data.success){reject(new Error(data.message||'Naməlum xəta'));return;}
+      resolve(data);
+    })
+    .catch(function(err){reject(err);});
+  });
 }
 
-function showToast(message, type) {
-  type = type || 'success';
-  var container = document.getElementById('toastContainer');
-  var toast = document.createElement('div');
-  toast.className = 'toast ' + type;
-  var icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'x-circle' : 'alert-triangle');
-  toast.innerHTML = '<i data-lucide="' + icon + '"></i><span>' + esc(message) + '</span>';
-  container.appendChild(toast);
-  refreshIcons(toast);
-  setTimeout(function() {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateX(120%)';
-    toast.style.transition = 'all 0.3s ease';
-    setTimeout(function() { toast.remove(); }, 300);
-  }, 3500);
+// ═════════ UI ═════════
+function showToast(msg,type){
+  var c=document.getElementById('toastContainer');
+  var t=document.createElement('div');
+  t.className='toast '+(type||'success');
+  var ic=type==='error'?'x-circle':(type==='warning'?'alert-triangle':'check-circle');
+  t.innerHTML='<i data-lucide="'+ic+'"></i><span>'+esc(msg)+'</span>';
+  c.appendChild(t);
+  refreshIcons(t);
+  setTimeout(function(){
+    t.style.opacity='0';
+    t.style.transform='translateX(120%)';
+    t.style.transition='all 0.3s ease';
+    setTimeout(function(){t.remove();},300);
+  },3500);
 }
 
-function openModal(title, bodyHtml, danger) {
-  document.getElementById('modalHeader').classList.toggle('danger-header', !!danger);
-  document.getElementById('modalTitle').innerText = title;
-  document.getElementById('modalBody').innerHTML = bodyHtml;
-  document.getElementById('modalFooter').style.display = 'none';
+function openModal(title,html,danger){
+  document.getElementById('modalHeader').classList.toggle('danger-header',!!danger);
+  document.getElementById('modalTitle').innerText=title;
+  document.getElementById('modalBody').innerHTML=html;
   document.getElementById('universalModal').classList.add('active');
   refreshIcons(document.getElementById('modalBody'));
 }
-
-function closeModal() {
+function closeModal(){
   document.getElementById('universalModal').classList.remove('active');
 }
 
-// ================= XUSUSI DIALOG =================
-var dlgCallback = null;
-
-var DLG_ICONS = { danger: 'trash-2', success: 'check-circle-2', warning: 'alert-triangle', info: 'info', kick: 'user-x', invite: 'mail-check', room: 'door-open', group: 'users-round', pay: 'credit-card', logout: 'log-out' };
-
-function dialogBase(type, title, bodyHtml, danger) {
-  document.getElementById('dlgHeader').classList.toggle('danger-header', !!danger);
-  document.getElementById('dlgTitleH').innerText = title;
-  document.getElementById('dlgBody').innerHTML =
-    '<div class="dlg-icon ' + type + '"><i data-lucide="' + (DLG_ICONS[type] || 'info') + '"></i></div>' + bodyHtml;
+// ═════════ DIALOG ═════════
+var dlgCallback=null;
+var DLG_ICONS={danger:'trash-2',success:'check-circle-2',warning:'alert-triangle',info:'info',group:'users-round',logout:'log-out',pay:'credit-card'};
+function dialogBase(type,title,html,danger){
+  document.getElementById('dlgHeader').classList.toggle('danger-header',!!danger);
+  document.getElementById('dlgTitleH').innerText=title;
+  document.getElementById('dlgBody').innerHTML='<div class="dlg-icon '+type+'"><i data-lucide="'+(DLG_ICONS[type]||'info')+'"></i></div>'+html;
   document.getElementById('dialogOverlay').classList.add('active');
   refreshIcons(document.getElementById('dlgBody'));
 }
-
-function closeDialog(result) {
+function closeDialog(res){
   document.getElementById('dialogOverlay').classList.remove('active');
-  var cb = dlgCallback; dlgCallback = null;
-  if (result && cb) { cb(); }
+  var cb=dlgCallback;dlgCallback=null;
+  if(res&&cb)cb();
+}
+function confirmDialog(title,text,cb,opts){
+  opts=opts||{};
+  dlgCallback=cb;
+  dialogBase(opts.type||'danger',title,
+    '<p class="dlg-text">'+text+'</p>'+
+    '<div class="dlg-actions">'+
+    '<button type="button" class="btn-secondary" onclick="closeDialog(false)">'+(opts.noText||'Ləğv et')+'</button>'+
+    '<button type="button" class="btn-danger" onclick="closeDialog(true)"><i data-lucide="check"></i> '+(opts.yesText||'Bəli')+'</button>'+
+    '</div>',opts.type==='danger');
+}
+function infoDialog(title,html,type){
+  dlgCallback=null;
+  dialogBase(type||'info',title,html+'<div class="dlg-actions"><button type="button" class="btn-primary" onclick="closeDialog(false)">Bağla</button></div>',false);
 }
 
-function confirmDialog(title, text, cb, opts) {
-  opts = opts || {};
-  var type = opts.type || 'danger';
-  dlgCallback = cb;
-  dialogBase(type, title,
-    '<p class="dlg-text">' + text + '</p>' +
-    '<div class="dlg-actions">' +
-    '<button type="button" class="btn-secondary" onclick="closeDialog(false)">' + (opts.noText || 'Ləğv et') + '</button>' +
-    '<button type="button" class="btn-danger" onclick="closeDialog(true)"><i data-lucide="check"></i> ' + (opts.yesText || 'Bəli, təsdiq edirəm') + '</button>' +
-    '</div>', type === 'danger' || type === 'kick');
-}
-
-function infoDialog(title, bodyHtml, type) {
-  dlgCallback = null;
-  dialogBase(type || 'info', title, bodyHtml + '<div class="dlg-actions"><button type="button" class="btn-primary" onclick="closeDialog(false)">Bağla</button></div>', false);
-}
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
+// Escape — yalnız modal bağlamaq üçün
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
     closeModal();
-    dlgCallback = null;
+    dlgCallback=null;
     document.getElementById('dialogOverlay').classList.remove('active');
-  }
-  if (e.key === '/' && ['INPUT','SELECT','TEXTAREA'].indexOf(document.activeElement.tagName) === -1) {
-    e.preventDefault();
-    var activeSection = document.querySelector('.page-content.active-page');
-    if (activeSection) {
-      var first = activeSection.querySelector('thead .col-filter');
-      if (first) { first.focus(); }
-    }
   }
 });
 
-function showLogin() { document.getElementById('loginOverlay').classList.add('active'); }
-function hideLogin() { document.getElementById('loginOverlay').classList.remove('active'); }
+// ═════════ AUTH ═════════
+function showLogin(){document.getElementById('loginOverlay').classList.add('active');}
+function hideLogin(){document.getElementById('loginOverlay').classList.remove('active');}
 
-function handleLogin(e) {
+function handleLogin(e){
   e.preventDefault();
-  var btn = document.getElementById('loginBtn');
-  var original = btn.innerHTML;
-  btn.innerHTML = '<i data-lucide="loader-2" style="animation:spin 1s linear infinite;"></i> Yoxlanılır...';
-  lucide.createIcons({ nodes: [btn] });
-
-  fetch('/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'same-origin',
-    body: JSON.stringify({ email: gv('loginEmail'), sifre: gv('loginPassword') })
-  }).then(function(r) { return r.json(); }).then(function(data) {
-    if (data.success) {
-      hideLogin();
-      isLoggedIn = true;
-      loadDashboard();
-      startPolling();
-      showToast('Uğurla daxil oldunuz!', 'success');
-    } else {
-      throw new Error('Yanlış məlumat');
+  var btn=document.getElementById('loginBtn');
+  var orig=btn.innerHTML;
+  btn.innerHTML='<i data-lucide="loader-2" style="animation:spin 1s linear infinite"></i> Yoxlanılır...';
+  refreshIcons(btn);
+  fetch('/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    credentials:'same-origin',
+    body:JSON.stringify({email:gv('loginEmail'),sifre:gv('loginPassword')})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.success){
+      hideLogin();isLoggedIn=true;loadDashboard();
+      startDashboardPolling();
+      showToast('Uğurla daxil oldunuz!','success');
+    }else{
+      document.getElementById('loginError').style.display='block';
+      btn.innerHTML=orig;
+      refreshIcons(btn);
     }
-  }).catch(function() {
-    document.getElementById('loginError').style.display = 'block';
-    btn.innerHTML = original;
+  })
+  .catch(function(){
+    document.getElementById('loginError').style.display='block';
+    btn.innerHTML=orig;
     refreshIcons(btn);
   });
 }
 
-function logout() {
-  confirmDialog('Çıxış', 'Admin paneldən çıxmaq istəyirsiniz?<span class="dlg-highlight">Dəyişilməmiş məlumatlar itə bilər</span>', function() {
-    fetch('/logout', { credentials: 'same-origin' }).then(function() {
-      stopPolling();
-      isLoggedIn = false;
+function logout(){
+  confirmDialog('Çıxış',
+    'Admin paneldən çıxmaq istəyirsiniz?<span class="dlg-highlight">Dəyişilməmiş məlumatlar itə bilər</span>',
+    function(){
+      fetch('/logout',{credentials:'same-origin'});
+      isLoggedIn=false;
+      stopDashboardPolling();
       showLogin();
-      showToast('Çıxış edildi', 'success');
-    });
-  }, { type: 'logout', yesText: 'Bəli, çıx', noText: 'Qalıram' });
+      showToast('Çıxış edildi','success');
+    },{type:'logout',yesText:'Bəli, çıx',noText:'Qalıram'});
 }
 
-function toggleSidebar() {
+function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('collapsed');
   document.getElementById('mainWrapper').classList.toggle('expanded');
 }
 
-// ================= REAL-TIME POLLING (30 san) =================
-// Yalnız dashboard səhifəsi AÇIQ və tab GÖRÜNƏN ikən işləyir — lazımsız sorğu yoxdur.
-function startPolling() {
-  stopPolling();
-  pollTimer = setInterval(function() {
-    if (!isLoggedIn) { stopPolling(); return; }
-    if (document.hidden) { return; }
-    if (document.querySelector('#page-dashboard.active-page')) {
-      loadDashboard(true);
+// ═════════ CSV EXPORT ═════════
+function exportCSV(entity){
+  window.location.href='/api/admin/export/'+entity;
+}
+
+// ═════════ NAV / PAGES ═════════
+function loadPage(page,el){
+  currentPage=page;
+  document.querySelectorAll('.nav-item').forEach(function(e){e.classList.remove('active');});
+  if(el)el.classList.add('active');
+  var t=PAGE_TITLES[page];
+  document.getElementById('pageTitle').innerText=t[0];
+  document.getElementById('pageDesc').innerText=t[1];
+  document.querySelectorAll('.page-content').forEach(function(p){p.classList.remove('active-page');});
+  var target=document.getElementById('page-'+page);
+  if(target){
+    target.classList.add('active-page');
+    setTimeout(function(){
+      target.style.opacity='1';
+      target.style.transform='translateY(0)';
+    },10);
+  }
+
+  if(page==='dashboard'){loadDashboard();startDashboardPolling();}
+  else{stopDashboardPolling();}
+  if(page==='logs')loadLogs();
+  if(page==='students')loadStudents();
+  if(page==='profiles')loadProfiles();
+  if(page==='rooms')loadRooms();
+  if(page==='groups')loadGroups();
+  if(page==='requests')loadRequests();
+  if(page==='applications')loadApplications();
+  if(page==='announcements')loadAnnouncements();
+  if(page==='surveys')loadSurveys();
+  if(page==='canteen')loadCanteen();
+  if(page==='laundry')loadLaundry();
+  if(page==='penalties')loadPenalties();
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ═════════ REAL-TIME DASHBOARD POLLING (30 san) ═════════
+function startDashboardPolling(){
+  stopDashboardPolling();
+  dashboardTimer=setInterval(function(){
+    if(isLoggedIn&&currentPage==='dashboard'){
+      loadDashboard();
     }
-    // Ölü sessiya yoxlaması (ucuz, DB-siz)
-    fetch('/api/admin/check', { credentials: 'same-origin' })
-      .then(function(r) { if (!r.ok && isLoggedIn) { isLoggedIn = false; stopPolling(); showLogin(); } })
-      .catch(function() {});
-  }, 30000);
+  },30000);
 }
-
-function stopPolling() {
-  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+function stopDashboardPolling(){
+  if(dashboardTimer){clearInterval(dashboardTimer);dashboardTimer=null;}
 }
-
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible' && isLoggedIn) {
-    fetch('/api/admin/check', { credentials: 'same-origin' })
-      .then(function(r) { if (!r.ok) { isLoggedIn = false; stopPolling(); showLogin(); } })
-      .catch(function() {});
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'&&isLoggedIn){
+    fetch('/api/admin/check',{credentials:'same-origin'})
+      .then(function(r){if(!r.ok){isLoggedIn=false;stopDashboardPolling();showLogin();}})
+      .catch(function(){});
   }
 });
 
-// ================= GENERIC CRUD =================
-function buildFormFields(fields, values) {
-  values = values || {};
-  return fields.map(function(f) {
-    var val = values[f.id] !== undefined ? values[f.id] : (f.default || '');
-    if (f.type === 'select') {
-      var opts = f.options.map(function(pair) { return '<option value="' + pair[0] + '"' + (val == pair[0] ? ' selected' : '') + '>' + pair[1] + '</option>'; }).join('');
-      return '<div class="form-group"><label>' + f.label + '</label><select class="form-select" id="' + f.id + '">' + opts + '</select></div>';
-    }
-    if (f.type === 'textarea') {
-      return '<div class="form-group"><label>' + f.label + '</label><textarea class="form-textarea" id="' + f.id + '" rows="' + (f.rows||3) + '" placeholder="' + escAttr(f.placeholder||'') + '">' + esc(val) + '</textarea></div>';
-    }
-    return '<div class="form-group"><label>' + f.label + '</label><input type="' + f.type + '" class="form-input" id="' + f.id + '" value="' + escAttr(val) + '" placeholder="' + escAttr(f.placeholder||'') + '"></div>';
-  }).join('');
-}
-
-function openAddModal(type) {
-  var cfg = CRUD_CONFIG[type];
-  if (!cfg) { return; }
-  if (type === 'room') { addRoomModal(); return; }
-  if (type === 'application') { addApplicationModal(); return; }
-  if (type === 'penalty') { addPenaltyModal(); return; }
-  if (type === 'laundry') { addLaundryModal(); return; }
-  var html = buildFormFields(cfg.fields) +
-    '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\'' + type + '\',0)"><i data-lucide="save"></i> Yadda Saxla</button>';
-  openModal(cfg.modalTitle.add, html);
-}
-
-function openEditModal(type, id) {
-  id = safeId(id);
-  var cfg = CRUD_CONFIG[type];
-  if (!cfg) { return; }
-  if (type === 'room') { editRoomModal(id); return; }
-  if (type === 'application') { editApplicationModal(id); return; }
-  if (type === 'penalty') { editPenaltyModal(id); return; }
-  if (type === 'laundry') { editLaundryModal(id); return; }
-
-  var values = {};
-  if (type === 'student') {
-    apiAction('get_student_full', 'POST', { id: id }).then(function(res) {
-      var d = res.data || {};
-      values = {
-        s_name: d.ad_soyad || '', s_email: d.email || '', s_sifre: '',
-        s_cins: d.cins || 'Kişi', s_ev: d.ev || 'Ev seçilməyib',
-        s_universitet: d.universitet || 'Qarabağ Universiteti',
-        s_ixtisas: d.ixtisas || '',
-        s_kurs: (d.kurs !== null && d.kurs !== undefined) ? d.kurs : '',
-        s_api_key: d.api_key || '',
-        s_ev_deyisme: (d.ev_deyisme_isteyi !== null && d.ev_deyisme_isteyi !== undefined) ? d.ev_deyisme_isteyi : '0'
-      };
-      var html = buildFormFields(cfg.fields, values) +
-        '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\'' + type + '\',' + id + ')"><i data-lucide="save"></i> Yadda Saxla</button>';
-      openModal(cfg.modalTitle.edit, html);
-    }).catch(function(e) { showToast(e.message, 'error'); });
-    return;
-  }
-
-  if (type === 'announcement' || type === 'survey') {
-    var action = type === 'announcement' ? 'get_announcements' : 'get_surveys';
-    apiAction(action).then(function(res) {
-      var item = null;
-      for (var i = 0; i < res.data.length; i++) { if (res.data[i].id == id) { item = res.data[i]; break; } }
-      if (item) {
-        values = { c_title: item.title, c_desc: item.description, c_priority: item.priority, c_status: item.status };
-      }
-      var html = buildFormFields(cfg.fields, values) +
-        '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\'' + type + '\',' + id + ')"><i data-lucide="save"></i> Yadda Saxla</button>';
-      openModal(cfg.modalTitle.edit, html);
-    }).catch(function(e) { showToast(e.message, 'error'); });
-    return;
-  }
-}
-
-function saveGenericItem(type, id) {
-  var cfg = CRUD_CONFIG[type];
-  if (!cfg) { return; }
-  var payload = cfg.buildPayload(id);
-  apiAction(cfg.saveAction, 'POST', payload).then(function() {
-    closeModal();
-    cfg.loadFn();
-    showToast(id ? 'Yeniləndi' : 'Əlavə edildi', 'success');
-  }).catch(function(e) {
-    infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger');
-  });
-}
-
-// Hər tip üçün XUSUSI silmə mesajları
-var DELETE_MSGS = {
-  student:   { title: 'Tələbəni Sil', html: function(i) { return 'Bu tələbəni silmək istədiyinizə <b>əminsiniz</b>?<span class="dlg-highlight">' + esc(i.ad_soyad || 'ID: ' + i.id) + '</span>Profil, cərimə, müraciət, camaşırxana və bütün tələbləri <b>birlikdə silinəcək</b>. Geri qaytarıla bilməz!'; } },
-  room:      { title: 'Otağı Sil', html: function(i) { return 'Bu otağı silmək istəyirsiniz?<span class="dlg-highlight">Ev ' + i.id + ' &bull; ' + (i.dolu || 0) + ' sakin</span>Sakinlər avtomatik <b>"Ev seçilməyib"</b> statusuna keçəcək.'; } },
-  application: { title: 'Müraciəti Sil', html: function(i) { return 'Bu müraciəti silmək istəyirsiniz?<span class="dlg-highlight">' + esc(i.basliq || 'Müraciət #' + i.id) + '</span>Bu əməliyyat geri qaytarıla bilməz!'; } },
-  announcement: { title: 'Elanı Sil', html: function(i) { return 'Bu elanı silmək istəyirsiniz?<span class="dlg-highlight">' + esc(i.title || 'Elan #' + i.id) + '</span>Tələbə panelindən də silinəcək.'; } },
-  survey:    { title: 'Anketi Sil', html: function(i) { return 'Bu anketi silmək istəyirsiniz?<span class="dlg-highlight">' + esc(i.title || 'Anket #' + i.id) + '</span>Cavablar da itəcək.'; } },
-  penalty:   { title: 'Cəriməni Sil', html: function(i) { return 'Bu cəriməni silmək istəyirsiniz?<span class="dlg-highlight">' + esc(i.ad_soyad || '') + ' &bull; ' + (i.amount || '') + ' AZN</span>Tarixçədən tam silinəcək.'; } },
-  laundry:   { title: 'Qeydi Sil', html: function(i) { return 'Bu qeydi silmək istəyirsiniz?<span class="dlg-highlight">' + esc(i.ad_soyad || '') + '</span>3 maşının statusu sıfırlanacaq.'; } }
-};
-
-function deleteItem(type, id) {
-  var cfg = CRUD_CONFIG[type];
-  if (!cfg) { return; }
-  id = safeId(id);
-
-  var sources = { student: currentStudents, room: currentRooms, application: currentApps };
-  var item = sources[type] ? sources[type].filter(function(x) { return (x.id || x.student_id) == id; })[0] : null;
-
-  function doConfirm(item) {
-    var msg = DELETE_MSGS[type];
-    var html = msg ? msg.html(item || { id: id }) : 'Bu elementi silmək istəyirsiniz?<span class="dlg-highlight">ID: ' + id + '</span>';
-    var dlgType = type === 'penalty' ? 'pay' : 'danger';
-    confirmDialog(msg ? msg.title : 'Silməni Təsdiqlə', html, function() {
-      apiAction('delete_' + cfg.endpoint, 'POST', { id: id }).then(function() {
-        cfg.loadFn();
-        showToast('Uğurla silindi', 'success');
-      }).catch(function(e) {
-        infoDialog('Silinmə Xətası', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger');
-      });
-    }, { type: dlgType, yesText: 'Bəli, sil' });
-  }
-
-  if ((type === 'penalty' || type === 'laundry') && !item) {
-    apiAction('get_' + type + 's').then(function(d) {
-      item = (d.data || []).filter(function(x) { return (x.id || x.student_id) == id; })[0];
-      doConfirm(item);
-    }).catch(function() { doConfirm(null); });
-  } else {
-    doConfirm(item);
-  }
-}
-
-// ================= PAGE LOADING =================
-function loadPage(page, el) {
-  document.querySelectorAll('.nav-item').forEach(function(e) { e.classList.remove('active'); });
-  if (el) { el.classList.add('active'); }
-  var t = PAGE_TITLES[page];
-  document.getElementById('pageTitle').innerText = t[0];
-  document.getElementById('pageDesc').innerText = t[1];
-  document.querySelectorAll('.page-content').forEach(function(p) { p.classList.remove('active-page'); });
-  var target = document.getElementById('page-' + page);
-  if (target) { target.classList.add('active-page'); }
-
-  var loaders = {
-    dashboard: loadDashboard, students: loadStudents, profiles: loadProfiles,
-    rooms: loadRooms, groups: loadGroups, requests: loadRequests, logs: loadLogs,
-    applications: loadApplications, announcements: loadAnnouncements,
-    surveys: loadSurveys, penalties: loadPenalties, canteen: loadCanteen, laundry: loadLaundry
-  };
-  if (loaders[page]) { loaders[page](); }
-}
-
-// ================= DASHBOARD =================
-function loadDashboard(quiet) {
-  apiAction('stats').then(function(data) {
-    var s = data.stats;
-    document.getElementById('dashboardStats').innerHTML =
-      '<div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="stat-value">' + s.students + '</div></div>' +
-      '<div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Otaqlar</div><div class="stat-value">' + s.rooms + '</div></div>' +
-      '<div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="stat-value">' + s.apps + '</div></div>' +
-      '<div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-luzide-clone="x" data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">' + s.penalties + '</div></div>' +
-      '<div class="stat-card delay-500"><div class="stat-icon" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce"><i data-lucide="users-round"></i></div><div class="stat-label">Aktiv Qruplar</div><div class="stat-value">' + s.groups + '</div></div>' +
-      '<div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-cream),#fde68a);color:#92400e"><i data-lucide="inbox"></i></div><div class="stat-label">Gözləyən Tələblər</div><div class="stat-value">' + s.requests + '</div><div class="stat-updated">' + (quiet ? 'avtomatik yeniləndi' : '') + '</div></div>';
+// ═════════ DASHBOARD ═════════
+function loadDashboard(){
+  apiAction('stats')
+  .then(function(data){
+    var s=data.stats;
+    document.getElementById('dashboardStats').innerHTML=
+      '<div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="stat-value">'+s.students+'</div></div>'+
+      '<div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Otaqlar</div><div class="stat-value">'+s.rooms+'</div></div>'+
+      '<div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="stat-value">'+s.apps+'</div></div>'+
+      '<div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">'+s.penalties+'</div></div>'+
+      '<div class="stat-card delay-500"><div class="stat-icon" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce"><i data-lucide="users-round"></i></div><div class="stat-label">Aktiv Qruplar</div><div class="stat-value">'+(s.groups||0)+'</div></div>'+
+      '<div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-cream),#fde68a);color:#92400e"><i data-lucide="inbox"></i></div><div class="stat-label">Gözləyən Tələblər</div><div class="stat-value">'+(s.requests||0)+'</div></div>';
     refreshIcons(document.getElementById('dashboardStats'));
-  }).catch(function(e) { if (!quiet) { showToast(e.message, 'error'); } });
+  })
+  .catch(function(e){showToast(e.message,'error');});
 }
 
-// ================= LOGS =================
-function loadLogs(page) {
-  page = page || 1;
-  PAGINATION.logs.page = page;
-  var filters = getColFilters('logsTable');
-  apiAction('get_logs', 'GET', null, { page: page, per_page: PAGINATION.logs.per_page }).then(function(data) {
-    // Server filtreleri desteklense de eski filtreleri uygula — filters obyektinde axtaris parametrleri goturulur
-    var items = data.data || [];
-    PAGINATION.logs.total = data.total || 0;
-    var html = '';
-    if (!items.length) {
-      html = emptyState('history', 'Son 1 ayda əməliyyat yoxdur');
-    } else {
-      items.forEach(function(l, idx) {
-        html += '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*40) + 'ms">' +
-          '<td style="font-size:13px;color:var(--text-secondary);white-space:nowrap">' + esc(l.tarix) + '</td>' +
-          '<td>' + esc(l.admin_user) + '</td>' +
-          '<td><span class="badge badge-info">' + esc(l.action) + '</span></td>' +
-          '<td>' + esc(l.entity||'-') + '</td>' +
-          '<td>' + esc(l.entity_id||'-') + '</td>' +
-          '<td style="font-size:13px">' + esc(l.details||'') + '</td></tr>';
+// ═════════ LOGS ═════════
+function loadLogs(page){
+  page=page||PAGINATION.logs.page;
+  PAGINATION.logs.page=page;
+  var f=getColFilters('logsTable');
+  apiAction('get_logs','GET',null,Object.assign({page:page,per_page:PAGINATION.logs.per_page},f))
+  .then(function(data){
+    PAGINATION.logs.total=data.total||0;
+    var items=data.data||[];
+    var html='';
+    if(!items.length){html=emptyState('history','Son 1 ayda əməliyyat yoxdur');}
+    else{
+      items.forEach(function(l,idx){
+        html+='<tr class="animate-fade-in-up" style="animation-delay:'+(idx*40)+'ms">'+
+          '<td style="font-size:13px;color:var(--text-secondary);white-space:nowrap">'+esc(l.tarix)+'</td>'+
+          '<td>'+esc(l.admin_user)+'</td>'+
+          '<td><span class="badge badge-info">'+esc(l.action)+'</span></td>'+
+          '<td>'+esc(l.entity||'-')+'</td>'+
+          '<td>'+esc(l.entity_id||'-')+'</td>'+
+          '<td style="font-size:13px">'+esc(l.details||'')+'</td></tr>';
       });
     }
-    document.getElementById('logsTbody').innerHTML = html;
-    renderPagination('logs', 'logsPagination', 'loadLogs');
-  }).catch(function(e) { showToast(e.message, 'error'); });
+    document.getElementById('logsTbody').innerHTML=html;
+    renderPagination('logs','logsPagination','loadLogs');
+  })
+  .catch(function(e){showToast(e.message,'error');});
 }
 
-function clearOldLogs() {
-  confirmDialog('Logları Təmizlə', '1 aydan köhnə bütün loglar silinsin?<span class="dlg-highlight">Son 1 ayın logları qalır</span>Bu əməliyyat geri qaytarıla bilməz!', function() {
-    apiAction('clear_old_logs', 'POST', {}).then(function(data) {
-      infoDialog('Təmizləndi', '<p class="dlg-text">' + esc(data.message) + '</p>', 'success');
-      loadLogs();
-    }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-  }, { type: 'danger', yesText: 'Bəli, təmizlə' });
+function clearOldLogs(){
+  confirmDialog('Logları Təmizlə',
+    '1 aydan köhnə bütün loglar silinsin?<span class="dlg-highlight">Son 1 ayın logları qalır</span>Bu əməliyyat geri qaytarıla bilməz!',
+    function(){
+      apiAction('clear_old_logs','POST',{})
+      .then(function(data){
+        infoDialog('Təmizləndi','<p class="dlg-text">'+esc(data.message)+'</p>','success');
+        loadLogs();
+      })
+      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    },{yesText:'Bəli, təmizlə'});
 }
 
-// ================= STUDENTS =================
-function loadStudents(page) {
-  page = page || 1;
-  PAGINATION.students.page = page;
-  var filters = getColFilters('studentsTable');
-  apiAction('get_students', 'GET', null, { page: page, per_page: PAGINATION.students.per_page, filters: undefined }).then(function(data) {
-    currentStudents = data.data || [];
-    PAGINATION.students.total = data.total || 0;
-    renderTable('student', data.data);
-    renderPagination('students', 'studentsPagination', 'loadStudents');
-  }).catch(function(e) { showToast(e.message, 'error'); });
+// ═════════ STUDENTS ═════════
+function loadStudents(page){
+  page=page||PAGINATION.students.page;
+  PAGINATION.students.page=page;
+  var f=getColFilters('studentsTable');
+  apiAction('get_students','GET',null,Object.assign({page:page,per_page:PAGINATION.students.per_page},f))
+  .then(function(data){
+    currentStudents=data.data||[];
+    PAGINATION.students.total=data.total||0;
+    renderTable('student',data.data);
+    renderPagination('students','studentsPagination','loadStudents');
+  })
+  .catch(function(e){showToast(e.message,'error');});
 }
 
-// ================= PROFILES =================
-function loadProfiles(page) {
-  page = page || 1;
-  PAGINATION.profiles.page = page;
-  apiAction('get_profiles', 'GET', null, { page: page, per_page: PAGINATION.profiles.per_page }).then(function(data) {
-    currentProfiles = data.data || [];
-    PAGINATION.profiles.total = data.total || 0;
-    var html = '';
-    if (!data.data || data.data.length === 0) {
-      html = emptyState('user-circle', 'Profil yoxdur');
-    } else {
-      data.data.forEach(function(p, idx) {
-        html += '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-          '<td style="font-weight:600">' + esc(p.ad_soyad) + '</td>' +
-          '<td>' + esc(p.yuxu_rejimi||'-') + '</td>' +
-          '<td>' + esc(p.temizlik||'-') + '</td>' +
-          '<td>' + esc(p.sosial_munasibet||'-') + '</td>' +
-          '<td>' + esc(p.hayat_terzi||'-') + '</td>' +
-          '<td><div style="display:flex;gap:8px">' +
-          '<button type="button" class="btn-icon" onclick="editProfileModal(' + p.student_id + ')" title="Redaktə"><i data-lucide="edit-3"></i></button>' +
-          '<button type="button" class="btn-icon danger" onclick="deleteProfile(' + p.student_id + ')" title="Sil"><i data-lucide="trash-2"></i></button>' +
+// ═════════ PROFILES ═════════
+function loadProfiles(page){
+  page=page||PAGINATION.profiles.page;
+  PAGINATION.profiles.page=page;
+  var f=getColFilters('profilesTable');
+  apiAction('get_profiles','GET',null,Object.assign({page:page,per_page:PAGINATION.profiles.per_page},f))
+  .then(function(data){
+    currentProfiles=data.data||[];
+    PAGINATION.profiles.total=data.total||0;
+    var html='';
+    if(!data.data||!data.data.length){html=emptyState('user-circle','Profil yoxdur');}
+    else{
+      data.data.forEach(function(p,idx){
+        html+='<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+          '<td style="font-weight:600">'+esc(p.ad_soyad)+'</td>'+
+          '<td>'+esc(p.yuxu_rejimi||'-')+'</td>'+
+          '<td>'+esc(p.temizlik||'-')+'</td>'+
+          '<td>'+esc(p.sosyal_munasibet||'-')+'</td>'+
+          '<td>'+esc(p.hayat_terzi||'-')+'</td>'+
+          '<td><div style="display:flex;gap:8px">'+
+          '<button type="button" class="btn-icon" onclick="editProfileModal('+p.student_id+')" title="Redaktə"><i data-lucide="edit-3"></i></button>'+
+          '<button type="button" class="btn-icon danger" onclick="deleteProfile('+p.student_id+')" title="Sil"><i data-lucide="trash-2"></i></button>'+
           '</div></td></tr>';
       });
     }
-    document.getElementById('profilesTbody').innerHTML = html;
+    document.getElementById('profilesTbody').innerHTML=html;
     refreshIcons(document.getElementById('profilesTbody'));
-    renderPagination('profiles', 'profilesPagination', 'loadProfiles');
-  }).catch(function(e) { showToast(e.message, 'error'); });
+    renderPagination('profiles','profilesPagination','loadProfiles');
+  })
+  .catch(function(e){showToast(e.message,'error');});
 }
 
-function editProfileModal(student_id) {
-  student_id = safeId(student_id);
-  var p = currentProfiles.filter(function(x) { return x.student_id == student_id; })[0];
+function editProfileModal(sid){
+  sid=safeId(sid);
+  var p=null;
+  for(var i=0;i<currentProfiles.length;i++){
+    if(currentProfiles[i].student_id==sid){p=currentProfiles[i];break;}
+  }
+  var nm=p?escAttr(p.ad_soyad):'';
   openModal('Profili Redaktə Et',
-    '<div class="form-group"><label>Tələbə</label>' +
-    '<input type="text" class="form-input" value="' + escAttr(p ? p.ad_soyad : '') + '" disabled style="background:#f1f5f9;cursor:not-allowed;">' +
-    '<input type="hidden" id="pr_student" value="' + student_id + '"></div>' +
-    '<div class="form-group"><label>Yuxu Rejimi</label><textarea class="form-textarea" id="pr_yuxu" rows="3">' + esc(p?p.yuxu_rejimi||'':'') + '</textarea></div>' +
-    '<div class="form-group"><label>Təmizlik</label><textarea class="form-textarea" id="pr_temizlik" rows="3">' + esc(p?p.temizlik||'':'') + '</textarea></div>' +
-    '<div class="form-group"><label>Sosial Münasibət</label><textarea class="form-textarea" id="pr_sosial" rows="3">' + esc(p?p.sosial_munasibet||'':'') + '</textarea></div>' +
-    '<div class="form-group"><label>Həyat Tərzi</label><textarea class="form-textarea" id="pr_hayat" rows="3">' + esc(p?p.hayat_terzi||'':'') + '</textarea></div>' +
-    '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveProfile(' + student_id + ')"><i data-lucide="save"></i> Yadda Saxla</button>');
+    '<div class="form-group"><label>Tələbə</label>'+
+    '<input type="text" class="form-input" value="'+nm+'" disabled style="background:#f1f5f9;cursor:not-allowed;">'+
+    '<input type="hidden" id="pr_student" value="'+sid+'"></div>'+
+    '<div class="form-group"><label>Yuxu Rejimi</label><textarea class="form-textarea" id="pr_yuxu" rows="3">'+esc(p?(p.yuxu_rejimi||''):'')+'</textarea></div>'+
+    '<div class="form-group"><label>Təmizlik</label><textarea class="form-textarea" id="pr_temizlik" rows="3">'+esc(p?(p.temizlik||''):'')+'</textarea></div>'+
+    '<div class="form-group"><label>Sosial Münasibət</label><textarea class="form-textarea" id="pr_sosial" rows="3">'+esc(p?(p.sosyal_munasibet||''):'')+'</textarea></div>'+
+    '<div class="form-group"><label>Həyat Tərzi</label><textarea class="form-textarea" id="pr_hayat" rows="3">'+esc(p?(p.hayat_terzi||''):'')+'</textarea></div>'+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveProfile('+sid+')"><i data-lucide="save"></i> Yadda Saxla</button>');
 }
 
-function saveProfile(student_id) {
-  apiAction('save_profile', 'POST', {
-    student_id: gv('pr_student'),
-    yuxu_rejimi: gv('pr_yuxu'), temizlik: gv('pr_temizlik'),
-    sosial_munasibet: gv('pr_sosial'), hayat_terzi: gv('pr_hayat')
-  }).then(function() {
-    closeModal();
-    loadProfiles();
-    showToast('Profil yeniləndi', 'success');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
+function saveProfile(sid){
+  apiAction('save_profile','POST',{
+    student_id:sid||gv('pr_student'),
+    yuxu_rejimi:gv('pr_yuxu'),
+    temizlik:gv('pr_temizlik'),
+    sosyal_munasibet:gv('pr_sosial'),
+    hayat_terzi:gv('pr_hayat')
+  })
+  .then(function(){
+    closeModal();loadProfiles();
+    showToast('Profil yeniləndi','success');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
 }
 
-function deleteProfile(student_id) {
-  student_id = safeId(student_id);
-  var p = currentProfiles.filter(function(x) { return x.student_id == student_id; })[0];
-  confirmDialog('Profili Sil', 'Bu tələbə profilini silmək istəyirsiniz?<span class="dlg-highlight">' + esc(p ? p.ad_soyad : 'ID: ' + student_id) + '</span>Yuxu rejimi, təmizlik və həyat tərzi məlumatları itəcək. AI uyğunluq hesablaması işləməyəcək.', function() {
-    apiAction('delete_profile', 'POST', { student_id: student_id }).then(function() {
-      loadProfiles();
-      showToast('Profil silindi', 'success');
-    }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-  }, { type: 'danger', yesText: 'Bəli, sil' });
+function deleteProfile(sid){
+  sid=safeId(sid);
+  var p=null;
+  for(var i=0;i<currentProfiles.length;i++){
+    if(currentProfiles[i].student_id==sid){p=currentProfiles[i];break;}
+  }
+  confirmDialog('Profili Sil',
+    'Bu tələbə profilini silmək istəyirsiniz?<span class="dlg-highlight">'+esc(p?p.ad_soyad:'ID: '+sid)+'</span>AI uyğunluq hesablaması işləməyəcək.',
+    function(){
+      apiAction('delete_profile','POST',{student_id:sid})
+      .then(function(){loadProfiles();showToast('Profil silindi','success');})
+      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    },{yesText:'Bəli, sil'});
 }
 
-// ================= ROOMS =================
-function loadRooms(page) {
-  page = page || 1;
-  PAGINATION.rooms.page = page;
-  apiAction('get_rooms', 'GET', null, { page: page, per_page: PAGINATION.rooms.per_page }).then(function(data) {
-    currentRooms = data.data || [];
-    PAGINATION.rooms.total = data.total || 0;
-    renderTable('room', data.data);
-    renderPagination('rooms', 'roomsPagination', 'loadRooms');
-  }).catch(function(e) { showToast(e.message, 'error'); });
+// ═════════ ROOMS ═════════
+function loadRooms(page){
+  page=page||PAGINATION.rooms.page;
+  PAGINATION.rooms.page=page;
+  var f=getColFilters('roomsTable');
+  apiAction('get_rooms','GET',null,Object.assign({page:page,per_page:PAGINATION.rooms.per_page},f))
+  .then(function(data){
+    currentRooms=data.data||[];
+    PAGINATION.rooms.total=data.total||0;
+    renderTable('room',data.data);
+    renderPagination('rooms','roomsPagination','loadRooms');
+  })
+  .catch(function(e){showToast(e.message,'error');});
 }
 
-function roomCinsById(rid) {
-  var n = parseInt(rid);
-  if (n >= 101 && n <= 120) { return 'Kişi'; }
-  if (n >= 121 && n <= 140) { return 'Qadın'; }
+function roomCinsById(rid){
+  var n=parseInt(rid);
+  if(n>=101&&n<=120)return 'Kişi';
+  if(n>=121&&n<=140)return 'Qadın';
   return '';
 }
 
-function genStatusOptions(selectedStatus) {
-  var stats = ['Yaxşı','Az zədəli','Zədəli'];
-  return stats.map(function(s) { return '<option value="' + s + '"' + (s==selectedStatus?' selected':'') + '>' + s + '</option>'; }).join('');
+function genStatusOptions(sel){
+  var st=['Yaxşı','Az zədəli','Zədəli'];
+  return st.map(function(s){return '<option value="'+s+'"'+(s==sel?' selected':'')+'>'+s+'</option>';}).join('');
 }
 
-function buildRoomForm(r, id) {
-  var isEdit = !!id;
-  var autoCins = roomCinsById(isEdit ? id : '');
-  var html = '';
-  html += '<div class="form-row">' +
-    '<div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" value="' + escAttr(isEdit ? id : '') + '"' + (isEdit ? ' disabled' : '') + ' placeholder="Məs: 105" oninput="syncRoomCins()"></div>' +
-    '<div class="form-group"><label>Tutum (maks. 6)</label><input type="number" min="1" max="6" class="form-input" id="r_capacity" value="' + (r ? r.capacity : 6) + '" oninput="toggleSlotCards()"></div>' +
-    '<div class="form-group"><label>Bina / Cins</label><select class="form-select" id="r_cins"' + (autoCins ? ' disabled' : '') + '>' +
-    '<option value="">Təyin edilməyib</option>' +
-    '<option value="Kişi"' + ((autoCins || (r && r.cins)) === 'Kişi' ? ' selected' : '') + '>Kişi (oğlan binası)</option>' +
-    '<option value="Qadın"' + ((autoCins || (r && r.cins)) === 'Qadın' ? ' selected' : '') + '>Qadın (qız binası)</option>' +
+function buildRoomForm(r,id){
+  var isEdit=!!id;
+  var auto=roomCinsById(isEdit?id:'');
+  var html='';
+  html+='<div class="form-row">'+
+    '<div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" value="'+escAttr(isEdit?id:'')+'"'+(isEdit?' disabled':'')+' placeholder="Məs: 105" oninput="syncRoomCins()"></div>'+
+    '<div class="form-group"><label>Tutum (maks. 6)</label><input type="number" min="1" max="6" class="form-input" id="r_capacity" value="'+(r?r.capacity:6)+'" oninput="toggleSlotCards()"></div>'+
+    '<div class="form-group"><label>Bina / Cins</label><select class="form-select" id="r_cins"'+(auto?' disabled':'')+'>'+
+    '<option value="">Təyin edilməyib</option>'+
+    '<option value="Kişi"'+((auto||(r&&r.cins))==='Kişi'?' selected':'')+'>Kişi (oğlan binası)</option>'+
+    '<option value="Qadın"'+((auto||(r&&r.cins))==='Qadın'?' selected':'')+'>Qadın (qız binası)</option>'+
     '</select></div></div>';
-  if (autoCins) {
-    html += '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Bu otaq nömrəsi ' + (autoCins === 'Kişi' ? 'oğlan (101-120)' : 'qız (121-140)') + ' binasına aiddir — cins avtomatik təyin olunub.</p>';
+  if(auto){
+    html+='<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Bu otaq nömrəsi '+(auto==='Kişi'?'oğlan (101-120)':'qız (121-140)')+' binasına aiddir — cins avtomatik təyin olunub.</p>';
   }
-  for (var i = 1; i <= 6; i++) {
-    var slot = (r && r.slots) ? r.slots.filter(function(s) { return s.slot === i; })[0] : null;
-    var curName = (slot && slot.student_id) ? (slot.ad_soyad || '') : '';
-    var curId = (slot && slot.student_id) ? slot.student_id : '';
-    var ys = slot ? slot.yataq_status : 'Yaxşı';
-    var ss = slot ? slot.skaf_status : 'Yaxşı';
-    var os = slot ? slot.oturacaq_status : 'Yaxşı';
-    html += '<div class="room-student-card" id="slotCard' + i + '"><h5><i data-lucide="user"></i> ' + i + '-ci Yer</h5>' +
-      '<div class="form-group"><label>Tələbə</label>' +
-      spContainerHtml('room-t' + i, { value: curName, valueId: curId, placeholder: 'Boş — ad yazın, axtarın...' }) +
-      '<div class="sp-hint">Ad yazıb siyahıdan seçin; boş saxlasanız yer boş qalacaq</div></div>' +
-      '<div class="form-row">' +
-      '<div class="form-group"><label>Yataq</label><select class="form-select" id="r_y' + i + '">' + genStatusOptions(ys) + '</select></div>' +
-      '<div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s' + i + '">' + genStatusOptions(ss) + '</select></div>' +
-      '<div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o' + i + '">' + genStatusOptions(os) + '</select></div>' +
+  var fc=auto||(r?r.cins:'');
+  for(var i=1;i<=6;i++){
+    var slot=null;
+    if(r&&r.slots){
+      for(var j=0;j<r.slots.length;j++){
+        if(r.slots[j].slot===i){slot=r.slots[j];break;}
+      }
+    }
+    var cn=(slot&&slot.student_id)?(slot.ad_soyad||''):'';
+    var ci=(slot&&slot.student_id)?slot.student_id:'';
+    var ys=slot?slot.yataq_status:'Yaxşı';
+    var ss=slot?slot.skaf_status:'Yaxşı';
+    var os=slot?slot.oturacaq_status:'Yaxşı';
+    html+='<div class="room-student-card" id="slotCard'+i+'"><h5><i data-lucide="user"></i> '+i+'-ci Yer</h5>'+
+      '<div class="form-group"><label>Tələbə</label>'+
+      spContainerHtml('room-t'+i,{value:cn,valueId:ci,placeholder:'Boş — ad yazın...'})+
+      '<div class="sp-hint">Ad yazıb siyahıdan seçin; boş saxlasanız yer boş qalacaq</div></div>'+
+      '<div class="form-row">'+
+      '<div class="form-group"><label>Yataq</label><select class="form-select" id="r_y'+i+'">'+genStatusOptions(ys)+'</select></div>'+
+      '<div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s'+i+'">'+genStatusOptions(ss)+'</select></div>'+
+      '<div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o'+i+'">'+genStatusOptions(os)+'</select></div>'+
       '</div></div>';
   }
-  html += '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(' + (isEdit ? id : 0) + ')"><i data-lucide="save"></i> Yadda Saxla</button>';
+  html+='<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom('+(isEdit?id:0)+')"><i data-lucide="save"></i> Yadda Saxla</button>';
   return html;
 }
 
-function initRoomPickers() {
-  for (var i = 1; i <= 6; i++) {
-    initStudentPicker('room-t' + i, { cinsFn: function() { return gv('r_cins') || null; } });
+function toggleSlotCards(){
+  var cap=Math.max(1,Math.min(6,parseInt(gv('r_capacity'))||6));
+  for(var i=1;i<=6;i++){
+    var c=document.getElementById('slotCard'+i);
+    if(c)c.style.display=(i<=cap)?'':'none';
+  }
+}
+function syncRoomCins(){
+  var idI=document.getElementById('r_id');
+  if(!idI||idI.disabled)return;
+  var c=roomCinsById(gv('r_id'));
+  var sel=document.getElementById('r_cins');
+  if(c){sel.value=c;sel.disabled=true;}
+  else{sel.disabled=false;}
+}
+function addRoomModal(){
+  openModal('Yeni Otaq',buildRoomForm(null,0));
+  initRoomPickers();
+  setTimeout(toggleSlotCards,100);
+}
+function editRoomModal(id){
+  id=safeId(id);
+  var r=null;
+  for(var i=0;i<currentRooms.length;i++){
+    if(currentRooms[i].id==id){r=currentRooms[i];break;}
+  }
+  if(!r){showToast('Otaq tapılmadı','error');return;}
+  openModal('Otaq Redaktə: '+id,buildRoomForm(r,id));
+  initRoomPickers();
+  setTimeout(toggleSlotCards,100);
+}
+function initRoomPickers(){
+  for(var i=1;i<=6;i++){
+    initStudentPicker('room-t'+i,{cinsFn:function(){return gv('r_cins')||null;}});
   }
 }
 
-function toggleSlotCards() {
-  var cap = Math.max(1, Math.min(6, parseInt(gv('r_capacity')) || 6));
-  for (var i = 1; i <= 6; i++) {
-    var card = document.getElementById('slotCard' + i);
-    if (card) { card.style.display = i <= cap ? '' : 'none'; }
-  }
-}
-
-function syncRoomCins() {
-  var idInput = document.getElementById('r_id');
-  if (!idInput || idInput.disabled) { return; }
-  var c = roomCinsById(gv('r_id'));
-  var sel = document.getElementById('r_cins');
-  if (c) { sel.value = c; sel.disabled = true; }
-  else { sel.disabled = false; }
-}
-
-function addRoomModal() {
-  openModal('Yeni Otaq', buildRoomForm(null, 0));
-  initRoomPickers();
-  setTimeout(toggleSlotCards, 100);
-}
-
-function editRoomModal(id) {
-  id = safeId(id);
-  var r = currentRooms.filter(function(x) { return x.id == id; })[0];
-  if (!r) { showToast('Otaq tapılmadı', 'error'); return; }
-  openModal('Otaq Redaktə: ' + id, buildRoomForm(r, id));
-  initRoomPickers();
-  setTimeout(toggleSlotCards, 100);
-}
-
-function saveRoom(id) {
-  for (var i = 1; i <= 6; i++) {
-    if (!spValidate('room-t' + i)) {
-      infoDialog('Tələbə Seçilməyib', '<p class="dlg-text">' + i + '-ci yerdə ad yazılıb, amma tələbə seçilməyib.<span class="dlg-highlight">Siyahıdan tələbəni seçin və ya sahəni təmizləyin</span></p>', 'warning');
+function saveRoom(id){
+  for(var i=1;i<=6;i++){
+    if(!spValidate('room-t'+i)){
+      infoDialog('Tələbə Seçilməyib','<p class="dlg-text">'+i+'-ci yerdə ad yazılıb, amma tələbə seçilməyib.<span class="dlg-highlight">Siyahıdan seçin və ya təmizləyin</span></p>','warning');
       return;
     }
   }
-
-  var payload = { id: id || gv('r_id'), capacity: gv('r_capacity') || 6, cins: gv('r_cins') };
-  for (var j = 1; j <= 6; j++) {
-    payload['t'+j] = spGetValue('room-t' + j);
-    payload['y'+j] = gv('r_y'+j);
-    payload['s'+j] = gv('r_s'+j);
-    payload['o'+j] = gv('r_o'+j);
+  var payload={id:id||gv('r_id'),capacity:gv('r_capacity')||6,cins:gv('r_cins')};
+  for(var i=1;i<=6;i++){
+    payload['t'+i]=spGetValue('room-t'+i);
+    payload['y'+i]=gv('r_y'+i);
+    payload['s'+i]=gv('r_s'+i);
+    payload['o'+i]=gv('r_o'+i);
   }
-  apiAction('save_room', 'POST', payload).then(function() {
-    closeModal();
-    loadRooms();
-    showToast(id ? 'Otaq yeniləndi' : 'Yeni otaq yaradıldı', 'success');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
+  apiAction('save_room','POST',payload)
+  .then(function(){
+    closeModal();loadRooms();
+    showToast(id?'Otaq yeniləndi':'Yeni otaq yaradıldı','success');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
 }
 
-// ================= APPLICATIONS =================
-function loadApplications(page) {
-  page = page || 1;
-  PAGINATION.applications.page = page;
-  apiAction('get_applications', 'GET', null, { page: page, per_page: PAGINATION.applications.per_page }).then(function(data) {
-    currentApps = data.data || [];
-    PAGINATION.applications.total = data.total || 0;
-    renderTable('application', data.data);
-    renderPagination('applications', 'appsPagination', 'loadApplications');
-  }).catch(function(e) { showToast(e.message, 'error'); });
+// ═════════ APPLICATIONS ═════════
+function loadApplications(page){
+  page=page||PAGINATION.applications.page;
+  PAGINATION.applications.page=page;
+  var f=getColFilters('appsTable');
+  apiAction('get_applications','GET',null,Object.assign({page:page,per_page:PAGINATION.applications.per_page},f))
+  .then(function(data){
+    currentApps=data.data||[];
+    PAGINATION.applications.total=data.total||0;
+    renderTable('application',data.data);
+    renderPagination('applications','appsPagination','loadApplications');
+  })
+  .catch(function(e){showToast(e.message,'error');});
 }
 
-function addApplicationModal() {
+function addApplicationModal(){
   openModal('Yeni Müraciət',
-    '<div class="form-group"><label>Tələbə</label>' +
-    spContainerHtml('app-student', { placeholder: 'Tələbə adını yazın...' }) +
-    '<div class="sp-hint">Minimum 2 hərf yazın, siyahıdan seçin</div></div>' +
-    '<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" placeholder="Başlıq"></div>' +
-    '<div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4" placeholder="Müraciət mətni..."></textarea></div>' +
-    '<div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Təsdiq zamanı tələbəyə görünəcək qeyd"></textarea></div>' +
-    '<div class="form-row">' +
-    '<div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option>Aşağı</option><option selected>Orta</option><option>Yüksək</option></select></div>' +
-    '<div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option selected>Gözləmədə</option><option>Təsdiqləndi</option><option>Rədd edildi</option></select></div></div>' +
+    '<div class="form-group"><label>Tələbə</label>'+spContainerHtml('app-student')+'<div class="sp-hint">Minimum 2 hərf yazın</div></div>'+
+    '<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" placeholder="Başlıq"></div>'+
+    '<div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4" placeholder="Müraciət mətni..."></textarea></div>'+
+    '<div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Təsdiq zamanı görünəcək qeyd"></textarea></div>'+
+    '<div class="form-row">'+
+    '<div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option>Aşağı</option><option selected>Orta</option><option>Yüksək</option></select></div>'+
+    '<div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option selected>Gözləmədə</option><option>Təsdiqləndi</option><option>Rədd edildi</option></select></div></div>'+
     '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>');
   initStudentPicker('app-student');
 }
 
-function editApplicationModal(id) {
-  id = safeId(id);
-  var a = currentApps.filter(function(x) { return x.id == id; })[0];
-  if (!a) { return; }
+function editApplicationModal(id){
+  id=safeId(id);
+  var a=null;
+  for(var i=0;i<currentApps.length;i++){
+    if(currentApps[i].id==id){a=currentApps[i];break;}
+  }
+  if(!a)return;
   openModal('Müraciəti Redaktə Et',
-    '<div class="form-group"><label>Tələbə</label>' +
-    '<input type="text" class="form-input" value="' + escAttr(a.ad_soyad) + '" disabled style="background:#f1f5f9;cursor:not-allowed;">' +
-    '<input type="hidden" id="app_student" value="' + a.student_id + '"></div>' +
-    '<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" value="' + escAttr(a.basliq) + '"></div>' +
-    '<div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4">' + esc(a.muraciet) + '</textarea></div>' +
-    '<div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Tələbəyə görünəcək qeyd">' + esc(a.notlar||'') + '</textarea></div>' +
-    '<div class="form-row">' +
-    '<div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option' + (a.priority=='Aşağı'?' selected':'') + '>Aşağı</option><option' + (a.priority=='Orta'?' selected':'') + '>Orta</option><option' + (a.priority=='Yüksək'?' selected':'') + '>Yüksək</option></select></div>' +
-    '<div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option' + (a.status=='Gözləmədə'?' selected':'') + '>Gözləmədə</option><option' + (a.status=='Təsdiqləndi'?' selected':'') + '>Təsdiqləndi</option><option' + (a.status=='Rədd edildi'?' selected':'') + '>Rədd edildi</option></select></div></div>' +
-    '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(' + id + ')"><i data-lucide="save"></i> Yadda Saxla</button>');
+    '<div class="form-group"><label>Tələbə</label><input type="text" class="form-input" value="'+escAttr(a.ad_soyad)+'" disabled style="background:#f1f5f9"><input type="hidden" id="app_student" value="'+a.student_id+'"></div>'+
+    '<div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" value="'+escAttr(a.basliq)+'"></div>'+
+    '<div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4">'+esc(a.muraciet)+'</textarea></div>'+
+    '<div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2">'+esc(a.notlar||'')+'</textarea></div>'+
+    '<div class="form-row">'+
+    '<div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option'+(a.priority=='Aşağı'?' selected':'')+'>Aşağı</option><option'+(a.priority=='Orta'?' selected':'')+'>Orta</option><option'+(a.priority=='Yüksək'?' selected':'')+'>Yüksək</option></select></div>'+
+    '<div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option'+(a.status=='Gözləmədə'?' selected':'')+'>Gözləmədə</option><option'+(a.status=='Təsdiqləndi'?' selected':'')+'>Təsdiqləndi</option><option'+(a.status=='Rədd edildi'?' selected':'')+'>Rədd edildi</option></select></div></div>'+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication('+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
 }
 
-function saveApplication(id) {
-  var studentId = id ? gv('app_student') : spGetValue('app-student');
-  if (!studentId) {
-    infoDialog('Tələbə Seçilməyib', '<p class="dlg-text">Axtarış sahəsinə tələbə adını yazıb siyahıdan seçin.<span class="dlg-highlight">Minimum 2 hərf yazın</span></p>', 'warning');
+function saveApplication(id){
+  var sid=id?gv('app_student'):spGetValue('app-student');
+  if(!sid){
+    infoDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>','warning');
     return;
   }
-  apiAction('save_application', 'POST', {
-    id: id, student_id: studentId, basliq: gv('app_basliq'),
-    muraciet: gv('app_muraciet'), priority: gv('app_priority'),
-    status: gv('app_status'), notlar: gv('app_notlar')
-  }).then(function() {
-    closeModal();
-    loadApplications();
-    showToast(id ? 'Müraciət yeniləndi' : 'Yeni müraciət əlavə edildi', 'success');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
+  apiAction('save_application','POST',{
+    id:id,student_id:sid,basliq:gv('app_basliq'),
+    muraciet:gv('app_muraciet'),priority:gv('app_priority'),
+    status:gv('app_status'),notlar:gv('app_notlar')
+  })
+  .then(function(){
+    closeModal();loadApplications();
+    showToast(id?'Müraciət yeniləndi':'Yeni müraciət əlavə edildi','success');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
 }
 
-function updateAppStatus(id, status) {
-  var a = currentApps.filter(function(x) { return x.id == id; })[0];
-  var isApprove = status === 'Təsdiqləndi';
-  confirmDialog(isApprove ? 'Müraciəti Təsdiqlə' : 'Müraciəti Rədd Et',
-    isApprove
-      ? 'Bu müraciəti təsdiqləmək istəyirsiniz?<span class="dlg-highlight">' + esc(a ? a.basliq : '') + '</span>Tələbə yaşıl statusda görəcək və avtomatik qeyd yazılacaq.'
-      : 'Bu müraciəti rədd etmək istəyirsiniz?<span class="dlg-highlight">' + esc(a ? a.basliq : '') + '</span>Tələbə qırmızı statusda görəcək. Geri qaytarmaq mümkündür.',
-    function() {
-      apiAction('update_app_status', 'POST', { id: safeId(id), status: status }).then(function() {
-        loadApplications();
-        showToast('Status yeniləndi', 'success');
-      }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-    }, { type: isApprove ? 'success' : 'warning', yesText: isApprove ? 'Bəli, təsdiqlə' : 'Bəli, rədd et' });
+function updateAppStatus(id,status){
+  var a=null;
+  for(var i=0;i<currentApps.length;i++){
+    if(currentApps[i].id==id){a=currentApps[i];break;}
+  }
+  var ap=status==='Təsdiqləndi';
+  confirmDialog(ap?'Müraciəti Təsdiqlə':'Müraciəti Rədd Et',
+    ap?'Bu müraciəti təsdiqləmək istəyirsiniz?<span class="dlg-highlight">'+esc(a?a.basliq:'')+'</span>Tələbə yaşıl statusda görəcək.'
+       :'Bu müraciəti rədd etmək istəyirsiniz?<span class="dlg-highlight">'+esc(a?a.basliq:'')+'</span>Tələbə qırmızı statusda görəcək.',
+    function(){
+      apiAction('update_app_status','POST',{id:safeId(id),status:status})
+      .then(function(){loadApplications();showToast('Status yeniləndi','success');})
+      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    },{type:ap?'success':'warning',yesText:ap?'Bəli, təsdiqlə':'Bəli, rədd et'});
 }
 
-// ================= GROUPS =================
-function loadGroups() {
-  apiAction('get_groups').then(function(data) {
-    var groups = data.data || [];
-    var html = '';
-    if (!groups.length) {
-      html = emptyState('users-round', 'Aktiv qrup yoxdur');
-    } else {
-      groups.forEach(function(g, idx) {
-        var chips = g.members.map(function(m) {
-          return '<span class="badge badge-gray" style="margin:2px 4px 2px 0;cursor:pointer;" title="Qrupdan çıxart" onclick="removeGroupMember(' + m.id + ',' + g.id + ')">' + esc(m.ad_soyad) + ' &#10005;</span>';
-        }).join('');
-        html += '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-          '<td style="font-weight:700">Qrup #' + g.id + '</td>' +
-          '<td><span class="badge badge-info">' + g.members.length + ' üzv</span></td>' +
-          '<td>' + chips + '<button type="button" class="btn-icon" style="margin-left:8px;width:28px;height:28px;" onclick="addMemberModal(' + g.id + ')" title="Üzv əlavə et"><i data-lucide="user-plus"></i></button></td>' +
-          '<td><button type="button" class="btn-icon danger" onclick="deleteGroup(' + g.id + ')" title="Qrupu ləğv et"><i data-lucide="trash-2"></i></button></td></tr>';
-      });
+// ═════════ GENERIC CRUD ═════════
+function buildFormFields(fields,values){
+  values=values||{};
+  return fields.map(function(f){
+    var val=values[f.id]!==undefined?values[f.id]:(f.def||'');
+    if(f.type==='select'){
+      var o=f.options.map(function(v){return '<option value="'+v[0]+'"'+(val==v[0]?' selected':'')+'>'+v[1]+'</option>';}).join('');
+      return '<div class="form-group"><label>'+f.label+'</label><select class="form-select" id="'+f.id+'">'+o+'</select></div>';
     }
-    document.getElementById('groupsTbody').innerHTML = html;
-    refreshIcons(document.getElementById('groupsTbody'));
-  }).catch(function(e) { showToast(e.message, 'error'); });
+    if(f.type==='textarea'){
+      return '<div class="form-group"><label>'+f.label+'</label><textarea class="form-textarea" id="'+f.id+'" rows="'+(f.rows||3)+'" placeholder="'+escAttr(f.placeholder||'')+'">'+esc(val)+'</textarea></div>';
+    }
+    return '<div class="form-group"><label>'+f.label+'</label><input type="'+f.type+'" class="form-input" id="'+f.id+'" value="'+escAttr(val)+'" placeholder="'+escAttr(f.placeholder||'')+'"></div>';
+  }).join('');
 }
 
-function adminCreateGroup() {
-  confirmDialog('Yeni Qrup', 'Boş qrup yaradılsın?<span class="dlg-highlight">Qrup #Yeni</span>Sonra üzvləri axtarışla əlavə edə bilərsiniz.', function() {
-    apiAction('create_group', 'POST', {}).then(function(data) {
-      infoDialog('Qrup Yaradıldı!', '<p class="dlg-text">Qrup uğurla yaradıldı.<span class="dlg-highlight">Qrup #' + data.group_id + '</span>İndi "+" düyməsi ilə üzv əlavə edin.</p>', 'group');
-      loadGroups();
-    }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-  }, { type: 'group', yesText: 'Yarat' });
+function openAddModal(type){
+  var cfg=CRUD_CONFIG[type];
+  if(!cfg)return;
+  if(type==='room'){addRoomModal();return;}
+  if(type==='application'){addApplicationModal();return;}
+  if(type==='penalty'){addPenaltyModal();return;}
+  if(type==='laundry'){addLaundryModal();return;}
+  openModal(cfg.modalTitle.add,buildFormFields(cfg.fields)+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\''+type+'\',0)"><i data-lucide="save"></i> Yadda Saxla</button>');
 }
 
-function addMemberModal(gid) {
-  openModal('Qrupa Üzv Əlavə Et — Qrup #' + gid,
-    '<div class="form-group"><label>Tələbə</label>' +
-    spContainerHtml('grp-add', { placeholder: 'Tələbə adını yazın...', exclude: 'no_group' }) +
-    '<div class="sp-hint">Yalnız qrupda olmayan və ev seçməmiş tələbələr görsənir</div></div>' +
-    '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveGroupMember(' + gid + ')"><i data-lucide="user-plus"></i> Əlavə et</button>');
-  initStudentPicker('grp-add', { exclude: 'no_group' });
-}
+function openEditModal(type,id){
+  var cfg=CRUD_CONFIG[type];
+  if(!cfg)return;
+  id=safeId(id);
+  if(type==='room'){editRoomModal(id);return;}
+  if(type==='application'){editApplicationModal(id);return;}
+  if(type==='penalty'){editPenaltyModal(id);return;}
+  if(type==='laundry'){editLaundryModal(id);return;}
 
-function saveGroupMember(gid) {
-  var sid = spGetValue('grp-add');
-  if (!sid) {
-    infoDialog('Seçilməyib', '<p class="dlg-text">Tələbə adını yazıb siyahıdan seçin.</p>', 'warning');
+  if(type==='student'){
+    apiAction('get_student_full','POST',{id:id})
+    .then(function(res){
+      var d=res.data||{};
+      var vals={
+        s_name:d.ad_soyad||'',s_email:d.email||'',s_sifre:'',
+        s_cins:d.cins||'Kişi',s_ev:d.ev||'Ev seçilməyib',
+        s_universitet:d.universitet||'Qarabağ Universiteti',
+        s_ixtisas:d.ixtisas||'',
+        s_kurs:(d.kurs!==null&&d.kurs!==undefined)?d.kurs:'',
+        s_api_key:d.api_key||'',
+        s_ev_deyisme:(d.ev_deyisme_isteyi!==null&&d.ev_deyisme_isteyi!==undefined)?d.ev_deyisme_isteyi:'0'
+      };
+      openModal(cfg.modalTitle.edit,buildFormFields(cfg.fields,vals)+
+        '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\''+type+'\','+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
+    })
+    .catch(function(e){showToast(e.message,'error');});
     return;
   }
-  apiAction('add_group_member', 'POST', { group_id: gid, student_id: sid }).then(function() {
-    closeModal();
-    loadGroups();
-    showToast('Üzv qrupa əlavə edildi', 'success');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
+
+  if(type==='announcement'||type==='surveys'||type==='survey'){
+    var action=type==='announcement'?'get_announcements':'get_surveys';
+    apiAction(action)
+    .then(function(res){
+      var item=null;
+      var items=res.data||[];
+      for(var i=0;i<items.length;i++){
+        if(items[i].id==id){item=items[i];break;}
+      }
+      var vals={c_title:'',c_desc:'',c_priority:'Normal',c_status:'Aktiv'};
+      if(item)vals={c_title:item.title,c_desc:item.description,c_priority:item.priority,c_status:item.status};
+      openModal(cfg.modalTitle.edit,buildFormFields(cfg.fields,vals)+
+        '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem(\''+type+'\','+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
+    })
+    .catch(function(e){showToast(e.message,'error');});
+    return;
+  }
 }
 
-function removeGroupMember(sid, gid) {
-  confirmDialog('Üzvü Çıxart', 'Bu tələbə qrupdan çıxarılsın?<span class="dlg-highlight">Qrup #' + gid + ' &bull; Tələbə ID: ' + sid + '</span>Son üzv olarsa, qrup tamamilə silinəcək.', function() {
-    apiAction('remove_group_member', 'POST', { student_id: sid }).then(function() {
-      loadGroups();
-      showToast('Üzv qrupdan çıxarıldı', 'success');
-    }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-  }, { type: 'group', yesText: 'Bəli, çıxart' });
+function saveGenericItem(type,id){
+  var cfg=CRUD_CONFIG[type];
+  if(!cfg)return;
+  var payload=cfg.buildPayload(id);
+  apiAction(cfg.saveAction,'POST',payload)
+  .then(function(){
+    closeModal();cfg.loadFn();
+    showToast(id?'Yeniləndi':'Əlavə edildi','success');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
 }
 
-function deleteGroup(gid) {
-  gid = safeId(gid);
-  confirmDialog('Qrupu Ləğv Et', 'Bu qrup tamamilə ləğv edilsin?<span class="dlg-highlight">Qrup #' + gid + '</span>Üzvlər qrupdan çıxarılacaq, amma silinməyəcək.', function() {
-    apiAction('delete_group', 'POST', { id: gid }).then(function() {
-      loadGroups();
-      showToast('Qrup ləğv edildi', 'success');
-    }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-  }, { type: 'group', yesText: 'Bəli, ləğv et' });
+var DELETE_MSGS={
+  student:'Bu tələbəni silmək istəyirsiniz? — bütün bağlı məlumatlar da silinəcək.',
+  room:'Bu otağı silmək istəyirsiniz? Sakinlər "Ev seçilməyib" statusuna keçəcək.',
+  application:'Bu müraciəti silmək istəyirsiniz?',
+  announcement:'Bu elanı silmək istəyirsiniz?',
+  survey:'Bu anketi silmək istəyirsiniz?',
+  penalty:'Bu cəriməni silmək istəyirsiniz?',
+  laundry:'Bu qeydi silmək istəyirsiniz?'
+};
+
+function deleteItem(type,id){
+  var cfg=CRUD_CONFIG[type];
+  if(!cfg)return;
+  id=safeId(id);
+  confirmDialog('Silməni Təsdiqlə',
+    DELETE_MSGS[type]||'Bu elementi silmək istəyirsiniz?<span class="dlg-highlight">ID: '+id+'</span>',
+    function(){
+      apiAction('delete_'+cfg.endpoint,'POST',{id:id})
+      .then(function(){cfg.loadFn();showToast('Silindi','success');})
+      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    },{yesText:'Bəli, sil'});
 }
 
-// ================= REQUESTS =================
-var REQ_TYPE_MAP = { invite: ['Dəvət','badge-info'], kick: ['Qovma','badge-danger'], leave: ['Çıxma','badge-warning'] };
+// ═════════ ANNOUNCEMENTS & SURVEYS ═════════
+function loadAnnouncements(page){
+  page=page||PAGINATION.announcements.page;
+  PAGINATION.announcements.page=page;
+  var f=getColFilters('annTable');
+  apiAction('get_announcements','GET',null,Object.assign({page:page,per_page:PAGINATION.announcements.per_page},f))
+  .then(function(data){
+    PAGINATION.announcements.total=data.total||0;
+    renderTable('announcement',data.data);
+    renderPagination('announcements','annPagination','loadAnnouncements');
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
 
-function loadRequests(page) {
-  page = page || 1;
-  PAGINATION.requests.page = page;
-  apiAction('get_requests', 'GET', null, { page: page, per_page: PAGINATION.requests.per_page }).then(function(data) {
-    PAGINATION.requests.total = data.total || 0;
-    var reqs = data.data || [];
-    var html = '';
-    if (!reqs.length) {
-      html = emptyState('inbox', 'Tələb yoxdur');
-    } else {
-      reqs.forEach(function(rq, idx) {
-        var pair = REQ_TYPE_MAP[rq.type] || ['?','badge-gray'];
-        var tName = pair[0], tCls = pair[1];
-        var sCls = rq.status === 'Gözləmədə' ? 'badge-warning' : (rq.status === 'Təsdiqləndi' ? 'badge-success' : 'badge-danger');
-        var actions = '';
-        actions += '<button type="button" class="btn-icon" onclick="viewRequestVotes(' + rq.id + ')" title="Səslər"><i data-lucide="vote"></i></button>';
-        if (rq.status === 'Gözləmədə') {
-          actions += '<button type="button" class="btn-icon" style="color:var(--success)" onclick="resolveRequest(' + rq.id + ', true)" title="Təsdiq et"><i data-lucide="check"></i></button>';
-          actions += '<button type="button" class="btn-icon danger" onclick="resolveRequest(' + rq.id + ', false)" title="Rədd et"><i data-lucide="x"></i></button>';
+// ═════════ SURVEYS / ANKETLƏR — DÜZGÜN ═════════
+function loadSurveys(page){
+  page=page||PAGINATION.surveys.page;
+  PAGINATION.surveys.page=page;
+  var f=getColFilters('surTable');
+  apiAction('get_surveys','GET',null,Object.assign({page:page,per_page:PAGINATION.surveys.per_page},f))
+  .then(function(data){
+    PAGINATION.surveys.total=data.total||0;
+    renderTable('survey',data.data);
+    renderPagination('surveys','surPagination','loadSurveys');
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+// ═════════ CANTEEN / YEMƏKXANA — DÜZGÜN ═════════
+function loadCanteen(){
+  apiAction('get_canteen')
+  .then(function(data){
+    var days=['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə','Bazar'];
+    var html='';
+    ['Yataqxana','Universitet'].forEach(function(loc){
+      html+='<div class="canteen-location"><h4><i data-lucide="'+(loc==='Yataqxana'?'hotel':'graduation-cap')+'"></i> '+loc+'</h4>';
+      for(var i=1;i<=7;i++){
+        var item=null;
+        var items=data.data||[];
+        for(var j=0;j<items.length;j++){
+          if(items[j].location===loc&&items[j].day_of_week==i){item=items[j];break;}
         }
-        actions += '<button type="button" class="btn-icon danger" onclick="deleteRequest(' + rq.id + ')" title="Sil"><i data-lucide="trash-2"></i></button>';
-        html += '<tr class="animate-fade-in-up" style="animation-delay:' + (idx*50) + 'ms">' +
-          '<td>' + rq.id + '</td>' +
-          '<td><span class="badge ' + tCls + '">' + tName + '</span></td>' +
-          '<td style="font-weight:600">Ev ' + rq.room_id + '</td>' +
-          '<td>' + esc(rq.requester_name) + '</td>' +
-          '<td style="font-weight:600">' + esc(rq.target_name) + '</td>' +
-          '<td>' + rq.vote_count + ' səs</td>' +
-          '<td><span class="badge ' + sCls + '">' + esc(rq.status) + '</span></td>' +
-          '<td style="font-size:12px;color:var(--text-secondary)">' + esc(rq.tarix||'') + '</td>' +
-          '<td><div style="display:flex;gap:8px">' + actions + '</div></td></tr>';
-      });
-    }
-    document.getElementById('reqTbody').innerHTML = html;
-    refreshIcons(document.getElementById('reqTbody'));
-    renderPagination('requests', 'reqPagination', 'loadRequests');
-  }).catch(function(e) { showToast(e.message, 'error'); });
+        if(item){
+          html+='<div class="meal-row"><span class="meal-day">'+days[i]+'</span>'+
+            '<input type="text" class="meal-input" value="'+escAttr(item.meal_name)+'" onchange="updateCanteen('+item.id+',this.value)" onkeyup="updateCanteenDelayed('+item.id+',this.value)"></div>';
+        }
+      }
+      html+='</div>';
+    });
+    document.getElementById('canteenGrid').innerHTML=html;
+    refreshIcons(document.getElementById('canteGrid'));
+  })
+  .catch(function(e){showToast(e.message,'error');});
 }
 
-function adminCreateRequestModal() {
+var canteenTimer;
+function updateCanteenDelayed(id,val){
+  clearTimeout(canteenTimer);
+  canteenTimer=setTimeout(function(){updateCanteen(id,val);},800);
+}
+function updateCanteen(id,val){
+  apiAction('save_canteen','POST',{id:safeId(id),meal_name:val})
+  .then(function(){showToast('Yemək yeniləndi','success');})
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+// ═════════ PENALTIES / CƏRİMƏLƏR — DÜZGÜN ═════════
+function loadPenalties(page){
+  page=page||PAGINATION.penalties.page;
+  PAGINATION.penalties.page=page;
+  var f=getColFilters('penTable');
+  apiAction('get_penalties','GET',null,Object.assign({page:page,per_page:PAGINATION.penalties.per_page},f))
+  .then(function(data){
+    PAGINATION.penalties.total=data.total||0;
+    renderTable('penalty',data.data);
+    renderPagination('penalties','penPagination','loadPenalties');
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+function addPenaltyModal(){
+  openModal('Yeni Cərimə',
+    '<div class="form-group"><label>Tələbə</label>'+spContainerHtml('pen-student')+'<div class="sp-hint">Minimum 2 hərf yazın</div></div>'+
+    '<div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" placeholder="Məbləğ"></div>'+
+    '<div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" placeholder="Səbəb"></div>'+
+    '<button type="button" class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>','danger');
+  initStudentPicker('pen-student');
+}
+
+function editPenaltyModal(id){
+  id=safeId(id);
+  apiAction('get_penalties')
+  .then(function(data){
+    var p=null;
+    var items=data.data||[];
+    for(var i=0;i<items.length;i++){
+      if(items[i].id==id){p=items[i];break;}
+    }
+    if(!p)return;
+    openModal('Cərimə Redaktə',
+      '<div class="form-group"><label>Tələbə</label><input type="text" class="form-input" value="'+escAttr(p.ad_soyad)+'" disabled style="background:#f1f5f9"><input type="hidden" id="p_student" value="'+p.student_id+'"></div>'+
+      '<div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="'+p.amount+'"></div>'+
+      '<div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="'+escAttr(p.reason)+'"></div>'+
+      '<div class="form-group"><label>Status</label><select class="form-select" id="p_status"><option'+(p.status=='Ödənilməmiş'?' selected':'')+'>Ödənilməmiş</option><option'+(p.status=='Ödənilib'?' selected':'')+'>Ödənilib</option></select></div>'+
+      '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty('+id+')"><i data-lucide="save"></i> Yadda Saxla</button>');
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+function savePenalty(id){
+  var sid=id?gv('p_student'):spGetValue('pen-student');
+  if(!sid){
+    infoDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>','warning');
+    return;
+  }
+  apiAction('save_penalty','POST',{
+    id:id,student_id:sid,amount:gv('p_amount'),reason:gv('p_reason'),status:gv('p_status')
+  })
+  .then(function(){
+    closeModal();loadPenalties();
+    showToast(id?'Cərimə yeniləndi':'Yeni cərimə əlavə edildi','success');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+}
+
+function payPenalty(id){
+  confirmDialog('Cəriməni Ödə',
+    'Bu cəriməni ödənilmiş kimi işarələmək istəyirsiniz?',
+    function(){
+      apiAction('pay_penalty','POST',{id:safeId(id)})
+      .then(function(){loadPenalties();showToast('Cərimə ödənildi','success');})
+      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    },{type:'pay',yesText:'Bəli, ödə'});
+}
+
+// ═════════ LAUNDRY / CAMAŞIRXANA — DÜZGÜN ═════════
+function loadLaundry(page){
+  page=page||PAGINATION.laundry.page;
+  PAGINATION.laundry.page=page;
+  var f=getColFilters('laundryTable');
+  apiAction('get_laundry','GET',null,Object.assign({page:page,per_page:PAGINATION.laundry.per_page},f))
+  .then(function(data){
+    PAGINATION.laundry.total=data.total||0;
+    renderTable('laundry',data.data);
+    renderPagination('laundry','laundryPagination','loadLaundry');
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+function genLaundryOptions(sel){
+  var st=['Yoxdur','Gözlənilir','Hazır'];
+  return st.map(function(s){return '<option value="'+s+'"'+(s==sel?' selected':'')+'>'+s+'</option>';}).join('');
+}
+
+function addLaundryModal(){
+  openModal('Yeni Çamaşırxana Qeydi',
+    '<div class="form-group"><label>Tələbə</label>'+spContainerHtml('lnd-student',{exclude:'laundry'})+'<div class="sp-hint">Artıq qeydi olanlar görünmür</div></div>'+
+    '<div class="form-row">'+
+    '<div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">'+genLaundryOptions('Yoxdur')+'</select></div>'+
+    '<div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">'+genLaundryOptions('Yoxdur')+'</select></div>'+
+    '<div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">'+genLaundryOptions('Yoxdur')+'</select></div></div>'+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>');
+  initStudentPicker('lnd-student',{exclude:'laundry'});
+}
+
+function editLaundryModal(sid){
+  sid=safeId(sid);
+  apiAction('get_laundry')
+  .then(function(data){
+    var l=null;
+    var items=data.data||[];
+    for(var i=0;i<items.length;i++){
+      if(items[i].student_id==sid){l=items[i];break;}
+    }
+    if(!l)return;
+    openModal('Redaktə',
+      '<div class="form-group"><label>Tələbə</label><input type="text" class="form-input" value="'+escAttr(l.ad_soyad)+'" disabled style="background:#f1f5f9"><input type="hidden" id="l_student" value="'+l.student_id+'"></div>'+
+      '<div class="form-row">'+
+      '<div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">'+genLaundryOptions(l.machine_1_status)+'</select></div>'+
+      '<div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">'+genLaundryOptions(l.machine_2_status)+'</select></div>'+
+      '<div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">'+genLaundryOptions(l.machine_3_status)+'</select></div></div>'+
+      '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry('+sid+')"><i data-lucide="save"></i> Yadda Saxla</button>');
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+function saveLaundry(sid){
+  var id=sid?gv('l_student'):spGetValue('lnd-student');
+  if(!id){
+    infoDialog('Tələbə Seçilməyib','<p class="dlg-text">Axtarışdan tələbə seçin.</p>','warning');
+    return;
+  }
+  apiAction('save_laundry','POST',{
+    student_id:id,
+    m1:gv('l_m1'),m2:gv('l_m2'),m3:gv('l_m3')
+  })
+  .then(function(){
+    closeModal();loadLaundry();
+    showToast(sid?'Yeniləndi':'Əlavə edildi','success');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+}
+
+// ═════════ GROUPS ═════════
+function loadGroups(){
+  apiAction('get_groups')
+  .then(function(data){
+    var groups=data.data||[];
+    var html='';
+    if(!groups.length){html=emptyState('users-round','Aktiv qrup yoxdur');}
+    else{
+      groups.forEach(function(g,idx){
+        var chips=g.members.map(function(m){
+          return '<span class="badge badge-gray" style="margin:2px 4px 2px 0;cursor:pointer" title="Qrupdan çıxart" onclick="removeGroupMember('+m.id+','+g.id+')">'+esc(m.ad_soyad)+' ✕</span>';
+        }).join('');
+        html+='<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+          '<td style="font-weight:700">Qrup #'+g.id+'</td>'+
+          '<td><span class="badge badge-info">'+g.members.length+' üzv</span></td>'+
+          '<td>'+chips+'<button type="button" class="btn-icon" style="margin-left:8px;width:28px;height:28px" onclick="addMemberModal('+g.id+')" title="Üzv əlavə et"><i data-lucide="user-plus"></i></button></td>'+
+          '<td><button type="button" class="btn-icon danger" onclick="deleteGroup('+g.id+')" title="Ləğv et"><i data-lucide="trash-2"></i></button></td></tr>';
+      });
+    }
+    document.getElementById('groupsTbody').innerHTML=html;
+    refreshIcons(document.getElementById('groupsTbody'));
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+function adminCreateGroup(){
+  confirmDialog('Yeni Qrup','Boş qrup yaradılsın?',function(){
+    apiAction('create_group','POST',{})
+    .then(function(data){
+      infoDialog('Qrup Yaradıldı!','<p class="dlg-text">Qrup #'+data.group_id+' yaradıldı. İndi üzv əlavə edin.</p>','group');
+      loadGroups();
+    })
+    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  },{type:'group',yesText:'Yarat'});
+}
+
+function addMemberModal(gid){
+  openModal('Qrupa Üzv Əlavə Et — Qrup #'+gid,
+    '<div class="form-group"><label>Tələbə</label>'+spContainerHtml('grp-add',{exclude:'no_group'})+'<div class="sp-hint">Yalnız qrupda olmayan və ev seçməmiş</div></div>'+
+    '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveGroupMember('+gid+')"><i data-lucide="user-plus"></i> Əlavə et</button>');
+  initStudentPicker('grp-add',{exclude:'no_group'});
+}
+
+function saveGroupMember(gid){
+  var sid=spGetValue('grp-add');
+  if(!sid){infoDialog('Seçilməyib','<p class="dlg-text">Tələbə seçin.</p>','warning');return;}
+  apiAction('add_group_member','POST',{group_id:gid,student_id:sid})
+  .then(function(){closeModal();loadGroups();showToast('Üzv əlavə edildi','success');})
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+}
+
+function removeGroupMember(sid,gid){
+  confirmDialog('Üzvü Çıxart','Bu tələbə qrupdan çıxarılsın? Son üzv olarsa qrup silinəcək.',function(){
+    apiAction('remove_group_member','POST',{student_id:sid})
+    .then(function(){loadGroups();showToast('Üzv çıxarıldı','success');})
+    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  },{type:'group',yesText:'Bəli, çıxart'});
+}
+
+function deleteGroup(gid){
+  gid=safeId(gid);
+  confirmDialog('Qrupu Ləğv Et','Bu qrup tamamilə ləğv edilsin? Üzvlər qalır, qrup silinir.',function(){
+    apiAction('delete_group','POST',{id:gid})
+    .then(function(){loadGroups();showToast('Qrup ləğv edildi','success');})
+    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></span></p>','danger');});
+  },{type:'group',yesText:'Bəli, ləğv et'});
+}
+
+// ═════════ REQUESTS ═════════
+var REQ_TYPE_MAP={invite:['Dəvət','badge-info'],kick:['Qovma','badge-danger'],leave:['Çıxma','badge-warning']};
+
+function loadRequests(page){
+  page=page||PAGINATION.requests.page;
+  PAGINATION.requests.page=page;
+  apiAction('get_requests','GET',null,{page:page,per_page:PAGINATION.requests.per_page})
+  .then(function(data){
+    PAGINATION.requests.total=data.total||0;
+    var reqs=data.data||[];
+    var html='';
+    if(!reqs.length){html=emptyState('inbox','Tələb yoxdur');}
+    else{
+      reqs.forEach(function(rq,idx){
+        var tm=REQ_TYPE_MAP[rq.type]||['?','badge-gray'];
+        var sc=rq.status==='Gözləmədə'?'badge-warning':(rq.status==='Təsdiqləndi'?'badge-success':'badge-danger');
+        var act='';
+        act+='<button type="button" class="btn-icon" onclick="viewRequestVotes('+rq.id+')" title="Səslər"><i data-lucide="vote"></i></button>';
+        if(rq.status==='Gözləmədə'){
+          act+='<button type="button" class="btn-icon" style="color:var(--success)" onclick="resolveRequest('+rq.id+',true)" title="Təsdiq"><i data-lucide="check"></i></button>';
+          act+='<button type="button" class="btn-icon danger" onclick="resolveRequest('+rq.id+',false)" title="Rədd"><i data-lucide="x"></i></button>';
+        }
+        act+='<button type="button" class="btn-icon danger" onclick="deleteRequest('+rq.id+')" title="Sil"><i data-lucide="trash-2"></i></button>';
+        html+='<tr class="animate-fade-in-up" style="animation-delay:'+(idx*50)+'ms">'+
+          '<td>'+rq.id+'</td>'+
+          '<td><span class="badge '+tm[1]+'">'+tm[0]+'</span></td>'+
+          '<td style="font-weight:600">Ev '+rq.room_id+'</td>'+
+          '<td>'+esc(rq.requester_name)+'</td>'+
+          '<td style="font-weight:600">'+esc(rq.target_name)+'</td>'+
+          '<td>'+rq.vote_count+' səs</td>'+
+          '<td><span class="badge '+sc+'">'+esc(rq.status)+'</span></td>'+
+          '<td style="font-size:12px;color:var(--text-secondary)">'+esc(rq.tarix||'')+'</td>'+
+          '<td><div style="display:flex;gap:8px">'+act+'</div></td></tr>';
+      });
+    }
+    document.getElementById('reqTbody').innerHTML=html;
+    refreshIcons(document.getElementById('reqTbody'));
+    renderPagination('requests','reqPagination','loadRequests');
+  })
+  .catch(function(e){showToast(e.message,'error');});
+}
+
+function adminCreateRequestModal(){
   openModal('Yeni Tələb (Admin)',
-    '<div class="form-group"><label>Tip</label>' +
-    '<select class="form-select" id="req_type">' +
-    '<option value="invite">Dəvət (evə çağırış)</option>' +
-    '<option value="kick">Qovma (evdən çıxart)</option>' +
-    '<option value="leave">Çıxma (öz istəyi ilə)</option>' +
-    '</select></div>' +
-    '<div class="form-group"><label>Hədəf Tələbə</label>' +
-    spContainerHtml('req-student', { placeholder: 'Tələbə adını yazın...' }) +
-    '<div class="sp-hint">Dəvət üçün ev seçməmiş, qovma/çıxma üçün evdə yaşayan tələbə</div></div>' +
-    '<div class="form-group"><label>Otaq Nömrəsi (yalnız dəvət üçün)</label>' +
-    '<input type="number" class="form-input" id="req_room" placeholder="Məs: 105"></div>' +
+    '<div class="form-group"><label>Tip</label><select class="form-select" id="req_type">'+
+    '<option value="invite">Dəvət (evə çağırış)</option>'+
+    '<option value="kick">Qovma (evdən çıxart)</option>'+
+    '<option value="leave">Çıxma (öz istəyi)</option></select></div>'+
+    '<div class="form-group"><label>Hədəf Tələbə</label>'+spContainerHtml('req-student')+'<div class="sp-hint">Minimum 2 hərf</div></div>'+
+    '<div class="form-group"><label>Otaq Nömrəsi (yalnız dəvət üçün)</label><input type="number" class="form-input" id="req_room" placeholder="Məs: 105"></div>'+
     '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveAdminRequest()"><i data-lucide="plus"></i> Yarat</button>');
   initStudentPicker('req-student');
 }
 
-function saveAdminRequest() {
-  var sid = spGetValue('req-student');
-  var type = gv('req_type');
-  var room = gv('req_room');
-
-  if (!sid) {
-    infoDialog('Seçilməyib', '<p class="dlg-text">Hədəf tələbəni axtarıb seçin.</p>', 'warning');
-    return;
-  }
-  if (type === 'invite' && !room) {
-    infoDialog('Otaq Lazımdır', '<p class="dlg-text">Dəvət tələbi üçün otaq nömrəsini daxil edin.</p>', 'warning');
-    return;
-  }
-
-  apiAction('create_request', 'POST', {
-    type: type, target_id: sid, room_id: room ? parseInt(room) : null
-  }).then(function() {
-    closeModal();
-    loadRequests();
-    showToast('Tələb yaradıldı', 'success');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
+function saveAdminRequest(){
+  var sid=spGetValue('req-student');
+  var type=gv('req_type');
+  var room=gv('req_room');
+  if(!sid){infoDialog('Seçilməyib','<p class="dlg-text">Hədəf tələbəni seçin.</p>','warning');return;}
+  if(type==='invite'&&!room){infoDialog('Otaq Lazımdır','<p class="dlg-text">Dəvət üçün otaq yazın.</p>','warning');return;}
+  apiAction('create_request','POST',{type:type,target_id:sid,room_id:room?parseInt(room):null})
+  .then(function(){
+    closeModal();loadRequests();
+    showToast('Tələb yaradıldı','success');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
 }
 
-function viewRequestVotes(reqId) {
-  apiAction('get_request_votes', 'GET', null, { request_id: safeId(reqId) }).then(function(data) {
-    var votes = data.data || [];
-    var html = '';
-    if (!votes.length) {
-      html = '<p class="dlg-text">Bu tələb üzrə hələ səs yoxdur.</p>';
-    } else {
-      votes.forEach(function(v) {
-        html += '<div style="display:flex;justify-content:space-between;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;">' +
-          '<span style="font-weight:600">' + esc(v.ad_soyad) + '</span>' +
-          '<span class="badge ' + (v.vote === 'Təsdiq' ? 'badge-success' : 'badge-danger') + '">' + esc(v.vote) + '</span></div>';
+function viewRequestVotes(reqId){
+  apiAction('get_request_votes?request_id='+safeId(reqId))
+  .then(function(data){
+    var votes=data.data||[];
+    var html='';
+    if(!votes.length){html='<p class="dlg-text">Bu tələb üzrə hələ səs yoxdur.</p>';}
+    else{
+      votes.forEach(function(v){
+        html+='<div style="display:flex;justify-content:space-between;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px">'+
+          '<span style="font-weight:600">'+esc(v.ad_soyad)+'</span>'+
+          '<span class="badge '+(v.vote==='Təsdiq'?'badge-success':'badge-danger')+'">'+esc(v.vote)+'</span></div>';
       });
     }
-    infoDialog('Səslər — Tələb #' + reqId, html, 'info');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
+    infoDialog('Səslər — Tələb #'+reqId,html,'info');
+  })
+  .catch(function(e){infoDialog('Xəta','<p class="dlg-text">'+esc(e.message)+'</p>','danger');});
 }
 
-function resolveRequest(id, approve) {
-  id = safeId(id);
-  if (approve) {
-    confirmDialog('Tələbi Təsdiq Et', 'Bu tələbi <b>admin səlahiyyəti</b> ilə təsdiq etmək istəyirsiniz?<span class="dlg-highlight">Tələb #' + id + '</span>Qovma/çıxma → şəxs <b>dərhal evdən çıxarılacaq</b>. Dəvət → şəxs <b>dərhal evə yerləşdiriləcək</b>. Sakinlərin səsləri nəzərə alınmayacaq!', function() {
-      apiAction('resolve_request', 'POST', { id: id, approve: true }).then(function() {
-        loadRequests();
-        showToast('Tələb admin tərəfindən təsdiq edildi', 'success');
-      }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-    }, { type: 'success', yesText: 'Bəli, təsdiq et' });
-  } else {
-    confirmDialog('Tələbi Rədd Et', 'Bu tələbi rədd etmək istəyirsiniz?<span class="dlg-highlight">Tələb #' + id + '</span>Tələb bağlanacaq, iştirakçılar görəcək.', function() {
-      apiAction('resolve_request', 'POST', { id: id, approve: false }).then(function() {
-        loadRequests();
-        showToast('Tələb rədd edildi', 'success');
-      }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-    }, { type: 'warning', yesText: 'Bəli, rədd et' });
+function resolveRequest(id,approve){
+  id=safeId(id);
+  confirmDialog(approve?'Tələbi Təsdiq Et':'Tələbi Rədd Et',
+    approve?'Bu tələb admin səlahiyyəti ilə təsdiq edilsin?<span class="dlg-highlight">Tələb #'+id+'</span>Qovma → şəxs evdən çıxarılacaq. Dəvət → evə yerləəşdiriləcək.'
+           :'Bu tələb rədd edilsin?<span class="dlg-highlight">Tələb #'+id+'</span>Tələb bağlanacaq.',
+    function(){
+      apiAction('resolve_request','POST',{id:id,approve:approve})
+      .then(function(){loadRequests();showToast('Tələb '+(approve?'təsdiq edildi':'rədd edildi'),'success');})
+      .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+    },{type:approve?'success':'warning',yesText:approve?'Bəli, təsdiq et':'Bəli, rədd et'});
+}
+
+function deleteRequest(id){
+  id=safeId(id);
+  confirmDialog('Tələbi Sil','Bu tələb tamamilə silinsin? Səslər də silinəcək.',function(){
+    apiAction('delete_request','POST',{id:id})
+    .then(function(){loadRequests();showToast('Tələb silindi','success');})
+    .catch(function(e){infoDialog('Xəta','<p class="dlg-text"><span class="dlg-highlight">'+esc(e.message)+'</span></p>','danger');});
+  },{yesText:'Bəli, sil'});
+}
+
+// ═════════ TABLE RENDERER ═════════
+function emptyState(icon,text){
+  return '<tr><td colspan="99"><div class="empty-state"><i data-lucide="'+icon+'"></i><p>'+text+'</p></div></td></tr>';
+}
+function renderTable(type,data){
+  var cfg=CRUD_CONFIG[type];
+  if(!cfg)return;
+  var tb=document.getElementById(cfg.tbodyId);
+  if(!data||!data.length){tb.innerHTML=emptyState(cfg.emptyIcon,cfg.emptyText);}
+  else{tb.innerHTML=data.map(function(item,idx){return cfg.renderRow(item,idx);}).join('');}
+  refreshIcons(tb);
+}
+function renderPagination(key,cid,fn){
+  var pg=PAGINATION[key];
+  var c=document.getElementById(cid);
+  if(!c||pg.total<=pg.per_page){if(c)c.innerHTML='';return;}
+  var tp=Math.ceil(pg.total/pg.per_page);
+  var html='';
+  html+='<button type="button" class="pagination-btn"'+(pg.page<=1?' disabled':'')+' onclick="'+fn+'('+(pg.page-1)+')"><i data-lucide="chevron-left"></i></button>';
+  var mb=5;
+  var st=Math.max(1,pg.page-Math.floor(mb/2));
+  var en=Math.min(tp,st+mb-1);
+  if(en-st<mb-1)st=Math.max(1,en-mb+1);
+  if(st>1)html+='<button type="button" class="pagination-btn" onclick="'+fn+'(1)">1</button>';
+  for(var i=st;i<=en;i++){
+    html+='<button type="button" class="pagination-btn'+(i===pg.page?' active':'')+'" onclick="'+fn+'('+i+')">'+i+'</button>';
   }
+  if(en<tp)html+='<button type="button" class="pagination-btn" onclick="'+fn+'('+tp+')">'+tp+'</button>';
+  html+='<button type="button" class="pagination-btn"'+(pg.page>=tp?' disabled':'')+' onclick="'+fn+'('+(pg.page+1)+')"><i data-lucide="chevron-right"></i></button>';
+  c.innerHTML=html;
+  refreshIcons(c);
 }
 
-function deleteRequest(id) {
-  id = safeId(id);
-  confirmDialog('Tələbi Sil', 'Bu tələbi <b>tamamilə silmək</b> istəyirsiniz?<span class="dlg-highlight">Tələb #' + id + '</span>Həm tələb, həm səsləri silinəcək. Bu, rədd etməkdən fərqlidir — izsiz yox olur.', function() {
-    apiAction('delete_request', 'POST', { id: id }).then(function() {
-      loadRequests();
-      showToast('Tələb silindi', 'success');
-    }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-  }, { type: 'danger', yesText: 'Bəli, sil' });
-}
-
-// ================= ANNOUNCEMENTS & SURVEYS =================
-function loadAnnouncements(page) {
-  page = page || 1;
-  PAGINATION.announcements.page = page;
-  apiAction('get_announcements', 'GET', null, { page: page, per_page: PAGINATION.announcements.per_page }).then(function(data) {
-    PAGINATION.announcements.total = data.total || 0;
-    renderTable('announcement', data.data);
-    renderPagination('announcements', 'annPagination', 'loadAnnouncements');
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-function loadSurveys(page) {
-  page = page || 1;
-  PAGINATION.surveys.page = page;
-  apiAction('get_surveys', 'GET', null, { page: page, per_page: PAGINATION.surveys.per_page }).then(function(data) {
-    PAGINATION.surveys.total = data.total || 0;
-    renderTable('survey', data.data);
-    renderPagination('surveys', 'surPagination', 'loadSurveys');
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-// ================= PENALTIES =================
-function loadPenalties(page) {
-  page = page || 1;
-  PAGINATION.penalties.page = page;
-  apiAction('get_penalties', 'GET', null, { page: page, per_page: PAGINATION.penalties.per_page }).then(function(data) {
-    PAGINATION.penalties.total = data.total || 0;
-    renderTable('penalty', data.data);
-    renderPagination('penalties', 'penPagination', 'loadPenalties');
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-function addPenaltyModal() {
-  openModal('Yeni Cərimə',
-    '<div class="form-group"><label>Tələbə</label>' +
-    spContainerHtml('pen-student', { placeholder: 'Tələbə adını yazın...' }) +
-    '<div class="sp-hint">Minimum 2 hərf yazın, siyahıdan seçin</div></div>' +
-    '<div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" placeholder="Məbləğ"></div>' +
-    '<div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" placeholder="Səbəb"></div>' +
-    '<button type="button" class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>', true);
-  initStudentPicker('pen-student');
-}
-
-function editPenaltyModal(id) {
-  id = safeId(id);
-  apiAction('get_penalties').then(function(data) {
-    var p = data.data.filter(function(x) { return x.id == id; })[0];
-    if (!p) { return; }
-    openModal('Cərimə Redaktə',
-      '<div class="form-group"><label>Tələbə</label>' +
-      '<input type="text" class="form-input" value="' + escAttr(p.ad_soyad) + '" disabled style="background:#f1f5f9;cursor:not-allowed;">' +
-      '<input type="hidden" id="p_student" value="' + p.student_id + '"></div>' +
-      '<div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="' + p.amount + '"></div>' +
-      '<div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="' + escAttr(p.reason) + '"></div>' +
-      '<div class="form-group"><label>Status</label><select class="form-select" id="p_status"><option' + (p.status=='Ödənilməmiş'?' selected':'') + '>Ödənilməmiş</option><option' + (p.status=='Ödənilib'?' selected':'') + '>Ödənilib</option></select></div>' +
-      '<button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(' + id + ')"><i data-lucide="save"></i> Yadda Saxla</button>');
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-function savePenalty(id) {
-  var studentId = id ? gv('p_student') : spGetValue('pen-student');
-  if (!studentId) {
-    infoDialog('Tələbə Seçilməyib', '<p class="dlg-text">Axtarışdan tələbə seçin.<span class="dlg-highlight">Ad yazıb siyahıdan klikləyin</span></p>', 'warning');
-    return;
-  }
-  apiAction('save_penalty', 'POST', {
-    id: id, student_id: studentId, amount: gv('p_amount'),
-    reason: gv('p_reason'), status: gv('p_status')
-  }).then(function() {
-    closeModal();
-    loadPenalties();
-    showToast(id ? 'Cərimə yeniləndi' : 'Yeni cərimə əlavə edildi', 'success');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-}
-
-function payPenalty(id) {
-  apiAction('get_penalties').then(function(data) {
-    var p = data.data.filter(function(x) { return x.id == id; })[0];
-    confirmDialog('Cəriməni Ödə', 'Bu cəriməni <b>ödənilmiş</b> kimi işarələmək istəyirsiniz?<span class="dlg-highlight">' + esc(p ? p.ad_soyad : '') + ' &bull; ' + (p ? p.amount : '') + ' AZN</span>Tələbə panelində "Ödənilib" kimi görünəcək.', function() {
-      apiAction('pay_penalty', 'POST', { id: safeId(id) }).then(function() {
-        loadPenalties();
-        showToast('Cərimə ödənilmiş kimi işarələndi', 'success');
-      }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-    }, { type: 'pay', yesText: 'Bəli, ödənilmişdir' });
-  });
-}
-
-// ================= CANTEEN =================
-function loadCanteen() {
-  apiAction('get_canteen').then(function(data) {
-    var days = ['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə','Bazar'];
-    var html = '';
-    ['Yataqxana','Universitet'].forEach(function(loc) {
-      html += '<div class="canteen-location"><h4><i data-lucide="' + (loc==='Yataqxana'?'hotel':'graduation-cap') + '"></i> ' + loc + '</h4>';
-      for (var i = 1; i <= 7; i++) {
-        var item = data.data.filter(function(x) { return x.location === loc && x.day_of_week == i; })[0];
-        if (item) {
-          html += '<div class="meal-row"><span class="meal-day">' + days[i] + '</span><input type="text" class="meal-input" value="' + escAttr(item.meal_name) + '" onchange="updateCanteen(' + item.id + ',this.value)" onkeyup="updateCanteenDelayed(' + item.id + ',this.value)"></div>';
-        }
-      }
-      html += '</div>';
-    });
-    document.getElementById('canteenGrid').innerHTML = html;
-    refreshIcons(document.getElementById('canteenGrid'));
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-function updateCanteen(id, val) {
-  apiAction('save_canteen', 'POST', { id: safeId(id), meal_name: val }).then(function() {
-    showToast('Yemək yeniləndi', 'success');
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-var canteenTimer;
-function updateCanteenDelayed(id, val) {
-  clearTimeout(canteenTimer);
-  canteenTimer = setTimeout(function() { updateCanteen(id, val); }, 800);
-}
-
-// ================= LAUNDRY =================
-function loadLaundry(page) {
-  page = page || 1;
-  PAGINATION.laundry.page = page;
-  apiAction('get_laundry', 'GET', null, { page: page, per_page: PAGINATION.laundry.per_page }).then(function(data) {
-    PAGINATION.laundry.total = data.total || 0;
-    renderTable('laundry', data.data);
-    renderPagination('laundry', 'laundryPagination', 'loadLaundry');
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-function genLaundryOptions(selected) {
-  var stats = ['Yoxdur','Gözlənilir','Hazır'];
-  return stats.map(function(s) { return '<option value="' + s + '"' + (s==selected?' selected':'') + '>' + s + '</option>'; }).join('');
-}
-
-function addLaundryModal() {
-  openModal('Yeni Çamaşırxana Qeydi',
-    '<div class="form-group"><label>Tələbə</label>' +
-    spContainerHtml('lnd-student', { placeholder: 'Tələbə adını yazın...', exclude: 'laundry' }) +
-    '<div class="sp-hint">Artıq qeydi olan tələbələr axtarışda görsənmir</div></div>' +
-    '<div class="form-row">' +
-    '<div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">' + genLaundryOptions('Yoxdur') + '</select></div>' +
-    '<div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">' + genLaundryOptions('Yoxdur') + '</select></div>' +
-    '<div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">' + genLaundryOptions('Yoxdur') + '</select></div></div>' +
-    '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>');
-  initStudentPicker('lnd-student', { exclude: 'laundry' });
-}
-
-function editLaundryModal(student_id) {
-  student_id = safeId(student_id);
-  apiAction('get_laundry').then(function(data) {
-    var l = data.data.filter(function(x) { return x.student_id == student_id; })[0];
-    if (!l) { return; }
-    openModal('Redaktə',
-      '<div class="form-group"><label>Tələbə</label>' +
-      '<input type="text" class="form-input" value="' + escAttr(l.ad_soyad) + '" disabled style="background:#f1f5f9;cursor:not-allowed;">' +
-      '<input type="hidden" id="l_student" value="' + l.student_id + '"></div>' +
-      '<div class="form-row">' +
-      '<div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">' + genLaundryOptions(l.machine_1_status) + '</select></div>' +
-      '<div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">' + genLaundryOptions(l.machine_2_status) + '</select></div>' +
-      '<div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">' + genLaundryOptions(l.machine_3_status) + '</select></div></div>' +
-      '<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(' + student_id + ')"><i data-lucide="save"></i> Yadda Saxla</button>');
-  }).catch(function(e) { showToast(e.message, 'error'); });
-}
-
-function saveLaundry(student_id) {
-  var sid = student_id ? gv('l_student') : spGetValue('lnd-student');
-  if (!sid) {
-    infoDialog('Tələbə Seçilməyib', '<p class="dlg-text">Axtarışdan tələbə seçin.</p>', 'warning');
-    return;
-  }
-  apiAction('save_laundry', 'POST', {
-    student_id: sid,
-    m1: gv('l_m1'), m2: gv('l_m2'), m3: gv('l_m3')
-  }).then(function() {
-    closeModal();
-    loadLaundry();
-    showToast(student_id ? 'Yeniləndi' : 'Əlavə edildi', 'success');
-  }).catch(function(e) { infoDialog('Xəta', '<p class="dlg-text"><span class="dlg-highlight">' + esc(e.message) + '</span></p>', 'danger'); });
-}
-
-// ================= TABLE RENDERER =================
-function emptyState(icon, text) {
-  return '<tr><td colspan="99"><div class="empty-state"><i data-lucide="' + icon + '"></i><p>' + text + '</p></div></td></tr>';
-}
-
-function renderTable(type, data) {
-  var cfg = CRUD_CONFIG[type];
-  if (!cfg) { return; }
-  var tbody = document.getElementById(cfg.tbodyId);
-  if (!data || data.length === 0) {
-    tbody.innerHTML = emptyState(cfg.emptyIcon, cfg.emptyText);
-  } else {
-    tbody.innerHTML = data.map(function(item, idx) { return cfg.renderRow(item, idx); }).join('');
-  }
-  refreshIcons(document.getElementById(cfg.tbodyId));
-}
-
-function renderPagination(key, containerId, loadFn) {
-  var pg = PAGINATION[key];
-  var container = document.getElementById(containerId);
-  if (!container || pg.total <= pg.per_page) {
-    if (container) { container.innerHTML = ''; }
-    return;
-  }
-  var totalPages = Math.ceil(pg.total / pg.per_page);
-  var html = '';
-  html += '<button type="button" class="pagination-btn"' + (pg.page<=1?' disabled':'') + ' onclick="' + loadFn + '(' + (pg.page-1) + ')"><i data-lucide="chevron-left"></i></button>';
-  var maxButtons = 5;
-  var start = Math.max(1, pg.page - Math.floor(maxButtons/2));
-  var end = Math.min(totalPages, start + maxButtons - 1);
-  if (end - start < maxButtons - 1) { start = Math.max(1, end - maxButtons + 1); }
-  if (start > 1) { html += '<button type="button" class="pagination-btn" onclick="' + loadFn + '(1)">1</button>'; if (start > 2) { html += '<span class="pagination-info">...</span>'; } }
-  for (var i = start; i <= end; i++) {
-    html += '<button type="button" class="pagination-btn' + (i===pg.page?' active':'') + '" onclick="' + loadFn + '(' + i + ')">' + i + '</button>';
-  }
-  if (end < totalPages) { if (end < totalPages-1) { html += '<span class="pagination-info">...</span>'; } html += '<button type="button" class="pagination-btn" onclick="' + loadFn + '(' + totalPages + ')">' + totalPages + '</button>'; }
-  html += '<button type="button" class="pagination-btn"' + (pg.page>=totalPages?' disabled':'') + ' onclick="' + loadFn + '(' + (pg.page+1) + ')"><i data-lucide="chevron-right"></i></button>';
-  var from = (pg.page - 1) * pg.per_page + 1;
-  var to = Math.min(pg.page * pg.per_page, pg.total);
-  html += '<span class="pagination-info">' + from + '–' + to + ' / ' + pg.total + '</span>';
-  container.innerHTML = html;
-  refreshIcons(container);
-}
-
-// ================= INIT: yalnız 200 → panel, yalnız login → startPolling =================
-fetch('/api/admin/check', { method: 'GET', credentials: 'same-origin' })
-  .then(function(r) {
-    if (r.ok) {
+// ═════════ INIT ═════════
+fetch('/api/admin/check',{method:'GET',credentials:'same-origin'})
+  .then(function(r){
+    if(r.ok){
       hideLogin();
-      isLoggedIn = true;
+      isLoggedIn=true;
       loadDashboard();
-      startPolling();
-    } else {
+      startDashboardPolling();
+    }else{
       showLogin();
     }
   })
-  .catch(function() { showLogin(); });
+  .catch(function(){showLogin();});
 
 lucide.createIcons();
 {% endraw %}
