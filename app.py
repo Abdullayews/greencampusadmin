@@ -38,9 +38,10 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 log = logging.getLogger('admin')
 logging.basicConfig(level=logging.INFO)
 
-# --- #8 Stats cache (30 saniyəlik TTL) ---
-_stats_cache = {"data": None, "ts": 0}
-STATS_TTL = 30
+# ---------------------------------------------------------------------------
+# Stats Cache (30 saniyə)
+# ---------------------------------------------------------------------------
+_stats_cache = {"data": None, "ts": 0.0}
 
 
 # ---------------------------------------------------------------------------
@@ -121,26 +122,6 @@ def dissolve_group_if_empty(cur, group_id):
         cur.execute("DELETE FROM student_groups WHERE id = %s", (group_id,))
 
 
-def resolve_stale_requests(cur):
-    """#9 Ölü tələbləri avtomatik bağlayır."""
-    cur.execute("""
-        UPDATE home_requests hr
-        LEFT JOIN room_slots rs ON rs.student_id = hr.target_id
-        SET hr.status = 'Rədd edildi'
-        WHERE hr.status = 'Gözləmədə'
-          AND hr.type IN ('kick', 'leave')
-          AND (rs.room_id IS NULL OR rs.room_id != hr.room_id)
-    """)
-    cur.execute("""
-        UPDATE home_requests hr
-        JOIN students s ON s.id = hr.target_id
-        SET hr.status = 'Rədd edildi'
-        WHERE hr.status = 'Gözləmədə'
-          AND hr.type = 'invite'
-          AND s.ev != 'Ev seçilməyib'
-    """)
-
-
 def log_admin(cur, action, entity='', entity_id='', details=''):
     try:
         cur.execute(
@@ -174,19 +155,24 @@ def heal_one_room_slots(cur, room_id):
     """, (room_id,))
 
 
-def make_csv_response(rows, headers, filename):
-    """#14 CSV export köməkçisi."""
-    buf = io.StringIO()
-    writer = csv.writer(buf)
-    # BOM — Excel-də Azərbaycan hərfləri üçün
-    buf.write('\ufeff')
-    writer.writerow(headers)
-    writer.writerows(rows)
-    return Response(
-        buf.getvalue(),
-        mimetype='text/csv; charset=utf-8',
-        headers={'Content-Disposition': f'attachment; filename={filename}'}
-    )
+def _cleanup_dead_requests(cur):
+    """ÖLÜ TƏLB TƏMİZLƏYİCİ — invite hədəfi ev alıbsa / kick-leave hədəfi
+    artıq həmin evdə deyilsə, Gözləmədə tələbi avtomatik bağlayır."""
+    try:
+        cur.execute("""
+            UPDATE home_requests hr
+            JOIN students s ON s.id = hr.target_id
+            LEFT JOIN room_slots rs ON rs.student_id = hr.target_id
+            SET hr.status = 'Rədd edildi'
+            WHERE hr.status = 'Gözləmədə'
+              AND (
+                (hr.type = 'invite' AND s.ev != 'Ev seçilməyib')
+                OR (hr.type IN ('kick', 'leave')
+                    AND (rs.room_id IS NULL OR rs.room_id != hr.room_id))
+              )
+        """)
+    except Exception as e:
+        log.warning("Ölü tələb təmizlənmədi: %s", e)
 
 
 # ---------------------------------------------------------------------------
@@ -206,7 +192,7 @@ def with_db(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         try:
-            conn = get_db_connection()
+            conn = get_db_connection()   # pool-dan
         except Exception as e:
             return fail(f"DB Bağlantı xətası: {e}", 500)
         try:
@@ -227,9 +213,13 @@ def with_db(f):
             log.exception("Əməliyyat xətası")
             return fail(f"Əməliyyat xətası: {e}", 500)
         finally:
-            conn.close()
+            conn.close()   # pool-a qaytarır
     return decorated
 
+
+# ---------------------------------------------------------------------------
+# Template helper
+# ---------------------------------------------------------------------------
 
 def serve_html(filename, **context):
     filepath = os.path.join(TEMPLATES_DIR, filename)
@@ -257,6 +247,10 @@ def admin_panel():
     return serve_html('index.html', is_logged_in=bool(session.get('admin_logged_in')))
 
 
+# ---------------------------------------------------------------------------
+# Auth
+# ---------------------------------------------------------------------------
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json() or {}
@@ -276,11 +270,13 @@ def logout():
 @app.route('/api/admin/check', methods=['GET'])
 @admin_required
 def admin_check():
+    """Yüngül sessiya yoxlaması — DB-yə toxunmur.
+    Real-time polling üçün ideal (30 san)."""
     return ok()
 
 
 # ---------------------------------------------------------------------------
-# Typeahead
+# Typeahead axtarış
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/search_students_query', methods=['GET'])
@@ -309,73 +305,114 @@ def search_students_query(cur):
 
 
 # ---------------------------------------------------------------------------
-# Dashboard — #8 cache + #16 charts
+# Dashboard — 30 SANLIQ CACHE
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/stats', methods=['GET'])
 @admin_required
-@with_db
-def admin_stats(cur):
-    # #8 Cache: 30 saniyədən köhnə deyilsə, cache-dən qaytar
+def admin_stats():
+    """Dashboard statistikası — 30 saniyəlik cache.
+    Cache hit halında DB-yə heç toxunulmur (real-time polling ucuzdur)."""
     now = time.time()
-    if _stats_cache["data"] is not None and (now - _stats_cache["ts"]) < STATS_TTL:
+    if _stats_cache["data"] is not None and (now - _stats_cache["ts"]) < 30:
         return ok(stats=_stats_cache["data"])
 
-    cur.execute("""
-        SELECT
-          (SELECT COUNT(*) FROM students) AS students,
-          (SELECT COUNT(*) FROM rooms) AS rooms,
-          (SELECT COUNT(*) FROM applications WHERE status='Gözləmədə') AS apps,
-          (SELECT COUNT(*) FROM penalties WHERE status='Ödənilməmiş') AS penalties,
-          (SELECT COUNT(DISTINCT group_id) FROM students WHERE group_id IS NOT NULL) AS `groups`,
-          (SELECT COUNT(*) FROM home_requests WHERE status='Gözləmədə') AS requests
-    """)
-    stats = dict(cur.fetchone() or {})
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            # "groups" rezerv söz olduğundan backtick içində
+            cur.execute("""
+                SELECT
+                  (SELECT COUNT(*) FROM students) AS students,
+                  (SELECT COUNT(*) FROM rooms) AS rooms,
+                  (SELECT COUNT(*) FROM applications WHERE status='Gözləmədə') AS apps,
+                  (SELECT COUNT(*) FROM penalties WHERE status='Ödənilməmiş') AS penalties,
+                  (SELECT COUNT(DISTINCT group_id) FROM students WHERE group_id IS NOT NULL) AS `groups`,
+                  (SELECT COUNT(*) FROM home_requests WHERE status='Gözləmədə') AS requests
+            """)
+            stats = dict(cur.fetchone() or {})
+        conn.commit()
+    finally:
+        conn.close()
 
     _stats_cache["data"] = stats
     _stats_cache["ts"] = now
     return ok(stats=stats)
 
 
-@app.route('/api/admin/stats_charts', methods=['GET'])
+# ---------------------------------------------------------------------------
+# CSV EXPORT (Excel üçün UTF-8 BOM)
+# ---------------------------------------------------------------------------
+
+@app.route('/api/admin/export/<entity>', methods=['GET'])
 @admin_required
 @with_db
-def stats_charts(cur):
-    """#16 Son 6 ayın aylıq statistikası (qrafiklər üçün)."""
-    cur.execute("""
-        SELECT DATE_FORMAT(created_at, '%%Y-%%m') AS ay, COUNT(*) AS say
-        FROM applications
-        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
-        GROUP BY ay ORDER BY ay
-    """)
-    apps = cur.fetchall()
+def export_entity(cur, entity):
+    """CSV Export: students / penalties / applications / logs.
+    Excel-in Azərbaycan hərflərini düzgün açması üçün UTF-8 BOM ilə."""
+    configs = {
+        'students': (
+            """SELECT s.id, s.ad_soyad, s.email, s.universitet, s.ixtisas, s.kurs, s.cins, s.ev,
+                      CASE WHEN s.api_key IS NULL OR s.api_key = '' THEN 'Yoxdur' ELSE 'Var' END AS api_var,
+                      COALESCE(rs.room_id, '') AS otaq
+               FROM students s
+               LEFT JOIN room_slots rs ON rs.student_id = s.id
+               ORDER BY s.id ASC""",
+            ['id', 'ad_soyad', 'email', 'universitet', 'ixtisas', 'kurs', 'cins', 'ev', 'api_var', 'otaq'],
+            ['ID', 'Ad Soyad', 'Email', 'Universitet', 'İxtisas', 'Kurs', 'Cins', 'Ev Statusu', 'API Açarı', 'Otaq'],
+            'telebeler.csv'
+        ),
+        'penalties': (
+            """SELECT p.id, s.ad_soyad, p.amount, p.reason, p.status,
+                      DATE_FORMAT(p.created_at, '%d.%m.%Y') AS tarix
+               FROM penalties p JOIN students s ON p.student_id = s.id
+               ORDER BY p.created_at DESC""",
+            ['id', 'ad_soyad', 'amount', 'reason', 'status', 'tarix'],
+            ['ID', 'Tələbə', 'Məbləğ (AZN)', 'Səbəb', 'Status', 'Tarix'],
+            'cerimeler.csv'
+        ),
+        'applications': (
+            """SELECT a.id, s.ad_soyad, a.basliq, a.muraciet, a.priority, a.status,
+                      COALESCE(a.notlar, '') AS notlar,
+                      DATE_FORMAT(a.created_at, '%d.%m.%Y') AS tarix
+               FROM applications a JOIN students s ON a.student_id = s.id
+               ORDER BY a.created_at DESC""",
+            ['id', 'ad_soyad', 'basliq', 'muraciet', 'priority', 'status', 'notlar', 'tarix'],
+            ['ID', 'Tələbə', 'Başlıq', 'Müraciət', 'Öncəlik', 'Status', 'Qeyd', 'Tarix'],
+            'muracietler.csv'
+        ),
+        'logs': (
+            """SELECT l.id, l.admin_user, l.action, l.entity,
+                      COALESCE(l.entity_id, '') AS entity_id,
+                      COALESCE(l.details, '') AS details,
+                      DATE_FORMAT(l.created_at, '%d.%m.%Y %H:%i') AS tarix
+               FROM admin_logs l
+               ORDER BY l.created_at DESC""",
+            ['id', 'admin_user', 'action', 'entity', 'entity_id', 'details', 'tarix'],
+            ['ID', 'Admin', 'Mövzu', 'Obyekt', 'ID', 'Təfərrüat', 'Tarix'],
+            'loglar.csv'
+        ),
+    }
 
-    cur.execute("""
-        SELECT DATE_FORMAT(created_at, '%%Y-%%m') AS ay, COUNT(*) AS say
-        FROM penalties
-        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
-        GROUP BY ay ORDER BY ay
-    """)
-    pens = cur.fetchall()
+    cfg = configs.get(entity)
+    if not cfg:
+        return fail(f"Belə export yoxdur! Mövcud: {', '.join(configs.keys())}", 404)
 
-    apps_map = {r['ay']: r['say'] for r in apps}
-    pens_map = {r['ay']: r['say'] for r in pens}
+    sql, cols, headers, filename = cfg
+    cur.execute(sql)
+    rows = cur.fetchall()
 
-    from datetime import datetime as dt
-    months = []
-    now = dt.now()
-    for i in range(5, -1, -1):
-        m = now.month - i
-        y = now.year
-        while m <= 0:
-            m += 12
-            y -= 1
-        key = f"{y}-{m:02d}"
-        label = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'][m - 1]
-        months.append({"ay": key, "label": label,
-                      "apps": apps_map.get(key, 0), "pens": pens_map.get(key, 0)})
+    out = io.StringIO()
+    writer = csv.writer(out)
+    writer.writerow(headers)
+    for row in rows:
+        writer.writerow(['' if row.get(c) is None else row.get(c) for c in cols])
 
-    return ok(months=months)
+    return Response(
+        "\ufeff" + out.getvalue(),   # BOM — Excel üçün
+        mimetype="text/csv; charset=utf-8",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1062,7 +1099,7 @@ def delete_penalty(cur):
 
 
 # ---------------------------------------------------------------------------
-# Canteen / Laundry
+# Canteen
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_canteen', methods=['GET'])
@@ -1091,6 +1128,10 @@ def save_canteen(cur):
     log_admin(cur, 'Menyu yeniləndi', 'Yeməkxana', cid, f"Yeni: {data.get('meal_name')}")
     return ok()
 
+
+# ---------------------------------------------------------------------------
+# Laundry
+# ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_laundry', methods=['GET'])
 @admin_required
@@ -1237,7 +1278,7 @@ def delete_profile(cur):
 
 
 # ---------------------------------------------------------------------------
-# Groups
+# Groups — tam idarə
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_groups', methods=['GET'])
@@ -1360,18 +1401,21 @@ def delete_group(cur):
 
 
 # ---------------------------------------------------------------------------
-# Requests
+# Requests — tam idarə + ÖLÜ TƏLB TƏMİZLƏYİCİ
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_requests', methods=['GET'])
 @admin_required
 @with_db
 def get_requests(cur):
-    # #9 Ölü tələbləri təmizlə
-    resolve_stale_requests(cur)
-
+    """Tələb siyahısı (səs sayı ilə).
+    Hər çağırışda ölü tələblər avtomatik təmizlənir —
+    real-time polling (30 san) üçün təhlükəsizdir."""
     page, per_page = get_pagination_params()
     offset = (page - 1) * per_page
+
+    # Ölü tələbləri bağla
+    _cleanup_dead_requests(cur)
 
     cur.execute("SELECT COUNT(*) as c FROM home_requests")
     total = cur.fetchone()['c']
@@ -1608,61 +1652,6 @@ def clear_old_logs(cur):
 
 
 # ---------------------------------------------------------------------------
-# #14 CSV Export
-# ---------------------------------------------------------------------------
-
-@app.route('/api/admin/export_students', methods=['GET'])
-@admin_required
-@with_db
-def export_students(cur):
-    cur.execute("""
-        SELECT s.id, s.ad_soyad, s.email, s.universitet, s.ixtisas, s.kurs, s.cins, s.ev,
-               COALESCE(rs.room_id, '') AS otaq, s.ev_deyisme_isteyi
-        FROM students s
-        LEFT JOIN room_slots rs ON rs.student_id = s.id
-        ORDER BY s.id ASC
-    """)
-    rows = [list(r.values()) for r in cur.fetchall()]
-    return make_csv_response(rows,
-        ['ID', 'Ad Soyad', 'Email', 'Universitet', 'İxtisas', 'Kurs', 'Cins', 'Ev Statusu', 'Otaq', 'Ev Dəyişmə İstəyi'],
-        'telebeler.csv')
-
-
-@app.route('/api/admin/export_penalties', methods=['GET'])
-@admin_required
-@with_db
-def export_penalties(cur):
-    cur.execute("""
-        SELECT p.id, s.ad_soyad, p.amount, p.reason, p.status,
-               DATE_FORMAT(p.created_at, '%%d.%%m.%%Y') AS tarix
-        FROM penalties p
-        JOIN students s ON p.student_id = s.id
-        ORDER BY p.created_at DESC
-    """)
-    rows = [list(r.values()) for r in cur.fetchall()]
-    return make_csv_response(rows,
-        ['ID', 'Tələbə', 'Məbləğ', 'Səbəb', 'Status', 'Tarix'],
-        'cerimeler.csv')
-
-
-@app.route('/api/admin/export_applications', methods=['GET'])
-@admin_required
-@with_db
-def export_applications(cur):
-    cur.execute("""
-        SELECT a.id, s.ad_soyad, a.basliq, a.muraciet, a.priority, a.status, a.notlar,
-               DATE_FORMAT(a.created_at, '%%d.%%m.%%Y') AS tarix
-        FROM applications a
-        JOIN students s ON a.student_id = s.id
-        ORDER BY a.created_at DESC
-    """)
-    rows = [list(r.values()) for r in cur.fetchall()]
-    return make_csv_response(rows,
-        ['ID', 'Tələbə', 'Başlıq', 'Müraciət', 'Öncəlik', 'Status', 'Qeyd', 'Tarix'],
-        'mursciatlar.csv')
-
-
-# ---------------------------------------------------------------------------
 # Error Handlers
 # ---------------------------------------------------------------------------
 
@@ -1682,4 +1671,4 @@ def forbidden(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0world 0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
