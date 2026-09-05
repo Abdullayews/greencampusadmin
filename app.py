@@ -12,11 +12,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 app = Flask(__name__)
 
-# Admin credentials (env)
 ADMIN_USER = os.getenv('ADMIN_USER', 'admin')
 ADMIN_PASS = os.getenv('ADMIN_PASS', '123')
 
-# Secret key — env → file fallback (sessiyalar deploy-lar arası qorunur)
 _secret_key = os.getenv("SECRET_KEY")
 if not _secret_key:
     _key_path = os.path.join(BASE_DIR, 'secret_key.txt')
@@ -57,15 +55,26 @@ def clean_val(val):
     return val if val else None
 
 
+def qarg(name):
+    """Query parametrini təmiz oxuyur (SQL axtarış filtrləri üçün)."""
+    return (request.args.get(name) or '').strip()
+
+
 def get_pagination_params():
-    page = int(request.args.get('page', 1))
-    per_page = min(int(request.args.get('per_page', 50)), 100)
-    search = request.args.get('search', '').strip()
-    return max(page, 1), per_page, search
+    """Səhifələmə: səhifə başına maksimum 20 item."""
+    try:
+        page = int(request.args.get('page', 1))
+    except (TypeError, ValueError):
+        page = 1
+    try:
+        per_page = int(request.args.get('per_page', 20))
+    except (TypeError, ValueError):
+        per_page = 20
+    return max(page, 1), min(per_page, 20)
 
 
 def room_cins_by_id(room_id):
-    """Bina konvensiyası: 101-120 oğlan binası, 121-140 qız binası."""
+    """Bina konvensiyası: 101-120 oğlan, 121-140 qız binası."""
     try:
         rid = int(room_id)
     except (TypeError, ValueError):
@@ -78,12 +87,10 @@ def room_cins_by_id(room_id):
 
 
 def remove_student_from_room(cur, student_id):
-    """Tələbəni evdən çıxarır (slot NULL + ev statusu sıfırlanır)."""
     cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
 
 
 def sync_ev_statuses(cur):
-    """Otaq yerləşməsi ilə ev statusunu sinxronlaşdırır."""
     cur.execute(
         "UPDATE students SET ev = 'Ev seçilib' "
         "WHERE id IN (SELECT student_id FROM room_slots WHERE student_id IS NOT NULL)"
@@ -101,6 +108,18 @@ def dissolve_group_if_empty(cur, group_id):
     cur.execute("SELECT COUNT(*) AS c FROM students WHERE group_id = %s", (group_id,))
     if cur.fetchone()['c'] == 0:
         cur.execute("DELETE FROM student_groups WHERE id = %s", (group_id,))
+
+
+def log_admin(cur, action, entity='', entity_id='', details=''):
+    """Bütün admin əməliyyatlarını admin_logs cədvəlinə yazır."""
+    try:
+        cur.execute(
+            "INSERT INTO admin_logs (admin_user, action, entity, entity_id, details) "
+            "VALUES (%s, %s, %s, %s, %s)",
+            (session.get('admin_user', 'admin'), action, entity, str(entity_id or ''), details or '')
+        )
+    except Exception:
+        pass  # log yazılışı əsas əməliyyatı pozmasın
 
 
 # ---------------------------------------------------------------------------
@@ -166,7 +185,6 @@ def serve_html(filename, **context):
 
 @app.route('/')
 def index():
-    """Admin panel (templates/index.html = admin panel)."""
     return serve_html('index.html')
 
 
@@ -184,6 +202,7 @@ def login():
     data = request.get_json() or {}
     if data.get('email') == ADMIN_USER and data.get('sifre') == ADMIN_PASS:
         session['admin_logged_in'] = True
+        session['admin_user'] = data.get('email')
         return ok()
     return fail("Admin məlumatları yanlışdır!", 401)
 
@@ -225,14 +244,34 @@ def admin_stats(cur):
 @admin_required
 @with_db
 def get_students(cur):
-    page, per_page, search = get_pagination_params()
-    where, params = "", []
-    if search:
-        where = "WHERE s.ad_soyad LIKE %s OR s.email LIKE %s OR s.ixtisas LIKE %s"
-        params = [f'%{search}%'] * 3
+    page, per_page = get_pagination_params()
+    where, params = ["1=1"], []
 
+    v = qarg('ad_soyad')
+    if v: where.append("s.ad_soyad LIKE %s"); params.append(f"%{v}%")
+    v = qarg('email')
+    if v: where.append("s.email LIKE %s"); params.append(f"%{v}%")
+    v = qarg('ixtisas')
+    if v: where.append("s.ixtisas LIKE %s"); params.append(f"%{v}%")
+    v = qarg('kurs')
+    if v: where.append("s.kurs LIKE %s"); params.append(f"%{v}%")
+    v = qarg('cins')
+    if v: where.append("s.cins = %s"); params.append(v)
+    v = qarg('ev')
+    if v: where.append("s.ev = %s"); params.append(v)
+    v = qarg('otaq')
+    if v: where.append("rs.room_id LIKE %s"); params.append(f"%{v}%")
+    v = qarg('api_key')
+    if v == 'var': where.append("s.api_key IS NOT NULL AND s.api_key != ''")
+    elif v == 'yoxdur': where.append("(s.api_key IS NULL OR s.api_key = '')")
+    v = qarg('ev_deyisme_isteyi')
+    if v == 'var': where.append("s.ev_deyisme_isteyi = 1")
+    elif v == 'yoxdur': where.append("COALESCE(s.ev_deyisme_isteyi, 0) = 0")
+
+    where_clause = "WHERE " + " AND ".join(where)
     offset = (page - 1) * per_page
-    cur.execute(f"SELECT COUNT(*) as c FROM students s {where}", params)
+
+    cur.execute(f"SELECT COUNT(*) as c FROM students s LEFT JOIN room_slots rs ON rs.student_id = s.id {where_clause}", params)
     total = cur.fetchone()['c']
 
     cur.execute(f"""
@@ -240,10 +279,19 @@ def get_students(cur):
                s.ev_deyisme_isteyi, s.cins, s.ev, rs.room_id AS otaq
         FROM students s
         LEFT JOIN room_slots rs ON rs.student_id = s.id
-        {where}
+        {where_clause}
         ORDER BY s.id ASC LIMIT %s OFFSET %s
     """, params + [per_page, offset])
     return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
+
+
+@app.route('/api/admin/get_students_light', methods=['GET'])
+@admin_required
+@with_db
+def get_students_light(cur):
+    """Modal seçimləri üçün yüngül siyahı (paginasiyasız)."""
+    cur.execute("SELECT id, ad_soyad, cins FROM students ORDER BY ad_soyad ASC")
+    return ok(data=cur.fetchall())
 
 
 @app.route('/api/admin/get_student_full', methods=['POST'])
@@ -277,7 +325,6 @@ def save_student(cur):
     if data.get('id'):
         student_id = data['id']
 
-        # Cins dəyişibsə və tələbə otaqdadırsa — uyğunluq yoxla
         cur.execute("""
             SELECT r.cins FROM room_slots rs JOIN rooms r ON r.id = rs.room_id
             WHERE rs.student_id = %s
@@ -305,6 +352,9 @@ def save_student(cur):
             vals.append(val)
         vals.append(student_id)
         cur.execute(f"UPDATE students SET {', '.join(fields)} WHERE id=%s", vals)
+
+        log_admin(cur, 'Tələbə yeniləndi', 'Tələbə', student_id,
+                  f"{data.get('ad_soyad')} — cins: {cins}, ev: {ev}")
     else:
         cur.execute("""
             INSERT INTO students (ad_soyad, email, sifre, ixtisas, kurs, api_key,
@@ -318,7 +368,9 @@ def save_student(cur):
         ])
         student_id = cur.lastrowid
 
-    # Ev statusu 'Ev seçilib' deyilsə — otaqdan çıxar
+        log_admin(cur, 'Tələbə yaradıldı', 'Tələbə', student_id,
+                  f"{data.get('ad_soyad')} — cins: {cins}, email: {data.get('email')}")
+
     if ev != 'Ev seçilib':
         remove_student_from_room(cur, student_id)
 
@@ -332,12 +384,11 @@ def delete_student(cur):
     data = request.get_json() or {}
     student_id = data.get('id')
 
-    # Qrup ID-ni əvvəlcədən al
-    cur.execute("SELECT group_id FROM students WHERE id = %s", (student_id,))
+    cur.execute("SELECT ad_soyad, group_id FROM students WHERE id = %s", (student_id,))
     row = cur.fetchone()
+    name = row['ad_soyad'] if row else ''
     gid = row['group_id'] if row else None
 
-    # Kaskad təmizlik
     cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
     cur.execute("DELETE FROM students_profiles WHERE student_id = %s", (student_id,))
     cur.execute("DELETE FROM laundry WHERE student_id = %s", (student_id,))
@@ -354,18 +405,21 @@ def delete_student(cur):
 
     if gid:
         dissolve_group_if_empty(cur, gid)
+
+    log_admin(cur, 'Tələbə silindi', 'Tələbə', student_id,
+              f"{name} — bütün bağlı məlumatlar silindi")
     return ok()
 
 
 # ---------------------------------------------------------------------------
-# Rooms (room_slots əsaslı)
+# Rooms
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_rooms', methods=['GET'])
 @admin_required
 @with_db
 def get_rooms(cur):
-    page, per_page, search = get_pagination_params()
+    page, per_page = get_pagination_params()
 
     # Self-heal: slot sətirləri yaradılmamış evlər üçün avtomatik yaradılır
     cur.execute("""
@@ -379,27 +433,41 @@ def get_rooms(cur):
         WHERE rs.room_id IS NULL
     """)
 
-    where, params = "", []
-    if search:
-        where = "WHERE r.id LIKE %s"
-        params = [f'%{search}%']
+    where, params = ["1=1"], []
+    v = qarg('id')
+    if v: where.append("r.id LIKE %s"); params.append(f"%{v}%")
+    v = qarg('cins')
+    if v: where.append("r.cins = %s"); params.append(v)
 
+    having, hparams = [], []
+    v = qarg('dolu')
+    if v: having.append("CAST(COALESCE(SUM(rs.student_id IS NOT NULL),0) AS CHAR) LIKE %s"); hparams.append(f"%{v}%")
+    v = qarg('occupants')
+    if v: having.append("COALESCE(GROUP_CONCAT(s.ad_soyad SEPARATOR ', '),'') LIKE %s"); hparams.append(f"%{v}%")
+
+    where_clause = "WHERE " + " AND ".join(where)
+    having_clause = ("HAVING " + " AND ".join(having)) if having else ""
     offset = (page - 1) * per_page
-    cur.execute(f"SELECT COUNT(*) as c FROM rooms r {where}", params)
+
+    base = f"""
+        FROM rooms r
+        LEFT JOIN room_slots rs ON rs.room_id = r.id
+        LEFT JOIN students s ON s.id = rs.student_id
+        {where_clause}
+        GROUP BY r.id, r.capacity, r.cins
+        {having_clause}
+    """
+    cur.execute(f"SELECT COUNT(*) as c FROM (SELECT r.id {base}) x", params + hparams)
     total = cur.fetchone()['c']
 
     cur.execute(f"""
         SELECT r.id, r.capacity, r.cins,
                CAST(COALESCE(SUM(rs.student_id IS NOT NULL), 0) AS SIGNED) AS dolu
-        FROM rooms r
-        LEFT JOIN room_slots rs ON rs.room_id = r.id
-        {where}
-        GROUP BY r.id, r.capacity, r.cins
+        {base}
         ORDER BY r.id ASC LIMIT %s OFFSET %s
-    """, params + [per_page, offset])
+    """, params + hparams + [per_page, offset])
     rooms = cur.fetchall()
 
-    # Slot detalları (redaktə modalı üçün)
     if rooms:
         ids = [r['id'] for r in rooms]
         placeholders = ','.join(['%s'] * len(ids))
@@ -438,10 +506,8 @@ def save_room(cur):
         capacity = 6
     capacity = max(1, min(capacity, 6))
 
-    # Bina konvensiyası üstünlük təşkil edir (101-120 Kişi, 121-140 Qadın)
     cins = room_cins_by_id(room_id) or clean_val(data.get('cins'))
 
-    # Eyni tələbə birdən çox yerdə seçilib?
     placed = []
     for i in range(1, capacity + 1):
         t = data.get(f't{i}')
@@ -459,10 +525,8 @@ def save_room(cur):
 
     if exists:
         cur.execute("UPDATE rooms SET capacity = %s, cins = %s WHERE id = %s", (capacity, cins, room_id))
-        # Self-heal slotlar
         for i in range(1, capacity + 1):
             cur.execute("INSERT IGNORE INTO room_slots (room_id, slot) VALUES (%s, %s)", (room_id, i))
-        # Tutumu azaldılıbsa artıq slotları sil
         cur.execute("DELETE FROM room_slots WHERE room_id = %s AND slot > %s", (room_id, capacity))
     else:
         cur.execute("INSERT INTO rooms (id, capacity, cins) VALUES (%s, %s, %s)", (room_id, capacity, cins))
@@ -473,7 +537,6 @@ def save_room(cur):
                 (room_id, i)
             )
 
-    # Slot məzmunlarını tətbiq et
     for i in range(1, capacity + 1):
         t = data.get(f't{i}')
         t = int(t) if t else None
@@ -488,7 +551,6 @@ def save_room(cur):
                 return fail(f"{i}-ci yerdəki tələbə (ID {t}) tapılmadı!", 400)
             if cins and st['cins'] != cins:
                 return fail(f"{i}-ci yerdəki tələbənin cinsi otağın cinsinə uyğun gəlmir!", 400)
-            # Köhnə yerdən çıxar (bu slot istisna)
             cur.execute(
                 "UPDATE room_slots SET student_id = NULL WHERE student_id = %s "
                 "AND NOT (room_id = %s AND slot = %s)",
@@ -501,9 +563,10 @@ def save_room(cur):
             (t, y, s, o, room_id, i)
         )
 
-    # Ev statuslarını sinxronlaşdır
     sync_ev_statuses(cur)
 
+    log_admin(cur, 'Otaq yeniləndi' if exists else 'Otaq yaradıldı', 'Otaq', room_id,
+              f"Ev {room_id} — cins: {cins or '-'}, tutum: {capacity}, yerləşən: {len(placed)}")
     return ok()
 
 
@@ -514,6 +577,9 @@ def delete_room(cur):
     data = request.get_json() or {}
     room_id = data.get('id')
 
+    cur.execute("SELECT COUNT(*) AS c FROM room_slots WHERE room_id = %s AND student_id IS NOT NULL", (room_id,))
+    dolu = cur.fetchone()['c']
+
     cur.execute(
         "UPDATE students SET ev = 'Ev seçilməyib' "
         "WHERE id IN (SELECT student_id FROM room_slots WHERE room_id = %s AND student_id IS NOT NULL)",
@@ -521,6 +587,8 @@ def delete_room(cur):
     )
     cur.execute("DELETE FROM room_slots WHERE room_id = %s", (room_id,))
     cur.execute("DELETE FROM rooms WHERE id = %s", (room_id,))
+
+    log_admin(cur, 'Otaq silindi', 'Otaq', room_id, f"Ev {room_id} — {dolu} sakin çıxarıldı")
     return ok()
 
 
@@ -532,16 +600,24 @@ def delete_room(cur):
 @admin_required
 @with_db
 def get_applications(cur):
-    page, per_page, search = get_pagination_params()
-    where, params = "", []
-    if search:
-        where = "WHERE s.ad_soyad LIKE %s OR a.basliq LIKE %s OR a.status LIKE %s"
-        params = [f'%{search}%'] * 3
+    page, per_page = get_pagination_params()
+    where, params = ["1=1"], []
 
+    v = qarg('ad_soyad')
+    if v: where.append("s.ad_soyad LIKE %s"); params.append(f"%{v}%")
+    v = qarg('muraciet')
+    if v:
+        where.append("(a.basliq LIKE %s OR a.muraciet LIKE %s)")
+        params.extend([f"%{v}%", f"%{v}%"])
+    v = qarg('status')
+    if v: where.append("a.status = %s"); params.append(v)
+
+    where_clause = "WHERE " + " AND ".join(where)
     offset = (page - 1) * per_page
+
     cur.execute(f"""
         SELECT COUNT(*) as c FROM applications a
-        JOIN students s ON a.student_id = s.id {where}
+        JOIN students s ON a.student_id = s.id {where_clause}
     """, params)
     total = cur.fetchone()['c']
 
@@ -550,7 +626,7 @@ def get_applications(cur):
                DATE_FORMAT(a.created_at, '%%d.%%m.%%Y') as tarix, s.ad_soyad
         FROM applications a
         JOIN students s ON a.student_id = s.id
-        {where}
+        {where_clause}
         ORDER BY a.created_at DESC LIMIT %s OFFSET %s
     """, params + [per_page, offset])
 
@@ -577,12 +653,16 @@ def save_application(cur):
             WHERE id=%s
         """, [data['student_id'], data['basliq'], data['muraciet'],
               data['priority'], status, notlar, data['id']])
+        log_admin(cur, 'Müraciət yeniləndi', 'Müraciət', data['id'],
+                  f"{data.get('basliq')} — status: {status}")
     else:
         cur.execute("""
             INSERT INTO applications (student_id, basliq, muraciet, priority, status, notlar)
             VALUES (%s, %s, %s, %s, %s, %s)
         """, [data['student_id'], data['basliq'], data['muraciet'],
               data['priority'], status, notlar])
+        log_admin(cur, 'Müraciət yaradıldı', 'Müraciət', cur.lastrowid,
+                  f"{data.get('basliq')} — status: {status}")
     return ok()
 
 
@@ -591,7 +671,11 @@ def save_application(cur):
 @with_db
 def delete_application(cur):
     data = request.get_json() or {}
+    cur.execute("SELECT basliq FROM applications WHERE id = %s", (data.get('id'),))
+    row = cur.fetchone()
     cur.execute("DELETE FROM applications WHERE id = %s", [data.get('id')])
+    log_admin(cur, 'Müraciət silindi', 'Müraciət', data.get('id'),
+              row['basliq'] if row else '')
     return ok()
 
 
@@ -603,7 +687,6 @@ def update_app_status(cur):
     status = data.get('status')
     notlar = clean_val(data.get('notlar'))
 
-    # Təsdiqlənəndə not boşdursa default qeyd yaz
     if status == 'Təsdiqləndi' and not notlar:
         cur.execute("SELECT notlar FROM applications WHERE id = %s", (data.get('id'),))
         row = cur.fetchone()
@@ -616,6 +699,9 @@ def update_app_status(cur):
     else:
         cur.execute("UPDATE applications SET status = %s WHERE id = %s",
                     (status, data.get('id')))
+
+    log_admin(cur, 'Müraciət statusu dəyişildi', 'Müraciət', data.get('id'),
+              f"Yeni status: {status}")
     return ok()
 
 
@@ -625,37 +711,50 @@ def update_app_status(cur):
 
 def _save_content(cur, content_type):
     data = request.get_json() or {}
+    label = 'Elan' if content_type == 'announcement' else 'Anket'
     if data.get('id'):
         cur.execute("""
             UPDATE contents SET title=%s, description=%s, priority=%s, status=%s
             WHERE id=%s
         """, [data['title'], data['description'], data['priority'], data['status'], data['id']])
+        log_admin(cur, f'{label} yeniləndi', label, data['id'], data.get('title'))
     else:
         cur.execute("""
             INSERT INTO contents (type, title, description, priority, status)
             VALUES (%s, %s, %s, %s, %s)
         """, [content_type, data['title'], data['description'], data['priority'], data['status']])
+        log_admin(cur, f'{label} yaradıldı', label, cur.lastrowid, data.get('title'))
     return ok()
+
+
+def _get_contents_paged(cur, content_type):
+    page, per_page = get_pagination_params()
+    where, params = ["type=%s"], [content_type]
+
+    v = qarg('title')
+    if v:
+        where.append("(title LIKE %s OR description LIKE %s)")
+        params.extend([f"%{v}%", f"%{v}%"])
+    v = qarg('status')
+    if v: where.append("status = %s"); params.append(v)
+
+    where_clause = "WHERE " + " AND ".join(where)
+    offset = (page - 1) * per_page
+
+    cur.execute(f"SELECT COUNT(*) as c FROM contents {where_clause}", params)
+    total = cur.fetchone()['c']
+    cur.execute(f"""
+        SELECT id, title, description, priority, status FROM contents
+        {where_clause} ORDER BY created_at DESC LIMIT %s OFFSET %s
+    """, params + [per_page, offset])
+    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/get_announcements', methods=['GET'])
 @admin_required
 @with_db
 def get_announcements(cur):
-    page, per_page, search = get_pagination_params()
-    where, params = "WHERE type=%s", ['announcement']
-    if search:
-        where += " AND (title LIKE %s OR description LIKE %s OR status LIKE %s)"
-        params += [f'%{search}%'] * 3
-
-    offset = (page - 1) * per_page
-    cur.execute(f"SELECT COUNT(*) as c FROM contents {where}", params)
-    total = cur.fetchone()['c']
-    cur.execute(f"""
-        SELECT id, title, description, priority, status FROM contents
-        {where} ORDER BY created_at DESC LIMIT %s OFFSET %s
-    """, params + [per_page, offset])
-    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
+    return _get_contents_paged(cur, 'announcement')
 
 
 @app.route('/api/admin/save_announcement', methods=['POST'])
@@ -670,7 +769,10 @@ def save_announcement(cur):
 @with_db
 def delete_announcement(cur):
     data = request.get_json() or {}
+    cur.execute("SELECT title FROM contents WHERE id = %s", (data.get('id'),))
+    row = cur.fetchone()
     cur.execute("DELETE FROM contents WHERE id = %s", [data.get('id')])
+    log_admin(cur, 'Elan silindi', 'Elan', data.get('id'), row['title'] if row else '')
     return ok()
 
 
@@ -678,20 +780,7 @@ def delete_announcement(cur):
 @admin_required
 @with_db
 def get_surveys(cur):
-    page, per_page, search = get_pagination_params()
-    where, params = "WHERE type=%s", ['survey']
-    if search:
-        where += " AND (title LIKE %s OR description LIKE %s OR status LIKE %s)"
-        params += [f'%{search}%'] * 3
-
-    offset = (page - 1) * per_page
-    cur.execute(f"SELECT COUNT(*) as c FROM contents {where}", params)
-    total = cur.fetchone()['c']
-    cur.execute(f"""
-        SELECT id, title, description, priority, status FROM contents
-        {where} ORDER BY created_at DESC LIMIT %s OFFSET %s
-    """, params + [per_page, offset])
-    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
+    return _get_contents_paged(cur, 'survey')
 
 
 @app.route('/api/admin/save_survey', methods=['POST'])
@@ -706,7 +795,10 @@ def save_survey(cur):
 @with_db
 def delete_survey(cur):
     data = request.get_json() or {}
+    cur.execute("SELECT title FROM contents WHERE id = %s", (data.get('id'),))
+    row = cur.fetchone()
     cur.execute("DELETE FROM contents WHERE id = %s", [data.get('id')])
+    log_admin(cur, 'Anket silindi', 'Anket', data.get('id'), row['title'] if row else '')
     return ok()
 
 
@@ -718,16 +810,24 @@ def delete_survey(cur):
 @admin_required
 @with_db
 def get_penalties(cur):
-    page, per_page, search = get_pagination_params()
-    where, params = "", []
-    if search:
-        where = "WHERE s.ad_soyad LIKE %s OR p.reason LIKE %s OR p.status LIKE %s"
-        params = [f'%{search}%'] * 3
+    page, per_page = get_pagination_params()
+    where, params = ["1=1"], []
 
+    v = qarg('ad_soyad')
+    if v: where.append("s.ad_soyad LIKE %s"); params.append(f"%{v}%")
+    v = qarg('reason')
+    if v: where.append("p.reason LIKE %s"); params.append(f"%{v}%")
+    v = qarg('amount')
+    if v: where.append("CAST(p.amount AS CHAR) LIKE %s"); params.append(f"%{v}%")
+    v = qarg('status')
+    if v: where.append("p.status = %s"); params.append(v)
+
+    where_clause = "WHERE " + " AND ".join(where)
     offset = (page - 1) * per_page
+
     cur.execute(f"""
         SELECT COUNT(*) as c FROM penalties p
-        JOIN students s ON p.student_id = s.id {where}
+        JOIN students s ON p.student_id = s.id {where_clause}
     """, params)
     total = cur.fetchone()['c']
 
@@ -736,7 +836,7 @@ def get_penalties(cur):
                DATE_FORMAT(p.created_at, '%%d.%%m.%%Y') as tarix, s.ad_soyad
         FROM penalties p
         JOIN students s ON p.student_id = s.id
-        {where}
+        {where_clause}
         ORDER BY p.created_at DESC LIMIT %s OFFSET %s
     """, params + [per_page, offset])
 
@@ -758,11 +858,15 @@ def save_penalty(cur):
             vals.append(data['status'])
         vals.append(data['id'])
         cur.execute(f"UPDATE penalties SET {', '.join(fields)} WHERE id=%s", vals)
+        log_admin(cur, 'Cərimə yeniləndi', 'Cərimə', data['id'],
+                  f"{data.get('amount')} AZN — {data.get('reason')}")
     else:
         cur.execute("""
             INSERT INTO penalties (student_id, amount, reason)
             VALUES (%s, %s, %s)
         """, [data['student_id'], data['amount'], data['reason']])
+        log_admin(cur, 'Cərimə yaradıldı', 'Cərimə', cur.lastrowid,
+                  f"{data.get('amount')} AZN — {data.get('reason')}")
     return ok()
 
 
@@ -772,6 +876,7 @@ def save_penalty(cur):
 def pay_penalty(cur):
     data = request.get_json() or {}
     cur.execute("UPDATE penalties SET status = 'Ödənilib' WHERE id = %s", [data.get('id')])
+    log_admin(cur, 'Cərimə ödənildi', 'Cərimə', data.get('id'), '')
     return ok()
 
 
@@ -781,6 +886,7 @@ def pay_penalty(cur):
 def delete_penalty(cur):
     data = request.get_json() or {}
     cur.execute("DELETE FROM penalties WHERE id = %s", [data.get('id')])
+    log_admin(cur, 'Cərimə silindi', 'Cərimə', data.get('id'), '')
     return ok()
 
 
@@ -807,6 +913,8 @@ def save_canteen(cur):
     data = request.get_json() or {}
     cur.execute("UPDATE canteen_menu SET meal_name = %s WHERE id = %s",
                 [data.get('meal_name'), data.get('id')])
+    log_admin(cur, 'Menyu yeniləndi', 'Yeməkxana', data.get('id'),
+              f"Yeni: {data.get('meal_name')}")
     return ok()
 
 
@@ -818,16 +926,21 @@ def save_canteen(cur):
 @admin_required
 @with_db
 def get_laundry(cur):
-    page, per_page, search = get_pagination_params()
-    where, params = "", []
-    if search:
-        where = "WHERE s.ad_soyad LIKE %s OR l.machine_1_status LIKE %s OR l.machine_2_status LIKE %s OR l.machine_3_status LIKE %s"
-        params = [f'%{search}%'] * 4
+    page, per_page = get_pagination_params()
+    where, params = ["1=1"], []
 
+    v = qarg('ad_soyad')
+    if v: where.append("s.ad_soyad LIKE %s"); params.append(f"%{v}%")
+    for m in ('m1', 'm2', 'm3'):
+        v = qarg(m)
+        if v: where.append(f"l.machine_{m[1]}_status = %s"); params.append(v)
+
+    where_clause = "WHERE " + " AND ".join(where)
     offset = (page - 1) * per_page
+
     cur.execute(f"""
         SELECT COUNT(*) as c FROM laundry l
-        JOIN students s ON l.student_id = s.id {where}
+        JOIN students s ON l.student_id = s.id {where_clause}
     """, params)
     total = cur.fetchone()['c']
 
@@ -835,8 +948,8 @@ def get_laundry(cur):
         SELECT l.student_id, l.machine_1_status, l.machine_2_status, l.machine_3_status, s.ad_soyad
         FROM laundry l
         JOIN students s ON l.student_id = s.id
-        {where}
-        LIMIT %s OFFSET %s
+        {where_clause}
+        ORDER BY s.ad_soyad ASC LIMIT %s OFFSET %s
     """, params + [per_page, offset])
 
     return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
@@ -856,6 +969,8 @@ def save_laundry(cur):
         machine_1_status=%s, machine_2_status=%s, machine_3_status=%s
     """, [data['student_id'], data['m1'], data['m2'], data['m3'],
           data['m1'], data['m2'], data['m3']])
+    log_admin(cur, 'Çamaşırxana yeniləndi', 'Çamaşırxana', data['student_id'],
+              f"M1: {data.get('m1')}, M2: {data.get('m2')}, M3: {data.get('m3')}")
     return ok()
 
 
@@ -865,6 +980,7 @@ def save_laundry(cur):
 def delete_laundry(cur):
     data = request.get_json() or {}
     cur.execute("DELETE FROM laundry WHERE student_id = %s", [data.get('student_id')])
+    log_admin(cur, 'Çamaşırxana qeydi silindi', 'Çamaşırxana', data.get('student_id'), '')
     return ok()
 
 
@@ -876,16 +992,22 @@ def delete_laundry(cur):
 @admin_required
 @with_db
 def get_profiles(cur):
-    page, per_page, search = get_pagination_params()
-    where, params = "", []
-    if search:
-        where = "WHERE s.ad_soyad LIKE %s OR sp.yuxu_rejimi LIKE %s OR sp.temizlik LIKE %s"
-        params = [f'%{search}%'] * 3
+    page, per_page = get_pagination_params()
+    where, params = ["1=1"], []
 
+    for col in ('ad_soyad', 'yuxu_rejimi', 'temizlik', 'sosial_munasibet', 'hayat_terzi'):
+        v = qarg(col)
+        if v:
+            target = 's.ad_soyad' if col == 'ad_soyad' else f'sp.{col}'
+            where.append(f"{target} LIKE %s")
+            params.append(f"%{v}%")
+
+    where_clause = "WHERE " + " AND ".join(where)
     offset = (page - 1) * per_page
+
     cur.execute(f"""
         SELECT COUNT(*) as c FROM students_profiles sp
-        JOIN students s ON sp.student_id = s.id {where}
+        JOIN students s ON sp.student_id = s.id {where_clause}
     """, params)
     total = cur.fetchone()['c']
 
@@ -893,8 +1015,8 @@ def get_profiles(cur):
         SELECT sp.student_id, sp.yuxu_rejimi, sp.temizlik, sp.sosial_munasibet, sp.hayat_terzi, s.ad_soyad
         FROM students_profiles sp
         JOIN students s ON sp.student_id = s.id
-        {where}
-        LIMIT %s OFFSET %s
+        {where_clause}
+        ORDER BY s.ad_soyad ASC LIMIT %s OFFSET %s
     """, params + [per_page, offset])
 
     return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
@@ -914,6 +1036,7 @@ def save_profile(cur):
           data['sosial_munasibet'], data['hayat_terzi'],
           data['yuxu_rejimi'], data['temizlik'],
           data['sosial_munasibet'], data['hayat_terzi']])
+    log_admin(cur, 'Profil yeniləndi', 'Profil', data['student_id'], '')
     return ok()
 
 
@@ -923,18 +1046,18 @@ def save_profile(cur):
 def delete_profile(cur):
     data = request.get_json() or {}
     cur.execute("DELETE FROM students_profiles WHERE student_id = %s", [data.get('student_id')])
+    log_admin(cur, 'Profil silindi', 'Profil', data.get('student_id'), '')
     return ok()
 
 
 # ---------------------------------------------------------------------------
-# Qruplar (YENİ)
+# Groups
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_groups', methods=['GET'])
 @admin_required
 @with_db
 def get_groups(cur):
-    # Boş qrupları avtomatik təmizlə
     cur.execute("""
         DELETE FROM student_groups
         WHERE id NOT IN (
@@ -971,35 +1094,41 @@ def delete_group(cur):
     gid = data.get('id')
     cur.execute("UPDATE students SET group_id = NULL WHERE group_id = %s", (gid,))
     cur.execute("DELETE FROM student_groups WHERE id = %s", (gid,))
+    log_admin(cur, 'Qrup ləğv edildi', 'Qrup', gid, '')
     return ok()
 
 
 # ---------------------------------------------------------------------------
-# Tələblər (YENİ)
+# Requests
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_requests', methods=['GET'])
 @admin_required
 @with_db
 def get_requests(cur):
+    page, per_page = get_pagination_params()
+    offset = (page - 1) * per_page
+
+    cur.execute("SELECT COUNT(*) as c FROM home_requests")
+    total = cur.fetchone()['c']
+
     cur.execute("""
         SELECT hr.id, hr.type, hr.room_id, hr.target_id, hr.requester_id, hr.status,
-               DATE_FORMAT(hr.created_at, '%d.%m.%Y %H:%i') AS tarix,
+               DATE_FORMAT(hr.created_at, '%%d.%%m.%%Y %%H:%%i') AS tarix,
                t.ad_soyad AS target_name, r.ad_soyad AS requester_name,
                (SELECT COUNT(*) FROM home_request_votes v WHERE v.request_id = hr.id) AS vote_count
         FROM home_requests hr
         JOIN students t ON t.id = hr.target_id
         JOIN students r ON r.id = hr.requester_id
-        ORDER BY hr.created_at DESC
-    """)
-    return ok(data=cur.fetchall())
+        ORDER BY hr.created_at DESC LIMIT %s OFFSET %s
+    """, [per_page, offset])
+    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
 
 
 @app.route('/api/admin/resolve_request', methods=['POST'])
 @admin_required
 @with_db
 def resolve_request(cur):
-    """Admin tələbi məcburi təsdiq/rədd edir."""
     data = request.get_json() or {}
     req_id = data.get('id')
     approve = bool(data.get('approve'))
@@ -1013,7 +1142,6 @@ def resolve_request(cur):
 
     if approve:
         if req['type'] == 'invite':
-            # Dəvəti təsdiqlə → tələbəni evə yerləşdir
             cur.execute("SELECT cins, ev FROM students WHERE id = %s", (req['target_id'],))
             st = cur.fetchone()
             if not st:
@@ -1026,7 +1154,6 @@ def resolve_request(cur):
             if room and room['cins'] and room['cins'] != st['cins']:
                 return fail("Cins uyğunsuzluğu — bu ev qarşı cinsə aiddir!")
 
-            # Self-heal
             cur.execute("""
                 INSERT IGNORE INTO room_slots (room_id, slot)
                 SELECT %s, s.slot FROM (SELECT 1 AS slot UNION SELECT 2 UNION SELECT 3
@@ -1050,15 +1177,18 @@ def resolve_request(cur):
                 (req['target_id'],)
             )
         else:
-            # Qovma / çıxma → target evdən çıxarılır
             remove_student_from_room(cur, req['target_id'])
             cur.execute(
                 "UPDATE students SET ev = 'Ev seçilməyib', group_id = NULL WHERE id = %s",
                 (req['target_id'],)
             )
         cur.execute("UPDATE home_requests SET status = 'Təsdiqləndi' WHERE id = %s", (req_id,))
+        log_admin(cur, 'Tələb admin tərəfindən təsdiq edildi', 'Tələb', req_id,
+                  f"Tip: {req['type']}, otaq: {req['room_id']}, hədəf ID: {req['target_id']}")
     else:
         cur.execute("UPDATE home_requests SET status = 'Rədd edildi' WHERE id = %s", (req_id,))
+        log_admin(cur, 'Tələb admin tərəfindən rədd edildi', 'Tələb', req_id,
+                  f"Tip: {req['type']}, otaq: {req['room_id']}")
 
     return ok()
 
@@ -1070,7 +1200,52 @@ def delete_request(cur):
     data = request.get_json() or {}
     cur.execute("DELETE FROM home_request_votes WHERE request_id = %s", (data.get('id'),))
     cur.execute("DELETE FROM home_requests WHERE id = %s", (data.get('id'),))
+    log_admin(cur, 'Tələb silindi', 'Tələb', data.get('id'), '')
     return ok()
+
+
+# ---------------------------------------------------------------------------
+# Logs (YENİ — son 1 ay)
+# ---------------------------------------------------------------------------
+
+@app.route('/api/admin/get_logs', methods=['GET'])
+@admin_required
+@with_db
+def get_logs(cur):
+    page, per_page = get_pagination_params()
+    where = ["l.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)"]
+    params = []
+
+    v = qarg('tarix')
+    if v:
+        where.append("DATE_FORMAT(l.created_at, '%%d.%%m.%%Y %%H:%%i') LIKE %s")
+        params.append(f"%{v}%")
+    v = qarg('admin')
+    if v: where.append("l.admin_user LIKE %s"); params.append(f"%{v}%")
+    v = qarg('action')
+    if v: where.append("l.action LIKE %s"); params.append(f"%{v}%")
+    v = qarg('entity')
+    if v: where.append("l.entity LIKE %s"); params.append(f"%{v}%")
+    v = qarg('entity_id')
+    if v: where.append("CAST(l.entity_id AS CHAR) LIKE %s"); params.append(f"%{v}%")
+    v = qarg('details')
+    if v: where.append("l.details LIKE %s"); params.append(f"%{v}%")
+
+    where_clause = "WHERE " + " AND ".join(where)
+    offset = (page - 1) * per_page
+
+    cur.execute(f"SELECT COUNT(*) as c FROM admin_logs l {where_clause}", params)
+    total = cur.fetchone()['c']
+
+    cur.execute(f"""
+        SELECT l.id, l.admin_user, l.action, l.entity, l.entity_id, l.details,
+               DATE_FORMAT(l.created_at, '%%d.%%m.%%Y %%H:%%i') AS tarix
+        FROM admin_logs l
+        {where_clause}
+        ORDER BY l.created_at DESC LIMIT %s OFFSET %s
+    """, params + [per_page, offset])
+
+    return ok(data=cur.fetchall(), total=total, page=page, per_page=per_page)
 
 
 # ---------------------------------------------------------------------------
