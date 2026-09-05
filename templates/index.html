@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yaşıl Kampus Admin</title>
+<title>Yataqxana İdarəetmə Paneli | KUDS</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -281,7 +281,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- LOGIN — server-side vəziyyət: sessiya VARSA bir an belə görünmir -->
+<!-- LOGIN — server-side: sessiya VARSA bir an belə görünmir -->
 <div class="login-overlay {% if not is_logged_in %}active{% endif %}" id="loginOverlay">
   <div class="login-card">
     <div class="login-logo">
@@ -343,7 +343,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 
     <section id="page-logs" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Əməliyyat Tarixçəsi — son 1 ay</h3></div>
+        <div class="widget-header"><h3>Əməliyyat Tarixçəsi — son 1 ay</h3><button type="button" class="btn-secondary" onclick="clearOldLogs()"><i data-lucide="trash-2"></i> Köhnə Logları Təmizlə</button></div>
         <div class="table-wrap"><table class="data-table" id="logsTable"><thead><tr>
       <th><div class="th-wrap"><span>Tarix</span><input type="text" class="col-filter" data-col="tarix" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
       <th><div class="th-wrap"><span>Admin</span><input type="text" class="col-filter" data-col="admin" placeholder="Filtr..." oninput="debouncedServerFilter('logs')"></div></th>
@@ -406,7 +406,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 
     <section id="page-groups" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Qruplar</h3></div>
+        <div class="widget-header"><h3>Qruplar</h3><button type="button" class="btn-primary" onclick="adminCreateGroup()"><i data-lucide="plus"></i> Yeni Qrup</button></div>
         <div class="table-wrap"><table class="data-table" id="groupsTable"><thead><tr>
       <th><div class="th-wrap"><span>Qrup ID</span></div></th>
       <th><div class="th-wrap"><span>Üzv Sayı</span></div></th>
@@ -418,7 +418,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 
     <section id="page-requests" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Tələblər — Dəvət / Qovma / Çıxma</h3></div>
+        <div class="widget-header"><h3>Tələblər — Dəvət / Qovma / Çıxma</h3><button type="button" class="btn-primary" onclick="adminCreateRequestModal()"><i data-lucide="plus"></i> Yeni Tələb</button></div>
         <div class="table-wrap"><table class="data-table" id="reqTable"><thead><tr>
       <th><div class="th-wrap"><span>ID</span></div></th>
       <th><div class="th-wrap"><span>Tip</span></div></th>
@@ -825,7 +825,6 @@ function spGetValue(key) {
     return hidden ? (hidden.value || '') : '';
 }
 
-// Input-da ad yazılıb, amma siyahıdan seçilməyibsə false
 function spValidate(key) {
     const input = document.getElementById('sp-input-' + key);
     const hidden = document.getElementById('sp-hidden-' + key);
@@ -1089,10 +1088,6 @@ function buildFormFields(fields, values = {}) {
   }).join('');
 }
 
-function studentFormHint() {
-  return `<p style="font-size:12px;color:var(--text-secondary);margin-top:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Ev statusu "Rədd edilib" və ya "Ev seçilməyib" seçilsə, tələbə otaqdan (varsa) çıxarılır. Yerləşdirmə "Otaqlar" bölməsindən aparılır.</p>`;
-}
-
 function openAddModal(type) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
@@ -1100,8 +1095,7 @@ function openAddModal(type) {
   if (type === 'application') { addApplicationModal(); return; }
   if (type === 'penalty') { addPenaltyModal(); return; }
   if (type === 'laundry') { addLaundryModal(); return; }
-  const hint = type === 'student' ? studentFormHint() : '';
-  const html = buildFormFields(cfg.fields) + hint +
+  const html = buildFormFields(cfg.fields) +
     `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`;
   openModal(cfg.modalTitle.add, html);
 }
@@ -1135,8 +1129,7 @@ async function openEditModal(type, id) {
     if (item) { values = { c_title: item.title, c_desc: item.description, c_priority: item.priority, c_status: item.status }; }
   }
 
-  const hint = type === 'student' ? studentFormHint() : '';
-  const html = buildFormFields(cfg.fields, values) + hint +
+  const html = buildFormFields(cfg.fields, values) +
     `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`;
   openModal(cfg.modalTitle.edit, html);
 }
@@ -1254,6 +1247,16 @@ async function loadLogs(page = 1) {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
+async function clearOldLogs() {
+  confirmDialog('Logları Təmizlə', `1 aydan köhnə bütün loglar silinsin?<span class="dlg-highlight">Son 1 ayın logları qalır</span>Bu əməliyyat geri qaytarıla bilməz!`, async () => {
+    try {
+      const data = await apiAction('clear_old_logs', 'POST', {});
+      infoDialog('Təmizləndi', `<p class="dlg-text">${esc(data.message)}</p>`, 'success');
+      loadLogs();
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'danger', yesText: 'Bəli, təmizlə' });
+}
+
 // ═════════ STUDENTS ═════════
 async function loadStudents(page = 1) {
   try {
@@ -1337,7 +1340,7 @@ function deleteProfile(student_id) {
   }, { type: 'danger', yesText: 'Bəli, sil' });
 }
 
-// ═════════ ROOMS — picker ilə ═════════
+// ═════════ ROOMS ═════════
 async function loadRooms(page = 1) {
   try {
     PAGINATION.rooms.page = page;
@@ -1461,7 +1464,7 @@ async function saveRoom(id) {
   } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
-// ═════════ APPLICATIONS — picker ilə ═════════
+// ═════════ APPLICATIONS ═════════
 async function loadApplications(page = 1) {
   try {
     PAGINATION.applications.page = page;
@@ -1544,7 +1547,7 @@ async function updateAppStatus(id, status) {
     }, { type: isApprove ? 'success' : 'warning', yesText: isApprove ? 'Bəli, təsdiqlə' : 'Bəli, rədd et' });
 }
 
-// ═════════ GROUPS ═════════
+// ═════════ GROUPS — tam idarə ═════════
 async function loadGroups() {
   try {
     const data = await apiAction('get_groups');
@@ -1553,11 +1556,12 @@ async function loadGroups() {
     if (!groups.length) { html = emptyState('users-round', 'Aktiv qrup yoxdur'); }
     else {
       groups.forEach((g, idx) => {
-        const chips = g.members.map(m => `<span class="badge badge-gray" style="margin:2px 4px 2px 0">${esc(m.ad_soyad)}</span>`).join('');
+        const chips = g.members.map(m =>
+          `<span class="badge badge-gray" style="margin:2px 4px 2px 0;cursor:pointer;" title="Qrupdan çıxart" onclick="removeGroupMember(${m.id}, ${g.id})">${esc(m.ad_soyad)} ✕</span>`).join('');
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
           <td style="font-weight:700">Qrup #${g.id}</td>
           <td><span class="badge badge-info">${g.members.length} üzv</span></td>
-          <td>${chips}</td>
+          <td>${chips}<button type="button" class="btn-icon" style="margin-left:8px;width:28px;height:28px;" onclick="addMemberModal(${g.id})" title="Üzv əlavə et"><i data-lucide="user-plus"></i></button></td>
           <td><button type="button" class="btn-icon danger" onclick="deleteGroup(${g.id})" title="Qrupu ləğv et"><i data-lucide="trash-2"></i></button></td>
         </tr>`;
       });
@@ -1567,9 +1571,52 @@ async function loadGroups() {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
+function adminCreateGroup() {
+  confirmDialog('Yeni Qrup', `Boş qrup yaradılsın?<span class="dlg-highlight">Qrup #Yeni</span>Sonra üzvləri axtarışla əlavə edə bilərsiniz.`, async () => {
+    try {
+      const data = await apiAction('create_group', 'POST', {});
+      infoDialog('Qrup Yaradıldı!', `<p class="dlg-text">Qrup uğurla yaradıldı.<span class="dlg-highlight">Qrup #${data.group_id}</span>İndi "+" düyməsi ilə üzv əlavə edin.</p>`, 'group');
+      loadGroups();
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'group', yesText: 'Yarat' });
+}
+
+function addMemberModal(gid) {
+  openModal(`Qrupa Üzv Əlavə Et — Qrup #${gid}`, `
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('grp-add', { placeholder: 'Tələbə adını yazın...', exclude: 'no_group' })}
+      <div class="sp-hint">Yalnız qrupda olmayan və ev seçməmiş tələbələr görsənir</div>
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveGroupMember(${gid})"><i data-lucide="user-plus"></i> Əlavə et</button>
+  `);
+  initStudentPicker('grp-add', { exclude: 'no_group' });
+}
+
+async function saveGroupMember(gid) {
+  const sid = spGetValue('grp-add');
+  if (!sid) {
+    infoDialog('Seçilməyib', `<p class="dlg-text">Tələbə adını yazıb siyahıdan seçin.</p>`, 'warning');
+    return;
+  }
+  try {
+    await apiAction('add_group_member', 'POST', { group_id: gid, student_id: sid });
+    closeModal(); loadGroups();
+    showToast('Üzv qrupa əlavə edildi', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+function removeGroupMember(sid, gid) {
+  confirmDialog('Üzvü Çıxart', `Bu tələbə qrupdan çıxarılsın?<span class="dlg-highlight">Qrup #${gid} • Tələbə ID: ${sid}</span>Son üzv olarsa, qrup tamamilə silinəcək.`, async () => {
+    try {
+      await apiAction('remove_group_member', 'POST', { student_id: sid });
+      loadGroups(); showToast('Üzv qrupdan çıxarıldı', 'success');
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'group', yesText: 'Bəli, çıxart' });
+}
+
 function deleteGroup(gid) {
   gid = safeId(gid);
-  confirmDialog('Qrupu Ləğv Et', `Bu qrupu ləğv etmək istəyirsiniz?<span class="dlg-highlight">Qrup #${gid}</span>Üzvlər qrupdan çıxarılacaq, amma silinməyəcək — yenidən ev seçə bilərlər.`, async () => {
+  confirmDialog('Qrupu Ləğv Et', `Bu qrup tamamilə ləğv edilsin?<span class="dlg-highlight">Qrup #${gid}</span>Üzvlər qrupdan çıxarılacaq, amma silinməyəcək.`, async () => {
     try {
       await apiAction('delete_group', 'POST', { id: gid });
       loadGroups(); showToast('Qrup ləğv edildi', 'success');
@@ -1577,7 +1624,7 @@ function deleteGroup(gid) {
   }, { type: 'group', yesText: 'Bəli, ləğv et' });
 }
 
-// ═════════ REQUESTS ═════════
+// ═════════ REQUESTS — tam idarə ═════════
 const REQ_TYPE_MAP = { invite: ['Dəvət','badge-info'], kick: ['Qovma','badge-danger'], leave: ['Çıxma','badge-warning'] };
 
 async function loadRequests(page = 1) {
@@ -1593,6 +1640,7 @@ async function loadRequests(page = 1) {
         const [tName, tCls] = REQ_TYPE_MAP[rq.type] || ['?','badge-gray'];
         const sCls = rq.status === 'Gözləmədə' ? 'badge-warning' : (rq.status === 'Təsdiqləndi' ? 'badge-success' : 'badge-danger');
         let actions = '';
+        actions += `<button type="button" class="btn-icon" onclick="viewRequestVotes(${rq.id})" title="Səslər"><i data-lucide="vote"></i></button>`;
         if (rq.status === 'Gözləmədə') {
           actions += `<button type="button" class="btn-icon" style="color:var(--success)" onclick="resolveRequest(${rq.id}, true)" title="Təsdiq et"><i data-lucide="check"></i></button>`;
           actions += `<button type="button" class="btn-icon danger" onclick="resolveRequest(${rq.id}, false)" title="Rədd et"><i data-lucide="x"></i></button>`;
@@ -1615,6 +1663,67 @@ async function loadRequests(page = 1) {
     refreshIcons(document.getElementById('reqTbody'));
     renderPagination('requests', 'reqPagination', 'loadRequests');
   } catch (e) { showToast(e.message, 'error'); }
+}
+
+function adminCreateRequestModal() {
+  openModal('Yeni Tələb (Admin)', `
+    <div class="form-group"><label>Tip</label>
+      <select class="form-select" id="req_type">
+        <option value="invite">Dəvət (evə çağırış)</option>
+        <option value="kick">Qovma (evdən çıxart)</option>
+        <option value="leave">Çıxma (öz istəyi ilə)</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Hədəf Tələbə</label>
+      ${spContainerHtml('req-student', { placeholder: 'Tələbə adını yazın...' })}
+      <div class="sp-hint">Dəvət üçün ev seçməmiş, qovma/çıxma üçün evdə yaşayan tələbə</div>
+    </div>
+    <div class="form-group"><label>Otaq Nömrəsi (yalnız dəvət üçün)</label>
+      <input type="number" class="form-input" id="req_room" placeholder="Məs: 105">
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveAdminRequest()"><i data-lucide="plus"></i> Yarat</button>
+  `);
+  initStudentPicker('req-student');
+}
+
+async function saveAdminRequest() {
+  const sid = spGetValue('req-student');
+  const type = gv('req_type');
+  const room = gv('req_room');
+
+  if (!sid) {
+    infoDialog('Seçilməyib', `<p class="dlg-text">Hədəf tələbəni axtarıb seçin.</p>`, 'warning');
+    return;
+  }
+  if (type === 'invite' && !room) {
+    infoDialog('Otaq Lazımdır', `<p class="dlg-text">Dəvət tələbi üçün otaq nömrəsini daxil edin.</p>`, 'warning');
+    return;
+  }
+
+  try {
+    await apiAction('create_request', 'POST', {
+      type, target_id: sid, room_id: room ? parseInt(room) : null
+    });
+    closeModal(); loadRequests();
+    showToast('Tələb yaradıldı', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+async function viewRequestVotes(reqId) {
+  try {
+    const data = await apiAction(`get_request_votes?request_id=${safeId(reqId)}`);
+    const votes = data.data || [];
+    let html = '';
+    if (!votes.length) { html = `<p class="dlg-text">Bu tələb üzrə hələ səs yoxdur.</p>`; }
+    else {
+      html = votes.map(v =>
+        `<div style="display:flex;justify-content:space-between;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;">
+          <span style="font-weight:600">${esc(v.ad_soyad)}</span>
+          <span class="badge ${v.vote === 'Təsdiq' ? 'badge-success' : 'badge-danger'}">${esc(v.vote)}</span>
+        </div>`).join('');
+    }
+    infoDialog(`Səslər — Tələb #${reqId}`, html, 'info');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
 function resolveRequest(id, approve) {
@@ -1669,7 +1778,7 @@ async function loadSurveys(page = 1) {
   } catch (e) { showToast(e.message, 'error'); }
 }
 
-// ═════════ PENALTIES — picker ilə ═════════
+// ═════════ PENALTIES ═════════
 async function loadPenalties(page = 1) {
   try {
     PAGINATION.penalties.page = page;
@@ -1772,7 +1881,7 @@ function updateCanteenDelayed(id, val) {
   canteenTimer = setTimeout(() => updateCanteen(id, val), 800);
 }
 
-// ═════════ LAUNDRY — picker ilə ═════════
+// ═════════ LAUNDRY ═════════
 async function loadLaundry(page = 1) {
   try {
     PAGINATION.laundry.page = page;
