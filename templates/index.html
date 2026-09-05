@@ -55,10 +55,9 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .input-group label{display:block;font-size:14px;color:var(--text-secondary);margin-bottom:8px;font-weight:500}
 .input-group input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;outline:none;background:var(--bg);transition:all var(--transition-fast)}
 .input-group input:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
-.login-btn{width:100%;padding:14px 24px;background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(68,118,108,0.3)}
+.login-btn{width:100%;padding:14px 24px;background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(68,118,108,0.3)}
 .login-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.4)}
-.login-btn i{width:20px;height:20px;transition:transform 0.3s}
-.login-btn:hover i{transform:translateX(4px)}
+.login-btn i{width:20px;height:20px}
 .login-error{color:var(--danger);font-size:14px;text-align:center;margin-top:16px;display:none;padding:8px;background:#fef2f2;border-radius:var(--radius-btn);border:1px solid #fee2e2;animation:shake 0.4s ease}
 
 .sidebar{width:280px;background:var(--surface);height:100vh;position:fixed;left:0;top:0;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);overflow:visible;white-space:nowrap;box-shadow:var(--shadow-sm)}
@@ -66,13 +65,13 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .sidebar.collapsed .logo span,.sidebar.collapsed .nav-item span,.sidebar.collapsed .nav-section{opacity:0;width:0;pointer-events:none}
 .sidebar.collapsed .logo{padding:0;justify-content:center;gap:0}
 .sidebar.collapsed .nav-item{justify-content:center;padding:12px 16px;gap:0}
-.logo{height:72px;padding:0 24px;font-size:22px;font-weight:700;color:var(--ku-dark-green);display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:all var(--transition-base);position:relative;overflow:hidden}
+.logo{height:72px;padding:0 24px;font-size:22px;font-weight:700;color:var(--ku-dark-green);display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;flex-shrink:0;position:relative;overflow:hidden}
 .logo::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ku-green);transform:scaleY(0);transition:transform 0.3s ease}
 .logo:hover::before{transform:scaleY(1)}
 .logo:hover{background:var(--bg)}
 .logo i{width:28px;height:28px;color:var(--ku-green);flex-shrink:0;transition:transform 0.3s ease}
 .logo:hover i{transform:rotate(-10deg) scale(1.1)}
-.logo span{transition:opacity 0.2s ease;font-weight:700}
+.logo span{font-weight:700}
 .nav-menu{flex:1;padding:16px 12px;overflow-y:auto;overflow-x:hidden}
 .nav-section{padding:0 16px;margin:16px 0 8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-secondary);transition:opacity 0.2s}
 .nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;color:var(--text-primary);text-decoration:none;border-radius:var(--radius-btn);margin-bottom:6px;font-size:15px;font-weight:500;transition:all var(--transition-fast);cursor:pointer;position:relative;overflow:hidden;border:none;background:none;width:100%;font-family:'Poppins';text-align:left}
@@ -88,7 +87,7 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 
 .main-wrapper{margin-left:280px;min-height:100vh;display:flex;flex-direction:column;transition:margin-left 0.35s cubic-bezier(0.4,0,0.2,1);flex:1}
 .main-wrapper.expanded{margin-left:80px}
-.top-bar{height:72px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 32px;position:sticky;top:0;z-index:90;transition:all var(--transition-fast)}
+.top-bar{height:72px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 32px;position:sticky;top:0;z-index:90}
 .top-bar h1{font-size:28px;font-weight:700;color:var(--text-primary);opacity:0;animation:fadeInUp 0.4s ease forwards}
 .top-bar-desc{font-size:14px;color:var(--text-secondary);font-weight:400;margin-top:2px}
 .top-bar-actions{display:flex;align-items:center;gap:16px}
@@ -111,13 +110,13 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .widget-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-2px)}
 .widget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .widget-header h3{font-size:18px;font-weight:600}
-.section-title{font-size:24px;margin-bottom:24px;color:var(--text-primary);font-weight:700;position:relative;display:inline-block}
+.section-title{font-size:24px;margin-bottom:24px;font-weight:700;position:relative;display:inline-block}
 .section-title::after{content:'';position:absolute;bottom:-6px;left:0;width:40px;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));border-radius:2px}
 
-.btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(68,118,108,0.25)}
+.btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(68,118,108,0.25)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.35)}
 .btn-primary i{width:18px;height:18px}
-.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(239,68,68,0.25)}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(239,68,68,0.25)}
 .btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35)}
 .btn-danger i{width:18px;height:18px}
 .btn-secondary{background:var(--bg);color:var(--text-primary);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
@@ -241,15 +240,33 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
 .pagination-btn:hover{background:var(--ku-soft-green);border-color:var(--ku-green);color:var(--ku-dark-green)}
 .pagination-btn.active{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border-color:var(--ku-green);box-shadow:0 2px 8px rgba(68,118,108,0.25)}
 .pagination-btn:disabled{opacity:0.4;cursor:not-allowed;background:var(--bg);border-color:var(--border);color:var(--text-secondary)}
-.pagination-btn:disabled:hover{background:var(--bg);border-color:var(--border);color:var(--text-secondary)}
 .pagination-info{font-size:13px;color:var(--text-secondary);font-weight:500;margin:0 8px}
+
+/* ═════════ XÜSUSİ DİALOQ SİSTEMİ ═════════ */
+.dlg-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.dlg-icon i{width:28px;height:28px}
+.dlg-icon.danger{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
+.dlg-icon.success{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
+.dlg-icon.warning{background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)}
+.dlg-icon.info{background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e}
+.dlg-icon.kick{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
+.dlg-icon.invite{background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e}
+.dlg-icon.room{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
+.dlg-icon.group{background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce}
+.dlg-icon.pay{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
+.dlg-icon.logout{background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)}
+.dlg-text{font-size:14px;color:var(--text-secondary);line-height:1.65;text-align:center}
+.dlg-text b,.dlg-text strong{color:var(--text-primary)}
+.dlg-highlight{display:block;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:12px;font-weight:600;color:var(--text-primary);text-align:center}
+.dlg-actions{display:flex;gap:12px;margin-top:24px}
+.dlg-actions .btn-primary,.dlg-actions .btn-danger,.dlg-actions .btn-secondary{flex:1;justify-content:center}
 </style>
 </head>
 <body>
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- LOGIN OVERLAY -->
+<!-- LOGIN -->
 <div class="login-overlay active" id="loginOverlay">
   <div class="login-card">
     <div class="login-logo">
@@ -258,89 +275,48 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <p>Yataqxana İdarəetmə Sistemi</p>
     </div>
     <form id="loginForm" onsubmit="handleLogin(event)">
-      <div class="input-group">
-        <label>İstifadəçi adı</label>
-        <input type="text" id="loginEmail" placeholder="İstifadəçi adı" required autocomplete="username">
-      </div>
-      <div class="input-group">
-        <label>Şifrə</label>
-        <input type="password" id="loginPassword" placeholder="Şifrə" required autocomplete="current-password">
-      </div>
+      <div class="input-group"><label>İstifadəçi adı</label><input type="text" id="loginEmail" placeholder="İstifadəçi adı" required autocomplete="username"></div>
+      <div class="input-group"><label>Şifrə</label><input type="password" id="loginPassword" placeholder="Şifrə" required autocomplete="current-password"></div>
       <div class="login-error" id="loginError">Məlumatlar yanlışdır!</div>
-      <button type="submit" class="login-btn" id="loginBtn">
-        <i data-lucide="log-in"></i> Daxil ol
-      </button>
+      <button type="submit" class="login-btn" id="loginBtn"><i data-lucide="log-in"></i> Daxil ol</button>
     </form>
   </div>
 </div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <div class="logo" onclick="toggleSidebar()">
-    <i data-lucide="shield-check"></i>
-    <span>Admin Panel</span>
-  </div>
+  <div class="logo" onclick="toggleSidebar()"><i data-lucide="shield-check"></i><span>Admin Panel</span></div>
   <nav class="nav-menu">
     <div class="nav-section">Ümumi</div>
-    <button type="button" class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)">
-      <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="logs" onclick="loadPage('logs',this)">
-      <i data-lucide="history"></i><span>Log Tarixçəsi</span>
-    </button>
+    <button type="button" class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
+    <button type="button" class="nav-item" data-menu="logs" onclick="loadPage('logs',this)"><i data-lucide="history"></i><span>Log Tarixçəsi</span></button>
     <div class="nav-section">İdarəetmə</div>
-    <button type="button" class="nav-item" data-menu="students" onclick="loadPage('students',this)">
-      <i data-lucide="users"></i><span>Tələbələr</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="profiles" onclick="loadPage('profiles',this)">
-      <i data-lucide="user-circle"></i><span>Tələbə Profilləri</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="rooms" onclick="loadPage('rooms',this)">
-      <i data-lucide="door-open"></i><span>Otaqlar və Əşyalar</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="groups" onclick="loadPage('groups',this)">
-      <i data-lucide="users-round"></i><span>Qruplar</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="requests" onclick="loadPage('requests',this)">
-      <i data-lucide="inbox"></i><span>Tələblər</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="applications" onclick="loadPage('applications',this)">
-      <i data-lucide="clipboard-list"></i><span>Müraciətlər</span>
-    </button>
+    <button type="button" class="nav-item" data-menu="students" onclick="loadPage('students',this)"><i data-lucide="users"></i><span>Tələbələr</span></button>
+    <button type="button" class="nav-item" data-menu="profiles" onclick="loadPage('profiles',this)"><i data-lucide="user-circle"></i><span>Tələbə Profilləri</span></button>
+    <button type="button" class="nav-item" data-menu="rooms" onclick="loadPage('rooms',this)"><i data-lucide="door-open"></i><span>Otaqlar və Əşyalar</span></button>
+    <button type="button" class="nav-item" data-menu="groups" onclick="loadPage('groups',this)"><i data-lucide="users-round"></i><span>Qruplar</span></button>
+    <button type="button" class="nav-item" data-menu="requests" onclick="loadPage('requests',this)"><i data-lucide="inbox"></i><span>Tələblər</span></button>
+    <button type="button" class="nav-item" data-menu="applications" onclick="loadPage('applications',this)"><i data-lucide="clipboard-list"></i><span>Müraciətlər</span></button>
     <div class="nav-section">Məzmun</div>
-    <button type="button" class="nav-item" data-menu="announcements" onclick="loadPage('announcements',this)">
-      <i data-lucide="megaphone"></i><span>Elanlar</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="surveys" onclick="loadPage('surveys',this)">
-      <i data-lucide="clipboard-check"></i><span>Anketlər</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="canteen" onclick="loadPage('canteen',this)">
-      <i data-lucide="utensils"></i><span>Yeməkxana</span>
-    </button>
-    <button type="button" class="nav-item" data-menu="laundry" onclick="loadPage('laundry',this)">
-      <i data-lucide="washing-machine"></i><span>Çamaşırxana</span>
-    </button>
+    <button type="button" class="nav-item" data-menu="announcements" onclick="loadPage('announcements',this)"><i data-lucide="megaphone"></i><span>Elanlar</span></button>
+    <button type="button" class="nav-item" data-menu="surveys" onclick="loadPage('surveys',this)"><i data-lucide="clipboard-check"></i><span>Anketlər</span></button>
+    <button type="button" class="nav-item" data-menu="canteen" onclick="loadPage('canteen',this)"><i data-lucide="utensils"></i><span>Yeməkxana</span></button>
+    <button type="button" class="nav-item" data-menu="laundry" onclick="loadPage('laundry',this)"><i data-lucide="washing-machine"></i><span>Çamaşırxana</span></button>
     <div class="nav-section">Maliyyə</div>
-    <button type="button" class="nav-item" data-menu="penalties" onclick="loadPage('penalties',this)">
-      <i data-lucide="receipt-text"></i><span>Cərimələr</span>
-    </button>
+    <button type="button" class="nav-item" data-menu="penalties" onclick="loadPage('penalties',this)"><i data-lucide="receipt-text"></i><span>Cərimələr</span></button>
   </nav>
 </aside>
 
-<!-- MAIN WRAPPER -->
+<!-- MAIN -->
 <div class="main-wrapper" id="mainWrapper">
   <header class="top-bar">
-    <div>
-      <h1 id="pageTitle">Dashboard</h1>
-      <div class="top-bar-desc" id="pageDesc">Ümumi statistika</div>
-    </div>
+    <div><h1 id="pageTitle">Dashboard</h1><div class="top-bar-desc" id="pageDesc">Ümumi statistika</div></div>
     <div class="top-bar-actions">
       <button type="button" class="btn-danger" onclick="logout()"><i data-lucide="log-out"></i> Çıxış</button>
     </div>
   </header>
 
   <main class="content-layout">
-    <!-- DASHBOARD -->
     <section id="page-dashboard" class="page-content active-page">
       <div class="stats-grid" id="dashboardStats">
         <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="skeleton skeleton-text" style="width:40%"></div></div>
@@ -350,7 +326,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- LOGS -->
     <section id="page-logs" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Əməliyyat Tarixçəsi — son 1 ay</h3></div>
@@ -366,7 +341,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- STUDENTS -->
     <section id="page-students" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Siyahısı</h3><button type="button" class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
@@ -386,7 +360,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- PROFILES -->
     <section id="page-profiles" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələbə Profilləri</h3></div>
@@ -402,7 +375,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- ROOMS -->
     <section id="page-rooms" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button type="button" class="btn-primary" onclick="openAddModal('room')"><i data-lucide="plus"></i> Yeni Otaq</button></div>
@@ -417,7 +389,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- GROUPS -->
     <section id="page-groups" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Qruplar</h3></div>
@@ -430,7 +401,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- REQUESTS -->
     <section id="page-requests" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Tələblər — Dəvət / Qovma / Çıxma</h3></div>
@@ -449,7 +419,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- APPLICATIONS -->
     <section id="page-applications" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Müraciətlər</h3><button type="button" class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button></div>
@@ -463,7 +432,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- ANNOUNCEMENTS -->
     <section id="page-announcements" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Elanlar</h3><button type="button" class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
@@ -476,7 +444,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- SURVEYS -->
     <section id="page-surveys" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Anketlər</h3><button type="button" class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
@@ -489,7 +456,6 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- PENALTIES -->
     <section id="page-penalties" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Cərimələr</h3><button type="button" class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
@@ -504,13 +470,11 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- CANTEEN -->
     <section id="page-canteen" class="page-content">
       <h2 class="section-title">Həftəlik Menyu</h2>
       <div class="canteen-grid" id="canteenGrid"><div class="widget-card" style="display:flex;justify-content:center;align-items:center;min-height:200px"><div class="loader"></div></div></div>
     </section>
 
-    <!-- LAUNDRY -->
     <section id="page-laundry" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Çamaşırxana</h3><button type="button" class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
@@ -527,7 +491,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </main>
 </div>
 
-<!-- UNIVERSAL MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="universalModal">
   <div class="modal-card">
     <div class="modal-header" id="modalHeader"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
@@ -536,15 +500,22 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </div>
 </div>
 
+<!-- XÜSUSİ DİALOQ -->
+<div class="modal-overlay" id="dialogOverlay" style="z-index: 2000;">
+  <div class="modal-card" style="max-width: 430px;">
+    <div class="modal-header" id="dlgHeader"><h3 id="dlgTitleH">Təsdiq</h3></div>
+    <div class="modal-body" id="dlgBody" style="text-align: center; padding: 32px 24px;"></div>
+  </div>
+</div>
+
 <script>
-// ═══════════════ STATE & CONFIG ═══════════════
+// ═════════ STATE & CONFIG ═════════
 let currentStudents = [];
 let currentRooms = [];
 let currentApps = [];
 let currentProfiles = [];
 let ALL_STUDENTS = [];
 let isLoggedIn = false;
-let activePageKey = 'dashboard';
 
 const PAGINATION = {
   students: { page: 1, per_page: 20, total: 0 },
@@ -685,7 +656,7 @@ const CRUD_CONFIG = {
     saveAction: 'save_announcement',
     loadFn: loadAnnouncements,
     modalTitle: { add: 'Yeni Elan', edit: 'Elanı Redaktə Et' },
-    deleteConfirm: 'Bu elan silinsin?',
+    deleteConfirm: 'Bu elan silinsin? (Tələbə panelindən də silinəcək)',
     tableId: 'annTable', tbodyId: 'annTbody',
     emptyIcon: 'megaphone', emptyText: 'Elan yoxdur',
     fields: [
@@ -716,7 +687,7 @@ const CRUD_CONFIG = {
     saveAction: 'save_survey',
     loadFn: loadSurveys,
     modalTitle: { add: 'Yeni Anket', edit: 'Anketi Redaktə Et' },
-    deleteConfirm: 'Bu anket silinsin?',
+    deleteConfirm: 'Bu anket silinsin? (Cavablar da itəcək)',
     tableId: 'surTable', tbodyId: 'surTbody',
     emptyIcon: 'clipboard-check', emptyText: 'Anket yoxdur',
     fields: [
@@ -747,7 +718,7 @@ const CRUD_CONFIG = {
     saveAction: 'save_penalty',
     loadFn: loadPenalties,
     modalTitle: { add: 'Yeni Cərimə', edit: 'Cəriməni Redaktə Et' },
-    deleteConfirm: 'Bu cərimə silinsin?',
+    deleteConfirm: 'Bu cərimə silinsin? (Tarixçədən tam silinəcək)',
     tableId: 'penTable', tbodyId: 'penTbody',
     emptyIcon: 'receipt-text', emptyText: 'Cərimə yoxdur',
     customModal: true,
@@ -772,7 +743,7 @@ const CRUD_CONFIG = {
     saveAction: 'save_laundry',
     loadFn: loadLaundry,
     modalTitle: { add: 'Yeni Çamaşırxana Qeydi', edit: 'Çamaşırxana Redaktə' },
-    deleteConfirm: 'Bu qeyd silinsin?',
+    deleteConfirm: 'Bu qeyd silinsin? (3 maşın statusu sıfırlanacaq)',
     tableId: 'laundryTable', tbodyId: 'laundryTbody',
     emptyIcon: 'washing-machine', emptyText: 'Məlumat yoxdur',
     customModal: true,
@@ -794,7 +765,7 @@ const CRUD_CONFIG = {
   }
 };
 
-// ═══════════════ UTILITIES ═══════════════
+// ═════════ UTILITIES ═════════
 function esc(str) {
   if (!str) return '';
   const div = document.createElement('div');
@@ -807,7 +778,6 @@ function gv(id) {
   return el ? el.value : '';
 }
 
-// #20 — onclick-lara gedən ID-lər tam int kimi təsdiqlənir
 function safeId(v) {
   const n = parseInt(v, 10);
   return Number.isInteger(n) ? n : 0;
@@ -821,7 +791,7 @@ function debounce(fn, delay = 350) {
   };
 }
 
-// ═══════════════ SERVER-SIDE FILTERS (SQL-də axtarış) ═══════════════
+// ═════════ SERVER-SIDE FILTERS ═════════
 function getColFilters(tableId) {
   const out = {};
   const table = document.getElementById(tableId);
@@ -846,16 +816,10 @@ const FILTER_LOADERS = {
   logs: () => loadLogs(1)
 };
 
-function serverFilter(key) {
-  if (FILTER_LOADERS[key]) FILTER_LOADERS[key]();
-}
+function serverFilter(key) { if (FILTER_LOADERS[key]) FILTER_LOADERS[key](); }
+const debouncedServerFilter = debounce(serverFilter, 350);
 
-// #17 — min 2 simvol (qısa sorğuları kəsir)
-const debouncedServerFilter = debounce((key) => {
-  serverFilter(key);
-}, 350);
-
-// ═══════════════ API ═══════════════
+// ═════════ API ═════════
 async function apiAction(action, method = 'GET', body = null, query = null) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
@@ -865,17 +829,12 @@ async function apiAction(action, method = 'GET', body = null, query = null) {
       const qs = new URLSearchParams(query).toString();
       if (qs) url += '?' + qs;
     }
-    const options = {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-      signal: controller.signal
-    };
+    const options = { method, headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', signal: controller.signal };
     if (body) options.body = JSON.stringify(body);
     const res = await fetch(url, options);
     clearTimeout(timeoutId);
     if (res.status === 403) { showLogin(); throw new Error('İcazə yoxdur'); }
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);   // #11 — status toast-da görünür
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (!data.success) throw new Error(data.message || 'Naməlum xəta');
     return data;
@@ -886,13 +845,10 @@ async function apiAction(action, method = 'GET', body = null, query = null) {
   }
 }
 
-// ═══════════════ UI ═══════════════
+// ═════════ UI ═════════
 function refreshIcons(container) {
-  if (container && container.querySelectorAll) {
-    lucide.createIcons({ nodes: [container] });
-  } else {
-    lucide.createIcons();
-  }
+  if (container && container.querySelectorAll) { lucide.createIcons({ nodes: [container] }); }
+  else { lucide.createIcons(); }
 }
 
 function showToast(message, type = 'success') {
@@ -912,8 +868,7 @@ function showToast(message, type = 'success') {
 }
 
 function openModal(title, bodyHtml, danger = false) {
-  const header = document.getElementById('modalHeader');
-  header.classList.toggle('danger-header', !!danger);
+  document.getElementById('modalHeader').classList.toggle('danger-header', !!danger);
   document.getElementById('modalTitle').innerText = title;
   document.getElementById('modalBody').innerHTML = bodyHtml;
   document.getElementById('modalFooter').style.display = 'none';
@@ -925,24 +880,50 @@ function closeModal() {
   document.getElementById('universalModal').classList.remove('active');
 }
 
-// #15 — öz confirm dialoqumuz (brauzer confirm() əvəzinə)
-let confirmCallback = null;
-function confirmDialog(title, text, cb) {
-  confirmCallback = cb;
-  openModal(title, `
-    <p style="font-size:15px;line-height:1.6">${esc(text)}</p>
-    <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px">
-      <button type="button" class="btn-secondary" onclick="closeModal();confirmCallback=null;">Ləğv et</button>
-      <button type="button" class="btn-danger" onclick="runConfirm()"><i data-lucide="trash-2"></i> Təsdiq et</button>
-    </div>
-  `, true);
+// ═════════ XÜSUSİ DİALOQ SİSTEMİ ═════════
+let dlgCallback = null;
+
+const DLG_ICONS = { danger: 'trash-2', success: 'check-circle-2', warning: 'alert-triangle', info: 'info', kick: 'user-x', invite: 'mail-check', room: 'door-open', group: 'users-round', pay: 'credit-card', logout: 'log-out' };
+
+function dialogBase(type, title, bodyHtml, danger) {
+  document.getElementById('dlgHeader').classList.toggle('danger-header', !!danger);
+  document.getElementById('dlgTitleH').innerText = title;
+  document.getElementById('dlgBody').innerHTML =
+    `<div class="dlg-icon ${type}"><i data-lucide="${DLG_ICONS[type] || 'info'}"></i></div>${bodyHtml}`;
+  document.getElementById('dialogOverlay').classList.add('active');
+  refreshIcons(document.getElementById('dlgBody'));
 }
-function runConfirm() {
-  const cb = confirmCallback;
-  confirmCallback = null;
-  closeModal();
-  if (cb) cb();
+
+function closeDialog(result) {
+  document.getElementById('dialogOverlay').classList.remove('active');
+  const cb = dlgCallback; dlgCallback = null;
+  if (result && cb) cb();
 }
+
+function confirmDialog(title, text, cb, opts = {}) {
+  const type = opts.type || 'danger';
+  dlgCallback = cb;
+  dialogBase(type, title,
+    `<p class="dlg-text">${text}</p>
+     <div class="dlg-actions">
+       <button type="button" class="btn-secondary" onclick="closeDialog(false)">${opts.noText || 'Ləğv et'}</button>
+       <button type="button" class="btn-danger" onclick="closeDialog(true)"><i data-lucide="check"></i> ${opts.yesText || 'Bəli, təsdiq edirəm'}</button>
+     </div>`, type === 'danger' || type === 'kick');
+}
+
+function infoDialog(title, bodyHtml, type = 'info') {
+  dlgCallback = null;
+  dialogBase(type, title, `${bodyHtml}<div class="dlg-actions"><button type="button" class="btn-primary" onclick="closeDialog(false)">Bağla</button></div>`, false);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeModal(); dlgCallback = null; document.getElementById('dialogOverlay').classList.remove('active'); }
+  if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) {
+    e.preventDefault();
+    const activeSection = document.querySelector('.page-content.active-page');
+    if (activeSection) { const first = activeSection.querySelector('thead .col-filter'); if (first) first.focus(); }
+  }
+});
 
 function showLogin() { document.getElementById('loginOverlay').classList.add('active'); }
 function hideLogin() { document.getElementById('loginOverlay').classList.remove('active'); }
@@ -955,20 +936,11 @@ async function handleLogin(e) {
   lucide.createIcons({ nodes: [btn] });
   try {
     const data = await fetch('/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({
-        email: document.getElementById('loginEmail').value,
-        sifre: document.getElementById('loginPassword').value
-      })
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ email: gv('loginEmail'), sifre: gv('loginPassword') })
     }).then(r => r.json());
-    if (data.success) {
-      hideLogin(); isLoggedIn = true; loadDashboard();
-      showToast('Uğurla daxil oldunuz!', 'success');
-    } else {
-      throw new Error('Yanlış məlumat');
-    }
+    if (data.success) { hideLogin(); isLoggedIn = true; loadDashboard(); showToast('Uğurla daxil oldunuz!', 'success'); }
+    else { throw new Error('Yanlış məlumat'); }
   } catch {
     document.getElementById('loginError').style.display = 'block';
     btn.innerHTML = original;
@@ -977,9 +949,11 @@ async function handleLogin(e) {
 }
 
 async function logout() {
-  await fetch('/logout', { credentials: 'same-origin' });
-  isLoggedIn = false; showLogin();
-  showToast('Çıxış edildi', 'success');
+  confirmDialog('Çıxış', 'Admin paneldən çıxmaq istəyirsiniz?<span class="dlg-highlight">Dəyişilməmiş məlumatlar itə bilər</span>', async () => {
+    await fetch('/logout', { credentials: 'same-origin' });
+    isLoggedIn = false; showLogin();
+    showToast('Çıxış edildi', 'success');
+  }, { type: 'logout', yesText: 'Bəli, çıx', noText: 'Qalıram' });
 }
 
 function toggleSidebar() {
@@ -987,7 +961,7 @@ function toggleSidebar() {
   document.getElementById('mainWrapper').classList.toggle('expanded');
 }
 
-// ═══════════════ GENERIC CRUD ═══════════════
+// ═════════ GENERIC CRUD ═════════
 function buildFormFields(fields, values = {}) {
   return fields.map(f => {
     const val = values[f.id] !== undefined ? values[f.id] : (f.default || '');
@@ -1023,7 +997,6 @@ async function openEditModal(type, id) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
   id = safeId(id);
-
   if (type === 'room') { editRoomModal(id); return; }
   if (type === 'application') { editApplicationModal(id); return; }
   if (type === 'penalty') { editPenaltyModal(id); return; }
@@ -1034,11 +1007,8 @@ async function openEditModal(type, id) {
     const res = await apiAction('get_student_full', 'POST', { id });
     const d = res.data || {};
     values = {
-      s_name: d.ad_soyad || '',
-      s_email: d.email || '',
-      s_sifre: '',
-      s_cins: d.cins || 'Kişi',
-      s_ev: d.ev || 'Ev seçilməyib',
+      s_name: d.ad_soyad || '', s_email: d.email || '', s_sifre: '',
+      s_cins: d.cins || 'Kişi', s_ev: d.ev || 'Ev seçilməyib',
       s_universitet: d.universitet || 'Qarabağ Universiteti',
       s_ixtisas: d.ixtisas || '',
       s_kurs: d.kurs !== null && d.kurs !== undefined ? d.kurs : '',
@@ -1049,9 +1019,7 @@ async function openEditModal(type, id) {
     const action = type === 'announcement' ? 'get_announcements' : 'get_surveys';
     const res = await apiAction(action);
     const item = res.data.find(x => x.id == id);
-    if (item) {
-      values = { c_title: item.title, c_desc: item.description, c_priority: item.priority, c_status: item.status };
-    }
+    if (item) { values = { c_title: item.title, c_desc: item.description, c_priority: item.priority, c_status: item.status }; }
   }
 
   const hint = type === 'student' ? studentFormHint() : '';
@@ -1070,29 +1038,49 @@ async function saveGenericItem(type, id) {
     cfg.loadFn();
     showToast(id ? 'Yeniləndi' : 'Əlavə edildi', 'success');
   } catch (e) {
-    showToast(e.message || 'Xəta baş verdi', 'error');
+    infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger');
   }
 }
 
-// #15 — confirmDialog ilə silmə
+// Hər tip üçün XÜSUSİ silmə mesajları
+const DELETE_MSGS = {
+  student:   { title: 'Tələbəni Sil', html: (i) => `Bu tələbəni silmək istədiyinizə <b>əminsiniz</b>?<span class="dlg-highlight">${esc(i.ad_soyad || 'ID: ' + i.id)}</span>Profil, cərimə, müraciət, camaşırxana və bütün tələbləri <b>birlikdə silinəcək</b>. Geri qaytarıla bilməz!` },
+  room:      { title: 'Otağı Sil', html: (i) => `Bu otağı silmək istəyirsiniz?<span class="dlg-highlight">Ev ${i.id} • ${i.dolu || 0} sakin</span>Sakinlər avtomatik <b>"Ev seçilməyib"</b> statusuna keçəcək.` },
+  application: { title: 'Müraciəti Sil', html: (i) => `Bu müraciəti silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.basliq || 'Müraciət #' + i.id)}</span>Bu əməliyyat geri qaytarıla bilməz!` },
+  announcement: { title: 'Elanı Sil', html: (i) => `Bu elanı silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.title || 'Elan #' + i.id)}</span>Tələbə panelindən də silinəcək.` },
+  survey:    { title: 'Anketi Sil', html: (i) => `Bu anketi silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.title || 'Anket #' + i.id)}</span>Cavablar da itəcək.` },
+  penalty:   { title: 'Cəriməni Sil', html: (i) => `Bu cəriməni silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.ad_soyad || '')} • ${i.amount || ''} AZN</span>Tarixçədən tam silinəcək.` },
+  laundry:   { title: 'Qeydi Sil', html: (i) => `Bu qeydi silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.ad_soyad || '')}</span>3 maşının statusu sıfırlanacaq.` }
+};
+
 async function deleteItem(type, id) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
   id = safeId(id);
-  confirmDialog('Silməni Təsdiq Et', cfg.deleteConfirm, async () => {
+
+  const sources = { student: currentStudents, room: currentRooms, application: currentApps };
+  let item = sources[type] ? sources[type].find(x => (x.id || x.student_id) == id) : null;
+  if ((type === 'penalty' || type === 'laundry') && !item) {
+    try { const d = await apiAction(`get_${type}s`); item = (d.data || []).find(x => (x.id || x.student_id) == id); } catch(e) {}
+  }
+
+  const msg = DELETE_MSGS[type];
+  const html = msg ? msg.html(item || { id }) : `Bu elementi silmək istəyirsiniz?<span class="dlg-highlight">ID: ${id}</span>`;
+  const dlgType = type === 'penalty' ? 'pay' : 'danger';
+
+  confirmDialog(msg ? msg.title : 'Silməni Təsdiqlə', html, async () => {
     try {
       await apiAction(`delete_${cfg.endpoint}`, 'POST', { id });
       cfg.loadFn();
-      showToast('Silindi', 'success');
+      showToast('Uğurla silindi', 'success');
     } catch (e) {
-      showToast(e.message || 'Xəta', 'error');
+      infoDialog('Silinmə Xətası', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger');
     }
-  });
+  }, { type: dlgType, yesText: 'Bəli, sil' });
 }
 
-// ═══════════════ PAGE LOADING ═══════════════
+// ═════════ PAGE LOADING ═════════
 function loadPage(page, el) {
-  activePageKey = page;
   document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
   if (el) el.classList.add('active');
   const t = PAGE_TITLES[page];
@@ -1101,7 +1089,6 @@ function loadPage(page, el) {
   document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active-page'));
   const target = document.getElementById('page-' + page);
   if (target) target.classList.add('active-page');
-
   const loaders = {
     dashboard: loadDashboard, students: loadStudents, profiles: loadProfiles,
     rooms: loadRooms, groups: loadGroups, requests: loadRequests, logs: loadLogs,
@@ -1111,7 +1098,7 @@ function loadPage(page, el) {
   if (loaders[page]) loaders[page]();
 }
 
-// ═══════════════ DASHBOARD ═══════════════
+// ═════════ DASHBOARD ═════════
 async function loadDashboard() {
   try {
     const data = await apiAction('stats');
@@ -1124,25 +1111,20 @@ async function loadDashboard() {
       <div class="stat-card delay-500"><div class="stat-icon" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce"><i data-lucide="users-round"></i></div><div class="stat-label">Aktiv Qruplar</div><div class="stat-value">${s.groups}</div></div>
       <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-cream),#fde68a);color:#92400e"><i data-lucide="inbox"></i></div><div class="stat-label">Gözləyən Tələblər</div><div class="stat-value">${s.requests}</div></div>`;
     refreshIcons(document.getElementById('dashboardStats'));
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
-// ═══════════════ LOGS ═══════════════
+// ═════════ LOGS ═════════
 async function loadLogs(page = 1) {
   try {
     PAGINATION.logs.page = page;
     const filters = getColFilters('logsTable');
-    const data = await apiAction('get_logs', 'GET', null, {
-      page, per_page: PAGINATION.logs.per_page, ...filters
-    });
+    const data = await apiAction('get_logs', 'GET', null, { page, per_page: PAGINATION.logs.per_page, ...filters });
     PAGINATION.logs.total = data.total || 0;
     const items = data.data || [];
     let html = '';
-    if (!items.length) {
-      html = emptyState('history', 'Son 1 ayda əməliyyat yoxdur');
-    } else {
+    if (!items.length) { html = emptyState('history', 'Son 1 ayda əməliyyat yoxdur'); }
+    else {
       items.forEach((l, idx) => {
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*40}ms">
           <td style="font-size:13px;color:var(--text-secondary);white-space:nowrap">${esc(l.tarix)}</td>
@@ -1156,52 +1138,40 @@ async function loadLogs(page = 1) {
     }
     document.getElementById('logsTbody').innerHTML = html;
     renderPagination('logs', 'logsPagination', 'loadLogs');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
-// ═══════════════ STUDENTS ═══════════════
+// ═════════ STUDENTS ═════════
 async function loadStudents(page = 1) {
   try {
     PAGINATION.students.page = page;
     const filters = getColFilters('studentsTable');
-    const data = await apiAction('get_students', 'GET', null, {
-      page, per_page: PAGINATION.students.per_page, ...filters
-    });
+    const data = await apiAction('get_students', 'GET', null, { page, per_page: PAGINATION.students.per_page, ...filters });
     currentStudents = data.data || [];
     PAGINATION.students.total = data.total || 0;
     renderTable('student', data.data);
     renderPagination('students', 'studentsPagination', 'loadStudents');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 async function ensureStudentsLoaded() {
   if (ALL_STUDENTS.length === 0) {
-    try {
-      const d = await apiAction('get_students_light');
-      ALL_STUDENTS = d.data || [];
-    } catch (e) { /* səssiz keç */ }
+    try { const d = await apiAction('get_students_light'); ALL_STUDENTS = d.data || []; } catch (e) {}
   }
   return ALL_STUDENTS;
 }
 
-// ═══════════════ PROFILES ═══════════════
+// ═════════ PROFILES ═════════
 async function loadProfiles(page = 1) {
   try {
     PAGINATION.profiles.page = page;
     const filters = getColFilters('profilesTable');
-    const data = await apiAction('get_profiles', 'GET', null, {
-      page, per_page: PAGINATION.profiles.per_page, ...filters
-    });
+    const data = await apiAction('get_profiles', 'GET', null, { page, per_page: PAGINATION.profiles.per_page, ...filters });
     currentProfiles = data.data || [];
     PAGINATION.profiles.total = data.total || 0;
     let html = '';
-    if (!data.data || data.data.length === 0) {
-      html = emptyState('user-circle', 'Profil yoxdur');
-    } else {
+    if (!data.data || data.data.length === 0) { html = emptyState('user-circle', 'Profil yoxdur'); }
+    else {
       data.data.forEach((p, idx) => {
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
           <td style="font-weight:600">${esc(p.ad_soyad)}</td>
@@ -1219,9 +1189,7 @@ async function loadProfiles(page = 1) {
     document.getElementById('profilesTbody').innerHTML = html;
     refreshIcons(document.getElementById('profilesTbody'));
     renderPagination('profiles', 'profilesPagination', 'loadProfiles');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 async function editProfileModal(student_id) {
@@ -1248,38 +1216,31 @@ async function saveProfile(student_id) {
     });
     closeModal(); loadProfiles();
     showToast('Profil yeniləndi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
 function deleteProfile(student_id) {
   student_id = safeId(student_id);
-  confirmDialog('Profili Sil', 'Bu profil silinsin?', async () => {
+  const p = currentProfiles.find(x => x.student_id == student_id);
+  confirmDialog('Profili Sil', `Bu tələbə profilini silmək istəyirsiniz?<span class="dlg-highlight">${esc(p ? p.ad_soyad : 'ID: ' + student_id)}</span>Yuxu rejimi, təmizlik və həyat tərzi məlumatları itəcək. AI uyğunluq hesablaması işləməyəcək.`, async () => {
     try {
       await apiAction('delete_profile', 'POST', { student_id });
       loadProfiles(); showToast('Profil silindi', 'success');
-    } catch (e) {
-      showToast(e.message, 'error');
-    }
-  });
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'danger', yesText: 'Bəli, sil' });
 }
 
-// ═══════════════ ROOMS ═══════════════
+// ═════════ ROOMS ═════════
 async function loadRooms(page = 1) {
   try {
     PAGINATION.rooms.page = page;
     const filters = getColFilters('roomsTable');
-    const data = await apiAction('get_rooms', 'GET', null, {
-      page, per_page: PAGINATION.rooms.per_page, ...filters
-    });
+    const data = await apiAction('get_rooms', 'GET', null, { page, per_page: PAGINATION.rooms.per_page, ...filters });
     currentRooms = data.data || [];
     PAGINATION.rooms.total = data.total || 0;
     renderTable('room', data.data);
     renderPagination('rooms', 'roomsPagination', 'loadRooms');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 function roomCinsById(rid) {
@@ -1315,7 +1276,6 @@ function buildRoomForm(r, id) {
   if (autoCins) {
     html += `<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Bu otaq nömrəsi ${autoCins === 'Kişi' ? 'oğlan (101-120)' : 'qız (121-140)'} binasına aiddir — cins avtomatik təyin olunub.</p>`;
   }
-
   const formCins = autoCins || (r ? r.cins : '');
   for (let i = 1; i <= 6; i++) {
     const slot = r && r.slots ? r.slots.find(s => s.slot === i) : null;
@@ -1382,11 +1342,7 @@ async function editRoomModal(id) {
 }
 
 async function saveRoom(id) {
-  const payload = {
-    id: id || gv('r_id'),
-    capacity: gv('r_capacity') || 6,
-    cins: gv('r_cins')
-  };
+  const payload = { id: id || gv('r_id'), capacity: gv('r_capacity') || 6, cins: gv('r_cins') };
   for (let i = 1; i <= 6; i++) {
     payload['t'+i] = gv('r_t'+i);
     payload['y'+i] = gv('r_y'+i);
@@ -1397,26 +1353,20 @@ async function saveRoom(id) {
     await apiAction('save_room', 'POST', payload);
     closeModal(); loadRooms();
     showToast(id ? 'Otaq yeniləndi' : 'Yeni otaq yaradıldı', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
-// ═══════════════ APPLICATIONS ═══════════════
+// ═════════ APPLICATIONS ═════════
 async function loadApplications(page = 1) {
   try {
     PAGINATION.applications.page = page;
     const filters = getColFilters('appsTable');
-    const data = await apiAction('get_applications', 'GET', null, {
-      page, per_page: PAGINATION.applications.per_page, ...filters
-    });
+    const data = await apiAction('get_applications', 'GET', null, { page, per_page: PAGINATION.applications.per_page, ...filters });
     currentApps = data.data || [];
     PAGINATION.applications.total = data.total || 0;
     renderTable('application', data.data);
     renderPagination('applications', 'appsPagination', 'loadApplications');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 async function addApplicationModal() {
@@ -1435,6 +1385,7 @@ async function addApplicationModal() {
     <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
+
 async function editApplicationModal(id) {
   await ensureStudentsLoaded();
   id = safeId(id);
@@ -1453,6 +1404,7 @@ async function editApplicationModal(id) {
     <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
+
 async function saveApplication(id) {
   try {
     await apiAction('save_application', 'POST', {
@@ -1462,31 +1414,34 @@ async function saveApplication(id) {
     });
     closeModal(); loadApplications();
     showToast(id ? 'Müraciət yeniləndi' : 'Yeni müraciət əlavə edildi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
-}
-async function updateAppStatus(id, status) {
-  try {
-    await apiAction('update_app_status', 'POST', { id: safeId(id), status });
-    loadApplications(); showToast('Status yeniləndi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
-// ═══════════════ GROUPS ═══════════════
+async function updateAppStatus(id, status) {
+  const a = currentApps.find(x => x.id == id);
+  const isApprove = status === 'Təsdiqləndi';
+  confirmDialog(isApprove ? 'Müraciəti Təsdiqlə' : 'Müraciəti Rədd Et',
+    isApprove
+      ? `Bu müraciəti təsdiqləmək istəyirsiniz?<span class="dlg-highlight">${esc(a ? a.basliq : '')}</span>Tələbə yaşıl statusda görəcək və avtomatik qeyd yazılacaq.`
+      : `Bu müraciəti rədd etmək istəyirsiniz?<span class="dlg-highlight">${esc(a ? a.basliq : '')}</span>Tələbə qırmızı statusda görəcək. Geri qaytarmaq mümkündür.`,
+    async () => {
+      try {
+        await apiAction('update_app_status', 'POST', { id: safeId(id), status });
+        loadApplications(); showToast('Status yeniləndi', 'success');
+      } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+    }, { type: isApprove ? 'success' : 'warning', yesText: isApprove ? 'Bəli, təsdiqlə' : 'Bəli, rədd et' });
+}
+
+// ═════════ GROUPS ═════════
 async function loadGroups() {
   try {
     const data = await apiAction('get_groups');
     const groups = data.data || [];
     let html = '';
-    if (!groups.length) {
-      html = emptyState('users-round', 'Aktiv qrup yoxdur');
-    } else {
+    if (!groups.length) { html = emptyState('users-round', 'Aktiv qrup yoxdur'); }
+    else {
       groups.forEach((g, idx) => {
-        const chips = g.members.map(m =>
-          `<span class="badge badge-gray" style="margin:2px 4px 2px 0">${esc(m.ad_soyad)}</span>`).join('');
+        const chips = g.members.map(m => `<span class="badge badge-gray" style="margin:2px 4px 2px 0">${esc(m.ad_soyad)}</span>`).join('');
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
           <td style="font-weight:700">Qrup #${g.id}</td>
           <td><span class="badge badge-info">${g.members.length} üzv</span></td>
@@ -1497,38 +1452,31 @@ async function loadGroups() {
     }
     document.getElementById('groupsTbody').innerHTML = html;
     refreshIcons(document.getElementById('groupsTbody'));
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 function deleteGroup(gid) {
   gid = safeId(gid);
-  confirmDialog('Qrupu Ləğv Et', `Qrup #${gid} ləğv edilsin? Üzvlər qrupdan çıxarılacaq.`, async () => {
+  confirmDialog('Qrupu Ləğv Et', `Bu qrupu ləğv etmək istəyirsiniz?<span class="dlg-highlight">Qrup #${gid}</span>Üzvlər qrupdan çıxarılacaq, amma silinməyəcək — yenidən ev seçə bilərlər.`, async () => {
     try {
       await apiAction('delete_group', 'POST', { id: gid });
       loadGroups(); showToast('Qrup ləğv edildi', 'success');
-    } catch (e) {
-      showToast(e.message, 'error');
-    }
-  });
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'group', yesText: 'Bəli, ləğv et' });
 }
 
-// ═══════════════ REQUESTS ═══════════════
+// ═════════ REQUESTS ═════════
 const REQ_TYPE_MAP = { invite: ['Dəvət','badge-info'], kick: ['Qovma','badge-danger'], leave: ['Çıxma','badge-warning'] };
 
 async function loadRequests(page = 1) {
   try {
     PAGINATION.requests.page = page;
-    const data = await apiAction('get_requests', 'GET', null, {
-      page, per_page: PAGINATION.requests.per_page
-    });
+    const data = await apiAction('get_requests', 'GET', null, { page, per_page: PAGINATION.requests.per_page });
     PAGINATION.requests.total = data.total || 0;
     const reqs = data.data || [];
     let html = '';
-    if (!reqs.length) {
-      html = emptyState('inbox', 'Tələb yoxdur');
-    } else {
+    if (!reqs.length) { html = emptyState('inbox', 'Tələb yoxdur'); }
+    else {
       reqs.forEach((rq, idx) => {
         const [tName, tCls] = REQ_TYPE_MAP[rq.type] || ['?','badge-gray'];
         const sCls = rq.status === 'Gözləmədə' ? 'badge-warning' : (rq.status === 'Təsdiqləndi' ? 'badge-success' : 'badge-danger');
@@ -1554,82 +1502,71 @@ async function loadRequests(page = 1) {
     document.getElementById('reqTbody').innerHTML = html;
     refreshIcons(document.getElementById('reqTbody'));
     renderPagination('requests', 'reqPagination', 'loadRequests');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 function resolveRequest(id, approve) {
   id = safeId(id);
-  const msg = approve
-    ? 'Bu tələb təsdiq edilsin? (Qovma/çıxma → şəxs evdən çıxarılacaq, dəvət → evə yerləşdiriləcək)'
-    : 'Bu tələb rədd edilsin?';
-  confirmDialog(approve ? 'Tələbi Təsdiq Et' : 'Tələbi Rədd Et', msg, async () => {
-    try {
-      await apiAction('resolve_request', 'POST', { id, approve });
-      loadRequests(); showToast(approve ? 'Tələb təsdiq edildi' : 'Tələb rədd edildi', 'success');
-    } catch (e) {
-      showToast(e.message, 'error');
-    }
-  });
+  if (approve) {
+    confirmDialog('Tələbi Təsdiq Et', `Bu tələbi <b>admin səlahiyyəti</b> ilə təsdiq etmək istəyirsiniz?<span class="dlg-highlight">Tələb #${id}</span>Qovma/çıxma → şəxs <b>dərhal evdən çıxarılacaq</b>. Dəvət → şəxs <b>dərhal evə yerləşdiriləcək</b>. Sakinlərin səsləri nəzərə alınmayacaq!`, async () => {
+      try {
+        await apiAction('resolve_request', 'POST', { id, approve: true });
+        loadRequests(); showToast('Tələb admin tərəfindən təsdiq edildi', 'success');
+      } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+    }, { type: 'success', yesText: 'Bəli, təsdiq et' });
+  } else {
+    confirmDialog('Tələbi Rədd Et', `Bu tələbi rədd etmək istəyirsiniz?<span class="dlg-highlight">Tələb #${id}</span>Tələb bağlanacaq, iştirakçılar görəcək.`, async () => {
+      try {
+        await apiAction('resolve_request', 'POST', { id, approve: false });
+        loadRequests(); showToast('Tələb rədd edildi', 'success');
+      } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+    }, { type: 'warning', yesText: 'Bəli, rədd et' });
+  }
 }
 
 function deleteRequest(id) {
   id = safeId(id);
-  confirmDialog('Tələbi Sil', 'Bu tələb silinsin?', async () => {
+  confirmDialog('Tələbi Sil', `Bu tələbi <b>tamamilə silmək</b> istəyirsiniz?<span class="dlg-highlight">Tələb #${id}</span>Həm tələb, həm səsləri silinəcək. Bu, rədd etməkdən fərqlidir — izsiz yox olur.`, async () => {
     try {
       await apiAction('delete_request', 'POST', { id });
       loadRequests(); showToast('Tələb silindi', 'success');
-    } catch (e) {
-      showToast(e.message, 'error');
-    }
-  });
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'danger', yesText: 'Bəli, sil' });
 }
 
-// ═══════════════ ANNOUNCEMENTS & SURVEYS ═══════════════
+// ═════════ ANNOUNCEMENTS & SURVEYS ═════════
 async function loadAnnouncements(page = 1) {
   try {
     PAGINATION.announcements.page = page;
     const filters = getColFilters('annTable');
-    const data = await apiAction('get_announcements', 'GET', null, {
-      page, per_page: PAGINATION.announcements.per_page, ...filters
-    });
+    const data = await apiAction('get_announcements', 'GET', null, { page, per_page: PAGINATION.announcements.per_page, ...filters });
     PAGINATION.announcements.total = data.total || 0;
     renderTable('announcement', data.data);
     renderPagination('announcements', 'annPagination', 'loadAnnouncements');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
+
 async function loadSurveys(page = 1) {
   try {
     PAGINATION.surveys.page = page;
     const filters = getColFilters('surTable');
-    const data = await apiAction('get_surveys', 'GET', null, {
-      page, per_page: PAGINATION.surveys.per_page, ...filters
-    });
+    const data = await apiAction('get_surveys', 'GET', null, { page, per_page: PAGINATION.surveys.per_page, ...filters });
     PAGINATION.surveys.total = data.total || 0;
     renderTable('survey', data.data);
     renderPagination('surveys', 'surPagination', 'loadSurveys');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
-// ═══════════════ PENALTIES ═══════════════
+// ═════════ PENALTIES ═════════
 async function loadPenalties(page = 1) {
   try {
     PAGINATION.penalties.page = page;
     const filters = getColFilters('penTable');
-    const data = await apiAction('get_penalties', 'GET', null, {
-      page, per_page: PAGINATION.penalties.per_page, ...filters
-    });
+    const data = await apiAction('get_penalties', 'GET', null, { page, per_page: PAGINATION.penalties.per_page, ...filters });
     PAGINATION.penalties.total = data.total || 0;
     renderTable('penalty', data.data);
     renderPagination('penalties', 'penPagination', 'loadPenalties');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 async function addPenaltyModal() {
@@ -1643,6 +1580,7 @@ async function addPenaltyModal() {
     <button type="button" class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `, true);
 }
+
 async function editPenaltyModal(id) {
   await ensureStudentsLoaded();
   id = safeId(id);
@@ -1658,6 +1596,7 @@ async function editPenaltyModal(id) {
     <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
+
 async function savePenalty(id) {
   try {
     await apiAction('save_penalty', 'POST', {
@@ -1666,20 +1605,21 @@ async function savePenalty(id) {
     });
     closeModal(); loadPenalties();
     showToast(id ? 'Cərimə yeniləndi' : 'Yeni cərimə əlavə edildi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
-}
-async function payPenalty(id) {
-  try {
-    await apiAction('pay_penalty', 'POST', { id: safeId(id) });
-    loadPenalties(); showToast('Cərimə ödənildi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
-// ═══════════════ CANTEEN ═══════════════
+async function payPenalty(id) {
+  const data = await apiAction('get_penalties');
+  const p = data.data.find(x => x.id == id);
+  confirmDialog('Cəriməni Ödə', `Bu cəriməni <b>ödənilmiş</b> kimi işarələmək istəyirsiniz?<span class="dlg-highlight">${esc(p ? p.ad_soyad : '')} • ${p ? p.amount : ''} AZN</span>Tələbə panelində "Ödənilib" kimi görünəcək.`, async () => {
+    try {
+      await apiAction('pay_penalty', 'POST', { id: safeId(id) });
+      loadPenalties(); showToast('Cərimə ödənilmiş kimi işarələndi', 'success');
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'pay', yesText: 'Bəli, ödənilmişdir' });
+}
+
+// ═════════ CANTEEN ═════════
 async function loadCanteen() {
   try {
     const data = await apiAction('get_canteen');
@@ -1697,44 +1637,39 @@ async function loadCanteen() {
     });
     document.getElementById('canteenGrid').innerHTML = html;
     refreshIcons(document.getElementById('canteenGrid'));
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
+
 async function updateCanteen(id, val) {
   try {
     await apiAction('save_canteen', 'POST', { id: safeId(id), meal_name: val });
     showToast('Yemək yeniləndi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
+
 let canteenTimer;
 function updateCanteenDelayed(id, val) {
   clearTimeout(canteenTimer);
   canteenTimer = setTimeout(() => updateCanteen(id, val), 800);
 }
 
-// ═══════════════ LAUNDRY ═══════════════
+// ═════════ LAUNDRY ═════════
 async function loadLaundry(page = 1) {
   try {
     PAGINATION.laundry.page = page;
     const filters = getColFilters('laundryTable');
-    const data = await apiAction('get_laundry', 'GET', null, {
-      page, per_page: PAGINATION.laundry.per_page, ...filters
-    });
+    const data = await apiAction('get_laundry', 'GET', null, { page, per_page: PAGINATION.laundry.per_page, ...filters });
     PAGINATION.laundry.total = data.total || 0;
     renderTable('laundry', data.data);
     renderPagination('laundry', 'laundryPagination', 'loadLaundry');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { showToast(e.message, 'error'); }
 }
 
 function genLaundryOptions(selected) {
   const stats = ['Yoxdur','Gözlənilir','Hazır'];
   return stats.map(s => `<option value="${s}" ${s==selected?'selected':''}>${s}</option>`).join('');
 }
+
 async function addLaundryModal() {
   await ensureStudentsLoaded();
   if (ALL_STUDENTS.length === 0) { showToast('Tələbə siyahısı boşdur!', 'warning'); return; }
@@ -1753,6 +1688,7 @@ async function addLaundryModal() {
     <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
+
 async function editLaundryModal(student_id) {
   await ensureStudentsLoaded();
   student_id = safeId(student_id);
@@ -1770,6 +1706,7 @@ async function editLaundryModal(student_id) {
     <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
+
 async function saveLaundry(student_id) {
   try {
     await apiAction('save_laundry', 'POST', {
@@ -1778,12 +1715,10 @@ async function saveLaundry(student_id) {
     });
     closeModal(); loadLaundry();
     showToast(student_id ? 'Yeniləndi' : 'Əlavə edildi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
 }
 
-// ═══════════════ GENERIC TABLE RENDERER ═══════════════
+// ═════════ TABLE RENDERER ═════════
 function emptyState(icon, text) {
   return `<tr><td colspan="99"><div class="empty-state"><i data-lucide="${icon}"></i><p>${text}</p></div></td></tr>`;
 }
@@ -1792,64 +1727,36 @@ function renderTable(type, data) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
   const tbody = document.getElementById(cfg.tbodyId);
-  if (!data || data.length === 0) {
-    tbody.innerHTML = emptyState(cfg.emptyIcon, cfg.emptyText);
-  } else {
-    tbody.innerHTML = data.map((item, idx) => cfg.renderRow(item, idx)).join('');
-  }
+  if (!data || data.length === 0) { tbody.innerHTML = emptyState(cfg.emptyIcon, cfg.emptyText); }
+  else { tbody.innerHTML = data.map((item, idx) => cfg.renderRow(item, idx)).join(''); }
   refreshIcons(document.getElementById(cfg.tbodyId));
 }
 
 function renderPagination(key, containerId, loadFn) {
   const pg = PAGINATION[key];
   const container = document.getElementById(containerId);
-  if (!container || pg.total <= pg.per_page) {
-    if (container) container.innerHTML = '';
-    return;
-  }
+  if (!container || pg.total <= pg.per_page) { if (container) container.innerHTML = ''; return; }
   const totalPages = Math.ceil(pg.total / pg.per_page);
   let html = '';
-
   html += `<button type="button" class="pagination-btn" ${pg.page<=1?'disabled':''} onclick="${loadFn}(${pg.page-1})"><i data-lucide="chevron-left"></i></button>`;
-
   const maxButtons = 5;
   let start = Math.max(1, pg.page - Math.floor(maxButtons/2));
   let end = Math.min(totalPages, start + maxButtons - 1);
   if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
-
   if (start > 1) html += `<button type="button" class="pagination-btn" onclick="${loadFn}(1)">1</button>${start>2?'<span class="pagination-info">...</span>':''}`;
   for (let i = start; i <= end; i++) {
     html += `<button type="button" class="pagination-btn ${i===pg.page?'active':''}" onclick="${loadFn}(${i})">${i}</button>`;
   }
   if (end < totalPages) html += `${end<totalPages-1?'<span class="pagination-info">...</span>':''}<button type="button" class="pagination-btn" onclick="${loadFn}(${totalPages})">${totalPages}</button>`;
-
   html += `<button type="button" class="pagination-btn" ${pg.page>=totalPages?'disabled':''} onclick="${loadFn}(${pg.page+1})"><i data-lucide="chevron-right"></i></button>`;
-
   const from = (pg.page - 1) * pg.per_page + 1;
   const to = Math.min(pg.page * pg.per_page, pg.total);
   html += `<span class="pagination-info">${from}–${to} / ${pg.total}</span>`;
-
   container.innerHTML = html;
   refreshIcons(container);
 }
 
-// ═══════════════ KEYBOARD (#16) ═══════════════
-document.addEventListener('keydown', (e) => {
-  // Esc — modal bağla
-  if (e.key === 'Escape') { closeModal(); confirmCallback = null; }
-
-  // '/' — aktiv cədvəlin ilk filtrinə fokus (input/selsect sahəsində deyilsə)
-  if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) {
-    e.preventDefault();
-    const activeSection = document.querySelector('.page-content.active-page');
-    if (activeSection) {
-      const first = activeSection.querySelector('thead .col-filter');
-      if (first) first.focus();
-    }
-  }
-});
-
-// ═══════════════ INIT ═══════════════
+// ═════════ INIT ═════════
 fetch('/api/admin/stats', { method: 'GET', credentials: 'same-origin' })
   .then(r => {
     if (r.status === 403) { showLogin(); }
