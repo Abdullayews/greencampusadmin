@@ -1,9 +1,12 @@
 import os
+import csv
+import io
+import time
 import secrets
 import logging
 from functools import wraps
 
-from flask import Flask, request, jsonify, session, render_template_string
+from flask import Flask, request, jsonify, session, render_template_string, Response
 from pymysql.err import IntegrityError
 
 from config import get_db_connection
@@ -34,6 +37,10 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 log = logging.getLogger('admin')
 logging.basicConfig(level=logging.INFO)
+
+# --- #8 Stats cache (30 saniyəlik TTL) ---
+_stats_cache = {"data": None, "ts": 0}
+STATS_TTL = 30
 
 
 # ---------------------------------------------------------------------------
@@ -114,6 +121,26 @@ def dissolve_group_if_empty(cur, group_id):
         cur.execute("DELETE FROM student_groups WHERE id = %s", (group_id,))
 
 
+def resolve_stale_requests(cur):
+    """#9 Ölü tələbləri avtomatik bağlayır."""
+    cur.execute("""
+        UPDATE home_requests hr
+        LEFT JOIN room_slots rs ON rs.student_id = hr.target_id
+        SET hr.status = 'Rədd edildi'
+        WHERE hr.status = 'Gözləmədə'
+          AND hr.type IN ('kick', 'leave')
+          AND (rs.room_id IS NULL OR rs.room_id != hr.room_id)
+    """)
+    cur.execute("""
+        UPDATE home_requests hr
+        JOIN students s ON s.id = hr.target_id
+        SET hr.status = 'Rədd edildi'
+        WHERE hr.status = 'Gözləmədə'
+          AND hr.type = 'invite'
+          AND s.ev != 'Ev seçilməyib'
+    """)
+
+
 def log_admin(cur, action, entity='', entity_id='', details=''):
     try:
         cur.execute(
@@ -145,6 +172,21 @@ def heal_one_room_slots(cur, room_id):
         FROM (SELECT 1 AS slot UNION SELECT 2 UNION SELECT 3
               UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) s
     """, (room_id,))
+
+
+def make_csv_response(rows, headers, filename):
+    """#14 CSV export köməkçisi."""
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    # BOM — Excel-də Azərbaycan hərfləri üçün
+    buf.write('\ufeff')
+    writer.writerow(headers)
+    writer.writerows(rows)
+    return Response(
+        buf.getvalue(),
+        mimetype='text/csv; charset=utf-8',
+        headers={'Content-Disposition': f'attachment; filename={filename}'}
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -189,10 +231,6 @@ def with_db(f):
     return decorated
 
 
-# ---------------------------------------------------------------------------
-# Template helper
-# ---------------------------------------------------------------------------
-
 def serve_html(filename, **context):
     filepath = os.path.join(TEMPLATES_DIR, filename)
     try:
@@ -219,10 +257,6 @@ def admin_panel():
     return serve_html('index.html', is_logged_in=bool(session.get('admin_logged_in')))
 
 
-# ---------------------------------------------------------------------------
-# Auth
-# ---------------------------------------------------------------------------
-
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json() or {}
@@ -242,12 +276,11 @@ def logout():
 @app.route('/api/admin/check', methods=['GET'])
 @admin_required
 def admin_check():
-    """Yüngül sessiya yoxlaması — DB-yə toxunmur."""
     return ok()
 
 
 # ---------------------------------------------------------------------------
-# Typeahead axtarış
+# Typeahead
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/search_students_query', methods=['GET'])
@@ -276,13 +309,18 @@ def search_students_query(cur):
 
 
 # ---------------------------------------------------------------------------
-# Dashboard
+# Dashboard — #8 cache + #16 charts
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/stats', methods=['GET'])
 @admin_required
 @with_db
 def admin_stats(cur):
+    # #8 Cache: 30 saniyədən köhnə deyilsə, cache-dən qaytar
+    now = time.time()
+    if _stats_cache["data"] is not None and (now - _stats_cache["ts"]) < STATS_TTL:
+        return ok(stats=_stats_cache["data"])
+
     cur.execute("""
         SELECT
           (SELECT COUNT(*) FROM students) AS students,
@@ -293,7 +331,51 @@ def admin_stats(cur):
           (SELECT COUNT(*) FROM home_requests WHERE status='Gözləmədə') AS requests
     """)
     stats = dict(cur.fetchone() or {})
+
+    _stats_cache["data"] = stats
+    _stats_cache["ts"] = now
     return ok(stats=stats)
+
+
+@app.route('/api/admin/stats_charts', methods=['GET'])
+@admin_required
+@with_db
+def stats_charts(cur):
+    """#16 Son 6 ayın aylıq statistikası (qrafiklər üçün)."""
+    cur.execute("""
+        SELECT DATE_FORMAT(created_at, '%%Y-%%m') AS ay, COUNT(*) AS say
+        FROM applications
+        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+        GROUP BY ay ORDER BY ay
+    """)
+    apps = cur.fetchall()
+
+    cur.execute("""
+        SELECT DATE_FORMAT(created_at, '%%Y-%%m') AS ay, COUNT(*) AS say
+        FROM penalties
+        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+        GROUP BY ay ORDER BY ay
+    """)
+    pens = cur.fetchall()
+
+    apps_map = {r['ay']: r['say'] for r in apps}
+    pens_map = {r['ay']: r['say'] for r in pens}
+
+    from datetime import datetime as dt
+    months = []
+    now = dt.now()
+    for i in range(5, -1, -1):
+        m = now.month - i
+        y = now.year
+        while m <= 0:
+            m += 12
+            y -= 1
+        key = f"{y}-{m:02d}"
+        label = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'][m - 1]
+        months.append({"ay": key, "label": label,
+                      "apps": apps_map.get(key, 0), "pens": pens_map.get(key, 0)})
+
+    return ok(months=months)
 
 
 # ---------------------------------------------------------------------------
@@ -980,7 +1062,7 @@ def delete_penalty(cur):
 
 
 # ---------------------------------------------------------------------------
-# Canteen
+# Canteen / Laundry
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_canteen', methods=['GET'])
@@ -1009,10 +1091,6 @@ def save_canteen(cur):
     log_admin(cur, 'Menyu yeniləndi', 'Yeməkxana', cid, f"Yeni: {data.get('meal_name')}")
     return ok()
 
-
-# ---------------------------------------------------------------------------
-# Laundry
-# ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_laundry', methods=['GET'])
 @admin_required
@@ -1159,7 +1237,7 @@ def delete_profile(cur):
 
 
 # ---------------------------------------------------------------------------
-# Groups — TAM idarə (YENİ: create / add / remove member)
+# Groups
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_groups', methods=['GET'])
@@ -1199,7 +1277,6 @@ def get_groups(cur):
 @admin_required
 @with_db
 def admin_create_group(cur):
-    """Admin boş qrup yaradır."""
     cur.execute("INSERT INTO student_groups (created_at) VALUES (NOW())")
     gid = cur.lastrowid
     log_admin(cur, 'Qrup yaradıldı (admin)', 'Qrup', gid, '')
@@ -1211,7 +1288,6 @@ def admin_create_group(cur):
 @admin_required
 @with_db
 def admin_add_group_member(cur):
-    """Admin qrupa üzv əlavə edir (cins + 6 üzv limiti ilə)."""
     data = request.get_json() or {}
     gid = as_int(data.get('group_id'))
     sid = as_int(data.get('student_id'))
@@ -1250,7 +1326,6 @@ def admin_add_group_member(cur):
 @admin_required
 @with_db
 def admin_remove_group_member(cur):
-    """Admin qrupdan üzv çıxarır; qrup boşalırsa ləğv olunur."""
     data = request.get_json() or {}
     sid = as_int(data.get('student_id'))
     if sid is None:
@@ -1285,13 +1360,16 @@ def delete_group(cur):
 
 
 # ---------------------------------------------------------------------------
-# Requests — TAM idarə (YENİ: create / votes baxışı)
+# Requests
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/get_requests', methods=['GET'])
 @admin_required
 @with_db
 def get_requests(cur):
+    # #9 Ölü tələbləri təmizlə
+    resolve_stale_requests(cur)
+
     page, per_page = get_pagination_params()
     offset = (page - 1) * per_page
 
@@ -1316,7 +1394,6 @@ def get_requests(cur):
 @admin_required
 @with_db
 def admin_create_request(cur):
-    """Admin birbaşa tələb yaradır: dəvət / qovma / çıxma."""
     data = request.get_json() or {}
     req_type = data.get('type')
     target_id = as_int(data.get('target_id'))
@@ -1359,7 +1436,6 @@ def admin_create_request(cur):
             return fail("Bu tələbə heç bir evdə yaşamır — qovma/çıxma tələbi üçün evdə olmalıdır!")
         room_id = row['room_id']
 
-    # Requester: kick üçün otaqdakı başqa sakin, yoxsa targetin özü
     if req_type == 'kick':
         cur.execute(
             "SELECT student_id FROM room_slots WHERE room_id = %s AND student_id IS NOT NULL "
@@ -1384,7 +1460,6 @@ def admin_create_request(cur):
 @admin_required
 @with_db
 def get_request_votes(cur):
-    """Tələb üzrə səslər (kim, nə verib)."""
     req_id = as_int(qarg('request_id'))
     if req_id is None:
         return fail("request_id lazımdır!")
@@ -1526,11 +1601,65 @@ def get_logs(cur):
 @admin_required
 @with_db
 def clear_old_logs(cur):
-    """1 aydan köhnə logları silir (cədvəl böyüməsin deyə)."""
     cur.execute("DELETE FROM admin_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 1 MONTH)")
     deleted = cur.rowcount
     log_admin(cur, f'Köhnə loglar təmizləndi ({deleted} sətir)', 'Loglar', '', '')
     return ok(deleted=deleted, message=f"{deleted} köhnə log sətri silindi.")
+
+
+# ---------------------------------------------------------------------------
+# #14 CSV Export
+# ---------------------------------------------------------------------------
+
+@app.route('/api/admin/export_students', methods=['GET'])
+@admin_required
+@with_db
+def export_students(cur):
+    cur.execute("""
+        SELECT s.id, s.ad_soyad, s.email, s.universitet, s.ixtisas, s.kurs, s.cins, s.ev,
+               COALESCE(rs.room_id, '') AS otaq, s.ev_deyisme_isteyi
+        FROM students s
+        LEFT JOIN room_slots rs ON rs.student_id = s.id
+        ORDER BY s.id ASC
+    """)
+    rows = [list(r.values()) for r in cur.fetchall()]
+    return make_csv_response(rows,
+        ['ID', 'Ad Soyad', 'Email', 'Universitet', 'İxtisas', 'Kurs', 'Cins', 'Ev Statusu', 'Otaq', 'Ev Dəyişmə İstəyi'],
+        'telebeler.csv')
+
+
+@app.route('/api/admin/export_penalties', methods=['GET'])
+@admin_required
+@with_db
+def export_penalties(cur):
+    cur.execute("""
+        SELECT p.id, s.ad_soyad, p.amount, p.reason, p.status,
+               DATE_FORMAT(p.created_at, '%%d.%%m.%%Y') AS tarix
+        FROM penalties p
+        JOIN students s ON p.student_id = s.id
+        ORDER BY p.created_at DESC
+    """)
+    rows = [list(r.values()) for r in cur.fetchall()]
+    return make_csv_response(rows,
+        ['ID', 'Tələbə', 'Məbləğ', 'Səbəb', 'Status', 'Tarix'],
+        'cerimeler.csv')
+
+
+@app.route('/api/admin/export_applications', methods=['GET'])
+@admin_required
+@with_db
+def export_applications(cur):
+    cur.execute("""
+        SELECT a.id, s.ad_soyad, a.basliq, a.muraciet, a.priority, a.status, a.notlar,
+               DATE_FORMAT(a.created_at, '%%d.%%m.%%Y') AS tarix
+        FROM applications a
+        JOIN students s ON a.student_id = s.id
+        ORDER BY a.created_at DESC
+    """)
+    rows = [list(r.values()) for r in cur.fetchall()]
+    return make_csv_response(rows,
+        ['ID', 'Tələbə', 'Başlıq', 'Müraciət', 'Öncəlik', 'Status', 'Qeyd', 'Tarix'],
+        'mursciatlar.csv')
 
 
 # ---------------------------------------------------------------------------
@@ -1553,4 +1682,4 @@ def forbidden(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0world 0.0.0.0', port=5000)
