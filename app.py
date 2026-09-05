@@ -251,7 +251,7 @@ def with_db(f):
 
 
 # ---------------------------------------------------------------------------
-# Template helper — Jinja istifadə etmir, düz fayl oxuyur
+# Template helper
 # ---------------------------------------------------------------------------
 
 def serve_html(filename, **context):
@@ -662,7 +662,7 @@ def delete_student(cur):
     cur.execute("DELETE FROM home_request_votes WHERE voter_id = %s", (student_id,))
     cur.execute(
         "DELETE FROM home_request_votes WHERE request_id IN "
-        "(SELECT id FROM (SELECT id FROM home_requests WHERE target_id = %s OR requester_id = %s) t)",
+        "(SELECT id FROM home_requests WHERE target_id = %s OR requester_id = %s)",
         (student_id, student_id)
     )
     cur.execute("DELETE FROM home_requests WHERE target_id = %s OR requester_id = %s", (student_id, student_id))
@@ -1425,9 +1425,7 @@ def delete_profile(cur):
 def get_groups(cur):
     cur.execute("""
         DELETE FROM student_groups
-        WHERE id NOT IN (
-            SELECT gid FROM (SELECT DISTINCT s.group_id AS gid FROM students WHERE s.group_id IS NOT NULL) x
-        )
+        WHERE id NOT IN (SELECT group_id FROM students WHERE group_id IS NOT NULL)
     """)
 
     cur.execute("""
