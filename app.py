@@ -9,7 +9,7 @@ import logging
 from collections import defaultdict
 from functools import wraps
 
-from flask import Flask, request, jsonify, session, render_template_string, Response
+from flask import Flask, request, jsonify, session, Response
 from pymysql.err import IntegrityError
 from werkzeug.security import generate_password_hash
 
@@ -139,8 +139,6 @@ def dissolve_group_if_empty(cur, group_id):
 
 
 def _next_group_id(cur):
-    """Yeni qrup ID-si = mövcud ən böyük ID + 1. Eyni anda yaradılan
-    iki qrup eyni ID tutarsa duplicate-key düşür — 3 dəfə təkrar cəhd edilir."""
     for _ in range(3):
         cur.execute("SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM student_groups")
         next_id = cur.fetchone()['next_id']
@@ -186,8 +184,6 @@ def heal_one_room_slots(cur, room_id):
 
 
 def _cleanup_dead_requests(cur):
-    """ÖLÜ TƏLB TƏMİZLƏYİCİ — invite hədəfi ev alıbsa / kick-leave hədəfi
-    artıq həmin evdə deyilsə, Gözləmədə tələbi avtomatik bağlayır."""
     try:
         cur.execute("""
             UPDATE home_requests hr
@@ -219,7 +215,7 @@ def admin_required(f):
 
 
 class BizError(Exception):
-    """İş məntiqi xətası — rollback edilir və mesajla qaytarılır."""
+    pass
 
 
 def with_db(f):
@@ -255,7 +251,7 @@ def with_db(f):
 
 
 # ---------------------------------------------------------------------------
-# Template helper
+# Template helper — Jinja istifadə etmir, düz fayl oxuyur
 # ---------------------------------------------------------------------------
 
 def serve_html(filename, **context):
@@ -263,11 +259,18 @@ def serve_html(filename, **context):
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-        if context:
-            return render_template_string(content, **context)
-        return content
     except FileNotFoundError:
         return fail(f"{filename} tapılmadı", 404)
+    except Exception:
+        log.exception("Template oxuna bilmədi: %s", filename)
+        return fail("Səhifə oxuna bilmədi", 500)
+
+    if '__LOGIN_ACTIVE__' in content:
+        content = content.replace(
+            '__LOGIN_ACTIVE__',
+            'active' if not context.get('is_logged_in') else ''
+        )
+    return Response(content, mimetype='text/html; charset=utf-8')
 
 
 @app.after_request
@@ -399,7 +402,7 @@ def admin_stats(cur):
 
 
 # ---------------------------------------------------------------------------
-# CSV EXPORT (Excel üçün UTF-8 BOM)
+# CSV EXPORT
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/export/<entity>', methods=['GET'])
@@ -1423,7 +1426,7 @@ def get_groups(cur):
     cur.execute("""
         DELETE FROM student_groups
         WHERE id NOT IN (
-            SELECT gid FROM (SELECT DISTINCT group_id AS gid FROM students WHERE group_id IS NOT NULL) x
+            SELECT gid FROM (SELECT DISTINCT s.group_id AS gid FROM students WHERE s.group_id IS NOT NULL) x
         )
     """)
 
@@ -1851,6 +1854,7 @@ def not_found(e):
 
 @app.errorhandler(500)
 def server_error(e):
+    log.exception("Server xətası")
     return fail("Daxili server xətası", 500)
 
 
