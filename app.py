@@ -1,5 +1,6 @@
 import os
 import secrets
+import logging
 from functools import wraps
 
 from flask import Flask, request, jsonify, session, render_template_string
@@ -27,7 +28,14 @@ if not _secret_key:
             f.write(_secret_key)
 app.secret_key = _secret_key
 
+# #10 — açıq cookie konfiqurasiyası
 app.config['JSON_AS_ASCII'] = False
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+# #9 — log yazılışı uğursuzsa konsolda görünəcək, əməliyyat pozulmayacaq
+log = logging.getLogger('admin')
+logging.basicConfig(level=logging.INFO)
 
 
 # ---------------------------------------------------------------------------
@@ -60,24 +68,25 @@ def qarg(name):
     return (request.args.get(name) or '').strip()
 
 
+def as_int(val, default=None):
+    """#3 — ID məcburi int-yə çevrilir, alınmazsa default."""
+    try:
+        return int(val)
+    except (TypeError, ValueError):
+        return default
+
+
 def get_pagination_params():
     """Səhifələmə: səhifə başına maksimum 20 item."""
-    try:
-        page = int(request.args.get('page', 1))
-    except (TypeError, ValueError):
-        page = 1
-    try:
-        per_page = int(request.args.get('per_page', 20))
-    except (TypeError, ValueError):
-        per_page = 20
+    page = as_int(request.args.get('page'), 1) or 1
+    per_page = as_int(request.args.get('per_page'), 20) or 20
     return max(page, 1), min(per_page, 20)
 
 
 def room_cins_by_id(room_id):
     """Bina konvensiyası: 101-120 oğlan, 121-140 qız binası."""
-    try:
-        rid = int(room_id)
-    except (TypeError, ValueError):
+    rid = as_int(room_id)
+    if rid is None:
         return None
     if 101 <= rid <= 120:
         return 'Kişi'
@@ -86,11 +95,8 @@ def room_cins_by_id(room_id):
     return None
 
 
-def remove_student_from_room(cur, student_id):
-    cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
-
-
 def sync_ev_statuses(cur):
+    """#4 — otaq yerləşməsi ilə ev statusunu hər dəfə tam sinxronlaşdırır."""
     cur.execute(
         "UPDATE students SET ev = 'Ev seçilib' "
         "WHERE id IN (SELECT student_id FROM room_slots WHERE student_id IS NOT NULL)"
@@ -102,6 +108,12 @@ def sync_ev_statuses(cur):
     )
 
 
+def remove_student_from_room(cur, student_id):
+    """#4 — slotı boşaldır + statusu dərhal sinxronlaşdırır."""
+    cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
+    sync_ev_statuses(cur)
+
+
 def dissolve_group_if_empty(cur, group_id):
     if group_id is None:
         return
@@ -111,15 +123,40 @@ def dissolve_group_if_empty(cur, group_id):
 
 
 def log_admin(cur, action, entity='', entity_id='', details=''):
-    """Bütün admin əməliyyatlarını admin_logs cədvəlinə yazır."""
+    """Bütün admin əməliyyatlarını admin_logs cədvəlinə yazır.
+    #9 — log cədvəli yoxdursa səssizcə əməliyyatı pozmur, konsolda xəbər verir."""
     try:
         cur.execute(
             "INSERT INTO admin_logs (admin_user, action, entity, entity_id, details) "
             "VALUES (%s, %s, %s, %s, %s)",
             (session.get('admin_user', 'admin'), action, entity, str(entity_id or ''), details or '')
         )
-    except Exception:
-        pass  # log yazılışı əsas əməliyyatı pozmasın
+    except Exception as e:
+        log.warning("log_admin yazıla bilmədi: %s", e)
+
+
+def heal_room_slots(cur):
+    """#23 — birləşdirilmiş self-heal: bütün evlər üçün əskik slotları bir sorğu ilə yaradır."""
+    cur.execute("""
+        INSERT IGNORE INTO room_slots (room_id, slot)
+        SELECT r.id, s.slot
+        FROM rooms r
+        JOIN (SELECT 1 AS slot UNION SELECT 2 UNION SELECT 3
+              UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) s
+             ON s.slot <= COALESCE(r.capacity, 6)
+        LEFT JOIN room_slots rs ON rs.room_id = r.id AND rs.slot = s.slot
+        WHERE rs.room_id IS NULL
+    """)
+
+
+def heal_one_room_slots(cur, room_id):
+    """#23 — bir ev üçün slot self-heal."""
+    cur.execute("""
+        INSERT IGNORE INTO room_slots (room_id, slot)
+        SELECT %s, s.slot
+        FROM (SELECT 1 AS slot UNION SELECT 2 UNION SELECT 3
+              UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) s
+    """, (room_id,))
 
 
 # ---------------------------------------------------------------------------
@@ -152,11 +189,12 @@ def with_db(f):
             err_msg = str(e)
             if 'Duplicate entry' in err_msg and 'email' in err_msg:
                 return fail("Bu email ilə tələbə artıq mövcuddur!", 400)
-            if 'Duplicate entry' in err_msg and 'student_id' in err_msg:
-                return fail("Bu tələbə artıq bir yerdə yaşayır!", 400)
+            if 'Duplicate entry' in err_msg and 'uq_slot_student' in err_msg:
+                return fail("Bu tələbə artıq bir evdə yaşayır!", 400)
             return fail(f"Məlumat uyğunsuzluğu: {e}", 400)
         except Exception as e:
             conn.rollback()
+            log.exception("Əməliyyat xətası")
             return fail(f"Əməliyyat xətası: {e}", 500)
         finally:
             conn.close()
@@ -214,25 +252,23 @@ def logout():
 
 
 # ---------------------------------------------------------------------------
-# Dashboard
+# Dashboard — #5 birləşdirilmiş sorğu
 # ---------------------------------------------------------------------------
 
 @app.route('/api/admin/stats', methods=['GET'])
 @admin_required
 @with_db
 def admin_stats(cur):
-    stats = {}
-    queries = [
-        ("students", "SELECT COUNT(*) as c FROM students"),
-        ("rooms", "SELECT COUNT(*) as c FROM rooms"),
-        ("apps", "SELECT COUNT(*) as c FROM applications WHERE status='Gözləmədə'"),
-        ("penalties", "SELECT COUNT(*) as c FROM penalties WHERE status='Ödənilməmiş'"),
-        ("groups", "SELECT COUNT(DISTINCT group_id) as c FROM students WHERE group_id IS NOT NULL"),
-        ("requests", "SELECT COUNT(*) as c FROM home_requests WHERE status='Gözləmədə'"),
-    ]
-    for key, sql in queries:
-        cur.execute(sql)
-        stats[key] = cur.fetchone()['c']
+    cur.execute("""
+        SELECT
+          (SELECT COUNT(*) FROM students) AS students,
+          (SELECT COUNT(*) FROM rooms) AS rooms,
+          (SELECT COUNT(*) FROM applications WHERE status='Gözləmədə') AS apps,
+          (SELECT COUNT(*) FROM penalties WHERE status='Ödənilməmiş') AS penalties,
+          (SELECT COUNT(DISTINCT group_id) FROM students WHERE group_id IS NOT NULL) AS groups,
+          (SELECT COUNT(*) FROM home_requests WHERE status='Gözləmədə') AS requests
+    """)
+    stats = dict(cur.fetchone() or {})
     return ok(stats=stats)
 
 
@@ -289,8 +325,8 @@ def get_students(cur):
 @admin_required
 @with_db
 def get_students_light(cur):
-    """Modal seçimləri üçün yüngül siyahı."""
-    cur.execute("SELECT id, ad_soyad, cins FROM students ORDER BY ad_soyad ASC")
+    """Modal seçimləri üçün yüngül siyahı (maksimum 5000 — böyüyəndə typeahead keçilər)."""
+    cur.execute("SELECT id, ad_soyad, cins FROM students ORDER BY ad_soyad ASC LIMIT 5000")
     return ok(data=cur.fetchall())
 
 
@@ -299,13 +335,16 @@ def get_students_light(cur):
 @with_db
 def get_student_full(cur):
     data = request.get_json() or {}
+    sid = as_int(data.get('id'))
+    if sid is None:
+        return fail("ID düzgün deyil", 400)
     cur.execute("""
         SELECT s.id, s.ad_soyad, s.email, s.ixtisas, s.kurs, s.api_key, s.universitet,
                s.ev_deyisme_isteyi, s.cins, s.ev, rs.room_id AS otaq
         FROM students s
         LEFT JOIN room_slots rs ON rs.student_id = s.id
         WHERE s.id = %s
-    """, [data.get('id')])
+    """, (sid,))
     return ok(data=cur.fetchone())
 
 
@@ -322,9 +361,10 @@ def save_student(cur):
     if ev not in ('Ev seçilib', 'Ev seçilməyib', 'Rədd edilib'):
         ev = 'Ev seçilməyib'
 
-    if data.get('id'):
-        student_id = data['id']
+    student_id = as_int(data.get('id'))
 
+    if student_id is not None:
+        # #2 — bütün validasiyalar YAZIDAN ƏVVƏL
         cur.execute("""
             SELECT r.cins FROM room_slots rs JOIN rooms r ON r.id = rs.room_id
             WHERE rs.student_id = %s
@@ -332,6 +372,9 @@ def save_student(cur):
         room_row = cur.fetchone()
         if room_row and room_row['cins'] and room_row['cins'] != cins:
             return fail("Tələbə hazırda əks cinsə aid evdə yaşayır — əvvəlcə Otaqlar bölməsindən çıxarın!", 400)
+
+        if not data.get('ad_soyad') or not data.get('email'):
+            return fail("Ad və email mütləqdir!", 400)
 
         fields, vals = [], []
         field_map = {
@@ -356,6 +399,9 @@ def save_student(cur):
         log_admin(cur, 'Tələbə yeniləndi', 'Tələbə', student_id,
                   f"{data.get('ad_soyad')} — cins: {cins}, ev: {ev}")
     else:
+        if not data.get('ad_soyad') or not data.get('email'):
+            return fail("Ad və email mütləqdir!", 400)
+
         cur.execute("""
             INSERT INTO students (ad_soyad, email, sifre, ixtisas, kurs, api_key,
                                   universitet, ev_deyisme_isteyi, cins, ev)
@@ -371,25 +417,38 @@ def save_student(cur):
         log_admin(cur, 'Tələbə yaradıldı', 'Tələbə', student_id,
                   f"{data.get('ad_soyad')} — cins: {cins}, email: {data.get('email')}")
 
+    # #4 — statusu dəyişiləndə / yeni yaradılanda dərhal sinxron
     if ev != 'Ev seçilib':
-        remove_student_from_room(cur, student_id)
+        cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
+        sync_ev_statuses(cur)
+    elif ev == 'Ev seçilib' and not any_room_for(cur, student_id):
+        # "Ev seçilib" seçilib, amma otağı yoxdur — statusu saxtalaşdırmaq olmaz
+        pass  # yerləşdirmə Otaqlar bölməsindən edilir; status saxlanılır
 
     return ok()
 
 
-# Silmə: həm tək, həm cəm URL (404-ün qarşısını alır)
+def any_room_for(cur, student_id):
+    cur.execute("SELECT 1 FROM room_slots WHERE student_id = %s", (student_id,))
+    return cur.fetchone() is not None
+
+
 @app.route('/api/admin/delete_student', methods=['POST'])
 @app.route('/api/admin/delete_students', methods=['POST'])
 @admin_required
 @with_db
 def delete_student(cur):
     data = request.get_json() or {}
-    student_id = data.get('id')
+    student_id = as_int(data.get('id'))
+    if student_id is None:
+        return fail("ID düzgün deyil", 400)
 
     cur.execute("SELECT ad_soyad, group_id FROM students WHERE id = %s", (student_id,))
     row = cur.fetchone()
-    name = row['ad_soyad'] if row else ''
-    gid = row['group_id'] if row else None
+    if not row:
+        return fail("Tələbə tapılmadı", 404)
+    name = row['ad_soyad']
+    gid = row['group_id']
 
     cur.execute("UPDATE room_slots SET student_id = NULL WHERE student_id = %s", (student_id,))
     cur.execute("DELETE FROM students_profiles WHERE student_id = %s", (student_id,))
@@ -423,17 +482,7 @@ def delete_student(cur):
 def get_rooms(cur):
     page, per_page = get_pagination_params()
 
-    # Self-heal: slot sətirləri yaradılmamış evlər üçün avtomatik yaradılır
-    cur.execute("""
-        INSERT IGNORE INTO room_slots (room_id, slot)
-        SELECT r.id, s.slot
-        FROM rooms r
-        JOIN (SELECT 1 AS slot UNION SELECT 2 UNION SELECT 3
-              UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) s
-             ON s.slot <= COALESCE(r.capacity, 6)
-        LEFT JOIN room_slots rs ON rs.room_id = r.id AND rs.slot = s.slot
-        WHERE rs.room_id IS NULL
-    """)
+    heal_room_slots(cur)  # #23
 
     where, params = ["1=1"], []
     v = qarg('id')
@@ -494,103 +543,93 @@ def get_rooms(cur):
 def save_room(cur):
     data = request.get_json() or {}
 
-    room_id = data.get('id')
-    try:
-        room_id = int(room_id) if room_id else None
-    except (TypeError, ValueError):
-        return fail("Otaq nömrəsi düzgün deyil", 400)
-    if not room_id:
-        return fail("Otaq nömrəsi daxil edilməyib", 400)
+    room_id = as_int(data.get('id'))
+    if room_id is None:
+        return fail("Otaq nömrəsi düzgün deyil və ya daxil edilməyib", 400)
 
-    try:
-        capacity = int(data.get('capacity', 6))
-    except (TypeError, ValueError):
-        capacity = 6
+    capacity = as_int(data.get('capacity'), 6) or 6
     capacity = max(1, min(capacity, 6))
 
     cins = room_cins_by_id(room_id) or clean_val(data.get('cins'))
 
+    # ── #2: BÜTÜN validasiyalar yazıdan əvvəl ──
     placed = []
     for i in range(1, capacity + 1):
-        t = data.get(f't{i}')
-        if t:
-            try:
-                t = int(t)
-            except (TypeError, ValueError):
-                return fail(f"{i}-ci yerdəki tələbə ID-si düzgün deyil", 400)
+        t = as_int(data.get(f't{i}'))
+        if data.get(f't{i}') and t is None:
+            return fail(f"{i}-ci yerdəki tələbə ID-si düzgün deyil", 400)
+        if t is not None:
             if t in placed:
                 return fail("Eyni tələbə birdən çox yerdə seçilib!", 400)
-            placed.append(t)
+            placed.append((i, t))
 
+    # Cins uyğunluğu — hamısı üçün ƏVVƏLCƏDƏN
+    for i, t in placed:
+        cur.execute("SELECT cins FROM students WHERE id = %s", (t,))
+        st = cur.fetchone()
+        if not st:
+            return fail(f"{i}-ci yerdəki tələbə (ID {t}) tapılmadı!", 400)
+        if cins and st['cins'] != cins:
+            return fail(f"{i}-ci yerdəki tələbənin cinsi otağın cinsinə uyğun gəlmir!", 400)
+
+    # ── Yazı mərhələsi (bütün yoxlamalar keçdi) ──
     cur.execute("SELECT 1 FROM rooms WHERE id = %s", (room_id,))
     exists = cur.fetchone() is not None
 
     if exists:
         cur.execute("UPDATE rooms SET capacity = %s, cins = %s WHERE id = %s", (capacity, cins, room_id))
-        for i in range(1, capacity + 1):
-            cur.execute("INSERT IGNORE INTO room_slots (room_id, slot) VALUES (%s, %s)", (room_id, i))
-        cur.execute("DELETE FROM room_slots WHERE room_id = %s AND slot > %s", (room_id, capacity))
     else:
         cur.execute("INSERT INTO rooms (id, capacity, cins) VALUES (%s, %s, %s)", (room_id, capacity, cins))
-        for i in range(1, capacity + 1):
-            cur.execute(
-                "INSERT INTO room_slots (room_id, slot, student_id, yataq_status, skaf_status, oturacaq_status) "
-                "VALUES (%s, %s, NULL, 'Yaxşı', 'Yaxşı', 'Yaxşı')",
-                (room_id, i)
-            )
 
-    for i in range(1, capacity + 1):
-        t = data.get(f't{i}')
-        t = int(t) if t else None
+    heal_one_room_slots(cur, room_id)  # #23 — INSERT IGNORE, bir sorğu
+    cur.execute("DELETE FROM room_slots WHERE room_id = %s AND slot > %s", (room_id, capacity))
+
+    for i, t in placed:
         y = data.get(f'y{i}') or 'Yaxşı'
         s = data.get(f's{i}') or 'Yaxşı'
         o = data.get(f'o{i}') or 'Yaxşı'
 
-        if t is not None:
-            cur.execute("SELECT cins FROM students WHERE id = %s", (t,))
-            st = cur.fetchone()
-            if not st:
-                return fail(f"{i}-ci yerdəki tələbə (ID {t}) tapılmadı!", 400)
-            if cins and st['cins'] != cins:
-                return fail(f"{i}-ci yerdəki tələbənin cinsi otağın cinsinə uyğun gəlmir!", 400)
-            cur.execute(
-                "UPDATE room_slots SET student_id = NULL WHERE student_id = %s "
-                "AND NOT (room_id = %s AND slot = %s)",
-                (t, room_id, i)
-            )
-
+        # Köhnə yerdən çıxar (bu slot istisna)
+        cur.execute(
+            "UPDATE room_slots SET student_id = NULL WHERE student_id = %s "
+            "AND NOT (room_id = %s AND slot = %s)",
+            (t, room_id, i)
+        )
         cur.execute(
             "UPDATE room_slots SET student_id = %s, yataq_status = %s, skaf_status = %s, oturacaq_status = %s "
             "WHERE room_id = %s AND slot = %s",
             (t, y, s, o, room_id, i)
         )
 
-    sync_ev_statuses(cur)
+    # Boşalan yerlərin statuslarını defaulta qaytar
+    cur.execute("""
+        UPDATE room_slots SET yataq_status='Yaxşı', skaf_status='Yaxşı', oturacaq_status='Yaxşı'
+        WHERE room_id = %s AND student_id IS NULL
+    """, (room_id,))
+
+    sync_ev_statuses(cur)  # #4
 
     log_admin(cur, 'Otaq yeniləndi' if exists else 'Otaq yaradıldı', 'Otaq', room_id,
               f"Ev {room_id} — cins: {cins or '-'}, tutum: {capacity}, yerləşən: {len(placed)}")
     return ok()
 
 
-# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_room', methods=['POST'])
 @app.route('/api/admin/delete_rooms', methods=['POST'])
 @admin_required
 @with_db
 def delete_room(cur):
     data = request.get_json() or {}
-    room_id = data.get('id')
+    room_id = as_int(data.get('id'))
+    if room_id is None:
+        return fail("ID düzgün deyil", 400)
 
     cur.execute("SELECT COUNT(*) AS c FROM room_slots WHERE room_id = %s AND student_id IS NOT NULL", (room_id,))
     dolu = cur.fetchone()['c']
 
-    cur.execute(
-        "UPDATE students SET ev = 'Ev seçilməyib' "
-        "WHERE id IN (SELECT student_id FROM room_slots WHERE room_id = %s AND student_id IS NOT NULL)",
-        (room_id,)
-    )
     cur.execute("DELETE FROM room_slots WHERE room_id = %s", (room_id,))
     cur.execute("DELETE FROM rooms WHERE id = %s", (room_id,))
+    sync_ev_statuses(cur)  # #4
 
     log_admin(cur, 'Otaq silindi', 'Otaq', room_id, f"Ev {room_id} — {dolu} sakin çıxarıldı")
     return ok()
@@ -642,8 +681,12 @@ def get_applications(cur):
 @with_db
 def save_application(cur):
     data = request.get_json() or {}
-    if not data.get('student_id'):
-        return fail("Tələbə seçilməyib")
+
+    sid = as_int(data.get('student_id'))
+    if sid is None:
+        return fail("Tələbə seçilməyib və ya ID düzgün deyil")
+    if not data.get('basliq') or not data.get('muraciet'):
+        return fail("Başlıq və müraciət mətni mütləqdir!")
 
     status = data.get('status', 'Gözləmədə')
     notlar = clean_val(data.get('notlar'))
@@ -655,7 +698,7 @@ def save_application(cur):
             UPDATE applications
             SET student_id=%s, basliq=%s, muraciet=%s, priority=%s, status=%s, notlar=%s
             WHERE id=%s
-        """, [data['student_id'], data['basliq'], data['muraciet'],
+        """, [sid, data['basliq'], data['muraciet'],
               data['priority'], status, notlar, data['id']])
         log_admin(cur, 'Müraciət yeniləndi', 'Müraciət', data['id'],
                   f"{data.get('basliq')} — status: {status}")
@@ -663,25 +706,27 @@ def save_application(cur):
         cur.execute("""
             INSERT INTO applications (student_id, basliq, muraciet, priority, status, notlar)
             VALUES (%s, %s, %s, %s, %s, %s)
-        """, [data['student_id'], data['basliq'], data['muraciet'],
+        """, [sid, data['basliq'], data['muraciet'],
               data['priority'], status, notlar])
         log_admin(cur, 'Müraciət yaradıldı', 'Müraciət', cur.lastrowid,
                   f"{data.get('basliq')} — status: {status}")
     return ok()
 
 
-# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_application', methods=['POST'])
 @app.route('/api/admin/delete_applications', methods=['POST'])
 @admin_required
 @with_db
 def delete_application(cur):
     data = request.get_json() or {}
-    cur.execute("SELECT basliq FROM applications WHERE id = %s", (data.get('id'),))
+    app_id = as_int(data.get('id'))
+    if app_id is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("SELECT basliq FROM applications WHERE id = %s", (app_id,))
     row = cur.fetchone()
-    cur.execute("DELETE FROM applications WHERE id = %s", [data.get('id')])
-    log_admin(cur, 'Müraciət silindi', 'Müraciət', data.get('id'),
-              row['basliq'] if row else '')
+    cur.execute("DELETE FROM applications WHERE id = %s", (app_id,))
+    log_admin(cur, 'Müraciət silindi', 'Müraciət', app_id, row['basliq'] if row else '')
     return ok()
 
 
@@ -690,23 +735,27 @@ def delete_application(cur):
 @with_db
 def update_app_status(cur):
     data = request.get_json() or {}
+    app_id = as_int(data.get('id'))
+    if app_id is None:
+        return fail("ID düzgün deyil", 400)
+
     status = data.get('status')
     notlar = clean_val(data.get('notlar'))
 
     if status == 'Təsdiqləndi' and not notlar:
-        cur.execute("SELECT notlar FROM applications WHERE id = %s", (data.get('id'),))
+        cur.execute("SELECT notlar FROM applications WHERE id = %s", (app_id,))
         row = cur.fetchone()
         if row and not row['notlar']:
             notlar = 'Müraciətiniz təsdiqləndi.'
 
     if notlar is not None:
         cur.execute("UPDATE applications SET status = %s, notlar = %s WHERE id = %s",
-                    (status, notlar, data.get('id')))
+                    (status, notlar, app_id))
     else:
         cur.execute("UPDATE applications SET status = %s WHERE id = %s",
-                    (status, data.get('id')))
+                    (status, app_id))
 
-    log_admin(cur, 'Müraciət statusu dəyişildi', 'Müraciət', data.get('id'),
+    log_admin(cur, 'Müraciət statusu dəyişildi', 'Müraciət', app_id,
               f"Yeni status: {status}")
     return ok()
 
@@ -718,6 +767,10 @@ def update_app_status(cur):
 def _save_content(cur, content_type):
     data = request.get_json() or {}
     label = 'Elan' if content_type == 'announcement' else 'Anket'
+
+    if not data.get('title'):
+        return fail("Başlıq mütləqdir!")
+
     if data.get('id'):
         cur.execute("""
             UPDATE contents SET title=%s, description=%s, priority=%s, status=%s
@@ -770,17 +823,20 @@ def save_announcement(cur):
     return _save_content(cur, 'announcement')
 
 
-# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_announcement', methods=['POST'])
 @app.route('/api/admin/delete_announcements', methods=['POST'])
 @admin_required
 @with_db
 def delete_announcement(cur):
     data = request.get_json() or {}
-    cur.execute("SELECT title FROM contents WHERE id = %s", (data.get('id'),))
+    cid = as_int(data.get('id'))
+    if cid is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("SELECT title FROM contents WHERE id = %s", (cid,))
     row = cur.fetchone()
-    cur.execute("DELETE FROM contents WHERE id = %s", [data.get('id')])
-    log_admin(cur, 'Elan silindi', 'Elan', data.get('id'), row['title'] if row else '')
+    cur.execute("DELETE FROM contents WHERE id = %s", (cid,))
+    log_admin(cur, 'Elan silindi', 'Elan', cid, row['title'] if row else '')
     return ok()
 
 
@@ -798,17 +854,20 @@ def save_survey(cur):
     return _save_content(cur, 'survey')
 
 
-# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_survey', methods=['POST'])
 @app.route('/api/admin/delete_surveys', methods=['POST'])
 @admin_required
 @with_db
 def delete_survey(cur):
     data = request.get_json() or {}
-    cur.execute("SELECT title FROM contents WHERE id = %s", (data.get('id'),))
+    cid = as_int(data.get('id'))
+    if cid is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("SELECT title FROM contents WHERE id = %s", (cid,))
     row = cur.fetchone()
-    cur.execute("DELETE FROM contents WHERE id = %s", [data.get('id')])
-    log_admin(cur, 'Anket silindi', 'Anket', data.get('id'), row['title'] if row else '')
+    cur.execute("DELETE FROM contents WHERE id = %s", (cid,))
+    log_admin(cur, 'Anket silindi', 'Anket', cid, row['title'] if row else '')
     return ok()
 
 
@@ -858,25 +917,36 @@ def get_penalties(cur):
 @with_db
 def save_penalty(cur):
     data = request.get_json() or {}
-    if not data.get('amount') or float(data['amount']) <= 0:
+
+    sid = as_int(data.get('student_id'))
+    if sid is None:
+        return fail("Tələbə seçilməyib")
+
+    try:
+        amount = float(data.get('amount'))
+    except (TypeError, ValueError):
         return fail("Məbləğ düzgün deyil", 400)
+    if amount <= 0:
+        return fail("Məbləğ düzgün deyil", 400)
+
     if data.get('id'):
+        pid = as_int(data['id'])
         fields = ["amount=%s", "reason=%s"]
-        vals = [data['amount'], data['reason']]
+        vals = [amount, data['reason']]
         if data.get('status'):
             fields.append("status=%s")
             vals.append(data['status'])
-        vals.append(data['id'])
+        vals.append(pid)
         cur.execute(f"UPDATE penalties SET {', '.join(fields)} WHERE id=%s", vals)
-        log_admin(cur, 'Cərimə yeniləndi', 'Cərimə', data['id'],
-                  f"{data.get('amount')} AZN — {data.get('reason')}")
+        log_admin(cur, 'Cərimə yeniləndi', 'Cərimə', pid,
+                  f"{amount} AZN — {data.get('reason')}")
     else:
         cur.execute("""
             INSERT INTO penalties (student_id, amount, reason)
             VALUES (%s, %s, %s)
-        """, [data['student_id'], data['amount'], data['reason']])
+        """, (sid, amount, data['reason']))
         log_admin(cur, 'Cərimə yaradıldı', 'Cərimə', cur.lastrowid,
-                  f"{data.get('amount')} AZN — {data.get('reason')}")
+                  f"{amount} AZN — {data.get('reason')}")
     return ok()
 
 
@@ -885,20 +955,27 @@ def save_penalty(cur):
 @with_db
 def pay_penalty(cur):
     data = request.get_json() or {}
-    cur.execute("UPDATE penalties SET status = 'Ödənilib' WHERE id = %s", [data.get('id')])
-    log_admin(cur, 'Cərimə ödənildi', 'Cərimə', data.get('id'), '')
+    pid = as_int(data.get('id'))
+    if pid is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("UPDATE penalties SET status = 'Ödənilib' WHERE id = %s", (pid,))
+    log_admin(cur, 'Cərimə ödənildi', 'Cərimə', pid, '')
     return ok()
 
 
-# Silmə: həm tək, həm cəm URL — 404 DÜZƏLDİLDİ
 @app.route('/api/admin/delete_penalty', methods=['POST'])
 @app.route('/api/admin/delete_penalties', methods=['POST'])
 @admin_required
 @with_db
 def delete_penalty(cur):
     data = request.get_json() or {}
-    cur.execute("DELETE FROM penalties WHERE id = %s", [data.get('id')])
-    log_admin(cur, 'Cərimə silindi', 'Cərimə', data.get('id'), '')
+    pid = as_int(data.get('id'))
+    if pid is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("DELETE FROM penalties WHERE id = %s", (pid,))
+    log_admin(cur, 'Cərimə silindi', 'Cərimə', pid, '')
     return ok()
 
 
@@ -923,10 +1000,13 @@ def get_canteen(cur):
 @with_db
 def save_canteen(cur):
     data = request.get_json() or {}
+    cid = as_int(data.get('id'))
+    if cid is None:
+        return fail("ID düzgün deyil", 400)
+
     cur.execute("UPDATE canteen_menu SET meal_name = %s WHERE id = %s",
-                [data.get('meal_name'), data.get('id')])
-    log_admin(cur, 'Menyu yeniləndi', 'Yeməkxana', data.get('id'),
-              f"Yeni: {data.get('meal_name')}")
+                (data.get('meal_name'), cid))
+    log_admin(cur, 'Menyu yeniləndi', 'Yeməkxana', cid, f"Yeni: {data.get('meal_name')}")
     return ok()
 
 
@@ -972,29 +1052,34 @@ def get_laundry(cur):
 @with_db
 def save_laundry(cur):
     data = request.get_json() or {}
-    if not data.get('student_id'):
+    sid = as_int(data.get('student_id'))
+    if sid is None:
         return fail("Tələbə seçilməyib")
+
     cur.execute("""
         INSERT INTO laundry (student_id, machine_1_status, machine_2_status, machine_3_status)
         VALUES (%s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
         machine_1_status=%s, machine_2_status=%s, machine_3_status=%s
-    """, [data['student_id'], data['m1'], data['m2'], data['m3'],
+    """, [sid, data['m1'], data['m2'], data['m3'],
           data['m1'], data['m2'], data['m3']])
-    log_admin(cur, 'Çamaşırxana yeniləndi', 'Çamaşırxana', data['student_id'],
+    log_admin(cur, 'Çamaşırxana yeniləndi', 'Çamaşırxana', sid,
               f"M1: {data.get('m1')}, M2: {data.get('m2')}, M3: {data.get('m3')}")
     return ok()
 
 
-# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_laundry', methods=['POST'])
 @app.route('/api/admin/delete_laundries', methods=['POST'])
 @admin_required
 @with_db
 def delete_laundry(cur):
     data = request.get_json() or {}
-    cur.execute("DELETE FROM laundry WHERE student_id = %s", [data.get('student_id')])
-    log_admin(cur, 'Çamaşırxana qeydi silindi', 'Çamaşırxana', data.get('student_id'), '')
+    sid = as_int(data.get('student_id'))
+    if sid is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("DELETE FROM laundry WHERE student_id = %s", (sid,))
+    log_admin(cur, 'Çamaşırxana qeydi silindi', 'Çamaşırxana', sid, '')
     return ok()
 
 
@@ -1041,28 +1126,35 @@ def get_profiles(cur):
 @with_db
 def save_profile(cur):
     data = request.get_json() or {}
+    sid = as_int(data.get('student_id'))
+    if sid is None:
+        return fail("Tələbə seçilməyib")
+
     cur.execute("""
         INSERT INTO students_profiles (student_id, yuxu_rejimi, temizlik, sosial_munasibet, hayat_terzi)
         VALUES (%s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
         yuxu_rejimi=%s, temizlik=%s, sosial_munasibet=%s, hayat_terzi=%s
-    """, [data['student_id'], data['yuxu_rejimi'], data['temizlik'],
+    """, [sid, data['yuxu_rejimi'], data['temizlik'],
           data['sosial_munasibet'], data['hayat_terzi'],
           data['yuxu_rejimi'], data['temizlik'],
           data['sosial_munasibet'], data['hayat_terzi']])
-    log_admin(cur, 'Profil yeniləndi', 'Profil', data['student_id'], '')
+    log_admin(cur, 'Profil yeniləndi', 'Profil', sid, '')
     return ok()
 
 
-# Silmə: həm tək, həm cəm URL
 @app.route('/api/admin/delete_profile', methods=['POST'])
 @app.route('/api/admin/delete_profiles', methods=['POST'])
 @admin_required
 @with_db
 def delete_profile(cur):
     data = request.get_json() or {}
-    cur.execute("DELETE FROM students_profiles WHERE student_id = %s", [data.get('student_id')])
-    log_admin(cur, 'Profil silindi', 'Profil', data.get('student_id'), '')
+    sid = as_int(data.get('student_id'))
+    if sid is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("DELETE FROM students_profiles WHERE student_id = %s", (sid,))
+    log_admin(cur, 'Profil silindi', 'Profil', sid, '')
     return ok()
 
 
@@ -1108,7 +1200,10 @@ def get_groups(cur):
 @with_db
 def delete_group(cur):
     data = request.get_json() or {}
-    gid = data.get('id')
+    gid = as_int(data.get('id'))
+    if gid is None:
+        return fail("ID düzgün deyil", 400)
+
     cur.execute("UPDATE students SET group_id = NULL WHERE group_id = %s", (gid,))
     cur.execute("DELETE FROM student_groups WHERE id = %s", (gid,))
     log_admin(cur, 'Qrup ləğv edildi', 'Qrup', gid, '')
@@ -1147,13 +1242,16 @@ def get_requests(cur):
 @with_db
 def resolve_request(cur):
     data = request.get_json() or {}
-    req_id = data.get('id')
+    req_id = as_int(data.get('id'))
+    if req_id is None:
+        return fail("ID düzgün deyil", 400)
+
     approve = bool(data.get('approve'))
 
     cur.execute("SELECT * FROM home_requests WHERE id = %s", (req_id,))
     req = cur.fetchone()
     if not req:
-        return fail("Tələb tapılmadı!")
+        return fail("Tələb tapılmadı!", 404)
     if req['status'] != 'Gözləmədə':
         return fail("Bu tələb artıq həll olunub!")
 
@@ -1171,11 +1269,7 @@ def resolve_request(cur):
             if room and room['cins'] and room['cins'] != st['cins']:
                 return fail("Cins uyğunsuzluğu — bu ev qarşı cinsə aiddir!")
 
-            cur.execute("""
-                INSERT IGNORE INTO room_slots (room_id, slot)
-                SELECT %s, s.slot FROM (SELECT 1 AS slot UNION SELECT 2 UNION SELECT 3
-                                        UNION SELECT 4 UNION SELECT 5 UNION SELECT 6) s
-            """, (req['room_id'],))
+            heal_one_room_slots(cur, req['room_id'])
 
             cur.execute(
                 "SELECT slot FROM room_slots WHERE room_id = %s AND student_id IS NULL ORDER BY slot ASC LIMIT 1",
@@ -1194,11 +1288,8 @@ def resolve_request(cur):
                 (req['target_id'],)
             )
         else:
-            remove_student_from_room(cur, req['target_id'])
-            cur.execute(
-                "UPDATE students SET ev = 'Ev seçilməyib', group_id = NULL WHERE id = %s",
-                (req['target_id'],)
-            )
+            remove_student_from_room(cur, req['target_id'])  # #4 — sinxron daxildir
+
         cur.execute("UPDATE home_requests SET status = 'Təsdiqləndi' WHERE id = %s", (req_id,))
         log_admin(cur, 'Tələb admin tərəfindən təsdiq edildi', 'Tələb', req_id,
                   f"Tip: {req['type']}, otaq: {req['room_id']}, hədəf ID: {req['target_id']}")
@@ -1216,9 +1307,13 @@ def resolve_request(cur):
 @with_db
 def delete_request(cur):
     data = request.get_json() or {}
-    cur.execute("DELETE FROM home_request_votes WHERE request_id = %s", (data.get('id'),))
-    cur.execute("DELETE FROM home_requests WHERE id = %s", (data.get('id'),))
-    log_admin(cur, 'Tələb silindi', 'Tələb', data.get('id'), '')
+    req_id = as_int(data.get('id'))
+    if req_id is None:
+        return fail("ID düzgün deyil", 400)
+
+    cur.execute("DELETE FROM home_request_votes WHERE request_id = %s", (req_id,))
+    cur.execute("DELETE FROM home_requests WHERE id = %s", (req_id,))
+    log_admin(cur, 'Tələb silindi', 'Tələb', req_id, '')
     return ok()
 
 
