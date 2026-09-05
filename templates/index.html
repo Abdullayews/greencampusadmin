@@ -46,21 +46,21 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .login-overlay::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:0.6}
 .login-overlay.active{display:flex}
 .login-card{width:100%;max-width:420px;background:var(--surface);border-radius:var(--radius-modal);padding:40px;box-shadow:var(--shadow-lg);position:relative;z-index:2}
-.login-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:32px}
+.login-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:32px;animation:fadeInUp 0.6s ease}
 .login-logo-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--ku-soft-green),var(--ku-light-blue));border-radius:var(--radius-avatar);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:var(--shadow-sm);animation:float 3s ease-in-out infinite}
 .login-logo-icon i{width:32px;height:32px;color:var(--ku-dark-green)}
 .login-logo h2{font-size:28px;font-weight:700;color:var(--ku-dark-green);margin-bottom:4px}
-.login-logo p{font-size:14px;color:var(--text-secondary)}
-.input-group{margin-bottom:20px}
+.login-logo p{font-size:14px;color:var(--text-secondary);font-weight:400}
+.input-group{margin-bottom:20px;position:relative}
 .input-group label{display:block;font-size:14px;color:var(--text-secondary);margin-bottom:8px;font-weight:500}
-.input-group input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;outline:none;background:var(--bg)}
-.input-group input:focus{border-color:var(--ku-green);background:var(--surface)}
-.login-btn{width:100%;padding:14px 24px;background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px}
-.login-btn:hover{transform:translateY(-2px)}
+.input-group input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;outline:none;background:var(--bg);transition:all var(--transition-fast)}
+.input-group input:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
+.login-btn{width:100%;padding:14px 24px;background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;border-radius:var(--radius-btn);font-family:'Poppins';font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(68,118,108,0.3)}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.4)}
 .login-btn i{width:20px;height:20px}
 .login-error{color:var(--danger);font-size:14px;text-align:center;margin-top:16px;display:none;padding:8px;background:#fef2f2;border-radius:var(--radius-btn);border:1px solid #fee2e2;animation:shake 0.4s ease}
 
-.sidebar{width:280px;background:var(--surface);height:100vh;position:fixed;left:0;top:0;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:all 0.35s;overflow:visible;white-space:nowrap;box-shadow:var(--shadow-sm)}
+.sidebar{width:280px;background:var(--surface);height:100vh;position:fixed;left:0;top:0;border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);overflow:visible;white-space:nowrap;box-shadow:var(--shadow-sm)}
 .sidebar.collapsed{width:80px}
 .sidebar.collapsed .logo span,.sidebar.collapsed .nav-item span,.sidebar.collapsed .nav-section{opacity:0;width:0;pointer-events:none}
 .sidebar.collapsed .logo{padding:0;justify-content:center;gap:0}
@@ -68,74 +68,84 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .logo{height:72px;padding:0 24px;font-size:22px;font-weight:700;color:var(--ku-dark-green);display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;flex-shrink:0;position:relative;overflow:hidden}
 .logo::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ku-green);transform:scaleY(0);transition:transform 0.3s ease}
 .logo:hover::before{transform:scaleY(1)}
-.logo i{width:28px;height:28px;color:var(--ku-green)}
+.logo:hover{background:var(--bg)}
+.logo i{width:28px;height:28px;color:var(--ku-green);flex-shrink:0;transition:transform 0.3s ease}
+.logo:hover i{transform:rotate(-10deg) scale(1.1)}
 .logo span{font-weight:700}
 .nav-menu{flex:1;padding:16px 12px;overflow-y:auto;overflow-x:hidden}
-.nav-section{padding:0 16px;margin:16px 0 8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-secondary)}
-.nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;color:var(--text-primary);border-radius:var(--radius-btn);margin-bottom:6px;font-size:15px;font-weight:500;transition:all var(--transition-fast);cursor:pointer;border:none;background:none;width:100%;font-family:'Poppins';text-align:left}
+.nav-section{padding:0 16px;margin:16px 0 8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-secondary);transition:opacity 0.2s}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;color:var(--text-primary);text-decoration:none;border-radius:var(--radius-btn);margin-bottom:6px;font-size:15px;font-weight:500;transition:all var(--transition-fast);cursor:pointer;position:relative;overflow:hidden;border:none;background:none;width:100%;font-family:'Poppins';text-align:left}
 .nav-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:60%;background:var(--ku-green);border-radius:0 4px 4px 0;transition:transform 0.25s ease}
+.nav-item:hover::before{transform:translateY(-50%) scaleY(1)}
+.nav-item i{width:22px;height:22px;color:var(--text-secondary);flex-shrink:0;transition:all 0.25s ease}
+.nav-item span{transition:opacity 0.2s ease}
 .nav-item:hover{background:var(--bg);transform:translateX(4px)}
-.nav-item i{width:22px;height:22px;color:var(--text-secondary)}
-.nav-item.active{background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface)}
+.nav-item:hover i{color:var(--ku-green);transform:scale(1.1)}
+.nav-item.active{background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface);box-shadow:0 4px 12px rgba(22,66,60,0.25)}
 .nav-item.active i{color:var(--surface)}
+.nav-item.active::before{display:none}
 
-.main-wrapper{margin-left:280px;min-height:100vh;display:flex;flex-direction:column;transition:margin-left 0.35s;flex:1}
+.main-wrapper{margin-left:280px;min-height:100vh;display:flex;flex-direction:column;transition:margin-left 0.35s cubic-bezier(0.4,0,0.2,1);flex:1}
 .main-wrapper.expanded{margin-left:80px}
 .top-bar{height:72px;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 32px;position:sticky;top:0;z-index:90}
-.top-bar h1{font-size:28px;font-weight:700;opacity:0;animation:fadeInUp 0.4s ease forwards}
-.top-bar-desc{font-size:14px;color:var(--text-secondary);margin-top:2px}
+.top-bar h1{font-size:28px;font-weight:700;color:var(--text-primary);opacity:0;animation:fadeInUp 0.4s ease forwards}
+.top-bar-desc{font-size:14px;color:var(--text-secondary);font-weight:400;margin-top:2px}
 .top-bar-actions{display:flex;align-items:center;gap:16px}
 .content-layout{padding:32px;flex:1}
 .page-content{display:none;width:100%;opacity:0;transform:translateY(16px);transition:opacity 0.3s ease,transform 0.3s ease}
 .page-content.active-page{display:block;opacity:1;transform:translateY(0);animation:fadeInUp 0.4s ease}
 
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:32px}
-.stat-card{background:var(--surface);padding:28px;border-radius:var(--radius-card);border:1px solid var(--border);box-shadow:var(--shadow-xs);transition:all var(--transition-base);animation:fadeInUp 0.5s ease both}
+.stat-card{background:var(--surface);padding:28px;border-radius:var(--radius-card);border:1px solid var(--border);box-shadow:var(--shadow-xs);transition:all var(--transition-base);position:relative;overflow:hidden;animation:fadeInUp 0.5s ease both}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));transform:scaleX(0);transition:transform 0.3s ease}
 .stat-card:hover::before{transform:scaleX(1)}
-.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
-.stat-icon{width:52px;height:52px;border-radius:var(--radius-btn);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--ku-green)}
+.stat-icon{width:52px;height:52px;border-radius:var(--radius-btn);display:flex;align-items:center;justify-content:center;margin-bottom:16px;transition:all 0.3s ease}
+.stat-card:hover .stat-icon{transform:scale(1.1) rotate(-5deg)}
 .stat-icon i{width:24px;height:24px}
 .stat-label{font-size:14px;color:var(--text-secondary);margin-bottom:8px;font-weight:500}
-.stat-value{font-size:32px;font-weight:700;line-height:1}
+.stat-value{font-size:32px;font-weight:700;color:var(--text-primary);line-height:1}
 
-.widget-card{background:var(--surface);border-radius:var(--radius-card);border:1px solid var(--border);padding:28px;box-shadow:var(--shadow-xs)}
+.widget-card{background:var(--surface);border-radius:var(--radius-card);border:1px solid var(--border);padding:28px;box-shadow:var(--shadow-xs);transition:all var(--transition-base);position:relative;overflow:hidden}
+.widget-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-2px)}
 .widget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .widget-header h3{font-size:18px;font-weight:600}
-.section-title{font-size:24px;margin-bottom:24px;font-weight:700;display:inline-block;position:relative}
+.widget-header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.section-title{font-size:24px;margin-bottom:24px;font-weight:700;position:relative;display:inline-block}
 .section-title::after{content:'';position:absolute;bottom:-6px;left:0;width:40px;height:3px;background:linear-gradient(90deg,var(--ku-green),var(--ku-soft-green));border-radius:2px}
 
-.btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
-.btn-primary:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(68,118,108,0.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(68,118,108,0.35)}
 .btn-primary i{width:18px;height:18px}
-.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:var(--surface);border:none;padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);box-shadow:0 4px 12px rgba(239,68,68,0.25)}
+.btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(239,68,68,0.35)}
 .btn-danger i{width:18px;height:18px}
-.btn-secondary{background:var(--bg);color:var(--text-primary);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base);text-decoration:none}
-.btn-secondary:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green)}
-.btn-secondary i{width:18px;height:18px}
+.btn-secondary{background:var(--bg);color:var(--text-primary);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all var(--transition-base)}
+.btn-secondary:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px)}
 .btn-icon{width:36px;height:36px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);display:inline-flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;transition:all var(--transition-fast)}
-.btn-icon:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green)}
-.btn-icon.danger:hover{background:#fee2e2;color:var(--danger)}
+.btn-icon:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:scale(1.1)}
+.btn-icon.danger:hover{background:#fee2e2;color:var(--danger);border-color:var(--danger)}
 .btn-icon i{width:18px;height:18px}
 
 .table-wrap{overflow-x:auto}
 .data-table{width:100%;border-collapse:separate;border-spacing:0}
 .data-table thead th{padding:10px 14px;text-align:left;font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;border-bottom:2px solid var(--border);background:var(--bg);white-space:nowrap;vertical-align:top}
 .data-table tbody tr{transition:all 0.2s ease}
-.data-table tbody tr:hover{background:var(--bg)}
+.data-table tbody tr:hover{background:var(--bg);transform:scale(1.002);box-shadow:var(--shadow-xs)}
 .data-table tbody td{padding:16px 14px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle}
 .data-table tbody td:last-child{white-space:nowrap}
 
-.form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary)}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--ku-green);background:var(--surface)}
+.form-input,.form-select,.form-textarea{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary);font-weight:400;transition:all var(--transition-fast)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
 .form-textarea{min-height:100px;resize:vertical}
-.form-select{cursor:pointer}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;padding-right:40px}
 .form-group{margin-bottom:20px}
 .form-group label{display:block;font-size:14px;font-weight:500;color:var(--text-secondary);margin-bottom:8px}
 .form-row{display:flex;gap:16px}
 .form-row .form-group{flex:1}
 
-.badge{padding:5px 14px;border-radius:var(--radius-badge);font-weight:600;font-size:12px;display:inline-block}
+.badge{padding:5px 14px;border-radius:var(--radius-badge);font-weight:600;font-size:12px;display:inline-block;transition:transform 0.2s}
+.badge:hover{transform:scale(1.05)}
 .badge-success{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
 .badge-warning{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e}
 .badge-danger{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
@@ -150,56 +160,90 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .modal-header{padding:24px;background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .modal-header.danger-header{background:linear-gradient(135deg,var(--danger),#dc2626)}
 .modal-header h3{font-size:20px;font-weight:600}
-.modal-header .close-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-btn);cursor:pointer;background:rgba(255,255,255,0.1)}
-.modal-header .close-btn:hover{background:rgba(255,255,255,0.2)}
+.modal-header .close-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-btn);cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.1)}
+.modal-header .close-btn:hover{background:rgba(255,255,255,0.2);transform:rotate(90deg)}
 .modal-header .close-btn i{width:20px;height:20px}
 .modal-body{padding:28px;overflow-y:auto;flex:1}
 .modal-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px;flex-shrink:0;background:var(--bg)}
 
 .canteen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-.canteen-location{border:1px solid var(--border);border-radius:var(--radius-card);padding:24px;background:var(--surface)}
-.canteen-location h4{font-size:16px;font-weight:600;margin-bottom:16px;color:var(--ku-green)}
-.meal-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px dashed var(--border);font-size:14px}
-.meal-day{font-weight:600;color:var(--text-secondary);margin-right:12px}
-.meal-input{border:none;border-bottom:2px solid var(--border);background:transparent;font-family:'Poppins';font-size:14px;text-align:right;font-weight:500;padding:4px 8px;width:100%;max-width:200px;outline:none}
+.canteen-location{border:1px solid var(--border);border-radius:var(--radius-card);padding:24px;transition:all var(--transition-base);background:var(--surface)}
+.canteen-location:hover{border-color:var(--ku-green);box-shadow:var(--shadow-sm)}
+.canteen-location h4{font-size:16px;font-weight:600;margin-bottom:16px;color:var(--ku-green);display:flex;align-items:center;gap:8px}
+.meal-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px dashed var(--border);font-size:14px;transition:all 0.2s}
+.meal-row:hover{background:var(--bg);margin:0 -8px;padding:14px 8px;border-radius:6px}
+.meal-row:last-child{border-bottom:none}
+.meal-day{font-weight:600;color:var(--text-secondary);white-space:nowrap;margin-right:12px}
+.meal-input{border:none;border-bottom:2px solid var(--border);background:transparent;font-family:'Poppins';font-size:14px;text-align:right;color:var(--text-primary);font-weight:500;padding:4px 8px;width:100%;max-width:200px;outline:none;transition:border-color 0.2s}
 .meal-input:focus{border-bottom-color:var(--ku-green)}
 
 .room-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px}
-.room-student-card{border:1px solid var(--border);border-radius:var(--radius-card);padding:16px;background:var(--bg)}
-.room-student-card h5{font-size:13px;font-weight:600;color:var(--ku-dark-green);margin-bottom:10px}
+.room-student-card{border:1px solid var(--border);border-radius:var(--radius-card);padding:16px;background:var(--bg);transition:all 0.2s}
+.room-student-card:hover{border-color:var(--ku-green);box-shadow:var(--shadow-xs)}
+.room-student-card h5{font-size:13px;font-weight:600;color:var(--ku-dark-green);margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .room-student-card h5 i{width:14px;height:14px}
 
 .toast-container{position:fixed;top:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:12px;pointer-events:none}
-.toast{pointer-events:auto;background:var(--surface);border-radius:var(--radius-card);padding:14px 18px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;min-width:280px;animation:toastSlide 0.4s ease;border-left:4px solid var(--ku-green);font-size:14px;font-weight:500}
+.toast{pointer-events:auto;background:var(--surface);border-radius:var(--radius-card);padding:14px 18px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;min-width:280px;max-width:380px;animation:toastSlide 0.4s ease;border-left:4px solid var(--ku-green);font-size:14px;font-weight:500}
 .toast.success{border-left-color:var(--success)}
-.toast.error{border-left-left-color:var(--danger)}
-.toast i{width:20px;height:20px}
+.toast.error{border-left-color:var(--danger)}
+.toast.warning{border-left-color:var(--warning)}
+.toast i{width:20px;height:20px;flex-shrink:0}
+.toast.success i{color:var(--success)}
+.toast.error i{color:var(--danger)}
+.toast.warning i{color:var(--warning)}
 
 .loader-wrap{display:flex;justify-content:center;align-items:center;min-height:200px}
 .loader{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--ku-green);border-radius:50%;animation:spin 0.8s linear infinite}
-.empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary);animation:fadeIn 0.4s ease}
 .empty-state i{width:64px;height:64px;margin-bottom:16px;opacity:0.4}
 .empty-state p{font-size:16px;font-weight:500}
 
-::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8}
 
-@media (max-width:1023px){.stats-grid{grid-template-columns:repeat(2,1fr)}.form-row{flex-direction:column;gap:0}.room-detail-grid{grid-template-columns:1fr}}
-@media (max-width:767px){.stats-grid{grid-template-columns:1fr}.sidebar{width:80px}.main-wrapper{margin-left:80px}.content-layout{padding:20px}.modal-card{max-height:95vh;max-width:95vw}}
+*:focus-visible{outline:2px solid var(--ku-green);outline-offset:2px;border-radius:4px}
+button:focus-visible,a:focus-visible{outline-offset:3px}
+
+@media (max-width:1023px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{flex-direction:column;gap:0}
+  .room-detail-grid{grid-template-columns:1fr}
+}
+@media (max-width:767px){
+  .stats-grid{grid-template-columns:1fr}
+  .top-bar h1{font-size:22px}
+  .sidebar{width:80px}
+  .main-wrapper{margin-left:80px}
+  .sidebar .logo span,.sidebar .nav-item span,.sidebar .nav-section{opacity:0;width:0;pointer-events:none}
+  .sidebar .logo,.sidebar .nav-item{justify-content:center;padding:12px 16px;gap:0}
+  .content-layout{padding:20px}
+  .modal-card{max-height:95vh;max-width:95vw}
+  .canteen-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
+}
 
 /* Column Filters */
 .th-wrap{display:flex;flex-direction:column;gap:6px}
-.col-filter{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-family:'Poppins';font-size:12px;background:var(--bg);outline:none;margin-top:2px}
-.col-filter:focus{border-color:var(--ku-green)}
+.th-wrap>span:first-child{font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
+.col-filter{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-family:'Poppins';font-size:12px;background:var(--bg);color:var(--text-primary);outline:none;transition:all var(--transition-fast);margin-top:2px}
+.col-filter:focus{border-color:var(--ku-green);box-shadow:0 0 0 3px rgba(68,118,108,0.08);background:var(--surface)}
+.col-filter::placeholder{color:#94a3b8;font-size:11px}
+select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px;appearance:none}
 
 /* Pagination */
 .pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap}
-.pagination-btn{min-width:36px;height:36px;padding:0 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:13px;font-weight:600;cursor:pointer}
-.pagination-btn.active{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface)}
-.pagination-btn:disabled{opacity:0.4;cursor:not-allowed}
-.pagination-info{font-size:13px;color:var(--text-secondary);margin:0 8px}
+.pagination-btn{min-width:36px;height:36px;padding:0 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:13px;font-weight:600;color:var(--text-primary);cursor:pointer;transition:all var(--transition-fast);display:inline-flex;align-items:center;justify-content:center}
+.pagination-btn:hover{background:var(--ku-soft-green);border-color:var(--ku-green);color:var(--ku-dark-green)}
+.pagination-btn.active{background:linear-gradient(135deg,var(--ku-green),var(--ku-dark-green));color:var(--surface);border-color:var(--ku-green);box-shadow:0 2px 8px rgba(68,118,108,0.25)}
+.pagination-btn:disabled{opacity:0.4;cursor:not-allowed;background:var(--bg);border-color:var(--border);color:var(--text-secondary)}
+.pagination-info{font-size:13px;color:var(--text-secondary);font-weight:500;margin:0 8px}
 
-/* XÜSUSİ DİALOQ */
+/* ═════════ XÜSUSİ DİALOQ SİSTEMİ ═════════ */
 .dlg-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
 .dlg-icon i{width:28px;height:28px}
 .dlg-icon.danger{background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)}
@@ -213,30 +257,36 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .dlg-icon.pay{background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)}
 .dlg-icon.logout{background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)}
 .dlg-text{font-size:14px;color:var(--text-secondary);line-height:1.65;text-align:center}
-.dlg-highlight{display:block;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:12px;font-weight:600;text-align:center}
+.dlg-text b,.dlg-text strong{color:var(--text-primary)}
+.dlg-highlight{display:block;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:12px;font-weight:600;color:var(--text-primary);text-align:center}
 .dlg-actions{display:flex;gap:12px;margin-top:24px}
 .dlg-actions .btn-primary,.dlg-actions .btn-danger,.dlg-actions .btn-secondary{flex:1;justify-content:center}
 
-/* TƏLƏBƏ AXTARIŞ PICKER */
+/* ═════════ TƏLƏBƏ AXTARIŞ PICKER (typeahead) ═════════ */
 .sp-picker{position:relative}
-.sp-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary)}
-.sp-input:focus{border-color:var(--ku-green);background:var(--surface)}
+.sp-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-btn);font-family:'Poppins';font-size:14px;outline:none;background:var(--bg);color:var(--text-primary);font-weight:400;transition:all var(--transition-fast)}
+.sp-input:focus{border-color:var(--ku-green);background:var(--surface);box-shadow:0 0 0 4px rgba(68,118,108,0.1)}
 .sp-input.sp-selected{border-color:var(--ku-green);background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);font-weight:600;color:var(--ku-dark-green)}
 .sp-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);box-shadow:var(--shadow-md);max-height:240px;overflow-y:auto;z-index:120;display:none}
 .sp-dropdown.active{display:block}
-.sp-item{padding:10px 14px;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.sp-item{padding:10px 14px;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;border-bottom:1px solid var(--border)}
+.sp-item:last-child{border-bottom:none}
 .sp-item:hover{background:var(--ku-soft-green)}
 .sp-item-name{font-weight:500}
 .sp-item-meta{font-size:11px;color:var(--text-secondary)}
 .sp-empty{padding:14px;text-align:center;font-size:13px;color:var(--text-secondary)}
 .sp-hint{font-size:11px;color:var(--text-secondary);margin-top:4px}
+
+/* ═════════ LIVE GÖSTƏRİCİ (real-time) ═════════ */
+.live-indicator{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--success);padding:4px 10px;background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-radius:var(--radius-badge)}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--success);animation:pulse 2s infinite}
 </style>
 </head>
 <body>
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- LOGIN -->
+<!-- LOGIN — server-side: sessiya VARSA bir an belə görünmir -->
 <div class="login-overlay {% if not is_logged_in %}active{% endif %}" id="loginOverlay">
   <div class="login-card">
     <div class="login-logo">
@@ -259,7 +309,7 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
   <nav class="nav-menu">
     <div class="nav-section">Ümumi</div>
     <button type="button" class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
-    <button type="button" class="nav-item" data-menu="logs" onclick="loadPage('logs',this)"><i data-lucice="history"></i><span>Log Tarixçəsi</span></button>
+    <button type="button" class="nav-item" data-menu="logs" onclick="loadPage('logs',this)"><i data-lucide="history"></i><span>Log Tarixçəsi</span></button>
     <div class="nav-section">İdarəetmə</div>
     <button type="button" class="nav-item" data-menu="students" onclick="loadPage('students',this)"><i data-lucide="users"></i><span>Tələbələr</span></button>
     <button type="button" class="nav-item" data-menu="profiles" onclick="loadPage('profiles',this)"><i data-lucide="user-circle"></i><span>Tələbə Profilləri</span></button>
@@ -280,8 +330,12 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 <!-- MAIN -->
 <div class="main-wrapper" id="mainWrapper">
   <header class="top-bar">
-    <div><h1 id="pageTitle">Dashboard</h1><div class="top-bar-desc" id="pageDesc">Ümumi statistika</div></div>
+    <div>
+      <h1 id="pageTitle">Dashboard</h1>
+      <div class="top-bar-desc" id="pageDesc">Ümumi statistika</div>
+    </div>
     <div class="top-bar-actions">
+      <span class="live-indicator" title="Hər 30 saniyədə avtomatik yenilənir"><span class="live-dot"></span> Live</span>
       <button type="button" class="btn-danger" onclick="logout()"><i data-lucide="log-out"></i> Çıxış</button>
     </div>
   </header>
@@ -300,8 +354,8 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
       <div class="widget-card">
         <div class="widget-header">
           <h3>Əməliyyat Tarixçəsi — son 1 ay</h3>
-          <div style="display:flex;gap:8px;">
-            <a class="btn-secondary" href="/api/admin/export/logs" download><i data-lucide="download"></i> CSV</a>
+          <div class="widget-header-actions">
+            <button type="button" class="btn-secondary" onclick="exportCsv('logs')"><i data-lucide="download"></i> CSV Export</button>
             <button type="button" class="btn-secondary" onclick="clearOldLogs()"><i data-lucide="trash-2"></i> Köhnə Logları Təmizlə</button>
           </div>
         </div>
@@ -321,8 +375,8 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
       <div class="widget-card">
         <div class="widget-header">
           <h3>Tələbə Siyahısı</h3>
-          <div style="display:flex;gap:8px;">
-            <a class="btn-secondary" href="/api/admin/export/students" download><i data-lucide="download"></i> CSV Export</a>
+          <div class="widget-header-actions">
+            <button type="button" class="btn-secondary" onclick="exportCsv('students')"><i data-lucide="download"></i> CSV Export</button>
             <button type="button" class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button>
           </div>
         </div>
@@ -349,7 +403,7 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
       <th><div class="th-wrap"><span>Yuxu Rejimi</span><input type="text" class="col-filter" data-col="yuxu_rejimi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
       <th><div class="th-wrap"><span>Təmizlik</span><input type="text" class="col-filter" data-col="temizlik" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
-      <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" data-col="sosyal_munasibet" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
+      <th><div class="th-wrap"><span>Sosial Münasibət</span><input type="text" class="col-filter" data-col="sosial_munasibet" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
       <th><div class="th-wrap"><span>Həyat Tərzi</span><input type="text" class="col-filter" data-col="hayat_terzi" placeholder="Filtr..." oninput="debouncedServerFilter('profiles')"></div></th>
       <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
     </tr></thead><tbody id="profilesTbody"><tr><td colspan="6"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
@@ -364,4 +418,1651 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
       <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" data-col="id" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
       <th><div class="th-wrap"><span>Bina / Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('rooms')"><option value="">Hamısı</option><option value="Kişi">Kişi (oğlan)</option><option value="Qadın">Qadın (qız)</option></select></div></th>
       <th><div class="th-wrap"><span>Tutum</span><input type="text" class="col-filter" data-col="dolu" placeholder="Məs: 2/6" oninput="debouncedServerFilter('rooms')"></div></th>
-      <th><div class="
+      <th><div class="th-wrap"><span>Tələbələr</span><input type="text" class="col-filter" data-col="occupants" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="roomsTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="roomsPagination"></div>
+      </div>
+    </section>
+
+    <section id="page-groups" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Qruplar</h3><button type="button" class="btn-primary" onclick="adminCreateGroup()"><i data-lucide="plus"></i> Yeni Qrup</button></div>
+        <div class="table-wrap"><table class="data-table" id="groupsTable"><thead><tr>
+      <th><div class="th-wrap"><span>Qrup ID</span></div></th>
+      <th><div class="th-wrap"><span>Üzv Sayı</span></div></th>
+      <th><div class="th-wrap"><span>Üzvlər</span></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="groupsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="page-requests" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Tələblər — Dəvət / Qovma / Çıxma</h3><button type="button" class="btn-primary" onclick="adminCreateRequestModal()"><i data-lucide="plus"></i> Yeni Tələb</button></div>
+        <div class="table-wrap"><table class="data-table" id="reqTable"><thead><tr>
+      <th><div class="th-wrap"><span>ID</span></div></th>
+      <th><div class="th-wrap"><span>Tip</span></div></th>
+      <th><div class="th-wrap"><span>Otaq</span></div></th>
+      <th><div class="th-wrap"><span>Kimdən</span></div></th>
+      <th><div class="th-wrap"><span>Kim barəsində</span></div></th>
+      <th><div class="th-wrap"><span>Səs</span></div></th>
+      <th><div class="th-wrap"><span>Status</span></div></th>
+      <th><div class="th-wrap"><span>Tarix</span></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="reqTbody"><tr><td colspan="9"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="reqPagination"></div>
+      </div>
+    </section>
+
+    <section id="page-applications" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header">
+          <h3>Müraciətlər</h3>
+          <div class="widget-header-actions">
+            <button type="button" class="btn-secondary" onclick="exportCsv('applications')"><i data-lucide="download"></i> CSV Export</button>
+            <button type="button" class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
+      <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" data-col="muraciet" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('applications')"><option value="">Hamısı</option><option value="Gözləmədə">Gözləmədə</option><option value="Təsdiqləndi">Təsdiqləndi</option><option value="Rədd edildi">Rədd edildi</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="appsTbody"><tr><td colspan="4"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="appsPagination"></div>
+      </div>
+    </section>
+
+    <section id="page-announcements" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Elanlar</h3><button type="button" class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
+        <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr>
+      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('announcements')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('announcements')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="annTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="annPagination"></div>
+      </div>
+    </section>
+
+    <section id="page-surveys" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Anketlər</h3><button type="button" class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
+        <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr>
+      <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('surveys')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('surveys')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="surTbody"><tr><td colspan="3"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="surPagination"></div>
+      </div>
+    </section>
+
+    <section id="page-penalties" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header">
+          <h3>Cərimələr</h3>
+          <div class="widget-header-actions">
+            <button type="button" class="btn-secondary" onclick="exportCsv('penalties')"><i data-lucide="download"></i> CSV Export</button>
+            <button type="button" class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+      <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" data-col="reason" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+      <th><div class="th-wrap"><span>Məbləğ</span><input type="text" class="col-filter" data-col="amount" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
+      <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('penalties')"><option value="">Hamısı</option><option value="Ödənilməmiş">Ödənilməmiş</option><option value="Ödənilib">Ödənilib</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="penTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="penPagination"></div>
+      </div>
+    </section>
+
+    <section id="page-canteen" class="page-content">
+      <h2 class="section-title">Həftəlik Menyu</h2>
+      <div class="canteen-grid" id="canteenGrid"><div class="widget-card" style="display:flex;justify-content:center;align-items:center;min-height:200px"><div class="loader"></div></div></div>
+    </section>
+
+    <section id="page-laundry" class="page-content">
+      <div class="widget-card">
+        <div class="widget-header"><h3>Çamaşırxana</h3><button type="button" class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
+        <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr>
+      <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('laundry')"></div></th>
+      <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" data-col="m1" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Maşın 2</span><select class="col-filter" data-col="m2" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Maşın 3</span><select class="col-filter" data-col="m3" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
+      <th><div class="th-wrap"><span>Əməliyyat</span></div></th>
+    </tr></thead><tbody id="laundryTbody"><tr><td colspan="5"><div class="loader-wrap"><div class="loader"></div></div></td></tr></tbody></table></div>
+        <div class="pagination" id="laundryPagination"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="universalModal">
+  <div class="modal-card">
+    <div class="modal-header" id="modalHeader"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter" style="display:none"><button type="button" class="btn-secondary" onclick="closeModal()">Ləğv et</button></div>
+  </div>
+</div>
+
+<!-- XÜSUSİ DİALOQ -->
+<div class="modal-overlay" id="dialogOverlay" style="z-index: 2000;">
+  <div class="modal-card" style="max-width: 430px;">
+    <div class="modal-header" id="dlgHeader"><h3 id="dlgTitleH">Təsdiq</h3></div>
+    <div class="modal-body" id="dlgBody" style="text-align: center; padding: 32px 24px;"></div>
+  </div>
+</div>
+
+<script>
+{% raw %}
+// ═════════ STATE & CONFIG ═════════
+let currentStudents = [];
+let currentRooms = [];
+let currentApps = [];
+let currentProfiles = [];
+let isLoggedIn = false;
+let activePageKey = 'dashboard';
+
+const PAGINATION = {
+  students: { page: 1, per_page: 20, total: 0 },
+  rooms:    { page: 1, per_page: 20, total: 0 },
+  applications: { page: 1, per_page: 20, total: 0 },
+  profiles: { page: 1, per_page: 20, total: 0 },
+  announcements: { page: 1, per_page: 20, total: 0 },
+  surveys:  { page: 1, per_page: 20, total: 0 },
+  penalties:{ page: 1, per_page: 20, total: 0 },
+  laundry:  { page: 1, per_page: 20, total: 0 },
+  requests: { page: 1, per_page: 20, total: 0 },
+  logs:     { page: 1, per_page: 20, total: 0 }
+};
+
+const PAGE_TITLES = {
+  dashboard: ['Dashboard', 'Ümumi statistika — hər 30 san yenilənir'],
+  logs: ['Log Tarixçəsi', 'Son 1 ayın admin əməliyyatları'],
+  students: ['Tələbələr', 'Tələbə məlumatları'],
+  profiles: ['Tələbə Profilləri', 'Tələbə profil məlumatları'],
+  rooms: ['Otaqlar və Əşyalar', 'İnventar və yerləşdirmə idarəetməsi'],
+  groups: ['Qruplar', 'Ev seçmə qrupları'],
+  requests: ['Tələblər', 'Dəvət, qovma və çıxma tələbləri'],
+  applications: ['Müraciətlər', 'Yataqxana və Təmir sorğuları'],
+  announcements: ['Elanlar', 'Rəsmi elanlar'],
+  surveys: ['Anketlər', 'Sorğular və anketlər'],
+  penalties: ['Cərimələr', 'Cərimə əməliyyatları'],
+  canteen: ['Yeməkxana', 'Həftəlik menyu'],
+  laundry: ['Çamaşırxana', 'Maşın idarəetməsi']
+};
+
+const CRUD_CONFIG = {
+  student: {
+    endpoint: 'students',
+    saveAction: 'save_student',
+    loadFn: loadStudents,
+    modalTitle: { add: 'Yeni Tələbə', edit: 'Tələbəni Redaktə Et' },
+    tableId: 'studentsTable', tbodyId: 'studentsTbody',
+    emptyIcon: 'users', emptyText: 'Tələbə yoxdur',
+    fields: [
+      { id: 's_name', label: 'Ad Soyad', type: 'text', required: true },
+      { id: 's_email', label: 'Email', type: 'email', required: true },
+      { id: 's_sifre', label: 'Şifrə', type: 'text', placeholder: 'Boş saxla dəyişməsin' },
+      { id: 's_cins', label: 'Cins', type: 'select', options: [['Kişi','Kişi'],['Qadın','Qadın']] },
+      { id: 's_ev', label: 'Ev Statusu', type: 'select', options: [['Ev seçilməyib','Ev seçilməyib'],['Ev seçilib','Ev seçilib'],['Rədd edilib','Rədd edilib']] },
+      { id: 's_universitet', label: 'Universitet', type: 'text', default: 'Qarabağ Universiteti' },
+      { id: 's_ixtisas', label: 'İxtisas', type: 'text' },
+      { id: 's_kurs', label: 'Kurs', type: 'number' },
+      { id: 's_api_key', label: 'API Açarı', type: 'text' },
+      { id: 's_ev_deyisme', label: 'Ev Dəyişmə İstəyi', type: 'select', options: [['0','Yoxdur'],['1','Var']] }
+    ],
+    buildPayload: (id) => {
+      const p = {
+        id, ad_soyad: gv('s_name'), email: gv('s_email'), ixtisas: gv('s_ixtisas'),
+        kurs: gv('s_kurs'), universitet: gv('s_universitet'),
+        ev_deyisme_isteyi: parseInt(gv('s_ev_deyisme')) || 0,
+        cins: gv('s_cins') || 'Kişi',
+        ev: gv('s_ev') || 'Ev seçilməyib'
+      };
+      const sifre = gv('s_sifre');
+      if (sifre) p.sifre = sifre;
+      p.api_key = gv('s_api_key');
+      return p;
+    },
+    renderRow: (s, idx) => {
+      const apiCls = s.api_key ? 'badge-success' : 'badge-gray';
+      const cinsCls = s.cins === 'Qadın' ? 'badge-purple' : 'badge-info';
+      const evStatCls = s.ev === 'Ev seçilib' ? 'badge-success' : (s.ev === 'Rədd edilib' ? 'badge-danger' : 'badge-warning');
+      return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+        <td>${s.id}</td>
+        <td style="font-weight:600">${esc(s.ad_soyad)}</td>
+        <td>${esc(s.email)}</td>
+        <td>${esc(s.ixtisas||'-')}</td>
+        <td>${esc(s.kurs||'-')}</td>
+        <td><span class="badge ${cinsCls}">${esc(s.cins||'-')}</span></td>
+        <td><span class="badge ${evStatCls}">${esc(s.ev||'-')}</span></td>
+        <td>${s.otaq ? `<span class="badge badge-info">Ev ${s.otaq}</span>` : '-'}</td>
+        <td><span class="badge ${apiCls}">${s.api_key?'Var':'Yoxdur'}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('student',${s.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('student',${s.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        </div></td>
+      </tr>`;
+    }
+  },
+  room: {
+    endpoint: 'rooms',
+    saveAction: 'save_room',
+    loadFn: loadRooms,
+    modalTitle: { add: 'Yeni Otaq', edit: 'Otaq Redaktə' },
+    tableId: 'roomsTable', tbodyId: 'roomsTbody',
+    emptyIcon: 'door-open', emptyText: 'Otaq yoxdur',
+    customModal: true,
+    renderRow: (r, idx) => {
+      const cinsCls = r.cins === 'Kişi' ? 'badge-info' : (r.cins === 'Qadın' ? 'badge-purple' : 'badge-gray');
+      const names = (r.slots || []).filter(s => s.student_id).map(s => esc(s.ad_soyad));
+      const studentsHtml = names.length ? names.join(', ') : '<span style="color:var(--text-secondary);font-size:13px">Boş ev</span>';
+      return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+        <td style="font-weight:700;font-size:16px">${esc(r.id)}</td>
+        <td><span class="badge ${cinsCls}">${r.cins ? esc(r.cins) : 'Təyin edilməyib'}</span></td>
+        <td style="font-weight:600">${r.dolu}/${r.capacity}</td>
+        <td>${studentsHtml}</td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('room',${r.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('room',${r.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        </div></td>
+      </tr>`;
+    }
+  },
+  application: {
+    endpoint: 'applications',
+    saveAction: 'save_application',
+    loadFn: loadApplications,
+    modalTitle: { add: 'Yeni Müraciət', edit: 'Müraciəti Redaktə Et' },
+    tableId: 'appsTable', tbodyId: 'appsTbody',
+    emptyIcon: 'clipboard-list', emptyText: 'Müraciət yoxdur',
+    customModal: true,
+    renderRow: (a, idx) => {
+      let statusClass = a.status==='Təsdiqləndi' ? 'badge-success' : (a.status==='Gözləmədə' ? 'badge-warning' : 'badge-danger');
+      const notlarHtml = a.notlar ? `<div style="font-size:12px;color:var(--ku-dark-green);background:var(--ku-soft-green);padding:4px 8px;border-radius:6px;margin-top:6px"><strong>Qeyd:</strong> ${esc(a.notlar)}</div>` : '';
+      return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+        <td><div style="font-weight:600">${esc(a.ad_soyad)}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td>
+        <td><div style="font-weight:600">${esc(a.basliq)}</div><div style="font-size:12px;color:var(--text-secondary)">${esc(a.muraciet)}</div><span class="badge badge-info" style="margin-top:4px">${esc(a.priority)}</span>${notlarHtml}</td>
+        <td><span class="badge ${statusClass}">${esc(a.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('application',${a.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Təsdiqləndi')" title="Təsdiqlə"><i data-lucide="check"></i></button>
+          <button type="button" class="btn-icon danger" onclick="updateAppStatus(${a.id},'Rədd edildi')" title="Rədd et"><i data-lucide="x"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('application',${a.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        </div></td>
+      </tr>`;
+    }
+  },
+  announcement: {
+    endpoint: 'announcements',
+    saveAction: 'save_announcement',
+    loadFn: loadAnnouncements,
+    modalTitle: { add: 'Yeni Elan', edit: 'Elanı Redaktə Et' },
+    tableId: 'annTable', tbodyId: 'annTbody',
+    emptyIcon: 'megaphone', emptyText: 'Elan yoxdur',
+    fields: [
+      { id: 'c_title', label: 'Başlıq', type: 'text', required: true },
+      { id: 'c_desc', label: 'Təsvir', type: 'textarea', rows: 4 },
+      { id: 'c_priority', label: 'Öncəlik', type: 'select', options: [['Normal','Normal'],['Yüksək','Yüksək']'normal']] },
+      { id: 'c_status', label: 'Status', type: 'select', options: [['Aktiv','Aktiv'],['Passiv','Passiv']] }
+    ],
+    buildPayload: (id) => ({
+      id, title: gv('c_title'), description: gv('c_desc'),
+      priority: gv('c_priority'), status: gv('c_status')
+    }),
+    renderRow: (c, idx) => {
+      const priCls = c.priority==='Yüksək' ? 'badge-danger' : 'badge-info';
+      const statCls = c.status==='Aktiv' ? 'badge-success' : 'badge-gray';
+      return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+        <td><div style="font-weight:600">${esc(c.title)}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${esc(c.description)}</div><span class="badge ${priCls}" style="margin-top:6px">${esc(c.priority)}</span></td>
+        <td><span class="badge ${statCls}">${esc(c.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('announcement',${c.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('announcement',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        </div></td>
+      </tr>`;
+    }
+  },
+  survey: {
+    endpoint: 'surveys',
+    saveAction: 'save_survey',
+    loadFn: loadSurveys,
+    modalTitle: { add: 'Yeni Anket', edit: 'Anketi Redaktə Et' },
+    tableId: 'surTable', tbodyId: 'surTbody',
+    emptyIcon: 'clipboard-check', emptyText: 'Anket yoxdur',
+    fields: [
+      { id: 'c_title', label: 'Başlıq', type: 'text', required: true },
+      { id: 'c_desc', label: 'Təsvir', type: 'textarea', rows: 4 },
+      { id: 'c_priority', label: 'Öncəlik', type: 'select', options: [['Normal','Normal'],['Yüksək','Yüksək']] },
+      { id: 'c_status', label: 'Status', type: 'select', options: [['Aktiv','Aktiv'],['Passiv','Passiv']] }
+    ],
+    buildPayload: (id) => ({
+      id, title: gv('c_title'), description: gv('c_desc'),
+      priority: gv('c_priority'), status: gv('c_status')
+    }),
+    renderRow: (c, idx) => {
+      const priCls = c.priority==='Yüksək' ? 'badge-danger' : 'badge-info';
+      const statCls = c.status==='Aktiv' ? 'badge-success' : 'badge-gray';
+      return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+        <td><div style="font-weight:600">${esc(c.title)}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${esc(c.description)}</div><span class="badge ${priCls}" style="margin-top:6px">${esc(c.priority)}</span></td>
+        <td><span class="badge ${statCls}">${esc(c.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('survey',${c.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('survey',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        </div></td>
+      </tr>`;
+    }
+  },
+  penalty: {
+    endpoint: 'penalties',
+    saveAction: 'save_penalty',
+    loadFn: loadPenalties,
+    modalTitle: { add: 'Yeni Cərimə', edit: 'Cəriməni Redaktə Et' },
+    tableId: 'penTable', tbodyId: 'penTbody',
+    emptyIcon: 'receipt-text', emptyText: 'Cərimə yoxdur',
+    customModal: true,
+    renderRow: (p, idx) => {
+      const statusClass = p.status==='Ödənilib' ? 'badge-success' : 'badge-danger';
+      const payBtn = p.status==='Ödənilməmiş' ? `<button type="button" class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ödə"><i data-lucide="check-circle"></i></button>` : '';
+      return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+        <td style="font-weight:600">${esc(p.ad_soyad)}</td>
+        <td>${esc(p.reason)}</td>
+        <td style="font-weight:700">${p.amount} AZN</td>
+        <td><span class="badge ${statusClass}">${esc(p.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('penalty',${p.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          ${payBtn}
+          <button type="button" class="btn-icon danger" onclick="deleteItem('penalty',${p.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        </div></td>
+      </tr>`;
+    }
+  },
+  laundry: {
+    endpoint: 'laundry',
+    saveAction: 'save_laundry',
+    loadFn: loadLaundry,
+    modalTitle: { add: 'Yeni Çamaşırxana Qeydi', edit: 'Çamaşırxana Redaktə' },
+    tableId: 'laundryTable', tbodyId: 'laundryTbody',
+    emptyIcon: 'washing-machine', emptyText: 'Məlumat yoxdur',
+    customModal: true,
+    renderRow: (l, idx) => {
+      const m1c = l.machine_1_status==='Hazır' ? 'badge-success' : (l.machine_1_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
+      const m2c = l.machine_2_status==='Hazır' ? 'badge-success' : (l.machine_2_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
+      const m3c = l.machine_3_status==='Hazır' ? 'badge-success' : (l.machine_3_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
+      return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+        <td style="font-weight:600">${esc(l.ad_soyad)}</td>
+        <td><span class="badge ${m1c}">${esc(l.machine_1_status)}</span></td>
+        <td><span class="badge ${m2c}">${esc(l.machine_2_status)}</span></td>
+        <td><span class="badge ${m3c}">${esc(l.machine_3_status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('laundry',${l.student_id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('laundry',${l.student_id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        </div></td>
+      </tr>`;
+    }
+  }
+};
+
+// ═════════ UTILITIES ═════════
+function esc(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function escAttr(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function gv(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function safeId(v) {
+  const n = parseInt(v, 10);
+  return Number.isInteger(n) ? n : 0;
+}
+
+function debounce(fn, delay = 350) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+// ═════════ CSV EXPORT ═════════
+function exportCsv(entity) {
+  // Attachment Content-Disposition səbəbində səhifədən getmədən yüklənir
+  const a = document.createElement('a');
+  a.href = `/api/admin/export/${entity}`;
+  a.download = '';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  showToast('CSV yüklənir...', 'info');
+}
+
+// ═════════ TƏLƏBƏ AXTARIŞ PICKER (typeahead) ═════════
+const spTimers = {};
+const spCache = {};
+
+function spContainerHtml(key, opts = {}) {
+    const val = opts.value || '';
+    const selected = opts.valueId ? ' sp-selected' : '';
+    return `
+    <div class="sp-picker" id="sp-${key}">
+        <input type="text" class="sp-input${selected}" id="sp-input-${key}" value="${escAttr(val)}"
+               placeholder="${escAttr(opts.placeholder || 'Tələbə adını yazın...')}" autocomplete="off">
+        <input type="hidden" id="sp-hidden-${key}" value="${escAttr(opts.valueId || '')}">
+        <div class="sp-dropdown" id="sp-dd-${key}"></div>
+    </div>`;
+}
+
+function spGetValue(key) {
+    const hidden = document.getElementById('sp-hidden-' + key);
+    return hidden ? (hidden.value || '') : '';
+}
+
+function spValidate(key) {
+    const input = document.getElementById('sp-input-' + key);
+    const hidden = document.getElementById('sp-hidden-' + key);
+    if (!input || !hidden) return true;
+    return !(input.value.trim() && !hidden.value);
+}
+
+async function spSearch(key, opts) {
+    const input = document.getElementById('sp-input-' + key);
+    const dd = document.getElementById('sp-dd-' + key);
+    if (!input || !dd) return;
+
+    const q = input.value.trim();
+    if (q.length < 2) { dd.classList.remove('active'); return; }
+
+    dd.innerHTML = '<div class="sp-empty">Axtarılır...</div>';
+    dd.classList.add('active');
+
+    try {
+        const params = { q };
+        const cins = opts.cinsFn ? opts.cinsFn() : (opts.cins || null);
+        if (cins) params.cins = cins;
+        if (opts.exclude) params.exclude = opts.exclude;
+
+        const data = await apiAction('search_students_query', 'GET', null, params);
+        const students = data.data || [];
+        spCache[key] = students;
+
+        if (!students.length) {
+            dd.innerHTML = `<div class="sp-empty">"${esc(q)}" üzrə nəticə tapılmadı</div>`;
+            return;
+        }
+
+        dd.innerHTML = students.map((st, idx) => `
+            <div class="sp-item" data-idx="${idx}">
+                <span class="sp-item-name">${esc(st.ad_soyad)}</span>
+                <span class="sp-item-meta">${esc(st.cins || '')} • ID:${st.id}</span>
+            </div>`).join('');
+
+        dd.querySelectorAll('.sp-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const st = spCache[key][parseInt(item.getAttribute('data-idx'), 10)];
+                if (!st) return;
+                input.value = st.ad_soyad;
+                input.classList.add('sp-selected');
+                document.getElementById('sp-hidden-' + key).value = st.id;
+                dd.classList.remove('active');
+                if (opts.onSelect) opts.onSelect(st.id, st.ad_soyad);
+            });
+        });
+    } catch (e) {
+        dd.innerHTML = `<div class="sp-empty">Xəta: ${esc(e.message)}</div>`;
+    }
+}
+
+function initStudentPicker(key, opts = {}) {
+    const input = document.getElementById('sp-input-' + key);
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+        input.classList.remove('sp-selected');
+        const hidden = document.getElementById('sp-hidden-' + key);
+        if (hidden) hidden.value = '';
+        clearTimeout(spTimers[key]);
+        spTimers[key] = setTimeout(() => spSearch(key, opts), 300);
+    });
+
+    input.addEventListener('focus', () => {
+        if (input.value.trim().length >= 2) spSearch(key, opts);
+    });
+
+    document.addEventListener('click', (e) => {
+        const picker = document.getElementById('sp-' + key);
+        const dd = document.getElementById('sp-dd-' + key);
+        if (picker && dd && !picker.contains(e.target)) dd.classList.remove('active');
+    });
+}
+
+// ═════════ SERVER-SIDE FILTERS ═════════
+function getColFilters(tableId) {
+  const out = {};
+  const table = document.getElementById(tableId);
+  if (!table) return out;
+  table.querySelectorAll('thead .col-filter').forEach(el => {
+    const col = el.getAttribute('data-col');
+    const v = el.value.trim();
+    if (col && v) out[col] = v;
+  });
+  return out;
+}
+
+const FILTER_LOADERS = {
+  students: () => loadStudents(1),
+  profiles: () => loadProfiles(1),
+  rooms: () => loadRooms(1),
+  applications: () => loadApplications(1),
+  announcements: () => loadAnnouncements(1),
+  surveys: () => loadSurveys(1),
+  penalties: () => loadPenalties(1),
+  laundry: () => loadLaundry(1),
+  logs: () => loadLogs(1)
+};
+
+function serverFilter(key) { if (FILTER_LOADERS[key]) FILTER_LOADERS[key](); }
+const debouncedServerFilter = debounce(serverFilter, 350);
+
+// ═════════ API ═════════
+async function apiAction(action, method = 'GET', body = null, query = null) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+  try {
+    let url = `/api/admin/${action}`;
+    if (query && method === 'GET') {
+      const qs = new URLSearchParams(query).toString();
+      if (qs) url += '?' + qs;
+    }
+    const options = { method, headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', signal: controller.signal };
+    if (body) options.body = JSON.stringify(body);
+    const res = await fetch(url, options);
+    clearTimeout(timeoutId);
+    if (res.status === 403) { showLogin(); throw new Error('İcazə yoxdur'); }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || 'Naməlum xəta');
+    return data;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') throw new Error('Sorğu çox uzun sürdü (15 san)');
+    throw err;
+  }
+}
+
+// ═════════ UI ═════════
+function refreshIcons(container) {
+  if (container && container.querySelectorAll) { lucide.createIcons({ nodes: [container] }); }
+  else { lucide.createIcons(); }
+}
+
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'x-circle' : 'alert-triangle');
+  toast.innerHTML = `<i data-lucide="${icon}"></i><span>${esc(message)}</span>`;
+  container.appendChild(toast);
+  refreshIcons(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(120%)';
+    toast.style.transition = 'all 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+function openModal(title, bodyHtml, danger = false) {
+  document.getElementById('modalHeader').classList.toggle('danger-header', !!danger);
+  document.getElementById('modalTitle').innerText = title;
+  document.getElementById('modalBody').innerHTML = bodyHtml;
+  document.getElementById('modalFooter').style.display = 'none';
+  document.getElementById('universalModal').classList.add('active');
+  refreshIcons(document.getElementById('modalBody'));
+}
+
+function closeModal() {
+  document.getElementById('universalModal').classList.remove('active');
+}
+
+// ═════════ XÜSUSİ DİALOQ SİSTEMİ ═════════
+let dlgCallback = null;
+
+const DLG_ICONS = { danger: 'trash-2', success: 'check-circle-2', warning: 'alert-triangle', info: 'info', kick: 'user-x', invite: 'mail-check', room: 'door-open', group: 'users-round', pay: 'credit-card', logout: 'log-out' };
+
+function dialogBase(type, title, bodyHtml, danger) {
+  document.getElementById('dlgHeader').classList.toggle('danger-header', !!danger);
+  document.getElementById('dlgTitleH').innerText = title;
+  document.getElementById('dlgBody').innerHTML =
+    `<div class="dlg-icon ${type}"><i data-lucide="${DLG_ICONS[type] || 'info'}"></i></div>${bodyHtml}`;
+  document.getElementById('dialogOverlay').classList.add('active');
+  refreshIcons(document.getElementById('dlgBody'));
+}
+
+function closeDialog(result) {
+  document.getElementById('dialogOverlay').classList.remove('active');
+  const cb = dlgCallback; dlgCallback = null;
+  if (result && cb) cb();
+}
+
+function confirmDialog(title, text, cb, opts = {}) {
+  const type = opts.type || 'danger';
+  dlgCallback = cb;
+  dialogBase(type, title,
+    `<p class="dlg-text">${text}</p>
+     <div class="dlg-actions">
+       <button type="button" class="btn-secondary" onclick="closeDialog(false)">${opts.noText || 'Ləğv et'}</button>
+       <button type="button" class="btn-danger" onclick="closeDialog(true)"><i data-lucide="check"></i> ${opts.yesText || 'Bəli, təsdiq edirəm'}</button>
+     </div>`, type === 'danger' || type === 'kick');
+}
+
+function infoDialog(title, bodyHtml, type = 'info') {
+  dlgCallback = null;
+  dialogBase(type, title, `${bodyHtml}<div class="dlg-actions"><button type="button" class="btn-primary" onclick="closeDialog(false)">Bağla</button></div>`, false);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeModal(); dlgCallback = null; document.getElementById('dialogOverlay').classList.remove('active'); }
+  if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) {
+    e.preventDefault();
+    const activeSection = document.querySelector('.page-content.active-page');
+    if (activeSection) { const first = activeSection.querySelector('thead .col-filter'); if (first) first.focus(); }
+  }
+});
+
+function showLogin() { document.getElementById('loginOverlay').classList.add('active'); }
+function hideLogin() { document.getElementById('loginOverlay').classList.remove('active'); }
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const original = btn.innerHTML;
+  btn.innerHTML = '<i data-lucide="loader-2" style="animation:spin 1s linear infinite"></i> Yoxlanılır...';
+  lucide.createIcons({ nodes: [btn] });
+  try {
+    const data = await fetch('/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ email: gv('loginEmail'), sifre: gv('loginPassword') })
+    }).then(r => r.json());
+    if (data.success) { hideLogin(); isLoggedIn = true; loadDashboard(); showToast('Uğurla daxil oldunuz!', 'success'); }
+    else { throw new Error('Yanlış məlumat'); }
+  } catch {
+    document.getElementById('loginError').style.display = 'block';
+    btn.innerHTML = original;
+    refreshIcons(btn);
+  }
+}
+
+async function logout() {
+  confirmDialog('Çıxış', 'Admin paneldən çıxmaq istəyirsiniz?<span class="dlg-highlight">Dəyişilməmiş məlumatlar itə bilər</span>', async () => {
+    await fetch('/logout', { credentials: 'same-origin' });
+    isLoggedIn = false; showLogin();
+    showToast('Çıxış edildi', 'success');
+  }, { type: 'logout', yesText: 'Bəli, çıx', noText: 'Qalıram' });
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+  document.getElementById('mainWrapper').classList.toggle('expanded');
+}
+
+// ═════════ GENERIC CRUD ═════════
+function buildFormFields(fields, values = {}) {
+  return fields.map(f => {
+    const val = values[f.id] !== undefined ? values[f.id] : (f.default || '');
+    if (f.type === 'select') {
+      const opts = f.options.map(([v, t]) => `<option value="${v}" ${val == v ? 'selected' : ''}>${t}</option>`).join('');
+      return `<div class="form-group"><label>${f.label}</label><select class="form-select" id="${f.id}">${opts}</select></div>`;
+    }
+    if (f.type === 'textarea') {
+      return `<div class="form-group"><label>${f.label}</label><textarea class="form-textarea" id="${f.id}" rows="${f.rows||3}" placeholder="${escAttr(f.placeholder||'')}">${esc(val)}</textarea></div>`;
+    }
+    return `<div class="form-group"><label>${f.label}</label><input type="${f.type}" class="form-input" id="${f.id}" value="${escAttr(val)}" placeholder="${escAttr(f.placeholder||'')}"></div>`;
+  }).join('');
+}
+
+function openAddModal(type) {
+  const cfg = CRUD_CONFIG[type];
+  if (!cfg) return;
+  if (type === 'room') { addRoomModal(); return; }
+  if (type === 'application') { addApplicationModal(); return; }
+  if (type === 'penalty') { addPenaltyModal(); return; }
+  if (type === 'laundry') { addLaundryModal(); return; }
+  const html = buildFormFields(cfg.fields) +
+    `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`;
+  openModal(cfg.modalTitle.add, html);
+}
+
+async function openEditModal(type, id) {
+  const cfg = CRUD_CONFIG[type];
+  if (!cfg) return;
+  id = safeId(id);
+  if (type === 'room') { editRoomModal(id); return; }
+  if (type === 'application') { editApplicationModal(id); return; }
+  if (type === 'penalty') { editPenaltyModal(id); return; }
+  if (type === 'laundry') { editLaundryModal(id); return; }
+
+  let values = {};
+  if (type === 'student') {
+    const res = await apiAction('get_student_full', 'POST', { id });
+    const d = res.data || {};
+    values = {
+      s_name: d.ad_soyad || '', s_email: d.email || '', s_sifre: '',
+      s_cins: d.cins || 'Kişi', s_ev: d.ev || 'Ev seçilməyib',
+      s_universitet: d.universitet || 'Qarabağ Universiteti',
+      s_ixtisas: d.ixtisas || '',
+      s_kurs: d.kurs !== null && d.kurs !== undefined ? d.kurs : '',
+      s_api_key: d.api_key || '',
+      s_ev_deyisme: d.ev_deyisme_isteyi !== null && d.ev_deyisme_isteyi !== undefined ? d.ev_deyisme_isteyi : '0'
+    };
+  } else if (type === 'announcement' || type === 'survey') {
+    const action = type === 'announcement' ? 'get_announcements' : 'get_surveys';
+    const res = await apiAction(action);
+    const item = res.data.find(x => x.id == id);
+    if (item) { values = { c_title: item.title, c_desc: item.description, c_priority: item.priority, c_status: item.status }; }
+  }
+
+  const html = buildFormFields(cfg.fields, values) +
+    `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`;
+  openModal(cfg.modalTitle.edit, html);
+}
+
+async function saveGenericItem(type, id) {
+  const cfg = CRUD_CONFIG[type];
+  if (!cfg) return;
+  try {
+    const payload = cfg.buildPayload(id);
+    await apiAction(cfg.saveAction, 'POST', payload);
+    closeModal();
+    cfg.loadFn();
+    showToast(id ? 'Yeniləndi' : 'Əlavə edildi', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+const DELETE_MSGS = {
+  student:   { title: 'Tələbəni Sil', html: (i) => `Bu tələbəni silmək istədiyinizə <b>əminsiniz</b>?<span class="dlg-highlight">${esc(i.ad_soyad || 'ID: ' + i.id)}</span>Profil, cərimə, müraciət, camaşırxana və bütün tələbləri <b>birlikdə silinəcək</b>. Geri qaytarıla bilməz!` },
+  room:      { title: 'Otağı Sil', html: (i) => `Bu otağı silmək istəyirsiniz?<span class="dlg-highlight">Ev ${i.id} • ${i.dolu || 0} sakin</span>Sakinlər avtomatik <b>"Ev seçilməyib"</b> statusuna keçəcək.` },
+  application: { title: 'Müraciəti Sil', html: (i) => `Bu müraciəti silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.basliq || 'Müraciət #' + i.id)}</span>Bu əməliyyat geri qaytarıla bilməz!` },
+  announcement: { title: 'Elanı Sil', html: (i) => `Bu elanı silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.title || 'Elan #' + i.id)}</span>Tələbə panelindən də silinəcək.` },
+  survey:    { title: 'Anketi Sil', html: (i) => `Bu anketi silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.title || 'Anket #' + i.id)}</span>Cavablar da itəcək.` },
+  penalty:   { title: 'Cəriməni Sil', html: (i) => `Bu cəriməni silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.ad_soyad || '')} • ${i.amount || ''} AZN</span>Tarixçədən tam silinəcək.` },
+  laundry:   { title: 'Qeydi Sil', html: (i) => `Bu qeydi silmək istəyirsiniz?<span class="dlg-highlight">${esc(i.ad_soyad || '')}</span>3 maşının statusu sıfırlanacaq.` }
+};
+
+async function deleteItem(type, id) {
+  const cfg = CRUD_CONFIG[type];
+  if (!cfg) return;
+  id = safeId(id);
+
+  const sources = { student: currentStudents, room: currentRooms, application: currentApps };
+  let item = sources[type] ? sources[type].find(x => (x.id || x.student_id) == id) : null;
+  if ((type === 'penalty' || type === 'laundry') && !item) {
+    try { const d = await apiAction(`get_${type}s`); item = (d.data || []).find(x => (x.id || x.student_id) == id); } catch(e) {}
+  }
+
+  const msg = DELETE_MSGS[type];
+  const html = msg ? msg.html(item || { id }) : `Bu elementi silmək istəyirsiniz?<span class="dlg-highlight">ID: ${id}</span>`;
+  const dlgType = type === 'penalty' ? 'pay' : 'danger';
+
+  confirmDialog(msg ? msg.title : 'Silməni Təsdiqlə', html, async () => {
+    try {
+      await apiAction(`delete_${cfg.endpoint}`, 'POST', { id });
+      cfg.loadFn();
+      showToast('Uğurla silindi', 'success');
+    } catch (e) {
+      infoDialog('Silinmə Xətası', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger');
+    }
+  }, { type: dlgType, yesText: 'Bəli, sil' });
+}
+
+// ═════════ PAGE LOADING ═════════
+function loadPage(page, el) {
+  activePageKey = page;
+  document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const t = PAGE_TITLES[page];
+  document.getElementById('pageTitle').innerText = t[0];
+  document.getElementById('pageDesc').innerText = t[1];
+  document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active-page'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active-page');
+  const loaders = {
+    dashboard: loadDashboard, students: loadStudents, profiles: loadProfiles,
+    rooms: loadRooms, groups: loadGroups, requests: loadRequests, logs: loadLogs,
+    applications: loadApplications, announcements: loadAnnouncements,
+    surveys: loadSurveys, penalties: loadPenalties, canteen: loadCanteen, laundry: loadLaundry
+  };
+  if (loaders[page]) loaders[page]();
+}
+
+// ═════════ DASHBOARD ═════════
+async function loadDashboard() {
+  try {
+    const data = await apiAction('stats');
+    const s = data.stats;
+    document.getElementById('dashboardStats').innerHTML = `
+      <div class="stat-card delay-100"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-soft-green),#e8f5d6);color:var(--ku-dark-green)"><i data-lucide="users"></i></div><div class="stat-label">Tələbə sayı</div><div class="stat-value">${s.students}</div></div>
+      <div class="stat-card delay-200"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-light-blue),#e0f4f8);color:#0c4a6e"><i data-lucide="door-open"></i></div><div class="stat-label">Otaqlar</div><div class="stat-value">${s.rooms}</div></div>
+      <div class="stat-card delay-300"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:var(--warning)"><i data-lucide="clipboard-list"></i></div><div class="stat-label">Gözləyən Müraciət</div><div class="stat-value">${s.apps}</div></div>
+      <div class="stat-card delay-400"><div class="stat-icon" style="background:linear-gradient(135deg,#fee2e2,#fecaca);color:var(--danger)"><i data-lucide="gavel"></i></div><div class="stat-label">Ödənilməmiş Cərimə</div><div class="stat-value">${s.penalties}</div></div>
+      <div class="stat-card delay-500"><div class="stat-icon" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff);color:#7e22ce"><i data-lucide="users-round"></i></div><div class="stat-label">Aktiv Qruplar</div><div class="stat-value">${s.groups}</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:linear-gradient(135deg,var(--ku-cream),#fde68a);color:#92400e"><i data-lucide="inbox"></i></div><div class="stat-label">Gözləyən Tələblər</div><div class="stat-value">${s.requests}</div></div>`;
+    refreshIcons(document.getElementById('dashboardStats'));
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+// ═════════ REAL-TIME POLLING (30 san) ═════════
+// Yalnız Dashboard açıq və tab görünəndə stats yenilənir (cache sayəsində DB-yə 30 saniyədən çox toxunmur)
+setInterval(() => {
+    if (document.visibilityState === 'visible' && isLoggedIn && activePageKey === 'dashboard') {
+        loadDashboard();
+    }
+}, 30000);
+
+// Sessiya hələ aktivdirmi? — səhifə görünəndə yoxla
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && isLoggedIn) {
+    fetch('/api/admin/check', { credentials: 'same-origin' })
+      .then(r => { if (!r.ok) { isLoggedIn = false; showLogin(); } })
+      .catch(() => {});
+  }
+});
+
+// ═════════ LOGS ═════════
+async function loadLogs(page = 1) {
+  try {
+    PAGINATION.logs.page = page;
+    const filters = getColFilters('logsTable');
+    const data = await apiAction('get_logs', 'GET', null, { page, per_page: PAGINATION.logs.per_page, ...filters });
+    PAGINATION.logs.total = data.total || 0;
+    const items = data.data || [];
+    let html = '';
+    if (!items.length) { html = emptyState('history', 'Son 1 ayda əməliyyat yoxdur'); }
+    else {
+      items.forEach((l, idx) => {
+        html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*40}ms">
+          <td style="font-size:13px;color:var(--text-secondary);white-space:nowrap">${esc(l.tarix)}</td>
+          <td>${esc(l.admin_user)}</td>
+          <td><span class="badge badge-info">${esc(l.action)}</span></td>
+          <td>${esc(l.entity||'-')}</td>
+          <td>${esc(l.entity_id||'-')}</td>
+          <td style="font-size:13px">${esc(l.details||'')}</td>
+        </tr>`;
+      });
+    }
+    document.getElementById('logsTbody').innerHTML = html;
+    renderPagination('logs', 'logsPagination', 'loadLogs');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+async function clearOldLogs() {
+  confirmDialog('Logları Təmizlə', `1 aydan köhnə bütün loglar silinsin?<span class="dlg-highlight">Son 1 ayın logları qalır</span>Bu əməliyyat geri qaytarıla bilməz!`, async () => {
+    try {
+      const data = await apiAction('clear_old_logs', 'POST', {});
+      infoDialog('Təmizləndi', `<p class="dlg-text">${esc(data.message)}</p>`, 'success');
+      loadLogs();
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'danger', yesText: 'Bəli, təmizlə' });
+}
+
+// ═════════ STUDENTS ═════════
+async function loadStudents(page = 1) {
+  try {
+    PAGINATION.students.page = page;
+    const filters = getColFilters('studentsTable');
+    const data = await apiAction('get_students', 'GET', null, { page, per_page: PAGINATION.students.per_page, ...filters });
+    currentStudents = data.data || [];
+    PAGINATION.students.total = data.total || 0;
+    renderTable('student', data.data);
+    renderPagination('students', 'studentsPagination', 'loadStudents');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+// ═════════ PROFILES ═════════
+async function loadProfiles(page = 1) {
+  try {
+    PAGINATION.profiles.page = page;
+    const filters = getColFilters('profilesTable');
+    const data = await apiAction('get_profiles', 'GET', null, { page, per_page: PAGINATION.profiles.per_page, ...filters });
+    currentProfiles = data.data || [];
+    PAGINATION.profiles.total = data.total || 0;
+    let html = '';
+    if (!data.data || data.data.length === 0) { html = emptyState('user-circle', 'Profil yoxdur'); }
+    else {
+      data.data.forEach((p, idx) => {
+        html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+          <td style="font-weight:600">${esc(p.ad_soyad)}</td>
+          <td>${esc(p.yuxu_rejimi||'-')}</td>
+          <td>${esc(p.temizlik||'-')}</td>
+          <td>${esc(p.sosial_munasibet||'-')}</td>
+          <td>${esc(p.hayat_terzi||'-')}</td>
+          <td><div style="display:flex;gap:8px">
+            <button type="button" class="btn-icon" onclick="editProfileModal(${p.student_id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+            <button type="button" class="btn-icon danger" onclick="deleteProfile(${p.student_id})" title="Sil"><i data-lucide="trash-2"></i></button>
+          </div></td>
+        </tr>`;
+      });
+    }
+    document.getElementById('profilesTbody').innerHTML = html;
+    refreshIcons(document.getElementById('profilesTbody'));
+    renderPagination('profiles', 'profilesPagination', 'loadProfiles');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function editProfileModal(student_id) {
+  student_id = safeId(student_id);
+  const p = currentProfiles.find(x => x.student_id == student_id);
+  openModal('Profili Redaktə Et', `
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(p ? p.ad_soyad : '')}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="pr_student" value="${student_id}">
+    </div>
+    <div class="form-group"><label>Yuxu Rejimi</label><textarea class="form-textarea" id="pr_yuxu" rows="3">${esc(p?p.yuxu_rejimi||'':'')}</textarea></div>
+    <div class="form-group"><label>Təmizlik</label><textarea class="form-textarea" id="pr_temizlik" rows="3">${esc(p?p.temizlik||'':'')}</textarea></div>
+    <div class="form-group"><label>Sosial Münasibət</label><textarea class="form-textarea" id="pr_sosial" rows="3">${esc(p?p.sosial_munasibet||'':'')}</textarea></div>
+    <div class="form-group"><label>Həyat Tərzi</label><textarea class="form-textarea" id="pr_hayat" rows="3">${esc(p?p.hayat_terzi||'':'')}</textarea></div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveProfile(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>
+  `);
+}
+
+async function saveProfile(student_id) {
+  try {
+    await apiAction('save_profile', 'POST', {
+      student_id: gv('pr_student'),
+      yuxu_rejimi: gv('pr_yuxu'), temizlik: gv('pr_temizlik'),
+      sosial_munasibet: gv('pr_sosial'), hayat_terzi: gv('pr_hayat')
+    });
+    closeModal(); loadProfiles();
+    showToast('Profil yeniləndi', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+function deleteProfile(student_id) {
+  student_id = safeId(student_id);
+  const p = currentProfiles.find(x => x.student_id == student_id);
+  confirmDialog('Profili Sil', `Bu tələbə profilini silmək istəyirsiniz?<span class="dlg-highlight">${esc(p ? p.ad_soyad : 'ID: ' + student_id)}</span>Yuxu rejimi, təmizlik və həyat tərzi məlumatları itəcək. AI uyğunluq hesablaması işləməyəcək.`, async () => {
+    try {
+      await apiAction('delete_profile', 'POST', { student_id });
+      loadProfiles(); showToast('Profil silindi', 'success');
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'danger', yesText: 'Bəli, sil' });
+}
+
+// ═════════ ROOMS ═════════
+async function loadRooms(page = 1) {
+  try {
+    PAGINATION.rooms.page = page;
+    const filters = getColFilters('roomsTable');
+    const data = await apiAction('get_rooms', 'GET', null, { page, per_page: PAGINATION.rooms.per_page, ...filters });
+    currentRooms = data.data || [];
+    PAGINATION.rooms.total = data.total || 0;
+    renderTable('room', data.data);
+    renderPagination('rooms', 'roomsPagination', 'loadRooms');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function roomCinsById(rid) {
+  const n = parseInt(rid);
+  if (n >= 101 && n <= 120) return 'Kişi';
+  if (n >= 121 && n <= 140) return 'Qadın';
+  return '';
+}
+
+function genStatusOptions(selectedStatus) {
+  const stats = ['Yaxşı','Az zədəli','Zədəli'];
+  return stats.map(s => `<option value="${s}" ${s==selectedStatus?'selected':''}>${s}</option>`).join('');
+}
+
+function buildRoomForm(r, id) {
+  const isEdit = !!id;
+  const autoCins = roomCinsById(isEdit ? id : '');
+  let html = '';
+  html += `<div class="form-row">
+    <div class="form-group"><label>Otaq Nömrəsi</label><input type="number" class="form-input" id="r_id" value="${escAttr(isEdit ? id : '')}" ${isEdit ? 'disabled' : ''} placeholder="Məs: 105" oninput="syncRoomCins()"></div>
+    <div class="form-group"><label>Tutum (maks. 6)</label><input type="number" min="1" max="6" class="form-input" id="r_capacity" value="${r ? r.capacity : 6}" oninput="toggleSlotCards()"></div>
+    <div class="form-group"><label>Bina / Cins</label><select class="form-select" id="r_cins" ${autoCins ? 'disabled' : ''}>
+      <option value="">Təyin edilməyib</option>
+      <option value="Kişi" ${(autoCins || (r && r.cins)) === 'Kişi' ? 'selected' : ''}>Kişi (oğlan binası)</option>
+      <option value="Qadın" ${(autoCins || (r && r.cins)) === 'Qadın' ? 'selected' : ''}>Qadın (qız binası)</option>
+    </select></div>
+  </div>`;
+  if (autoCins) {
+    html += `<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px"><i data-lucide="info" style="width:12px;height:12px;vertical-align:-2px"></i> Bu otaq nömrəsi ${autoCins === 'Kişi' ? 'oğlan (101-120)' : 'qız (121-140)'} binasına aiddir — cins avtomatik təyin olunub.</p>`;
+  }
+  for (let i = 1; i <= 6; i++) {
+    const slot = r && r.slots ? r.slots.find(s => s.slot === i) : null;
+    const curName = slot && slot.student_id ? (slot.ad_soyad || '') : '';
+    const curId = slot && slot.student_id ? slot.student_id : '';
+    const ys = slot ? slot.yataq_status : 'Yaxşı';
+    const ss = slot ? slot.skaf_status : 'Yaxşı';
+    const os = slot ? slot.oturacaq_status : 'Yaxşı';
+    html += `<div class="room-student-card" id="slotCard${i}"><h5><i data-lucide="user"></i> ${i}-ci Yer</h5>
+      <div class="form-group"><label>Tələbə</label>
+        ${spContainerHtml('room-t' + i, { value: curName, valueId: curId, placeholder: 'Boş — ad yazın, axtarın...' })}
+        <div class="sp-hint">Ad yazıb siyahıdan seçin; boş saxlasanız yer boş qalacaq</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Yataq</label><select class="form-select" id="r_y${i}">${genStatusOptions(ys)}</select></div>
+        <div class="form-group"><label>Şkaf</label><select class="form-select" id="r_s${i}">${genStatusOptions(ss)}</select></div>
+        <div class="form-group"><label>Oturacaq</label><select class="form-select" id="r_o${i}">${genStatusOptions(os)}</select></div>
+      </div>
+    </div>`;
+  }
+  html += `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${isEdit ? id : 0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
+  return html;
+}
+
+function initRoomPickers() {
+  for (let i = 1; i <= 6; i++) {
+    initStudentPicker('room-t' + i, { cinsFn: () => gv('r_cins') || null });
+  }
+}
+
+function toggleSlotCards() {
+  const cap = Math.max(1, Math.min(6, parseInt(gv('r_capacity')) || 6));
+  for (let i = 1; i <= 6; i++) {
+    const card = document.getElementById('slotCard' + i);
+    if (card) card.style.display = i <= cap ? '' : 'none';
+  }
+}
+
+function syncRoomCins() {
+  const idInput = document.getElementById('r_id');
+  if (!idInput || idInput.disabled) return;
+  const c = roomCinsById(gv('r_id'));
+  const sel = document.getElementById('r_cins');
+  if (c) { sel.value = c; sel.disabled = true; }
+  else { sel.disabled = false; }
+}
+
+function addRoomModal() {
+  openModal('Yeni Otaq', buildRoomForm(null, 0));
+  initRoomPickers();
+  setTimeout(toggleSlotCards, 100);
+}
+
+function editRoomModal(id) {
+  id = safeId(id);
+  const r = currentRooms.find(x => x.id == id);
+  if (!r) { showToast('Otaq tapılmadı', 'error'); return; }
+  openModal('Otaq Redaktə: ' + id, buildRoomForm(r, id));
+  initRoomPickers();
+  setTimeout(toggleSlotCards, 100);
+}
+
+async function saveRoom(id) {
+  for (let i = 1; i <= 6; i++) {
+    if (!spValidate('room-t' + i)) {
+      infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">${i}-ci yerdə ad yazılıb, amma tələbə seçilməyib.<span class="dlg-highlight">Siyahıdan tələbəni seçin və ya sahəni təmizləyin</span></p>`, 'warning');
+      return;
+    }
+  }
+
+  const payload = { id: id || gv('r_id'), capacity: gv('r_capacity') || 6, cins: gv('r_cins') };
+  for (let i = 1; i <= 6; i++) {
+    payload['t'+i] = spGetValue('room-t' + i);
+    payload['y'+i] = gv('r_y'+i);
+    payload['s'+i] = gv('r_s'+i);
+    payload['o'+i] = gv('r_o'+i);
+  }
+  try {
+    await apiAction('save_room', 'POST', payload);
+    closeModal(); loadRooms();
+    showToast(id ? 'Otaq yeniləndi' : 'Yeni otaq yaradıldı', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+// ═════════ APPLICATIONS ═════════
+async function loadApplications(page = 1) {
+  try {
+    PAGINATION.applications.page = page;
+    const filters = getColFilters('appsTable');
+    const data = await apiAction('get_applications', 'GET', null, { page, per_page: PAGINATION.applications.per_page, ...filters });
+    currentApps = data.data || [];
+    PAGINATION.applications.total = data.total || 0;
+    renderTable('application', data.data);
+    renderPagination('applications', 'appsPagination', 'loadApplications');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function addApplicationModal() {
+  openModal('Yeni Müraciət', `
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('app-student', { placeholder: 'Tələbə adını yazın...' })}
+      <div class="sp-hint">Minimum 2 hərf yazın, siyahıdan seçin</div>
+    </div>
+    <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" placeholder="Başlıq"></div>
+    <div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4" placeholder="Müraciət mətni..."></textarea></div>
+    <div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Təsdiq zamanı tələbəyə görünəcək qeyd"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option>Aşağı</option><option selected>Orta</option><option>Yüksək</option></select></div>
+      <div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option selected>Gözləmədə</option><option>Təsdiqləndi</option><option>Rədd edildi</option></select></div>
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>
+  `);
+  initStudentPicker('app-student');
+}
+
+function editApplicationModal(id) {
+  id = safeId(id);
+  const a = currentApps.find(x => x.id == id);
+  if (!a) return;
+  openModal('Müraciəti Redaktə Et', `
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(a.ad_soyad)}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="app_student" value="${a.student_id}">
+    </div>
+    <div class="form-group"><label>Başlıq</label><input type="text" class="form-input" id="app_basliq" value="${escAttr(a.basliq)}"></div>
+    <div class="form-group"><label>Müraciət Mətni</label><textarea class="form-textarea" id="app_muraciet" rows="4">${esc(a.muraciet)}</textarea></div>
+    <div class="form-group"><label>Qeyd (notlar)</label><textarea class="form-textarea" id="app_notlar" rows="2" placeholder="Tələbəyə görünəcək qeyd">${esc(a.notlar||'')}</textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option ${a.priority=='Aşağı'?'selected':''}>Aşağı</option><option ${a.priority=='Orta'?'selected':''}>Orta</option><option ${a.priority=='Yüksək'?'selected':''}>Yüksək</option></select></div>
+      <div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option ${a.status=='Gözləmədə'?'selected':''}>Gözləmədə</option><option ${a.status=='Təsdiqləndi'?'selected':''}>Təsdiqləndi</option><option ${a.status=='Rədd edildi'?'selected':''}>Rədd edildi</option></select></div>
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
+  `);
+}
+
+async function saveApplication(id) {
+  const studentId = id ? gv('app_student') : spGetValue('app-student');
+  if (!studentId) {
+    infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">Axtarış sahəsinə tələbə adını yazıb siyahıdan seçin.<span class="dlg-highlight">Minimum 2 hərf yazın</span></p>`, 'warning');
+    return;
+  }
+  try {
+    await apiAction('save_application', 'POST', {
+      id, student_id: studentId, basliq: gv('app_basliq'),
+      muraciet: gv('app_muraciet'), priority: gv('app_priority'),
+      status: gv('app_status'), notlar: gv('app_notlar')
+    });
+    closeModal(); loadApplications();
+    showToast(id ? 'Müraciət yeniləndi' : 'Yeni müraciət əlavə edildi', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+async function updateAppStatus(id, status) {
+  const a = currentApps.find(x => x.id == id);
+  const isApprove = status === 'Təsdiqləndi';
+  confirmDialog(isApprove ? 'Müraciəti Təsdiqlə' : 'Müraciəti Rədd Et',
+    isApprove
+      ? `Bu müraciəti təsdiqləmək istəyirsiniz?<span class="dlg-highlight">${esc(a ? a.basliq : '')}</span>Tələbə yaşıl statusda görəcək və avtomatik qeyd yazılacaq.`
+      : `Bu müraciəti rədd etmək istəyirsiniz?<span class="dlg-highlight">${esc(a ? a.basliq : '')}</span>Tələbə qırmızı statusda görəcək. Geri qaytarmaq mümkündür.`,
+    async () => {
+      try {
+        await apiAction('update_app_status', 'POST', { id: safeId(id), status });
+        loadApplications(); showToast('Status yeniləndi', 'success');
+      } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+    }, { type: isApprove ? 'success' : 'warning', yesText: isApprove ? 'Bəli, təsdiqlə' : 'Bəli, rədd et' });
+}
+
+// ═════════ GROUPS — tam idarə ═════════
+async function loadGroups() {
+  try {
+    const data = await apiAction('get_groups');
+    const groups = data.data || [];
+    let html = '';
+    if (!groups.length) { html = emptyState('users-round', 'Aktiv qrup yoxdur'); }
+    else {
+      groups.forEach((g, idx) => {
+        const chips = g.members.map(m =>
+          `<span class="badge badge-gray" style="margin:2px 4px 2px 0;cursor:pointer;" title="Qrupdan çıxart" onclick="removeGroupMember(${m.id}, ${g.id})">${esc(m.ad_soyad)} ✕</span>`).join('');
+        html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+          <td style="font-weight:700">Qrup #${g.id}</td>
+          <td><span class="badge badge-info">${g.members.length} üzv</span></td>
+          <td>${chips}<button type="button" class="btn-icon" style="margin-left:8px;width:28px;height:28px;" onclick="addMemberModal(${g.id})" title="Üzv əlavə et"><i data-lucide="user-plus"></i></button></td>
+          <td><button type="button" class="btn-icon danger" onclick="deleteGroup(${g.id})" title="Qrupu ləğv et"><i data-lucide="trash-2"></i></button></td>
+        </tr>`;
+      });
+    }
+    document.getElementById('groupsTbody').innerHTML = html;
+    refreshIcons(document.getElementById('groupsTbody'));
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function adminCreateGroup() {
+  confirmDialog('Yeni Qrup', `Boş qrup yaradılsın?<span class="dlg-highlight">Qrup #Yeni</span>Sonra üzvləri axtarışla əlavə edə bilərsiniz.`, async () => {
+    try {
+      const data = await apiAction('create_group', 'POST', {});
+      infoDialog('Qrup Yaradıldı!', `<p class="dlg-text">Qrup uğurla yaradıldı.<span class="dlg-highlight">Qrup #${data.group_id}</span>İndi "+" düyməsi ilə üzv əlavə edin.</p>`, 'group');
+      loadGroups();
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'group', yesText: 'Yarat' });
+}
+
+function addMemberModal(gid) {
+  openModal(`Qrupa Üzv Əlavə Et — Qrup #${gid}`, `
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('grp-add', { placeholder: 'Tələbə adını yazın...', exclude: 'no_group' })}
+      <div class="sp-hint">Yalnız qrupda olmayan və ev seçməmiş tələbələr görsənir</div>
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveGroupMember(${gid})"><i data-lucide="user-plus"></i> Əlavə et</button>
+  `);
+  initStudentPicker('grp-add', { exclude: 'no_group' });
+}
+
+async function saveGroupMember(gid) {
+  const sid = spGetValue('grp-add');
+  if (!sid) {
+    infoDialog('Seçilməyib', `<p class="dlg-text">Tələbə adını yazıb siyahıdan seçin.</p>`, 'warning');
+    return;
+  }
+  try {
+    await apiAction('add_group_member', 'POST', { group_id: gid, student_id: sid });
+    closeModal(); loadGroups();
+    showToast('Üzv qrupa əlavə edildi', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+function removeGroupMember(sid, gid) {
+  confirmDialog('Üzvü Çıxart', `Bu tələbə qrupdan çıxarılsın?<span class="dlg-highlight">Qrup #${gid} • Tələbə ID: ${sid}</span>Son üzv olarsa, qrup tamamilə silinəcək.`, async () => {
+    try {
+      await apiAction('remove_group_member', 'POST', { student_id: sid });
+      loadGroups(); showToast('Üzv qrupdan çıxarıldı', 'success');
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'group', yesText: 'Bəli, çıxart' });
+}
+
+function deleteGroup(gid) {
+  gid = safeId(gid);
+  confirmDialog('Qrupu Ləğv Et', `Bu qrup tamamilə ləğv edilsin?<span class="dlg-highlight">Qrup #${gid}</span>Üzvlər qrupdan çıxarılacaq, amma silinməyəcək.`, async () => {
+    try {
+      await apiAction('delete_group', 'POST', { id: gid });
+      loadGroups(); showToast('Qrup ləğv edildi', 'success');
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'group', yesText: 'Bəli, ləğv et' });
+}
+
+// ═════════ REQUESTS — tam idarə ═════════
+const REQ_TYPE_MAP = { invite: ['Dəvət','badge-info'], kick: ['Qovma','badge-danger'], leave: ['Çıxma','badge-warning'] };
+
+async function loadRequests(page = 1) {
+  try {
+    PAGINATION.requests.page = page;
+    const data = await apiAction('get_requests', 'GET', null, { page, per_page: PAGINATION.requests.per_page });
+    PAGINATION.requests.total = data.total || 0;
+    const reqs = data.data || [];
+    let html = '';
+    if (!reqs.length) { html = emptyState('inbox', 'Tələb yoxdur'); }
+    else {
+      reqs.forEach((rq, idx) => {
+        const [tName, tCls] = REQ_TYPE_MAP[rq.type] || ['?','badge-gray'];
+        const sCls = rq.status === 'Gözləmədə' ? 'badge-warning' : (rq.status === 'Təsdiqləndi' ? 'badge-success' : 'badge-danger');
+        let actions = '';
+        actions += `<button type="button" class="btn-icon" onclick="viewRequestVotes(${rq.id})" title="Səslər"><i data-lucide="vote"></i></button>`;
+        if (rq.status === 'Gözləmədə') {
+          actions += `<button type="button" class="btn-icon" style="color:var(--success)" onclick="resolveRequest(${rq.id}, true)" title="Təsdiq et"><i data-lucide="check"></i></button>`;
+          actions += `<button type="button" class="btn-icon danger" onclick="resolveRequest(${rq.id}, false)" title="Rədd et"><i data-lucide="x"></i></button>`;
+        }
+        actions += `<button type="button" class="btn-icon danger" onclick="deleteRequest(${rq.id})" title="Sil"><i data-lucide="trash-2"></i></button>`;
+        html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
+          <td>${rq.id}</td>
+          <td><span class="badge ${tCls}">${tName}</span></td>
+          <td style="font-weight:600">Ev ${rq.room_id}</td>
+          <td>${esc(rq.requester_name)}</td>
+          <td style="font-weight:600">${esc(rq.target_name)}</td>
+          <td>${rq.vote_count} səs</td>
+          <td><span class="badge ${sCls}">${esc(rq.status)}</span></td>
+          <td style="font-size:12px;color:var(--text-secondary)">${esc(rq.tarix||'')}</td>
+          <td><div style="display:flex;gap:8px">${actions}</div></td>
+        </tr>`;
+      });
+    }
+    document.getElementById('reqTbody').innerHTML = html;
+    refreshIcons(document.getElementById('reqTbody'));
+    renderPagination('requests', 'reqPagination', 'loadRequests');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function adminCreateRequestModal() {
+  openModal('Yeni Tələb (Admin)', `
+    <div class="form-group"><label>Tip</label>
+      <select class="form-select" id="req_type">
+        <option value="invite">Dəvət (evə çağırış)</option>
+        <option value="kick">Qovma (evdən çıxart)</option>
+        <option value="leave">Çıxma (öz istəyi ilə)</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Hədəf Tələbə</label>
+      ${spContainerHtml('req-student', { placeholder: 'Tələbə adını yazın...' })}
+      <div class="sp-hint">Dəvət üçün ev seçməmiş, qovma/çıxma üçün evdə yaşayan tələbə</div>
+    </div>
+    <div class="form-group"><label>Otaq Nömrəsi (yalnız dəvət üçün)</label>
+      <input type="number" class="form-input" id="req_room" placeholder="Məs: 105">
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveAdminRequest()"><i data-lucide="plus"></i> Yarat</button>
+  `);
+  initStudentPicker('req-student');
+}
+
+async function saveAdminRequest() {
+  const sid = spGetValue('req-student');
+  const type = gv('req_type');
+  const room = gv('req_room');
+
+  if (!sid) {
+    infoDialog('Seçilməyib', `<p class="dlg-text">Hədəf tələbəni axtarıb seçin.</p>`, 'warning');
+    return;
+  }
+  if (type === 'invite' && !room) {
+    infoDialog('Otaq Lazımdır', `<p class="dlg-text">Dəvət tələbi üçün otaq nömrəsini daxil edin.</p>`, 'warning');
+    return;
+  }
+
+  try {
+    await apiAction('create_request', 'POST', {
+      type, target_id: sid, room_id: room ? parseInt(room) : null
+    });
+    closeModal(); loadRequests();
+    showToast('Tələb yaradıldı', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+async function viewRequestVotes(reqId) {
+  try {
+    const data = await apiAction(`get_request_votes?request_id=${safeId(reqId)}`);
+    const votes = data.data || [];
+    let html = '';
+    if (!votes.length) { html = `<p class="dlg-text">Bu tələb üzrə hələ səs yoxdur.</p>`; }
+    else {
+      html = votes.map(v =>
+        `<div style="display:flex;justify-content:space-between;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;">
+          <span style="font-weight:600">${esc(v.ad_soyad)}</span>
+          <span class="badge ${v.vote === 'Təsdiq' ? 'badge-success' : 'badge-danger'}">${esc(v.vote)}</span>
+        </div>`).join('');
+    }
+    infoDialog(`Səslər — Tələb #${reqId}`, html, 'info');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+function resolveRequest(id, approve) {
+  id = safeId(id);
+  if (approve) {
+    confirmDialog('Tələbi Təsdiq Et', `Bu tələbi <b>admin səlahiyyəti</b> ilə təsdiq etmək istəyirsiniz?<span class="dlg-highlight">Tələb #${id}</span>Qovma/çıxma → şəxs <b>dərhal evdən çıxarılacaq</b>. Dəvət → şəxs <b>dərhal evə yerləşdiriləcək</b>. Sakinlərin səsləri nəzərə alınmayacaq!`, async () => {
+      try {
+        await apiAction('resolve_request', 'POST', { id, approve: true });
+        loadRequests(); showToast('Tələb admin tərəfindən təsdiq edildi', 'success');
+      } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+    }, { type: 'success', yesText: 'Bəli, təsdiq et' });
+  } else {
+    confirmDialog('Tələbi Rədd Et', `Bu tələbi rədd etmək istəyirsiniz?<span class="dlg-highlight">Tələb #${id}</span>Tələb bağlanacaq, iştirakçılar görəcək.`, async () => {
+      try {
+        await apiAction('resolve_request', 'POST', { id, approve: false });
+        loadRequests(); showToast('Tələb rədd edildi', 'success');
+      } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+    }, { type: 'warning', yesText: 'Bəli, rədd et' });
+  }
+}
+
+function deleteRequest(id) {
+  id = safeId(id);
+  confirmDialog('Tələbi Sil', `Bu tələbi <b>tamamilə silmək</b> istəyirsiniz?<span class="dlg-highlight">Tələb #${id}</span>Həm tələb, həm səsləri silinəcək. Bu, rədd etməkdən fərqlidir — izsiz yox olur.`, async () => {
+    try {
+      await apiAction('delete_request', 'POST', { id });
+      loadRequests(); showToast('Tələb silindi', 'success');
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'danger', yesText: 'Bəli, sil' });
+}
+
+// ═════════ ANNOUNCEMENTS & SURVEYS ═════════
+async function loadAnnouncements(page = 1) {
+  try {
+    PAGINATION.announcements.page = page;
+    const filters = getColFilters('annTable');
+    const data = await apiAction('get_announcements', 'GET', null, { page, per_page: PAGINATION.announcements.per_page, ...filters });
+    PAGINATION.announcements.total = data.total || 0;
+    renderTable('announcement', data.data);
+    renderPagination('announcements', 'annPagination', 'loadAnnouncements');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+async function loadSurveys(page = 1) {
+  try {
+    PAGINATION.surveys.page = page;
+    const filters = getColFilters('surTable');
+    const data = await apiAction('get_surveys', 'GET', null, { page, per_page: PAGINATION.surveys.per_page, ...filters });
+    PAGINATION.surveys.total = data.total || 0;
+    renderTable('survey', data.data);
+    renderPagination('surveys', 'surPagination', 'loadSurveys');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+// ═════════ PENALTIES ═════════
+async function loadPenalties(page = 1) {
+  try {
+    PAGINATION.penalties.page = page;
+    const filters = getColFilters('penTable');
+    const data = await apiAction('get_penalties', 'GET', null, { page, per_page: PAGINATION.penalties.per_page, ...filters });
+    PAGINATION.penalties.total = data.total || 0;
+    renderTable('penalty', data.data);
+    renderPagination('penalties', 'penPagination', 'loadPenalties');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function addPenaltyModal() {
+  openModal('Yeni Cərimə', `
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('pen-student', { placeholder: 'Tələbə adını yazın...' })}
+      <div class="sp-hint">Minimum 2 hərf yazın, siyahıdan seçin</div>
+    </div>
+    <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" placeholder="Məbləğ"></div>
+    <div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" placeholder="Səbəb"></div>
+    <button type="button" class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>
+  `, true);
+  initStudentPicker('pen-student');
+}
+
+async function editPenaltyModal(id) {
+  id = safeId(id);
+  const data = await apiAction('get_penalties');
+  const p = data.data.find(x => x.id == id);
+  if (!p) return;
+  openModal('Cərimə Redaktə', `
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(p.ad_soyad)}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="p_student" value="${p.student_id}">
+    </div>
+    <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="${p.amount}"></div>
+    <div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="${escAttr(p.reason)}"></div>
+    <div class="form-group"><label>Status</label><select class="form-select" id="p_status"><option ${p.status=='Ödənilməmiş'?'selected':''}>Ödənilməmiş</option><option ${p.status=='Ödənilib'?'selected':''}>Ödənilib</option></select></div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
+  `);
+}
+
+async function savePenalty(id) {
+  const studentId = id ? gv('p_student') : spGetValue('pen-student');
+  if (!studentId) {
+    infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">Axtarışdan tələbə seçin.<span class="dlg-highlight">Ad yazıb siyahıdan klikləyin</span></p>`, 'warning');
+    return;
+  }
+  try {
+    await apiAction('save_penalty', 'POST', {
+      id, student_id: studentId, amount: gv('p_amount'),
+      reason: gv('p_reason'), status: gv('p_status')
+    });
+    closeModal(); loadPenalties();
+    showToast(id ? 'Cərimə yeniləndi' : 'Yeni cərimə əlavə edildi', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+async function payPenalty(id) {
+  const data = await apiAction('get_penalties');
+  const p = data.data.find(x => x.id == id);
+  confirmDialog('Cəriməni Ödə', `Bu cəriməni <b>ödənilmiş</b> kimi işarələmək istəyirsiniz?<span class="dlg-highlight">${esc(p ? p.ad_soyad : '')} • ${p ? p.amount : ''} AZN</span>Tələbə panelində "Ödənilib" kimi görünəcək.`, async () => {
+    try {
+      await apiAction('pay_penalty', 'POST', { id: safeId(id) });
+      loadPenalties(); showToast('Cərimə ödənilmiş kimi işarələndi', 'success');
+    } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+  }, { type: 'pay', yesText: 'Bəli, ödənilmişdir' });
+}
+
+// ═════════ CANTEEN ═════════
+async function loadCanteen() {
+  try {
+    const data = await apiAction('get_canteen');
+    const days = ['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə','Bazar'];
+    let html = '';
+    ['Yataqxana','Universitet'].forEach(loc => {
+      html += `<div class="canteen-location"><h4><i data-lucide="${loc==='Yataqxana'?'hotel':'graduation-cap'}"></i> ${loc}</h4>`;
+      for (let i = 1; i <= 7; i++) {
+        let item = data.data.find(x => x.location === loc && x.day_of_week == i);
+        if (item) {
+          html += `<div class="meal-row"><span class="meal-day">${days[i]}</span><input type="text" class="meal-input" value="${escAttr(item.meal_name)}" onchange="updateCanteen(${item.id},this.value)" onkeyup="updateCanteenDelayed(${item.id},this.value)"></div>`;
+        }
+      }
+      html += `</div>`;
+    });
+    document.getElementById('canteenGrid').innerHTML = html;
+    refreshIcons(document.getElementById('canteenGrid'));
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+async function updateCanteen(id, val) {
+  try {
+    await apiAction('save_canteen', 'POST', { id: safeId(id), meal_name: val });
+    showToast('Yemək yeniləndi', 'success');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+let canteenTimer;
+function updateCanteenDelayed(id, val) {
+  clearTimeout(canteenTimer);
+  canteenTimer = setTimeout(() => updateCanteen(id, val), 800);
+}
+
+// ═════════ LAUNDRY ═════════
+async function loadLaundry(page = 1) {
+  try {
+    PAGINATION.laundry.page = page;
+    const filters = getColFilters('laundryTable');
+    const data = await apiAction('get_laundry', 'GET', null, { page, per_page: PAGINATION.laundry.per_page, ...filters });
+    PAGINATION.laundry.total = data.total || 0;
+    renderTable('laundry', data.data);
+    renderPagination('laundry', 'laundryPagination', 'loadLaundry');
+  } catch (e) { showToast(e.message, 'error'); }
+}
+
+function genLaundryOptions(selected) {
+  const stats = ['Yoxdur','Gözlənilir','Hazır'];
+  return stats.map(s => `<option value="${s}" ${s==selected?'selected':''}>${s}</option>`).join('');
+}
+
+function addLaundryModal() {
+  openModal('Yeni Çamaşırxana Qeydi', `
+    <div class="form-group"><label>Tələbə</label>
+      ${spContainerHtml('lnd-student', { placeholder: 'Tələbə adını yazın...', exclude: 'laundry' })}
+      <div class="sp-hint">Artıq qeydi olan tələbələr axtarışda görsənmir</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions('Yoxdur')}</select></div>
+      <div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions('Yoxdur')}</select></div>
+      <div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions('Yoxdur')}</select></div>
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>
+  `);
+  initStudentPicker('lnd-student', { exclude: 'laundry' });
+}
+
+async function editLaundryModal(student_id) {
+  student_id = safeId(student_id);
+  const data = await apiAction('get_laundry');
+  const l = data.data.find(x => x.student_id == student_id);
+  if (!l) return;
+  openModal('Redaktə', `
+    <div class="form-group"><label>Tələbə</label>
+      <input type="text" class="form-input" value="${escAttr(l.ad_soyad)}" disabled style="background:#f1f5f9;cursor:not-allowed;">
+      <input type="hidden" id="l_student" value="${l.student_id}">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Maşın 1</label><select class="form-select" id="l_m1">${genLaundryOptions(l.machine_1_status)}</select></div>
+      <div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions(l.machine_2_status)}</select></div>
+      <div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions(l.machine_3_status)}</select></div>
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>
+  `);
+}
+
+async function saveLaundry(student_id) {
+  const sid = student_id ? gv('l_student') : spGetValue('lnd-student');
+  if (!sid) {
+    infoDialog('Tələbə Seçilməyib', `<p class="dlg-text">Axtarışdan tələbə seçin.</p>`, 'warning');
+    return;
+  }
+  try {
+    await apiAction('save_laundry', 'POST', {
+      student_id: sid,
+      m1: gv('l_m1'), m2: gv('l_m2'), m3: gv('l_m3')
+    });
+    closeModal(); loadLaundry();
+    showToast(student_id ? 'Yeniləndi' : 'Əlavə edildi', 'success');
+  } catch (e) { infoDialog('Xəta', `<p class="dlg-text"><span class="dlg-highlight">${esc(e.message)}</span></p>`, 'danger'); }
+}
+
+// ═════════ TABLE RENDERER ═════════
+function emptyState(icon, text) {
+  return `<tr><td colspan="99"><div class="empty-state"><i data-lucide="${icon}"></i><p>${text}</p></div></td></tr>`;
+}
+
+function renderTable(type, data) {
+  const cfg = CRUD_CONFIG[type];
+  if (!cfg) return;
+  const tbody = document.getElementById(cfg.tbodyId);
+  if (!data || data.length === 0) { tbody.innerHTML = emptyState(cfg.emptyIcon, cfg.emptyText); }
+  else { tbody.innerHTML = data.map((item, idx) => cfg.renderRow(item, idx)).join(''); }
+  refreshIcons(document.getElementById(cfg.tbodyId));
+}
+
+function renderPagination(key, containerId, loadFn) {
+  const pg = PAGINATION[key];
+  const container = document.getElementById(containerId);
+  if (!container || pg.total <= pg.per_page) { if (container) container.innerHTML = ''; return; }
+  const totalPages = Math.ceil(pg.total / pg.per_page);
+  let html = '';
+  html += `<button type="button" class="pagination-btn" ${pg.page<=1?'disabled':''} onclick="${loadFn}(${pg.page-1})"><i data-lucide="chevron-left"></i></button>`;
+  const maxButtons = 5;
+  let start = Math.max(1, pg.page - Math.floor(maxButtons/2));
+  let end = Math.min(totalPages, start + maxButtons - 1);
+  if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
+  if (start > 1) html += `<button type="button" class="pagination-btn" onclick="${loadFn}(1)">1</button>${start>2?'<span class="pagination-info">...</span>':''}`;
+  for (let i = start; i <= end; i++) {
+    html += `<button type="button" class="pagination-btn ${i===pg.page?'active':''}" onclick="${loadFn}(${i})">${i}</button>`;
+  }
+  if (end < totalPages) html += `${end<totalPages-1?'<span class="pagination-info">...</span>':''}<button type="button" class="pagination-btn" onclick="${loadFn}(${totalPages})">${totalPages}</button>`;
+  html += `<button type="button" class="pagination-btn" ${pg.page>=totalPages?'disabled':''} onclick="${loadFn}(${pg.page+1})"><i data-lucide="chevron-right"></i></button>`;
+  const from = (pg.page - 1) * pg.per_page + 1;
+  const to = Math.min(pg.page * pg.per_page, pg.total);
+  html += `<span class="pagination-info">${from}–${to} / ${pg.total}</span>`;
+  container.innerHTML = html;
+  refreshIcons(container);
+}
+
+// ═════════ INIT — yalnız 200-də panel (500/502 → login) ═════════
+fetch('/api/admin/check', { method: 'GET', credentials: 'same-origin' })
+  .then(r => {
+    if (r.ok) {
+      hideLogin();
+      isLoggedIn = true;
+      loadDashboard();
+    } else {
+      showLogin();
+    }
+  })
+  .catch(() => showLogin());
+
+lucide.createIcons();
+{% endraw %}
+</script>
+</body>
+</html>
