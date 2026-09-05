@@ -138,6 +138,20 @@ def dissolve_group_if_empty(cur, group_id):
         cur.execute("DELETE FROM student_groups WHERE id = %s", (group_id,))
 
 
+def _next_group_id(cur):
+    """Yeni qrup ID-si = mövcud ən böyük ID + 1. Eyni anda yaradılan
+    iki qrup eyni ID tutarsa duplicate-key düşür — 3 dəfə təkrar cəhd edilir."""
+    for _ in range(3):
+        cur.execute("SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM student_groups")
+        next_id = cur.fetchone()['next_id']
+        try:
+            cur.execute("INSERT INTO student_groups (id, created_at) VALUES (%s, NOW())", (next_id,))
+            return next_id
+        except IntegrityError:
+            continue
+    raise BizError("Qrup yaradıla bilmədi — bir azdan təkrar cəhd edin!")
+
+
 def log_admin(cur, action, entity='', entity_id='', details=''):
     try:
         cur.execute(
@@ -1471,8 +1485,7 @@ def admin_create_group(cur):
         if r['ev'] == 'Ev seçilib':
             return fail(f"{r['ad_soyad']} üçün artıq ev seçilib!")
 
-    cur.execute("INSERT INTO student_groups (created_at) VALUES (NOW())")
-    gid = cur.lastrowid
+    gid = _next_group_id(cur)
 
     cur.execute(f"UPDATE students SET group_id = %s WHERE id IN ({placeholders})", [gid] + clean_ids)
 
