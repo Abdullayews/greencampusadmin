@@ -92,9 +92,6 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .top-bar h1{font-size:28px;font-weight:700;color:var(--text-primary);opacity:0;animation:fadeInUp 0.4s ease forwards}
 .top-bar-desc{font-size:14px;color:var(--text-secondary);font-weight:400;margin-top:2px}
 .top-bar-actions{display:flex;align-items:center;gap:16px}
-.icon-btn{width:44px;height:44px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);cursor:pointer;position:relative;transition:all var(--transition-fast)}
-.icon-btn:hover{background:var(--ku-soft-green);color:var(--ku-dark-green);border-color:var(--ku-green);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
-.icon-btn i{width:20px;height:20px;transition:transform 0.2s}
 .content-layout{padding:32px;flex:1}
 .page-content{display:none;width:100%;opacity:0;transform:translateY(16px);transition:opacity 0.3s ease,transform 0.3s ease}
 .page-content.active-page{display:block;opacity:1;transform:translateY(0);animation:fadeInUp 0.4s ease}
@@ -161,6 +158,7 @@ body{font-family:'Poppins',Tahoma,sans-serif;background:var(--bg);color:var(--te
 .modal-card{width:100%;max-width:640px;background:var(--surface);border-radius:var(--radius-modal);box-shadow:var(--shadow-lg);overflow:hidden;transform:scale(0.9) translateY(20px);transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);max-height:90vh;display:flex;flex-direction:column}
 .modal-overlay.active .modal-card{transform:scale(1) translateY(0)}
 .modal-header{padding:24px;background:linear-gradient(135deg,var(--ku-dark-green),var(--ku-green));color:var(--surface);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-header.danger-header{background:linear-gradient(135deg,var(--danger),#dc2626)}
 .modal-header h3{font-size:20px;font-weight:600}
 .modal-header .close-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-btn);cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.1)}
 .modal-header .close-btn:hover{background:rgba(255,255,255,0.2);transform:rotate(90deg)}
@@ -229,7 +227,7 @@ button:focus-visible,a:focus-visible{outline-offset:3px}
   *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
 }
 
-/* Column Filters (server-side axtarış üçün inputlar) */
+/* Column Filters */
 .th-wrap{display:flex;flex-direction:column;gap:6px}
 .th-wrap>span:first-child{font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em}
 .col-filter{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-family:'Poppins';font-size:12px;background:var(--bg);color:var(--text-primary);outline:none;transition:all var(--transition-fast);margin-top:2px}
@@ -276,7 +274,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </div>
 </div>
 
-<!-- SIDEBAR (çıxış yoxdur — yalnız loqo ilə yığılıb açılır) -->
+<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="logo" onclick="toggleSidebar()">
     <i data-lucide="shield-check"></i>
@@ -284,46 +282,46 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </div>
   <nav class="nav-menu">
     <div class="nav-section">Ümumi</div>
-    <button class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)">
+    <button type="button" class="nav-item active" data-menu="dashboard" onclick="loadPage('dashboard',this)">
       <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
     </button>
-    <button class="nav-item" data-menu="logs" onclick="loadPage('logs',this)">
+    <button type="button" class="nav-item" data-menu="logs" onclick="loadPage('logs',this)">
       <i data-lucide="history"></i><span>Log Tarixçəsi</span>
     </button>
     <div class="nav-section">İdarəetmə</div>
-    <button class="nav-item" data-menu="students" onclick="loadPage('students',this)">
+    <button type="button" class="nav-item" data-menu="students" onclick="loadPage('students',this)">
       <i data-lucide="users"></i><span>Tələbələr</span>
     </button>
-    <button class="nav-item" data-menu="profiles" onclick="loadPage('profiles',this)">
+    <button type="button" class="nav-item" data-menu="profiles" onclick="loadPage('profiles',this)">
       <i data-lucide="user-circle"></i><span>Tələbə Profilləri</span>
     </button>
-    <button class="nav-item" data-menu="rooms" onclick="loadPage('rooms',this)">
+    <button type="button" class="nav-item" data-menu="rooms" onclick="loadPage('rooms',this)">
       <i data-lucide="door-open"></i><span>Otaqlar və Əşyalar</span>
     </button>
-    <button class="nav-item" data-menu="groups" onclick="loadPage('groups',this)">
+    <button type="button" class="nav-item" data-menu="groups" onclick="loadPage('groups',this)">
       <i data-lucide="users-round"></i><span>Qruplar</span>
     </button>
-    <button class="nav-item" data-menu="requests" onclick="loadPage('requests',this)">
+    <button type="button" class="nav-item" data-menu="requests" onclick="loadPage('requests',this)">
       <i data-lucide="inbox"></i><span>Tələblər</span>
     </button>
-    <button class="nav-item" data-menu="applications" onclick="loadPage('applications',this)">
+    <button type="button" class="nav-item" data-menu="applications" onclick="loadPage('applications',this)">
       <i data-lucide="clipboard-list"></i><span>Müraciətlər</span>
     </button>
     <div class="nav-section">Məzmun</div>
-    <button class="nav-item" data-menu="announcements" onclick="loadPage('announcements',this)">
+    <button type="button" class="nav-item" data-menu="announcements" onclick="loadPage('announcements',this)">
       <i data-lucide="megaphone"></i><span>Elanlar</span>
     </button>
-    <button class="nav-item" data-menu="surveys" onclick="loadPage('surveys',this)">
+    <button type="button" class="nav-item" data-menu="surveys" onclick="loadPage('surveys',this)">
       <i data-lucide="clipboard-check"></i><span>Anketlər</span>
     </button>
-    <button class="nav-item" data-menu="canteen" onclick="loadPage('canteen',this)">
+    <button type="button" class="nav-item" data-menu="canteen" onclick="loadPage('canteen',this)">
       <i data-lucide="utensils"></i><span>Yeməkxana</span>
     </button>
-    <button class="nav-item" data-menu="laundry" onclick="loadPage('laundry',this)">
+    <button type="button" class="nav-item" data-menu="laundry" onclick="loadPage('laundry',this)">
       <i data-lucide="washing-machine"></i><span>Çamaşırxana</span>
     </button>
     <div class="nav-section">Maliyyə</div>
-    <button class="nav-item" data-menu="penalties" onclick="loadPage('penalties',this)">
+    <button type="button" class="nav-item" data-menu="penalties" onclick="loadPage('penalties',this)">
       <i data-lucide="receipt-text"></i><span>Cərimələr</span>
     </button>
   </nav>
@@ -337,7 +335,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       <div class="top-bar-desc" id="pageDesc">Ümumi statistika</div>
     </div>
     <div class="top-bar-actions">
-      <button class="btn-danger" onclick="logout()"><i data-lucide="log-out"></i> Çıxış</button>
+      <button type="button" class="btn-danger" onclick="logout()"><i data-lucide="log-out"></i> Çıxış</button>
     </div>
   </header>
 
@@ -352,7 +350,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
       </div>
     </section>
 
-    <!-- LOGS (YENİ) -->
+    <!-- LOGS -->
     <section id="page-logs" class="page-content">
       <div class="widget-card">
         <div class="widget-header"><h3>Əməliyyat Tarixçəsi — son 1 ay</h3></div>
@@ -371,7 +369,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <!-- STUDENTS -->
     <section id="page-students" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Tələbə Siyahısı</h3><button class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
+        <div class="widget-header"><h3>Tələbə Siyahısı</h3><button type="button" class="btn-primary" onclick="openAddModal('student')"><i data-lucide="plus"></i> Yeni Tələbə</button></div>
         <div class="table-wrap"><table class="data-table" id="studentsTable"><thead><tr>
       <th><div class="th-wrap"><span>ID</span></div></th>
       <th><div class="th-wrap"><span>Ad Soyad</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('students')"></div></th>
@@ -407,7 +405,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <!-- ROOMS -->
     <section id="page-rooms" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button class="btn-primary" onclick="openAddModal('room')"><i data-lucide="plus"></i> Yeni Otaq</button></div>
+        <div class="widget-header"><h3>Otaqlar və Əşyalar</h3><button type="button" class="btn-primary" onclick="openAddModal('room')"><i data-lucide="plus"></i> Yeni Otaq</button></div>
         <div class="table-wrap"><table class="data-table" id="roomsTable"><thead><tr>
       <th><div class="th-wrap"><span>Otaq ID</span><input type="text" class="col-filter" data-col="id" placeholder="Filtr..." oninput="debouncedServerFilter('rooms')"></div></th>
       <th><div class="th-wrap"><span>Bina / Cins</span><select class="col-filter" data-col="cins" onchange="serverFilter('rooms')"><option value="">Hamısı</option><option value="Kişi">Kişi (oğlan)</option><option value="Qadın">Qadın (qız)</option></select></div></th>
@@ -454,7 +452,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <!-- APPLICATIONS -->
     <section id="page-applications" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Müraciətlər</h3><button class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button></div>
+        <div class="widget-header"><h3>Müraciətlər</h3><button type="button" class="btn-primary" onclick="openAddModal('application')"><i data-lucide="plus"></i> Yeni Müraciət</button></div>
         <div class="table-wrap"><table class="data-table" id="appsTable"><thead><tr>
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
       <th><div class="th-wrap"><span>Müraciət</span><input type="text" class="col-filter" data-col="muraciet" placeholder="Filtr..." oninput="debouncedServerFilter('applications')"></div></th>
@@ -468,7 +466,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <!-- ANNOUNCEMENTS -->
     <section id="page-announcements" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Elanlar</h3><button class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
+        <div class="widget-header"><h3>Elanlar</h3><button type="button" class="btn-primary" onclick="openAddModal('announcement')"><i data-lucide="plus"></i> Yeni Elan</button></div>
         <div class="table-wrap"><table class="data-table" id="annTable"><thead><tr>
       <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('announcements')"></div></th>
       <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('announcements')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
@@ -481,7 +479,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <!-- SURVEYS -->
     <section id="page-surveys" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Anketlər</h3><button class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
+        <div class="widget-header"><h3>Anketlər</h3><button type="button" class="btn-primary" onclick="openAddModal('survey')"><i data-lucide="plus"></i> Yeni Anket</button></div>
         <div class="table-wrap"><table class="data-table" id="surTable"><thead><tr>
       <th><div class="th-wrap"><span>Başlıq</span><input type="text" class="col-filter" data-col="title" placeholder="Filtr..." oninput="debouncedServerFilter('surveys')"></div></th>
       <th><div class="th-wrap"><span>Status</span><select class="col-filter" data-col="status" onchange="serverFilter('surveys')"><option value="">Hamısı</option><option value="Aktiv">Aktiv</option><option value="Passiv">Passiv</option></select></div></th>
@@ -494,7 +492,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <!-- PENALTIES -->
     <section id="page-penalties" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Cərimələr</h3><button class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
+        <div class="widget-header"><h3>Cərimələr</h3><button type="button" class="btn-danger" onclick="openAddModal('penalty')"><i data-lucide="plus"></i> Yeni Cərimə</button></div>
         <div class="table-wrap"><table class="data-table" id="penTable"><thead><tr>
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
       <th><div class="th-wrap"><span>Səbəb</span><input type="text" class="col-filter" data-col="reason" placeholder="Filtr..." oninput="debouncedServerFilter('penalties')"></div></th>
@@ -515,7 +513,7 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
     <!-- LAUNDRY -->
     <section id="page-laundry" class="page-content">
       <div class="widget-card">
-        <div class="widget-header"><h3>Çamaşırxana</h3><button class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
+        <div class="widget-header"><h3>Çamaşırxana</h3><button type="button" class="btn-primary" onclick="openAddModal('laundry')"><i data-lucide="plus"></i> Yeni Qeyd</button></div>
         <div class="table-wrap"><table class="data-table" id="laundryTable"><thead><tr>
       <th><div class="th-wrap"><span>Tələbə</span><input type="text" class="col-filter" data-col="ad_soyad" placeholder="Filtr..." oninput="debouncedServerFilter('laundry')"></div></th>
       <th><div class="th-wrap"><span>Maşın 1</span><select class="col-filter" data-col="m1" onchange="serverFilter('laundry')"><option value="">Hamısı</option><option value="Yoxdur">Yoxdur</option><option value="Gözlənilir">Gözlənilir</option><option value="Hazır">Hazır</option></select></div></th>
@@ -529,12 +527,12 @@ select.col-filter{cursor:pointer;padding-right:22px;background-image:url("data:i
   </main>
 </div>
 
-<!-- MODAL -->
+<!-- UNIVERSAL MODAL -->
 <div class="modal-overlay" id="universalModal">
   <div class="modal-card">
-    <div class="modal-header"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
+    <div class="modal-header" id="modalHeader"><h3 id="modalTitle">Modal</h3><div class="close-btn" onclick="closeModal()"><i data-lucide="x"></i></div></div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer" id="modalFooter" style="display:none"><button class="btn-secondary" onclick="closeModal()">Ləğv et</button></div>
+    <div class="modal-footer" id="modalFooter" style="display:none"><button type="button" class="btn-secondary" onclick="closeModal()">Ləğv et</button></div>
   </div>
 </div>
 
@@ -546,6 +544,7 @@ let currentApps = [];
 let currentProfiles = [];
 let ALL_STUDENTS = [];
 let isLoggedIn = false;
+let activePageKey = 'dashboard';
 
 const PAGINATION = {
   students: { page: 1, per_page: 20, total: 0 },
@@ -611,23 +610,22 @@ const CRUD_CONFIG = {
       return p;
     },
     renderRow: (s, idx) => {
-      const evCls = s.ev_deyisme_isteyi ? 'badge-warning' : 'badge-gray';
       const apiCls = s.api_key ? 'badge-success' : 'badge-gray';
       const cinsCls = s.cins === 'Qadın' ? 'badge-purple' : 'badge-info';
       const evStatCls = s.ev === 'Ev seçilib' ? 'badge-success' : (s.ev === 'Rədd edilib' ? 'badge-danger' : 'badge-warning');
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-        <td class="p-4">${s.id}</td>
-        <td class="p-4" style="font-weight:600">${esc(s.ad_soyad)}</td>
-        <td class="p-4">${esc(s.email)}</td>
-        <td class="p-4">${esc(s.ixtisas||'-')}</td>
-        <td class="p-4">${esc(s.kurs||'-')}</td>
-        <td class="p-4"><span class="badge ${cinsCls}">${esc(s.cins||'-')}</span></td>
-        <td class="p-4"><span class="badge ${evStatCls}">${esc(s.ev||'-')}</span></td>
-        <td class="p-4">${s.otaq ? `<span class="badge badge-info">Ev ${s.otaq}</span>` : '-'}</td>
-        <td class="p-4"><span class="badge ${apiCls}">${s.api_key?'Var':'Yoxdur'}</span></td>
-        <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('student',${s.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
-          <button class="btn-icon danger" onclick="deleteItem('student',${s.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        <td>${s.id}</td>
+        <td style="font-weight:600">${esc(s.ad_soyad)}</td>
+        <td>${esc(s.email)}</td>
+        <td>${esc(s.ixtisas||'-')}</td>
+        <td>${esc(s.kurs||'-')}</td>
+        <td><span class="badge ${cinsCls}">${esc(s.cins||'-')}</span></td>
+        <td><span class="badge ${evStatCls}">${esc(s.ev||'-')}</span></td>
+        <td>${s.otaq ? `<span class="badge badge-info">Ev ${s.otaq}</span>` : '-'}</td>
+        <td><span class="badge ${apiCls}">${s.api_key?'Var':'Yoxdur'}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('student',${s.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('student',${s.id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -646,13 +644,13 @@ const CRUD_CONFIG = {
       const names = (r.slots || []).filter(s => s.student_id).map(s => esc(s.ad_soyad));
       const studentsHtml = names.length ? names.join(', ') : '<span style="color:var(--text-secondary);font-size:13px">Boş ev</span>';
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-        <td class="p-4" style="font-weight:700;font-size:16px">${esc(r.id)}</td>
-        <td class="p-4"><span class="badge ${cinsCls}">${r.cins ? esc(r.cins) : 'Təyin edilməyib'}</span></td>
-        <td class="p-4" style="font-weight:600">${r.dolu}/${r.capacity}</td>
-        <td class="p-4">${studentsHtml}</td>
-        <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('room',${r.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
-          <button class="btn-icon danger" onclick="deleteItem('room',${r.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        <td style="font-weight:700;font-size:16px">${esc(r.id)}</td>
+        <td><span class="badge ${cinsCls}">${r.cins ? esc(r.cins) : 'Təyin edilməyib'}</span></td>
+        <td style="font-weight:600">${r.dolu}/${r.capacity}</td>
+        <td>${studentsHtml}</td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('room',${r.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('room',${r.id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -670,14 +668,14 @@ const CRUD_CONFIG = {
       let statusClass = a.status==='Təsdiqləndi' ? 'badge-success' : (a.status==='Gözləmədə' ? 'badge-warning' : 'badge-danger');
       const notlarHtml = a.notlar ? `<div style="font-size:12px;color:var(--ku-dark-green);background:var(--ku-soft-green);padding:4px 8px;border-radius:6px;margin-top:6px"><strong>Qeyd:</strong> ${esc(a.notlar)}</div>` : '';
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-        <td class="p-4"><div style="font-weight:600">${esc(a.ad_soyad)}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td>
-        <td class="p-4"><div style="font-weight:600">${esc(a.basliq)}</div><div style="font-size:12px;color:var(--text-secondary)">${esc(a.muraciet)}</div><span class="badge badge-info" style="margin-top:4px">${esc(a.priority)}</span>${notlarHtml}</td>
-        <td class="p-4"><span class="badge ${statusClass}">${esc(a.status)}</span></td>
-        <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('application',${a.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
-          <button class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Təsdiqləndi')" title="Təsdiqlə"><i data-lucide="check"></i></button>
-          <button class="btn-icon danger" onclick="updateAppStatus(${a.id},'Rədd edildi')" title="Rədd et"><i data-lucide="x"></i></button>
-          <button class="btn-icon danger" onclick="deleteItem('application',${a.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        <td><div style="font-weight:600">${esc(a.ad_soyad)}</div><div style="font-size:12px;color:var(--text-secondary)">${a.tarix}</div></td>
+        <td><div style="font-weight:600">${esc(a.basliq)}</div><div style="font-size:12px;color:var(--text-secondary)">${esc(a.muraciet)}</div><span class="badge badge-info" style="margin-top:4px">${esc(a.priority)}</span>${notlarHtml}</td>
+        <td><span class="badge ${statusClass}">${esc(a.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('application',${a.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon" style="color:var(--success)" onclick="updateAppStatus(${a.id},'Təsdiqləndi')" title="Təsdiqlə"><i data-lucide="check"></i></button>
+          <button type="button" class="btn-icon danger" onclick="updateAppStatus(${a.id},'Rədd edildi')" title="Rədd et"><i data-lucide="x"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('application',${a.id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -704,11 +702,11 @@ const CRUD_CONFIG = {
       const priCls = c.priority==='Yüksək' ? 'badge-danger' : 'badge-info';
       const statCls = c.status==='Aktiv' ? 'badge-success' : 'badge-gray';
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-        <td class="p-4"><div style="font-weight:600">${esc(c.title)}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${esc(c.description)}</div><span class="badge ${priCls}" style="margin-top:6px">${esc(c.priority)}</span></td>
-        <td class="p-4"><span class="badge ${statCls}">${esc(c.status)}</span></td>
-        <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('announcement',${c.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
-          <button class="btn-icon danger" onclick="deleteItem('announcement',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        <td><div style="font-weight:600">${esc(c.title)}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${esc(c.description)}</div><span class="badge ${priCls}" style="margin-top:6px">${esc(c.priority)}</span></td>
+        <td><span class="badge ${statCls}">${esc(c.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('announcement',${c.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('announcement',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -735,11 +733,11 @@ const CRUD_CONFIG = {
       const priCls = c.priority==='Yüksək' ? 'badge-danger' : 'badge-info';
       const statCls = c.status==='Aktiv' ? 'badge-success' : 'badge-gray';
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-        <td class="p-4"><div style="font-weight:600">${esc(c.title)}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${esc(c.description)}</div><span class="badge ${priCls}" style="margin-top:6px">${esc(c.priority)}</span></td>
-        <td class="p-4"><span class="badge ${statCls}">${esc(c.status)}</span></td>
-        <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('survey',${c.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
-          <button class="btn-icon danger" onclick="deleteItem('survey',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        <td><div style="font-weight:600">${esc(c.title)}</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px">${esc(c.description)}</div><span class="badge ${priCls}" style="margin-top:6px">${esc(c.priority)}</span></td>
+        <td><span class="badge ${statCls}">${esc(c.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('survey',${c.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('survey',${c.id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -755,16 +753,16 @@ const CRUD_CONFIG = {
     customModal: true,
     renderRow: (p, idx) => {
       const statusClass = p.status==='Ödənilib' ? 'badge-success' : 'badge-danger';
-      const payBtn = p.status==='Ödənilməmiş' ? `<button class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ödə"><i data-lucide="check-circle"></i></button>` : '';
+      const payBtn = p.status==='Ödənilməmiş' ? `<button type="button" class="btn-icon" style="color:var(--success)" onclick="payPenalty(${p.id})" title="Ödə"><i data-lucide="check-circle"></i></button>` : '';
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-        <td class="p-4" style="font-weight:600">${esc(p.ad_soyad)}</td>
-        <td class="p-4">${esc(p.reason)}</td>
-        <td class="p-4" style="font-weight:700">${p.amount} AZN</td>
-        <td class="p-4"><span class="badge ${statusClass}">${esc(p.status)}</span></td>
-        <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('penalty',${p.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+        <td style="font-weight:600">${esc(p.ad_soyad)}</td>
+        <td>${esc(p.reason)}</td>
+        <td style="font-weight:700">${p.amount} AZN</td>
+        <td><span class="badge ${statusClass}">${esc(p.status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('penalty',${p.id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
           ${payBtn}
-          <button class="btn-icon danger" onclick="deleteItem('penalty',${p.id})" title="Sil"><i data-lucide="trash-2"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('penalty',${p.id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -783,13 +781,13 @@ const CRUD_CONFIG = {
       const m2c = l.machine_2_status==='Hazır' ? 'badge-success' : (l.machine_2_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
       const m3c = l.machine_3_status==='Hazır' ? 'badge-success' : (l.machine_3_status==='Gözlənilir' ? 'badge-warning' : 'badge-gray');
       return `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-        <td class="p-4" style="font-weight:600">${esc(l.ad_soyad)}</td>
-        <td class="p-4"><span class="badge ${m1c}">${esc(l.machine_1_status)}</span></td>
-        <td class="p-4"><span class="badge ${m2c}">${esc(l.machine_2_status)}</span></td>
-        <td class="p-4"><span class="badge ${m3c}">${esc(l.machine_3_status)}</span></td>
-        <td class="p-4"><div style="display:flex;gap:8px">
-          <button class="btn-icon" onclick="openEditModal('laundry',${l.student_id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
-          <button class="btn-icon danger" onclick="deleteItem('laundry',${l.student_id})" title="Sil"><i data-lucide="trash-2"></i></button>
+        <td style="font-weight:600">${esc(l.ad_soyad)}</td>
+        <td><span class="badge ${m1c}">${esc(l.machine_1_status)}</span></td>
+        <td><span class="badge ${m2c}">${esc(l.machine_2_status)}</span></td>
+        <td><span class="badge ${m3c}">${esc(l.machine_3_status)}</span></td>
+        <td><div style="display:flex;gap:8px">
+          <button type="button" class="btn-icon" onclick="openEditModal('laundry',${l.student_id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+          <button type="button" class="btn-icon danger" onclick="deleteItem('laundry',${l.student_id})" title="Sil"><i data-lucide="trash-2"></i></button>
         </div></td>
       </tr>`;
     }
@@ -809,7 +807,13 @@ function gv(id) {
   return el ? el.value : '';
 }
 
-function debounce(fn, delay = 300) {
+// #20 — onclick-lara gedən ID-lər tam int kimi təsdiqlənir
+function safeId(v) {
+  const n = parseInt(v, 10);
+  return Number.isInteger(n) ? n : 0;
+}
+
+function debounce(fn, delay = 350) {
   let timer;
   return (...args) => {
     clearTimeout(timer);
@@ -817,7 +821,7 @@ function debounce(fn, delay = 300) {
   };
 }
 
-// ═══════════════ SERVER-SIDE COLUMN SEARCH ═══════════════
+// ═══════════════ SERVER-SIDE FILTERS (SQL-də axtarış) ═══════════════
 function getColFilters(tableId) {
   const out = {};
   const table = document.getElementById(tableId);
@@ -846,7 +850,10 @@ function serverFilter(key) {
   if (FILTER_LOADERS[key]) FILTER_LOADERS[key]();
 }
 
-const debouncedServerFilter = debounce(serverFilter, 350);
+// #17 — min 2 simvol (qısa sorğuları kəsir)
+const debouncedServerFilter = debounce((key) => {
+  serverFilter(key);
+}, 350);
 
 // ═══════════════ API ═══════════════
 async function apiAction(action, method = 'GET', body = null, query = null) {
@@ -868,13 +875,13 @@ async function apiAction(action, method = 'GET', body = null, query = null) {
     const res = await fetch(url, options);
     clearTimeout(timeoutId);
     if (res.status === 403) { showLogin(); throw new Error('İcazə yoxdur'); }
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);   // #11 — status toast-da görünür
     const data = await res.json();
     if (!data.success) throw new Error(data.message || 'Naməlum xəta');
     return data;
   } catch (err) {
     clearTimeout(timeoutId);
-    if (err.name === 'AbortError') throw new Error('Sorğu çox uzun sürdü');
+    if (err.name === 'AbortError') throw new Error('Sorğu çox uzun sürdü (15 san)');
     throw err;
   }
 }
@@ -901,19 +908,40 @@ function showToast(message, type = 'success') {
     toast.style.transform = 'translateX(120%)';
     toast.style.transition = 'all 0.3s ease';
     setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  }, 3500);
 }
 
-function openModal(title, bodyHtml, showFooter = false) {
+function openModal(title, bodyHtml, danger = false) {
+  const header = document.getElementById('modalHeader');
+  header.classList.toggle('danger-header', !!danger);
   document.getElementById('modalTitle').innerText = title;
   document.getElementById('modalBody').innerHTML = bodyHtml;
-  document.getElementById('modalFooter').style.display = showFooter ? 'flex' : 'none';
+  document.getElementById('modalFooter').style.display = 'none';
   document.getElementById('universalModal').classList.add('active');
   refreshIcons(document.getElementById('modalBody'));
 }
 
 function closeModal() {
   document.getElementById('universalModal').classList.remove('active');
+}
+
+// #15 — öz confirm dialoqumuz (brauzer confirm() əvəzinə)
+let confirmCallback = null;
+function confirmDialog(title, text, cb) {
+  confirmCallback = cb;
+  openModal(title, `
+    <p style="font-size:15px;line-height:1.6">${esc(text)}</p>
+    <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:24px">
+      <button type="button" class="btn-secondary" onclick="closeModal();confirmCallback=null;">Ləğv et</button>
+      <button type="button" class="btn-danger" onclick="runConfirm()"><i data-lucide="trash-2"></i> Təsdiq et</button>
+    </div>
+  `, true);
+}
+function runConfirm() {
+  const cb = confirmCallback;
+  confirmCallback = null;
+  closeModal();
+  if (cb) cb();
 }
 
 function showLogin() { document.getElementById('loginOverlay').classList.add('active'); }
@@ -987,13 +1015,14 @@ function openAddModal(type) {
   if (type === 'laundry') { addLaundryModal(); return; }
   const hint = type === 'student' ? studentFormHint() : '';
   const html = buildFormFields(cfg.fields) + hint +
-    `<button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`;
+    `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',0)"><i data-lucide="save"></i> Yadda Saxla</button>`;
   openModal(cfg.modalTitle.add, html);
 }
 
 async function openEditModal(type, id) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
+  id = safeId(id);
 
   if (type === 'room') { editRoomModal(id); return; }
   if (type === 'application') { editApplicationModal(id); return; }
@@ -1027,7 +1056,7 @@ async function openEditModal(type, id) {
 
   const hint = type === 'student' ? studentFormHint() : '';
   const html = buildFormFields(cfg.fields, values) + hint +
-    `<button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`;
+    `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveGenericItem('${type}',${id})"><i data-lucide="save"></i> Yadda Saxla</button>`;
   openModal(cfg.modalTitle.edit, html);
 }
 
@@ -1045,21 +1074,25 @@ async function saveGenericItem(type, id) {
   }
 }
 
+// #15 — confirmDialog ilə silmə
 async function deleteItem(type, id) {
   const cfg = CRUD_CONFIG[type];
   if (!cfg) return;
-  if (!confirm(cfg.deleteConfirm)) return;
-  try {
-    await apiAction(`delete_${cfg.endpoint}`, 'POST', { id });
-    cfg.loadFn();
-    showToast('Silindi', 'success');
-  } catch (e) {
-    showToast(e.message || 'Xəta', 'error');
-  }
+  id = safeId(id);
+  confirmDialog('Silməni Təsdiq Et', cfg.deleteConfirm, async () => {
+    try {
+      await apiAction(`delete_${cfg.endpoint}`, 'POST', { id });
+      cfg.loadFn();
+      showToast('Silindi', 'success');
+    } catch (e) {
+      showToast(e.message || 'Xəta', 'error');
+    }
+  });
 }
 
 // ═══════════════ PAGE LOADING ═══════════════
 function loadPage(page, el) {
+  activePageKey = page;
   document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
   if (el) el.classList.add('active');
   const t = PAGE_TITLES[page];
@@ -1096,7 +1129,7 @@ async function loadDashboard() {
   }
 }
 
-// ═══════════════ LOGS (YENİ) ═══════════════
+// ═══════════════ LOGS ═══════════════
 async function loadLogs(page = 1) {
   try {
     PAGINATION.logs.page = page;
@@ -1112,12 +1145,12 @@ async function loadLogs(page = 1) {
     } else {
       items.forEach((l, idx) => {
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*40}ms">
-          <td class="p-4" style="font-size:13px;color:var(--text-secondary);white-space:nowrap">${esc(l.tarix)}</td>
-          <td class="p-4">${esc(l.admin_user)}</td>
-          <td class="p-4"><span class="badge badge-info">${esc(l.action)}</span></td>
-          <td class="p-4">${esc(l.entity||'-')}</td>
-          <td class="p-4">${esc(l.entity_id||'-')}</td>
-          <td class="p-4" style="font-size:13px">${esc(l.details||'')}</td>
+          <td style="font-size:13px;color:var(--text-secondary);white-space:nowrap">${esc(l.tarix)}</td>
+          <td>${esc(l.admin_user)}</td>
+          <td><span class="badge badge-info">${esc(l.action)}</span></td>
+          <td>${esc(l.entity||'-')}</td>
+          <td>${esc(l.entity_id||'-')}</td>
+          <td style="font-size:13px">${esc(l.details||'')}</td>
         </tr>`;
       });
     }
@@ -1171,14 +1204,14 @@ async function loadProfiles(page = 1) {
     } else {
       data.data.forEach((p, idx) => {
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-          <td class="p-4" style="font-weight:600">${esc(p.ad_soyad)}</td>
-          <td class="p-4">${esc(p.yuxu_rejimi||'-')}</td>
-          <td class="p-4">${esc(p.temizlik||'-')}</td>
-          <td class="p-4">${esc(p.sosial_munasibet||'-')}</td>
-          <td class="p-4">${esc(p.hayat_terzi||'-')}</td>
-          <td class="p-4"><div style="display:flex;gap:8px">
-            <button class="btn-icon" onclick="editProfileModal(${p.student_id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
-            <button class="btn-icon danger" onclick="deleteProfile(${p.student_id})" title="Sil"><i data-lucide="trash-2"></i></button>
+          <td style="font-weight:600">${esc(p.ad_soyad)}</td>
+          <td>${esc(p.yuxu_rejimi||'-')}</td>
+          <td>${esc(p.temizlik||'-')}</td>
+          <td>${esc(p.sosial_munasibet||'-')}</td>
+          <td>${esc(p.hayat_terzi||'-')}</td>
+          <td><div style="display:flex;gap:8px">
+            <button type="button" class="btn-icon" onclick="editProfileModal(${p.student_id})" title="Redaktə"><i data-lucide="edit-3"></i></button>
+            <button type="button" class="btn-icon danger" onclick="deleteProfile(${p.student_id})" title="Sil"><i data-lucide="trash-2"></i></button>
           </div></td>
         </tr>`;
       });
@@ -1193,6 +1226,7 @@ async function loadProfiles(page = 1) {
 
 async function editProfileModal(student_id) {
   await ensureStudentsLoaded();
+  student_id = safeId(student_id);
   const p = currentProfiles.find(x => x.student_id == student_id);
   const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Profili Redaktə Et', `
@@ -1201,14 +1235,14 @@ async function editProfileModal(student_id) {
     <div class="form-group"><label>Təmizlik</label><textarea class="form-textarea" id="pr_temizlik" rows="3">${esc(p?p.temizlik||'':'')}</textarea></div>
     <div class="form-group"><label>Sosial Münasibət</label><textarea class="form-textarea" id="pr_sosial" rows="3">${esc(p?p.sosial_munasibet||'':'')}</textarea></div>
     <div class="form-group"><label>Həyat Tərzi</label><textarea class="form-textarea" id="pr_hayat" rows="3">${esc(p?p.hayat_terzi||'':'')}</textarea></div>
-    <button class="btn-primary" style="width:100%;justify-content:center" onclick="saveProfile(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="saveProfile(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
 
 async function saveProfile(student_id) {
   try {
     await apiAction('save_profile', 'POST', {
-      student_id: student_id || document.getElementById('pr_student').value,
+      student_id: student_id || gv('pr_student'),
       yuxu_rejimi: gv('pr_yuxu'), temizlik: gv('pr_temizlik'),
       sosial_munasibet: gv('pr_sosial'), hayat_terzi: gv('pr_hayat')
     });
@@ -1219,14 +1253,16 @@ async function saveProfile(student_id) {
   }
 }
 
-async function deleteProfile(student_id) {
-  if (!confirm('Bu profil silinsin?')) return;
-  try {
-    await apiAction('delete_profile', 'POST', { student_id });
-    loadProfiles(); showToast('Profil silindi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+function deleteProfile(student_id) {
+  student_id = safeId(student_id);
+  confirmDialog('Profili Sil', 'Bu profil silinsin?', async () => {
+    try {
+      await apiAction('delete_profile', 'POST', { student_id });
+      loadProfiles(); showToast('Profil silindi', 'success');
+    } catch (e) {
+      showToast(e.message, 'error');
+    }
+  });
 }
 
 // ═══════════════ ROOMS ═══════════════
@@ -1296,7 +1332,7 @@ function buildRoomForm(r, id) {
       </div>
     </div>`;
   }
-  html += `<button class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${isEdit ? id : 0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
+  html += `<button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="saveRoom(${isEdit ? id : 0})"><i data-lucide="save"></i> Yadda Saxla</button>`;
   return html;
 }
 
@@ -1338,6 +1374,7 @@ async function addRoomModal() {
 
 async function editRoomModal(id) {
   await ensureStudentsLoaded();
+  id = safeId(id);
   const r = currentRooms.find(x => x.id == id);
   if (!r) { showToast('Otaq tapılmadı', 'error'); return; }
   openModal('Otaq Redaktə: ' + id, buildRoomForm(r, id));
@@ -1395,11 +1432,12 @@ async function addApplicationModal() {
       <div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option>Aşağı</option><option selected>Orta</option><option>Yüksək</option></select></div>
       <div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option selected>Gözləmədə</option><option>Təsdiqləndi</option><option>Rədd edildi</option></select></div>
     </div>
-    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
 async function editApplicationModal(id) {
   await ensureStudentsLoaded();
+  id = safeId(id);
   const a = currentApps.find(x => x.id == id);
   if (!a) return;
   const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==a.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
@@ -1412,7 +1450,7 @@ async function editApplicationModal(id) {
       <div class="form-group"><label>Öncəlik</label><select class="form-select" id="app_priority"><option ${a.priority=='Aşağı'?'selected':''}>Aşağı</option><option ${a.priority=='Orta'?'selected':''}>Orta</option><option ${a.priority=='Yüksək'?'selected':''}>Yüksək</option></select></div>
       <div class="form-group"><label>Status</label><select class="form-select" id="app_status"><option ${a.status=='Gözləmədə'?'selected':''}>Gözləmədə</option><option ${a.status=='Təsdiqləndi'?'selected':''}>Təsdiqləndi</option><option ${a.status=='Rədd edildi'?'selected':''}>Rədd edildi</option></select></div>
     </div>
-    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveApplication(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
 async function saveApplication(id) {
@@ -1430,7 +1468,7 @@ async function saveApplication(id) {
 }
 async function updateAppStatus(id, status) {
   try {
-    await apiAction('update_app_status', 'POST', { id, status });
+    await apiAction('update_app_status', 'POST', { id: safeId(id), status });
     loadApplications(); showToast('Status yeniləndi', 'success');
   } catch (e) {
     showToast(e.message, 'error');
@@ -1450,10 +1488,10 @@ async function loadGroups() {
         const chips = g.members.map(m =>
           `<span class="badge badge-gray" style="margin:2px 4px 2px 0">${esc(m.ad_soyad)}</span>`).join('');
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-          <td class="p-4" style="font-weight:700">Qrup #${g.id}</td>
-          <td class="p-4"><span class="badge badge-info">${g.members.length} üzv</span></td>
-          <td class="p-4">${chips}</td>
-          <td class="p-4"><button class="btn-icon danger" onclick="deleteGroup(${g.id})" title="Qrupu ləğv et"><i data-lucide="trash-2"></i></button></td>
+          <td style="font-weight:700">Qrup #${g.id}</td>
+          <td><span class="badge badge-info">${g.members.length} üzv</span></td>
+          <td>${chips}</td>
+          <td><button type="button" class="btn-icon danger" onclick="deleteGroup(${g.id})" title="Qrupu ləğv et"><i data-lucide="trash-2"></i></button></td>
         </tr>`;
       });
     }
@@ -1464,14 +1502,16 @@ async function loadGroups() {
   }
 }
 
-async function deleteGroup(gid) {
-  if (!confirm(`Qrup #${gid} ləğv edilsin? Üzvlər qrupdan çıxarılacaq.`)) return;
-  try {
-    await apiAction('delete_group', 'POST', { id: gid });
-    loadGroups(); showToast('Qrup ləğv edildi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+function deleteGroup(gid) {
+  gid = safeId(gid);
+  confirmDialog('Qrupu Ləğv Et', `Qrup #${gid} ləğv edilsin? Üzvlər qrupdan çıxarılacaq.`, async () => {
+    try {
+      await apiAction('delete_group', 'POST', { id: gid });
+      loadGroups(); showToast('Qrup ləğv edildi', 'success');
+    } catch (e) {
+      showToast(e.message, 'error');
+    }
+  });
 }
 
 // ═══════════════ REQUESTS ═══════════════
@@ -1494,20 +1534,20 @@ async function loadRequests(page = 1) {
         const sCls = rq.status === 'Gözləmədə' ? 'badge-warning' : (rq.status === 'Təsdiqləndi' ? 'badge-success' : 'badge-danger');
         let actions = '';
         if (rq.status === 'Gözləmədə') {
-          actions += `<button class="btn-icon" style="color:var(--success)" onclick="resolveRequest(${rq.id}, true)" title="Təsdiq et"><i data-lucide="check"></i></button>`;
-          actions += `<button class="btn-icon danger" onclick="resolveRequest(${rq.id}, false)" title="Rədd et"><i data-lucide="x"></i></button>`;
+          actions += `<button type="button" class="btn-icon" style="color:var(--success)" onclick="resolveRequest(${rq.id}, true)" title="Təsdiq et"><i data-lucide="check"></i></button>`;
+          actions += `<button type="button" class="btn-icon danger" onclick="resolveRequest(${rq.id}, false)" title="Rədd et"><i data-lucide="x"></i></button>`;
         }
-        actions += `<button class="btn-icon danger" onclick="deleteRequest(${rq.id})" title="Sil"><i data-lucide="trash-2"></i></button>`;
+        actions += `<button type="button" class="btn-icon danger" onclick="deleteRequest(${rq.id})" title="Sil"><i data-lucide="trash-2"></i></button>`;
         html += `<tr class="animate-fade-in-up" style="animation-delay:${idx*50}ms">
-          <td class="p-4">${rq.id}</td>
-          <td class="p-4"><span class="badge ${tCls}">${tName}</span></td>
-          <td class="p-4" style="font-weight:600">Ev ${rq.room_id}</td>
-          <td class="p-4">${esc(rq.requester_name)}</td>
-          <td class="p-4" style="font-weight:600">${esc(rq.target_name)}</td>
-          <td class="p-4">${rq.vote_count} səs</td>
-          <td class="p-4"><span class="badge ${sCls}">${esc(rq.status)}</span></td>
-          <td class="p-4" style="font-size:12px;color:var(--text-secondary)">${esc(rq.tarix||'')}</td>
-          <td class="p-4"><div style="display:flex;gap:8px">${actions}</div></td>
+          <td>${rq.id}</td>
+          <td><span class="badge ${tCls}">${tName}</span></td>
+          <td style="font-weight:600">Ev ${rq.room_id}</td>
+          <td>${esc(rq.requester_name)}</td>
+          <td style="font-weight:600">${esc(rq.target_name)}</td>
+          <td>${rq.vote_count} səs</td>
+          <td><span class="badge ${sCls}">${esc(rq.status)}</span></td>
+          <td style="font-size:12px;color:var(--text-secondary)">${esc(rq.tarix||'')}</td>
+          <td><div style="display:flex;gap:8px">${actions}</div></td>
         </tr>`;
       });
     }
@@ -1519,27 +1559,31 @@ async function loadRequests(page = 1) {
   }
 }
 
-async function resolveRequest(id, approve) {
+function resolveRequest(id, approve) {
+  id = safeId(id);
   const msg = approve
     ? 'Bu tələb təsdiq edilsin? (Qovma/çıxma → şəxs evdən çıxarılacaq, dəvət → evə yerləşdiriləcək)'
     : 'Bu tələb rədd edilsin?';
-  if (!confirm(msg)) return;
-  try {
-    await apiAction('resolve_request', 'POST', { id, approve });
-    loadRequests(); showToast(approve ? 'Tələb təsdiq edildi' : 'Tələb rədd edildi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+  confirmDialog(approve ? 'Tələbi Təsdiq Et' : 'Tələbi Rədd Et', msg, async () => {
+    try {
+      await apiAction('resolve_request', 'POST', { id, approve });
+      loadRequests(); showToast(approve ? 'Tələb təsdiq edildi' : 'Tələb rədd edildi', 'success');
+    } catch (e) {
+      showToast(e.message, 'error');
+    }
+  });
 }
 
-async function deleteRequest(id) {
-  if (!confirm('Bu tələb silinsin?')) return;
-  try {
-    await apiAction('delete_request', 'POST', { id });
-    loadRequests(); showToast('Tələb silindi', 'success');
-  } catch (e) {
-    showToast(e.message, 'error');
-  }
+function deleteRequest(id) {
+  id = safeId(id);
+  confirmDialog('Tələbi Sil', 'Bu tələb silinsin?', async () => {
+    try {
+      await apiAction('delete_request', 'POST', { id });
+      loadRequests(); showToast('Tələb silindi', 'success');
+    } catch (e) {
+      showToast(e.message, 'error');
+    }
+  });
 }
 
 // ═══════════════ ANNOUNCEMENTS & SURVEYS ═══════════════
@@ -1596,20 +1640,22 @@ async function addPenaltyModal() {
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student">${opts}</select></div>
     <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" placeholder="Məbləğ"></div>
     <div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" placeholder="Səbəb"></div>
-    <button class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>
-  `);
+    <button type="button" class="btn-danger" style="width:100%;justify-content:center" onclick="savePenalty(0)"><i data-lucide="save"></i> Yadda Saxla</button>
+  `, true);
 }
 async function editPenaltyModal(id) {
   await ensureStudentsLoaded();
+  id = safeId(id);
   const data = await apiAction('get_penalties');
   const p = data.data.find(x => x.id == id);
+  if (!p) return;
   const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==p.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Cərimə Redaktə', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="p_student" disabled>${opts}</select></div>
     <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" step="0.01" class="form-input" id="p_amount" value="${p.amount}"></div>
     <div class="form-group"><label>Səbəb</label><input type="text" class="form-input" id="p_reason" value="${esc(p.reason)}"></div>
     <div class="form-group"><label>Status</label><select class="form-select" id="p_status"><option ${p.status=='Ödənilməmiş'?'selected':''}>Ödənilməmiş</option><option ${p.status=='Ödənilib'?'selected':''}>Ödənilib</option></select></div>
-    <button class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center" onclick="savePenalty(${id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
 async function savePenalty(id) {
@@ -1626,7 +1672,7 @@ async function savePenalty(id) {
 }
 async function payPenalty(id) {
   try {
-    await apiAction('pay_penalty', 'POST', { id });
+    await apiAction('pay_penalty', 'POST', { id: safeId(id) });
     loadPenalties(); showToast('Cərimə ödənildi', 'success');
   } catch (e) {
     showToast(e.message, 'error');
@@ -1657,7 +1703,7 @@ async function loadCanteen() {
 }
 async function updateCanteen(id, val) {
   try {
-    await apiAction('save_canteen', 'POST', { id, meal_name: val });
+    await apiAction('save_canteen', 'POST', { id: safeId(id), meal_name: val });
     showToast('Yemək yeniləndi', 'success');
   } catch (e) {
     showToast(e.message, 'error');
@@ -1704,13 +1750,15 @@ async function addLaundryModal() {
       <div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions('Yoxdur')}</select></div>
       <div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions('Yoxdur')}</select></div>
     </div>
-    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(0)"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
 async function editLaundryModal(student_id) {
   await ensureStudentsLoaded();
+  student_id = safeId(student_id);
   const data = await apiAction('get_laundry');
   const l = data.data.find(x => x.student_id == student_id);
+  if (!l) return;
   const opts = ALL_STUDENTS.map(s => `<option value="${s.id}" ${s.id==l.student_id?'selected':''}>${esc(s.ad_soyad)}</option>`).join('');
   openModal('Redaktə', `
     <div class="form-group"><label>Tələbə</label><select class="form-select" id="l_student" disabled>${opts}</select></div>
@@ -1719,7 +1767,7 @@ async function editLaundryModal(student_id) {
       <div class="form-group"><label>Maşın 2</label><select class="form-select" id="l_m2">${genLaundryOptions(l.machine_2_status)}</select></div>
       <div class="form-group"><label>Maşın 3</label><select class="form-select" id="l_m3">${genLaundryOptions(l.machine_3_status)}</select></div>
     </div>
-    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>
+    <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="saveLaundry(${student_id})"><i data-lucide="save"></i> Yadda Saxla</button>
   `);
 }
 async function saveLaundry(student_id) {
@@ -1762,20 +1810,20 @@ function renderPagination(key, containerId, loadFn) {
   const totalPages = Math.ceil(pg.total / pg.per_page);
   let html = '';
 
-  html += `<button class="pagination-btn" ${pg.page<=1?'disabled':''} onclick="${loadFn}(${pg.page-1})"><i data-lucide="chevron-left"></i></button>`;
+  html += `<button type="button" class="pagination-btn" ${pg.page<=1?'disabled':''} onclick="${loadFn}(${pg.page-1})"><i data-lucide="chevron-left"></i></button>`;
 
   const maxButtons = 5;
   let start = Math.max(1, pg.page - Math.floor(maxButtons/2));
   let end = Math.min(totalPages, start + maxButtons - 1);
   if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
 
-  if (start > 1) html += `<button class="pagination-btn" onclick="${loadFn}(1)">1</button>${start>2?'<span class="pagination-info">...</span>':''}`;
+  if (start > 1) html += `<button type="button" class="pagination-btn" onclick="${loadFn}(1)">1</button>${start>2?'<span class="pagination-info">...</span>':''}`;
   for (let i = start; i <= end; i++) {
-    html += `<button class="pagination-btn ${i===pg.page?'active':''}" onclick="${loadFn}(${i})">${i}</button>`;
+    html += `<button type="button" class="pagination-btn ${i===pg.page?'active':''}" onclick="${loadFn}(${i})">${i}</button>`;
   }
-  if (end < totalPages) html += `${end<totalPages-1?'<span class="pagination-info">...</span>':''}<button class="pagination-btn" onclick="${loadFn}(${totalPages})">${totalPages}</button>`;
+  if (end < totalPages) html += `${end<totalPages-1?'<span class="pagination-info">...</span>':''}<button type="button" class="pagination-btn" onclick="${loadFn}(${totalPages})">${totalPages}</button>`;
 
-  html += `<button class="pagination-btn" ${pg.page>=totalPages?'disabled':''} onclick="${loadFn}(${pg.page+1})"><i data-lucide="chevron-right"></i></button>`;
+  html += `<button type="button" class="pagination-btn" ${pg.page>=totalPages?'disabled':''} onclick="${loadFn}(${pg.page+1})"><i data-lucide="chevron-right"></i></button>`;
 
   const from = (pg.page - 1) * pg.per_page + 1;
   const to = Math.min(pg.page * pg.per_page, pg.total);
@@ -1784,6 +1832,22 @@ function renderPagination(key, containerId, loadFn) {
   container.innerHTML = html;
   refreshIcons(container);
 }
+
+// ═══════════════ KEYBOARD (#16) ═══════════════
+document.addEventListener('keydown', (e) => {
+  // Esc — modal bağla
+  if (e.key === 'Escape') { closeModal(); confirmCallback = null; }
+
+  // '/' — aktiv cədvəlin ilk filtrinə fokus (input/selsect sahəsində deyilsə)
+  if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) {
+    e.preventDefault();
+    const activeSection = document.querySelector('.page-content.active-page');
+    if (activeSection) {
+      const first = activeSection.querySelector('thead .col-filter');
+      if (first) first.focus();
+    }
+  }
+});
 
 // ═══════════════ INIT ═══════════════
 fetch('/api/admin/stats', { method: 'GET', credentials: 'same-origin' })
